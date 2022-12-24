@@ -1,0 +1,12 @@
+body {
+  display: flex;
+  flex-direction: row;
+
+  margin: 0;
+}
+
+canvas {
+  // display: block;
+
+  border: 2px solid red;
+}

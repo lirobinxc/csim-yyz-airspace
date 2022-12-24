@@ -1,14 +1,14 @@
-import Phaser from 'phaser'
+import Phaser from 'phaser';
 
-import HelloWorldScene from './scenes/HelloWorldScene'
+import HelloWorldScene from './scenes/HelloWorldScene';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
-  parent: 'phaser-container',
+  parent: 'phaser',
   backgroundColor: '#282c34',
   scale: {
     mode: Phaser.Scale.ScaleModes.RESIZE,
-    width: window.innerWidth,
+    width: window.innerHeight,
     height: window.innerHeight,
   },
   physics: {
@@ -18,6 +18,6 @@ const config: Phaser.Types.Core.GameConfig = {
     },
   },
   scene: [HelloWorldScene],
-}
+};
 
-export default new Phaser.Game(config)
+export default new Phaser.Game(config);
