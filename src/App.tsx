@@ -1,13 +1,12 @@
-import logo from './logo.svg';
-import phaserGame from './PhaserGame';
-import HelloWorldScene from './scenes/HelloWorldScene';
+import phaserGame from './phaser/PhaserGame';
+import Radar06sScene from './phaser/scenes/Radar06sScene';
 
 import styles from './App.module.scss';
 
 function App() {
   const handleClick = () => {
-    const scene = phaserGame.scene.keys.helloworld as HelloWorldScene;
-    scene.createEmitter();
+    const scene = phaserGame.scene.keys.helloworld as Radar06sScene;
+    // scene.createEmitter();
   };
 
   return (

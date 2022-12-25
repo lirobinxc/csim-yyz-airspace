@@ -1,23 +1,28 @@
 import Phaser from 'phaser';
 
-import HelloWorldScene from './scenes/HelloWorldScene';
+import Radar06sScene from './scenes/Radar06sScene';
+
+const IS_DEBUG_MODE = true;
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   parent: 'phaser',
-  backgroundColor: '#282c34',
+  backgroundColor: '#000',
   scale: {
-    mode: Phaser.Scale.ScaleModes.RESIZE,
+    mode: Phaser.Scale.ScaleModes.HEIGHT_CONTROLS_WIDTH,
     width: window.innerHeight,
     height: window.innerHeight,
   },
   physics: {
     default: 'arcade',
     arcade: {
-      gravity: { y: 200 },
+      gravity: { x: 0, y: 0 },
     },
   },
-  scene: [HelloWorldScene],
+  scene: [new Radar06sScene({ isDebug: IS_DEBUG_MODE })],
+  render: {
+    antialias: true,
+  },
 };
 
 export default new Phaser.Game(config);
