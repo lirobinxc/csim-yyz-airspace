@@ -60,12 +60,12 @@ export const CommonWaypointList: WaypointDataCommon[] = [
   {
     name: 'NOSIK',
     relativeCoord: new Phaser.Math.Vector2(0, 0.179),
-    type: AcType.Prop,
+    type: AcType.Jet,
   },
   {
     name: 'NUGOP',
     relativeCoord: new Phaser.Math.Vector2(0.051, 0),
-    type: AcType.Prop,
+    type: AcType.Jet,
   },
   {
     name: 'OAKVL',
