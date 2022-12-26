@@ -2,15 +2,12 @@ import Phaser from 'phaser';
 import {
   WaypointDataAll,
   WaypointNamesAll,
-} from '../../config/shared/WaypointsCollection';
-import {
-  FontColors,
-  genWaypointTextStyles,
-} from '../../config/TextStyleConfig';
-import { AcType } from '../../types/AircraftTypes';
-import { DomEvents } from '../../types/DomEvents';
-import type { GameObjectOptions } from '../../types/GameObjectOptions';
-import { setRelativeSize } from '../../utils/setRelativeSize';
+} from '../config/shared/WaypointsCollection';
+import { FontColors, genWaypointTextStyles } from '../config/TextStyleConfig';
+import { AcType } from '../types/AircraftTypes';
+import { DomEvents } from '../types/DomEvents';
+import type { GameObjectOptions } from '../types/GameObjectOptions';
+import { setRelativeSize } from '../utils/setRelativeSize';
 
 export default class Waypoint extends Phaser.GameObjects.Arc {
   public name: WaypointNamesAll;
@@ -41,7 +38,8 @@ export default class Waypoint extends Phaser.GameObjects.Arc {
     this.setInteractive();
 
     if (options.isDebug) {
-      scene.input.enableDebug(this);
+      const colorPink = 0xff0ef4;
+      scene.input.enableDebug(this, colorPink);
     }
 
     // Attach new TEXT object: Waypoint Name

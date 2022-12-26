@@ -17,11 +17,12 @@ const config: Phaser.Types.Core.GameConfig = {
     default: 'arcade',
     arcade: {
       gravity: { x: 0, y: 0 },
+      fps: 0.2,
     },
   },
   scene: [new Radar06sScene({ isDebug: IS_DEBUG_MODE })],
   render: {
-    antialias: true,
+    antialias: false,
   },
 };
 

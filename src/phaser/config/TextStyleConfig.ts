@@ -13,7 +13,7 @@ export function genWaypointTextStyles(
   const styles = {
     fontFamily: 'monospace',
     fontSize: `${setRelativeSize(scene, 14)}px`,
-    color: acType === AcType.Jet ? FontColors.Blue : FontColors.Pink,
+    color: acType === AcType.JET ? FontColors.Blue : FontColors.Pink,
   } as Phaser.GameObjects.TextStyle;
 
   return styles;

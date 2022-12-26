@@ -10,7 +10,7 @@ export default class RadarBg extends Phaser.GameObjects.Image {
     const cameraHeight = scene.cameras.main.height;
 
     const IMG_SCALE = 1.5;
-    const IMG_ALPHA = 0.8;
+    const IMG_ALPHA = 0.75;
 
     const scaledHeight = cameraHeight * IMG_SCALE;
     this.setDisplaySize(scaledHeight, scaledHeight);
