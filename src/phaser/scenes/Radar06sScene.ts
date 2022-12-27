@@ -8,14 +8,18 @@ import { SceneKeys } from '../types/SceneKeys';
 import { AssetKeys } from '../types/AssetKeys';
 import PointerCoordinates from '../utils/PointerCoordinates';
 import RunwayOrigins from '../config/RunwayOrigins';
-
-import img_Radar06s from '../assets/Radar06s.png';
-import img_PpsSymbol from '../assets/PpsSymbol.png';
 import Plane, { PlaneProperties } from '../objects/Plane/Plane';
 import { AcModel, AcType, AcWTC, DepRunwayYYZ } from '../types/AircraftTypes';
-import PlaneSymbol from '../objects/Plane/PlaneSymbol';
 import { DomEvents } from '../types/DomEvents';
 import { AdjacentSectors } from '../types/AirspaceTypes';
+
+import img_Radar06s from '../assets/Radar06s.png';
+// import img_Radar06s from '../assets/Radar06s_vector.svg';
+import img_PpsSymbol from '../assets/PpsSymbol.png';
+import fontTexture_DejaVuMono from '../assets/font/FontDejaVuMono.png';
+import fontXml_DejaVuMono from '../assets/font/FontDejaVuMono.xml';
+import fontTexture_DejaVuMonoBold from '../assets/font/FontDejaVuMonoBold.png';
+import fontXml_DejaVuMonoBold from '../assets/font/FontDejaVuMonoBold.xml';
 
 export default class Radar06sScene extends Phaser.Scene {
   public Waypoints!: Waypoint[];
@@ -24,7 +28,7 @@ export default class Radar06sScene extends Phaser.Scene {
   private isDebug: boolean;
 
   constructor(options: GameObjectOptions) {
-    super(SceneKeys.Radar06s);
+    super(SceneKeys.RADAR_06s);
 
     // this.PlaneList = new Phaser.GameObjects.Layer(this);
     this.Waypoints = [];
@@ -32,13 +36,16 @@ export default class Radar06sScene extends Phaser.Scene {
     this.isDebug = options?.isDebug;
   }
 
-  init() {
-    // Property setup
-  }
+  init() {}
 
   preload() {
-    this.load.image(AssetKeys.Radar06s, img_Radar06s);
-    this.load.image(AssetKeys.PpsSymbol, img_PpsSymbol);
+    this.load.image(AssetKeys.RADAR_06s, img_Radar06s);
+    this.load.image(AssetKeys.PPS_SYMBOL, img_PpsSymbol);
+    this.load.bitmapFont(
+      AssetKeys.FONT_DEJAVU_MONO_BOLD,
+      fontTexture_DejaVuMonoBold,
+      fontXml_DejaVuMonoBold
+    );
   }
 
   create() {
@@ -46,8 +53,10 @@ export default class Radar06sScene extends Phaser.Scene {
       this.debug();
     }
 
+    //TEMP
+
     // Create object: Background Image
-    new RadarBg(this, AssetKeys.Radar06s);
+    new RadarBg(this, AssetKeys.RADAR_06s);
 
     // Create objects: Waypoints Layer
     Rwy06sWaypointList.forEach((waypointData) =>
@@ -61,8 +70,13 @@ export default class Radar06sScene extends Phaser.Scene {
       acId: { abbrev: 'ACA123', spoken: 'Air Canada 1-2-3' },
       acType: AcType.JET,
       acModel: AcModel.A343,
-      acWtc: AcWTC.M,
-      filedData: { alt: 300, route: ['PERLO', 'OMAPA', 'ANCOL'], speed: 300 },
+      acWtc: AcWTC.H,
+      filedData: {
+        alt: 300,
+        route: ['GOTIM', 'IKLEN', 'TONNY'],
+        speed: 300,
+        destination: 'CYOW',
+      },
       handoffData: {
         alt: 150,
         sector: AdjacentSectors.HM,
@@ -70,9 +84,12 @@ export default class Radar06sScene extends Phaser.Scene {
       depRunway: DepRunwayYYZ.RWY_05,
     };
 
+    const newPlane = new Plane(this, testPlaneProps);
+    this.PlaneList.push(newPlane);
+
     this.input.on(DomEvents.PointerDown, () => {
-      const newPlane = new Plane(this, testPlaneProps);
-      this.PlaneList.push(newPlane);
+      // const newPlane2 = new Plane(this, testPlaneProps);
+      // this.PlaneList.push(newPlane2);
     });
   }
 

@@ -1,4 +1,4 @@
 export enum SceneKeys {
   // Preloader = 'Preloader',
-  Radar06s = 'Radar06sScene',
+  RADAR_06s = 'Radar06sScene',
 }

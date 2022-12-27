@@ -8,21 +8,22 @@ const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   parent: 'phaser',
   backgroundColor: '#000',
+
   scale: {
     mode: Phaser.Scale.ScaleModes.HEIGHT_CONTROLS_WIDTH,
-    width: window.innerHeight,
-    height: window.innerHeight,
+    width: 1080,
+    height: 1080,
   },
   physics: {
     default: 'arcade',
     arcade: {
       gravity: { x: 0, y: 0 },
-      fps: 0.2,
+      fps: 0.5,
     },
   },
   scene: [new Radar06sScene({ isDebug: IS_DEBUG_MODE })],
   render: {
-    antialias: false,
+    antialias: true,
   },
 };
 

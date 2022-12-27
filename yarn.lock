@@ -1904,6 +1904,13 @@
   dependencies:
     "@types/node" "*"
 
+"@types/xml@^1.0.8":
+  "integrity" "sha512-IptEZBtDwSPayCP8FmbordhAdjdxsif4zH29xTbBRacZeCHFHZp8OxyG1/CrS8AS0MziJUPTGWCTKbYtvHGYPg=="
+  "resolved" "https://registry.npmjs.org/@types/xml/-/xml-1.0.8.tgz"
+  "version" "1.0.8"
+  dependencies:
+    "@types/node" "*"
+
 "@types/yargs-parser@*":
   "integrity" "sha512-7tFImggNeNBVMsn0vLrpn1H1uPrUBdnARPTpZoitY37ZrdJREzf7I16tMrlK3hen349gr1NYh8CmZQa7CTG6Aw=="
   "resolved" "https://registry.npmjs.org/@types/yargs-parser/-/yargs-parser-20.2.1.tgz"

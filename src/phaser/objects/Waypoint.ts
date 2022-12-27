@@ -7,7 +7,6 @@ import { FontColors, genWaypointTextStyles } from '../config/TextStyleConfig';
 import { AcType } from '../types/AircraftTypes';
 import { DomEvents } from '../types/DomEvents';
 import type { GameObjectOptions } from '../types/GameObjectOptions';
-import { setRelativeSize } from '../utils/setRelativeSize';
 
 export default class Waypoint extends Phaser.GameObjects.Arc {
   public name: WaypointNamesAll;
@@ -24,7 +23,7 @@ export default class Waypoint extends Phaser.GameObjects.Arc {
     const actualX = waypointData.relativeCoord.x * cameraHeight;
     const actualY = waypointData.relativeCoord.y * cameraHeight;
 
-    const CIRCLE_RADIUS = setRelativeSize(scene, 6);
+    const CIRCLE_RADIUS = 8;
 
     super(scene, actualX, actualY, CIRCLE_RADIUS);
     this.name = waypointData.name;

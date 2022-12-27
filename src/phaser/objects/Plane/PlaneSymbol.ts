@@ -2,17 +2,16 @@ import Phaser from 'phaser';
 
 import { AssetKeys } from '../../types/AssetKeys';
 import { convertHeadingToRadians } from '../../utils/convertHeadingToRadians';
-import { setRelativeSize } from '../../utils/setRelativeSize';
 import { asKnots } from '../../utils/asKnots';
 import Plane from './Plane';
 
 export default class PlaneSymbol extends Phaser.GameObjects.Image {
   constructor(plane: Plane) {
-    super(plane.scene, 0, 0, AssetKeys.PpsSymbol);
+    super(plane.scene, 0, 0, AssetKeys.PPS_SYMBOL);
 
     // Init properties
     this.setDepth(10);
-    this.setScale(setRelativeSize(plane.scene, 0.02));
+    this.setScale(0.2);
 
     plane.scene.add.existing(this);
 

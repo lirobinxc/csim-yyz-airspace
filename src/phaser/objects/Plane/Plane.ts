@@ -11,6 +11,7 @@ import { WaypointNamesAll } from '../../config/shared/WaypointsCollection';
 import RunwayOrigins from '../../config/RunwayOrigins';
 import { AdjacentSectors, TerminalSectors } from '../../types/AirspaceTypes';
 import { PlanePerformanceConfig } from '../../config/PlanePerformanceConfig';
+import { getRunwayHeading } from '../../config/RunwayHeadingConfig';
 
 export interface PlanePerformance {
   speed: {
@@ -34,6 +35,7 @@ export interface PlaneProperties {
     route: WaypointNamesAll[];
     alt: number;
     speed: number;
+    destination: string;
   };
   handoffData: {
     alt: number;
@@ -59,6 +61,8 @@ export interface PlaneCommands {
     current: number;
     assigned: number;
   };
+  isClimbing: boolean;
+  isDescending: boolean;
 }
 
 export default class Plane extends Phaser.GameObjects.Container {
@@ -74,41 +78,49 @@ export default class Plane extends Phaser.GameObjects.Container {
   constructor(scene: Phaser.Scene, props: PlaneProperties) {
     super(scene);
 
-    // Common setup tasks
+    // Common init
     scene.add.existing(this);
+
+    // Init: Name
     this.name = props.acId.abbrev;
 
     // Init: Plane data
     this.Properties = props;
-    this.Performance = this.getPlanePerformance(props);
-    this.Commands = {} as PlaneCommands;
+    this.Performance = this.initPlanePerformance(props);
+    this.Commands = this.initPlaneCommands(props, this.Performance);
 
-    // Attach obj: Plane Subcomponents
+    // Attach objs: Plane Subcomponents
     this.Symbol = new PlaneSymbol(this);
-    this.DataTag = new PlaneDataTag(this);
+    this.DataTag = new PlaneDataTag(this, this.Symbol);
 
     this.add(this.Symbol);
     this.add(this.DataTag);
 
-    // Setup: Plane Symbol
+    // Setup: Plane Symbol @ runway origin
     this.setX(this.getRunwayOrigin(props).x);
     this.setY(this.getRunwayOrigin(props).y);
 
     // Setup: Plane Data Tag
-    const symbolRightCenter = this.Symbol.getRightCenter();
-    console.log({ symbolRightCenter });
-
-    this.DataTag.setPosition(symbolRightCenter.x, symbolRightCenter.y);
+    this.updateDataTagPosition();
   }
 
   preUpdate() {
-    const symbolRightCenter = this.Symbol.getRightCenter();
-    console.log({ symbolRightCenter });
-
-    this.DataTag.setPosition(symbolRightCenter.x, symbolRightCenter.y);
+    this.updateDataTagPosition();
   }
 
-  private getPlanePerformance(props: PlaneProperties): PlanePerformance {
+  private updateDataTagPosition() {
+    const DEFAULT_DATATAG_SPACING = 6; // px
+
+    if (this.DataTag.isDefaultPosition) {
+      const symbolRightCenter = this.Symbol.getRightCenter();
+      this.DataTag.setPosition(
+        symbolRightCenter.x + DEFAULT_DATATAG_SPACING,
+        symbolRightCenter.y
+      );
+    }
+  }
+
+  private initPlanePerformance(props: PlaneProperties): PlanePerformance {
     const performanceData = PlanePerformanceConfig[props.acModel];
 
     if (!performanceData) {
@@ -117,6 +129,37 @@ export default class Plane extends Phaser.GameObjects.Container {
       );
     }
     return performanceData;
+  }
+
+  private initPlaneCommands(
+    acProps: PlaneProperties,
+    acPerf: PlanePerformance
+  ): PlaneCommands {
+    if (!acPerf) {
+      throw new Error(
+        `Could not find PlanePerformance data for Plane: ${this.name}`
+      );
+    }
+
+    const initialCommands: PlaneCommands = {
+      speed: {
+        current: acPerf.speed.initialClimb,
+        assigned: acPerf.speed.initialClimb,
+      },
+      altitude: {
+        current: 0,
+        assigned: acProps.acType === AcType.JET ? 50 : 30,
+      },
+      heading: { ...getRunwayHeading(acProps.depRunway) },
+      climbRate: {
+        current: 0,
+        assigned: acPerf.climbRate.initialClimb,
+      },
+      isClimbing: true,
+      isDescending: false,
+    };
+
+    return initialCommands;
   }
 
   private getRunwayOrigin(props: PlaneProperties): Phaser.Math.Vector2 {
