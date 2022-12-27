@@ -5,6 +5,7 @@ import {
 } from '../config/shared/WaypointsCollection';
 import { FontColors, genWaypointTextStyles } from '../config/TextStyleConfig';
 import { AcType } from '../types/AircraftTypes';
+import { ColorKeys } from '../types/ColorKeys';
 import { DomEvents } from '../types/DomEvents';
 import type { GameObjectOptions } from '../types/GameObjectOptions';
 
@@ -37,7 +38,7 @@ export default class Waypoint extends Phaser.GameObjects.Arc {
     this.setInteractive();
 
     if (options.isDebug) {
-      const colorPink = 0xff0ef4;
+      const colorPink = ColorKeys.DEBUG_PINK;
       scene.input.enableDebug(this, colorPink);
     }
 

@@ -9,11 +9,12 @@ export default class PlaneSymbol extends Phaser.GameObjects.Image {
   constructor(plane: Plane) {
     super(plane.scene, 0, 0, AssetKeys.PPS_SYMBOL);
 
+    // Common setup
+    plane.scene.add.existing(this);
+
     // Init properties
     this.setDepth(10);
     this.setScale(0.2);
-
-    plane.scene.add.existing(this);
 
     // Enable physics on the Plane object
     this.scene.physics.add.existing(this);

@@ -8,69 +8,80 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
   public isExtendedTag: boolean;
   public isDefaultPosition: boolean; // px
 
-  private Plane: Plane;
-  private Symbol: PlaneSymbol;
-  private TextLine1: Phaser.GameObjects.BitmapText;
-  private TextLine2: Phaser.GameObjects.DynamicBitmapText;
-  private TextLine3: Phaser.GameObjects.BitmapText;
+  // CONSTANTS
+  public LINE_SPACING: 3; // px; space between the Text lines
 
-  constructor(plane: Plane, planeSymbol: PlaneSymbol) {
+  // Parent component
+  private Plane: Plane;
+
+  // Subcomponents
+  private Text1: Phaser.GameObjects.BitmapText;
+  private Text2: Phaser.GameObjects.DynamicBitmapText;
+  private Text3: Phaser.GameObjects.BitmapText;
+
+  constructor(plane: Plane) {
     super(plane.scene);
 
-    // Common setup tasks
+    // Common setup
     plane.scene.add.existing(this);
     this.isExtendedTag = false;
-    this.isDefaultPosition = true; // px
+    this.isDefaultPosition = true;
+    this.LINE_SPACING = 3; // px
+
     this.Plane = plane;
-    this.Symbol = planeSymbol;
 
-    // Attach: Text
-    this.TextLine1 = new Phaser.GameObjects.BitmapText(
+    // Attach: Text, max 9 chars per line
+    this.Text1 = new Phaser.GameObjects.BitmapText(
       plane.scene,
       0,
       0,
-      AssetKeys.FONT_DEJAVU_MONO_BOLD
+      AssetKeys.FONT_DEJAVU_MONO_BOLD,
+      '123456789'
     );
-    this.TextLine2 = new Phaser.GameObjects.DynamicBitmapText(
+    this.Text2 = new Phaser.GameObjects.DynamicBitmapText(
       plane.scene,
       0,
       0,
-      AssetKeys.FONT_DEJAVU_MONO_BOLD
+      AssetKeys.FONT_DEJAVU_MONO_BOLD,
+      '123456789'
     );
-    this.TextLine3 = new Phaser.GameObjects.BitmapText(
+    this.Text3 = new Phaser.GameObjects.BitmapText(
       plane.scene,
       0,
       0,
-      AssetKeys.FONT_DEJAVU_MONO_BOLD
+      AssetKeys.FONT_DEJAVU_MONO_BOLD,
+      '123456789'
     );
-    this.add([this.TextLine1, this.TextLine2, this.TextLine3]);
 
-    // Setup: Line1
+    // Attach: All subcomponents to this container
+    this.add([this.Text1, this.Text2, this.Text3]);
+
+    // Setup: Text1
     const FONT_SIZE = 16;
     const FONT_TINT_COLOR = 0xeae37f; // light yellow
     const FONT_SCALE_Y = 0.9; // vertically squishes font
     const LINE_ORIGIN = [0, 0.5];
 
-    this.TextLine1.setFontSize(FONT_SIZE);
-    this.TextLine1.setTint(FONT_TINT_COLOR);
-    this.TextLine1.scaleY = FONT_SCALE_Y;
-    this.TextLine1.setOrigin(...LINE_ORIGIN);
+    this.Text1.setFontSize(FONT_SIZE);
+    this.Text1.setTint(FONT_TINT_COLOR);
+    this.Text1.scaleY = FONT_SCALE_Y;
+    this.Text1.setOrigin(...LINE_ORIGIN);
 
-    // Setup: Line2 - CENTER LINE
-    this.TextLine2.setFontSize(FONT_SIZE);
-    this.TextLine2.setTint(FONT_TINT_COLOR);
-    this.TextLine2.scaleY = FONT_SCALE_Y;
-    this.TextLine2.setDisplayCallback(this.incVmiFontSize);
-    this.TextLine2.setOrigin(...LINE_ORIGIN);
+    // Setup: Text2 - CENTER LINE
+    this.Text2.setFontSize(FONT_SIZE);
+    this.Text2.setTint(FONT_TINT_COLOR);
+    this.Text2.scaleY = FONT_SCALE_Y;
+    this.Text2.setDisplayCallback(this.incVmiFontSize);
+    this.Text2.setOrigin(...LINE_ORIGIN);
 
-    // Setup: Line3
-    this.TextLine3.setFontSize(FONT_SIZE);
-    this.TextLine3.setTint(FONT_TINT_COLOR);
-    this.TextLine3.scaleY = FONT_SCALE_Y;
-    this.TextLine3.setOrigin(...LINE_ORIGIN);
+    // Setup: Text3
+    this.Text3.setFontSize(FONT_SIZE);
+    this.Text3.setTint(FONT_TINT_COLOR);
+    this.Text3.scaleY = FONT_SCALE_Y;
+    this.Text3.setOrigin(...LINE_ORIGIN);
 
-    // Setup: Line1 & Line3 positions relative to Line2 (CENTER LINE)
-    this.setLine1Line3Position();
+    // Setup: Text1 & Text3 positions relative to Line2 (CENTER LINE)
+    this.setText1Text3Position();
 
     // Input: On press F10 key, toggle EXT TAG
     this.scene.input.keyboard.on('keydown-F10', () => {
@@ -79,19 +90,53 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
   }
 
   preUpdate() {
-    this.setLine1Line3Position();
-    this.updateLine1Text();
-    this.updateLine2Text();
-    this.updateLine3Text();
+    // this.setText1Text3Position();
+    this.updateText1();
+    this.updateText2();
+    this.updateText3();
   }
 
-  private updateLine1Text() {
+  // TO DO: convert this function to
+  // getText1LeftCenter() & getText1RightCenter()
+  public getLineHeight() {
+    // console.log(this.Text1.getTextBounds());
+
+    const lineHeight = this.Text1.getTextBounds().global.height;
+    return lineHeight - this.LINE_SPACING;
+  }
+
+  // Local = relative to its own container
+  public getText1LeftCenterLocal() {
+    const text1LocalCoord = new Phaser.Math.Vector2(this.Text1.x, this.Text1.y);
+
+    const coordPlusContainerPosition = new Phaser.Math.Vector2(
+      text1LocalCoord.x + this.x,
+      text1LocalCoord.y + this.y
+    );
+
+    return coordPlusContainerPosition;
+  }
+
+  // Local = relative to its own container
+  public getText1RightCenterLocal() {
+    const text2Width = this.Text2.getTextBounds().global.width;
+    const text1LocalCoord = new Phaser.Math.Vector2(this.Text1.x, this.Text1.y);
+
+    const coordPlusContainerPosition = new Phaser.Math.Vector2(
+      text1LocalCoord.x + this.x + text2Width,
+      text1LocalCoord.y + this.y
+    );
+
+    return coordPlusContainerPosition;
+  }
+
+  private updateText1() {
     const acid = this.Plane.Properties.acId.abbrev;
     const wtcSymbol = convertAcWtcToSymbol(this.Plane.Properties.acWtc);
-    this.TextLine1.setText(`${acid}${wtcSymbol}`);
+    this.Text1.setText(`${acid}${wtcSymbol}`);
   }
 
-  private updateLine2Text() {
+  private updateText2() {
     const currCommands = this.Plane.Commands;
 
     const altitude = currCommands.altitude.current.toString().padStart(3, '0');
@@ -108,25 +153,24 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
 
     const groundSpeed = Math.round(currCommands.speed.current / 10);
 
-    this.TextLine2.setText(`${altitude}${vmi}${vmr} ${groundSpeed}`); // max 9 chars length
+    this.Text2.setText(`${altitude}${vmi}${vmr} ${groundSpeed}`); // max 9 chars length
   }
 
-  updateLine3Text() {
+  private updateText3() {
     if (this.isExtendedTag) {
       const acModel = this.Plane.Properties.acModel.padEnd(4, ' ');
       const destination = this.Plane.Properties.filedData.destination;
-      this.TextLine3.setText(`${acModel} ${destination}`); // max 9 chars length
+      this.Text3.setText(`${acModel} ${destination}`); // max 9 chars length
     } else {
-      this.TextLine3.setText('');
+      this.Text3.setText('');
     }
   }
 
-  private setLine1Line3Position() {
-    const line2Height = this.TextLine2.getTextBounds().global.height;
+  private setText1Text3Position() {
+    const line2Height = this.Text2.getTextBounds().global.height;
 
-    const LINE_SPACING = 3;
-    this.TextLine1.setY(-line2Height + LINE_SPACING);
-    this.TextLine3.setY(line2Height - LINE_SPACING);
+    this.Text1.setY(-line2Height + this.LINE_SPACING);
+    this.Text3.setY(line2Height - this.LINE_SPACING);
   }
 
   private incVmiFontSize(

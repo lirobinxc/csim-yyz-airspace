@@ -16,8 +16,6 @@ import { AdjacentSectors } from '../types/AirspaceTypes';
 import img_Radar06s from '../assets/Radar06s.png';
 // import img_Radar06s from '../assets/Radar06s_vector.svg';
 import img_PpsSymbol from '../assets/PpsSymbol.png';
-import fontTexture_DejaVuMono from '../assets/font/FontDejaVuMono.png';
-import fontXml_DejaVuMono from '../assets/font/FontDejaVuMono.xml';
 import fontTexture_DejaVuMonoBold from '../assets/font/FontDejaVuMonoBold.png';
 import fontXml_DejaVuMonoBold from '../assets/font/FontDejaVuMonoBold.xml';
 

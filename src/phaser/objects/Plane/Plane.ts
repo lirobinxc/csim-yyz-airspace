@@ -12,6 +12,7 @@ import RunwayOrigins from '../../config/RunwayOrigins';
 import { AdjacentSectors, TerminalSectors } from '../../types/AirspaceTypes';
 import { PlanePerformanceConfig } from '../../config/PlanePerformanceConfig';
 import { getRunwayHeading } from '../../config/RunwayHeadingConfig';
+import PlaneDataTagLine from './PlaneDataTagLine';
 
 export interface PlanePerformance {
   speed: {
@@ -71,15 +72,21 @@ export default class Plane extends Phaser.GameObjects.Container {
   public Properties: PlaneProperties;
   public Commands: PlaneCommands;
 
-  // Plane Subcomponents
+  // CONSTANTS
+  public DEFAULT_DATATAG_SPACING: number; // px; horizontal space between DataTag & Symbol
+
+  // Subcomponents
   private Symbol: PlaneSymbol;
   private DataTag: PlaneDataTag;
+  private TagLine: PlaneDataTagLine;
 
   constructor(scene: Phaser.Scene, props: PlaneProperties) {
     super(scene);
 
-    // Common init
+    // Common setup
     scene.add.existing(this);
+    this.setDepth(10);
+    this.DEFAULT_DATATAG_SPACING = 6; // px
 
     // Init: Name
     this.name = props.acId.abbrev;
@@ -91,14 +98,14 @@ export default class Plane extends Phaser.GameObjects.Container {
 
     // Attach objs: Plane Subcomponents
     this.Symbol = new PlaneSymbol(this);
-    this.DataTag = new PlaneDataTag(this, this.Symbol);
+    this.DataTag = new PlaneDataTag(this);
+    this.TagLine = new PlaneDataTagLine(this, this.Symbol, this.DataTag);
 
-    this.add(this.Symbol);
-    this.add(this.DataTag);
+    this.add([this.Symbol, this.DataTag, this.TagLine]);
 
-    // Setup: Plane Symbol @ runway origin
-    this.setX(this.getRunwayOrigin(props).x);
-    this.setY(this.getRunwayOrigin(props).y);
+    // Setup: Plane obj @ runway origin
+    this.setX(this.initRunwayOrigin(props).x);
+    this.setY(this.initRunwayOrigin(props).y);
 
     // Setup: Plane Data Tag
     this.updateDataTagPosition();
@@ -109,12 +116,10 @@ export default class Plane extends Phaser.GameObjects.Container {
   }
 
   private updateDataTagPosition() {
-    const DEFAULT_DATATAG_SPACING = 6; // px
-
     if (this.DataTag.isDefaultPosition) {
       const symbolRightCenter = this.Symbol.getRightCenter();
       this.DataTag.setPosition(
-        symbolRightCenter.x + DEFAULT_DATATAG_SPACING,
+        symbolRightCenter.x + this.DEFAULT_DATATAG_SPACING,
         symbolRightCenter.y
       );
     }
@@ -162,7 +167,7 @@ export default class Plane extends Phaser.GameObjects.Container {
     return initialCommands;
   }
 
-  private getRunwayOrigin(props: PlaneProperties): Phaser.Math.Vector2 {
+  private initRunwayOrigin(props: PlaneProperties): Phaser.Math.Vector2 {
     if (!this.Properties.depRunway) {
       throw new Error(`Could not determine runway origin for: ${props.acId}`);
     }
