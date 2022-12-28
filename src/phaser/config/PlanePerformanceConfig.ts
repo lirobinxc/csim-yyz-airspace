@@ -1,55 +1,61 @@
 import { PlanePerformance } from '../objects/Plane/Plane';
 import { AcModel } from '../types/AircraftTypes';
 
+const BASE_ACCEL = 5; // kts per second
+
 export const PlanePerformanceConfig: {
   [key in AcModel]: PlanePerformance;
 } = {
   A21N: {
     speed: {
-      initialClimb: 150, // to 5000 feet
-      normalClimb: 210, // 5000 to FL240
-      cruise: 360,
+      initialClimb: 150, // kts, to 800 feet
+      normalClimb: 210, // kts, 800 to FL240
+      maxCruise: 360,
+      maxBelow10k: 250,
     },
     climbRate: {
-      initialClimb: 35, // hundred feet per minute
-      normalClimb: 15,
+      initialClimb: 3500, // feet per minute
+      normalClimb: 1500,
     },
-    accel: 0.0012, // knots per second
+    accel: BASE_ACCEL,
   },
   A343: {
     speed: {
-      initialClimb: 175, // to 5000 feet
-      normalClimb: 290, // 5000 to FL240
-      cruise: 490,
+      initialClimb: 175, // to 800 feet
+      normalClimb: 290, // 800 to FL240
+      maxCruise: 490,
+      maxBelow10k: 250,
     },
     climbRate: {
-      initialClimb: 14, // hundred feet per minute
-      normalClimb: 13,
+      initialClimb: 1400, // feet per minute
+      normalClimb: 1250,
     },
-    accel: 0.0012, // knots per second
+    accel: BASE_ACCEL,
   },
   B738: {
     speed: {
-      initialClimb: 165, // to 5000 feet
-      normalClimb: 290, // 5000 to FL240
-      cruise: 460,
+      initialClimb: 165, // to 800 feet
+      normalClimb: 290, // 800 to FL240
+      maxCruise: 460,
+      maxBelow10k: 250,
     },
     climbRate: {
-      initialClimb: 30, // hundred feet per minute
-      normalClimb: 20,
+      initialClimb: 3000, // feet per minute
+      normalClimb: 2000,
     },
-    accel: 0.0012, // knots per second
+    accel: BASE_ACCEL,
   },
   DH8D: {
     speed: {
-      initialClimb: 150, // to 5000 feet
-      normalClimb: 210, // 5000 to FL240
-      cruise: 360,
+      initialClimb: 150, // to 800 feet
+      normalClimb: 210, // 800 to FL240
+      maxCruise: 270,
+      maxBelow10k: 250,
     },
     climbRate: {
-      initialClimb: 35, // hundred feet per minute
-      normalClimb: 14,
+      initialClimb: 3500, // feet per minute
+      normalClimb: 1400,
     },
-    accel: 0.0012, // knots per second
+    accel: BASE_ACCEL,
   },
 };

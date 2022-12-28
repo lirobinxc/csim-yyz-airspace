@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.scss';
 import App from './App';
 
-import './phaser/PhaserGame';
+import './phaser/PhaserGameConfig';
 
 ReactDOM.render(
   <React.StrictMode>

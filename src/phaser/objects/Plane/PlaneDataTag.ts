@@ -7,6 +7,7 @@ import PlaneSymbol from './PlaneSymbol';
 export default class PlaneDataTag extends Phaser.GameObjects.Container {
   public isExtendedTag: boolean;
   public isDefaultPosition: boolean; // px
+  public showVmi: boolean;
 
   // CONSTANTS
   public LINE_SPACING: 3; // px; space between the Text lines
@@ -26,6 +27,7 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
     plane.scene.add.existing(this);
     this.isExtendedTag = false;
     this.isDefaultPosition = true;
+    this.showVmi = false;
     this.LINE_SPACING = 3; // px
 
     this.Plane = plane;
@@ -87,22 +89,18 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
     this.scene.input.keyboard.on('keydown-F10', () => {
       this.isExtendedTag = !this.isExtendedTag;
     });
+
+    // Synced update with FPS
+    this.updateText2();
+
+    this.scene.physics.world.on('worldstep', () => {
+      this.updateText2();
+    });
   }
 
   preUpdate() {
-    // this.setText1Text3Position();
     this.updateText1();
-    this.updateText2();
     this.updateText3();
-  }
-
-  // TO DO: convert this function to
-  // getText1LeftCenter() & getText1RightCenter()
-  public getLineHeight() {
-    // console.log(this.Text1.getTextBounds());
-
-    const lineHeight = this.Text1.getTextBounds().global.height;
-    return lineHeight - this.LINE_SPACING;
   }
 
   // Local = relative to its own container
@@ -133,25 +131,32 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
   private updateText1() {
     const acid = this.Plane.Properties.acId.abbrev;
     const wtcSymbol = convertAcWtcToSymbol(this.Plane.Properties.acWtc);
-    this.Text1.setText(`${acid}${wtcSymbol}`);
+    this.Text1.setText(
+      `${acid}${wtcSymbol} HDG ${this.Plane.Commands.heading.current
+        .toFixed(1)
+        .toString()
+        .padStart(5, '0')}`
+    );
   }
 
   private updateText2() {
     const currCommands = this.Plane.Commands;
 
-    const altitude = currCommands.altitude.current.toString().padStart(3, '0');
+    const altitude = Math.floor(currCommands.altitude.current / 100)
+      .toString()
+      .padStart(3, '0');
 
-    const vmi = currCommands.isClimbing
-      ? '↑'
-      : currCommands.isDescending
-      ? '↓'
-      : ' ';
+    const vmi = this.showVmi ? '↑' : currCommands.isDescending ? '↓' : ' ';
 
-    const vmr = currCommands.isClimbing
-      ? currCommands.climbRate.current.toString().padStart(2, '0')
+    const vmr = this.showVmi
+      ? Math.floor(currCommands.climbRate.current / 100)
+          .toString()
+          .padStart(2, '0')
       : '  ';
 
-    const groundSpeed = Math.round(currCommands.speed.current / 10);
+    const groundSpeed = Math.ceil(currCommands.speed.current / 10)
+      .toString()
+      .padStart(2, '0');
 
     this.Text2.setText(`${altitude}${vmi}${vmr} ${groundSpeed}`); // max 9 chars length
   }

@@ -21,17 +21,19 @@ import fontXml_DejaVuMonoBold from '../assets/font/FontDejaVuMonoBold.xml';
 
 export default class Radar06sScene extends Phaser.Scene {
   public Waypoints!: Waypoint[];
-  public PlaneList!: Plane[];
+  public PlaneList!: Phaser.GameObjects.Group;
 
   private isDebug: boolean;
+  private lastFrameTime: number;
 
   constructor(options: GameObjectOptions) {
     super(SceneKeys.RADAR_06s);
 
     // this.PlaneList = new Phaser.GameObjects.Layer(this);
     this.Waypoints = [];
-    this.PlaneList = [];
+    this.PlaneList = new Phaser.GameObjects.Group(this);
     this.isDebug = options?.isDebug;
+    this.lastFrameTime = 0;
   }
 
   init() {}
@@ -67,23 +69,27 @@ export default class Radar06sScene extends Phaser.Scene {
     const testPlaneProps: PlaneProperties = {
       acId: { abbrev: 'ACA123', spoken: 'Air Canada 1-2-3' },
       acType: AcType.JET,
-      acModel: AcModel.A343,
-      acWtc: AcWTC.H,
+      acModel: AcModel.B738,
+      acWtc: AcWTC.M,
       filedData: {
         alt: 300,
         route: ['GOTIM', 'IKLEN', 'TONNY'],
         speed: 300,
         destination: 'CYOW',
       },
+      takeoffData: {
+        depRunway: DepRunwayYYZ.RWY_05,
+        isNADP1: false,
+        assignedAlt: 5000,
+      },
       handoffData: {
         alt: 150,
         sector: AdjacentSectors.HM,
       },
-      depRunway: DepRunwayYYZ.RWY_05,
     };
 
     const newPlane = new Plane(this, testPlaneProps);
-    this.PlaneList.push(newPlane);
+    this.PlaneList.add(newPlane);
 
     this.input.on(DomEvents.PointerDown, () => {
       // const newPlane2 = new Plane(this, testPlaneProps);
@@ -91,9 +97,16 @@ export default class Radar06sScene extends Phaser.Scene {
     });
   }
 
-  update() {}
-
-  updatePlaneSpeed() {}
+  update() {
+    // TEMP
+    // const thisCoord = new Phaser.Math.Vector2(this.PlaneList..x, this.y);
+    // const wpCoord = Rwy06sWaypointKeys.ALKUT;
+    // const rad = Phaser.Math.Angle.BetweenPoints(thisCoord, wpCoord);
+    // const deg = Phaser.Math.RadToDeg(rad);
+    // // const deg = convertRadiansToHeading(rad);
+    // console.log({ thisCoord, wpCoord, deg });
+    // // this.Commands.heading.assigned = Math.ceil(deg);
+  }
 
   debug() {
     new PointerCoordinates(this);

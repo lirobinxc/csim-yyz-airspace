@@ -8,5 +8,5 @@
  * @returns {number}
  */
 export function asKnots(knots: number) {
-  return knots / 250;
+  return knots / 200;
 }

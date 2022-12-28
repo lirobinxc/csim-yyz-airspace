@@ -17,31 +17,15 @@ export default class PlaneSymbol extends Phaser.GameObjects.Image {
     this.setScale(0.2);
 
     // Enable physics on the Plane object
-    this.scene.physics.add.existing(this);
-    this.updatePlaneVelocity();
+    // this.scene.physics.add.existing(this);
 
     // Config the physics body
-    const body = this.body as Phaser.Physics.Arcade.Body;
-    body.setCollideWorldBounds(true);
-    body.setSize(this.displayWidth + 2, this.displayHeight + 2);
+    // const body = this.body as Phaser.Physics.Arcade.Body;
+    // body.setCollideWorldBounds(true);
+    // body.setSize(this.displayWidth + 2, this.displayHeight + 2);
 
     /* -------------------------- Init Events -------------------------- */
     this.setInteractive();
     plane.scene.input.enableDebug(this);
   }
-
-  private updatePlaneVelocity = () => {
-    const PLANE_MAX_SPEED = asKnots(250);
-    const PLANE_ACCEL = asKnots(10);
-
-    const body = this.body as Phaser.Physics.Arcade.Body;
-
-    const planeRadian = convertHeadingToRadians(57);
-
-    this.scene.physics.velocityFromRotation(
-      planeRadian,
-      PLANE_MAX_SPEED,
-      body.velocity
-    );
-  };
 }

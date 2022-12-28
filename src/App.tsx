@@ -1,4 +1,4 @@
-import phaserGame from './phaser/PhaserGame';
+import phaserGame from './phaser/PhaserGameConfig';
 import Radar06sScene from './phaser/scenes/Radar06sScene';
 
 import styles from './App.module.scss';

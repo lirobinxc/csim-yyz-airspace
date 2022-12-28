@@ -13,12 +13,20 @@ import { AdjacentSectors, TerminalSectors } from '../../types/AirspaceTypes';
 import { PlanePerformanceConfig } from '../../config/PlanePerformanceConfig';
 import { getRunwayHeading } from '../../config/RunwayHeadingConfig';
 import PlaneDataTagLine from './PlaneDataTagLine';
+import PlaneBehaviour from './PlaneBehaviour';
+import PlanePTL from './PlanePTL';
+import { determineLeftOrRightTurn } from '../../utils/determineLeftOrRightTurn';
+import { Rwy06sWaypointKeys } from '../../config/Rwy06sWaypoints';
+import { convertRadiansToHeading } from '../../utils/convertRadiansToHeading';
+import Radar06sScene from '../../scenes/Radar06sScene';
+import Waypoint from '../Waypoint';
 
 export interface PlanePerformance {
   speed: {
     initialClimb: number; // to 5000 feet
     normalClimb: number; // 5000 to FL240
-    cruise: number;
+    maxCruise: number;
+    maxBelow10k: number;
   };
   climbRate: {
     initialClimb: number;
@@ -38,11 +46,15 @@ export interface PlaneProperties {
     speed: number;
     destination: string;
   };
+  takeoffData: {
+    assignedAlt: number;
+    depRunway: DepRunwayAll;
+    isNADP1: boolean;
+  };
   handoffData: {
     alt: number;
     sector: TerminalSectors | AdjacentSectors;
   };
-  depRunway: DepRunwayAll;
 }
 
 export interface PlaneCommands {
@@ -56,7 +68,7 @@ export interface PlaneCommands {
   };
   heading: {
     current: number;
-    assigned: number | Phaser.Math.Vector2;
+    assigned: number;
   };
   climbRate: {
     current: number;
@@ -64,27 +76,37 @@ export interface PlaneCommands {
   };
   isClimbing: boolean;
   isDescending: boolean;
+  isLeveling: boolean; // TO DO: not yet implemented in PlaneBehaviour
+  completedSidHeading: boolean;
 }
 
 export default class Plane extends Phaser.GameObjects.Container {
   // Plane Properties
-  private Performance: PlanePerformance;
   public Properties: PlaneProperties;
   public Commands: PlaneCommands;
+  public Performance: PlanePerformance;
 
   // CONSTANTS
   public DEFAULT_DATATAG_SPACING: number; // px; horizontal space between DataTag & Symbol
 
   // Subcomponents
+  private Scene: Radar06sScene;
   private Symbol: PlaneSymbol;
   private DataTag: PlaneDataTag;
   private TagLine: PlaneDataTagLine;
+  private Behaviour: PlaneBehaviour;
 
-  constructor(scene: Phaser.Scene, props: PlaneProperties) {
+  //TEMP
+  public PTL: Phaser.GameObjects.Line;
+
+  constructor(scene: Radar06sScene, props: PlaneProperties) {
     super(scene);
 
     // Common setup
+    this.Scene = scene;
     scene.add.existing(this);
+    scene.physics.add.existing(this); // Enable physics
+
     this.setDepth(10);
     this.DEFAULT_DATATAG_SPACING = 6; // px
 
@@ -100,8 +122,11 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.Symbol = new PlaneSymbol(this);
     this.DataTag = new PlaneDataTag(this);
     this.TagLine = new PlaneDataTagLine(this, this.Symbol, this.DataTag);
+    this.PTL = new PlanePTL(this, this.Symbol, 600);
+    this.add([this.PTL, this.Symbol, this.TagLine, this.DataTag]);
 
-    this.add([this.Symbol, this.DataTag, this.TagLine]);
+    // Attach: Behaviour logic
+    this.Behaviour = new PlaneBehaviour(this, this.DataTag);
 
     // Setup: Plane obj @ runway origin
     this.setX(this.initRunwayOrigin(props).x);
@@ -146,35 +171,41 @@ export default class Plane extends Phaser.GameObjects.Container {
       );
     }
 
+    const runwayHeading = getRunwayHeading(
+      acProps.takeoffData.depRunway
+    ).initial;
+
     const initialCommands: PlaneCommands = {
       speed: {
-        current: acPerf.speed.initialClimb,
+        current: acPerf.speed.initialClimb - 80,
         assigned: acPerf.speed.initialClimb,
       },
       altitude: {
         current: 0,
-        assigned: acProps.acType === AcType.JET ? 50 : 30,
+        assigned: acProps.takeoffData.assignedAlt,
       },
-      heading: { ...getRunwayHeading(acProps.depRunway) },
+      heading: { current: runwayHeading, assigned: runwayHeading },
       climbRate: {
         current: 0,
         assigned: acPerf.climbRate.initialClimb,
       },
-      isClimbing: true,
+      isClimbing: false,
       isDescending: false,
+      isLeveling: false,
+      completedSidHeading: false,
     };
 
     return initialCommands;
   }
 
-  private initRunwayOrigin(props: PlaneProperties): Phaser.Math.Vector2 {
-    if (!this.Properties.depRunway) {
-      throw new Error(`Could not determine runway origin for: ${props.acId}`);
+  private initRunwayOrigin(acProps: PlaneProperties): Phaser.Math.Vector2 {
+    if (!acProps.takeoffData.depRunway) {
+      throw new Error(`Could not determine runway origin for: ${acProps.acId}`);
     }
 
     const rwyOrigins = new RunwayOrigins(this.scene, { isDebug: false });
 
-    const origin = rwyOrigins.getOrigin(props.depRunway);
+    const origin = rwyOrigins.getOrigin(acProps.takeoffData.depRunway);
     return origin;
   }
 }

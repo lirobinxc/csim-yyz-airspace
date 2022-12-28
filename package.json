@@ -1,7 +1,7 @@
 {
   "name": "CSiM YYZ Departure",
   "version": "0.1.0",
-  "homepage": "https://lirobinxc.github.io/atc-sim-yyz-dep",
+  "homepage": "https://lirobinxc.github.io/csim-yyz-departure",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.1",
