@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 
 import Radar06sScene from './scenes/Radar06sScene';
 
-const IS_DEBUG_MODE = true;
+const IS_DEBUG_MODE = false;
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -25,6 +25,7 @@ const config: Phaser.Types.Core.GameConfig = {
   render: {
     antialias: true,
   },
+  disableContextMenu: true,
 };
 
 export default new Phaser.Game(config);

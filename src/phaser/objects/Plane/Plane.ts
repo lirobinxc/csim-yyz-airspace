@@ -20,6 +20,7 @@ import { Rwy06sWaypointKeys } from '../../config/Rwy06sWaypoints';
 import { convertRadiansToHeading } from '../../utils/convertRadiansToHeading';
 import Radar06sScene from '../../scenes/Radar06sScene';
 import Waypoint from '../Waypoint';
+import { GameObjectOptions } from '../../types/GameObjectOptions';
 
 export interface PlanePerformance {
   speed: {
@@ -88,6 +89,7 @@ export default class Plane extends Phaser.GameObjects.Container {
 
   // CONSTANTS
   public DEFAULT_DATATAG_SPACING: number; // px; horizontal space between DataTag & Symbol
+  public SHOW_PTL: boolean;
 
   // Subcomponents
   private Scene: Radar06sScene;
@@ -95,11 +97,13 @@ export default class Plane extends Phaser.GameObjects.Container {
   private DataTag: PlaneDataTag;
   private TagLine: PlaneDataTagLine;
   private Behaviour: PlaneBehaviour;
+  private PTL: PlanePTL;
 
-  //TEMP
-  public PTL: Phaser.GameObjects.Line;
-
-  constructor(scene: Radar06sScene, props: PlaneProperties) {
+  constructor(
+    scene: Radar06sScene,
+    props: PlaneProperties,
+    options: GameObjectOptions
+  ) {
     super(scene);
 
     // Common setup
@@ -109,6 +113,7 @@ export default class Plane extends Phaser.GameObjects.Container {
 
     this.setDepth(10);
     this.DEFAULT_DATATAG_SPACING = 6; // px
+    this.SHOW_PTL = false;
 
     // Init: Name
     this.name = props.acId.abbrev;
@@ -122,22 +127,37 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.Symbol = new PlaneSymbol(this);
     this.DataTag = new PlaneDataTag(this);
     this.TagLine = new PlaneDataTagLine(this, this.Symbol, this.DataTag);
-    this.PTL = new PlanePTL(this, this.Symbol, 600);
+    this.PTL = new PlanePTL(this, this.Symbol, 60);
     this.add([this.PTL, this.Symbol, this.TagLine, this.DataTag]);
 
     // Attach: Behaviour logic
     this.Behaviour = new PlaneBehaviour(this, this.DataTag);
 
-    // Setup: Plane obj @ runway origin
+    // Setup: Plane Container @ runway origin
     this.setX(this.initRunwayOrigin(props).x);
     this.setY(this.initRunwayOrigin(props).y);
 
-    // Setup: Plane Data Tag
+    // Setup: DataTag
     this.updateDataTagPosition();
+
+    // Setup: PTL
+    this.PTL.setVisible(this.SHOW_PTL);
+
+    // Debug
+    if (options.isDebug) {
+      this.SHOW_PTL = true;
+      this.PTL.TIME_IN_SEC = 600;
+    }
   }
 
   preUpdate() {
     this.updateDataTagPosition();
+  }
+
+  public togglePTL() {
+    this.SHOW_PTL = !this.SHOW_PTL;
+
+    this.PTL.setVisible(this.SHOW_PTL);
   }
 
   private updateDataTagPosition() {

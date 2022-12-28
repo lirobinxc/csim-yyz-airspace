@@ -18,12 +18,13 @@ import img_Radar06s from '../assets/Radar06s.png';
 import img_PpsSymbol from '../assets/PpsSymbol.png';
 import fontTexture_DejaVuMonoBold from '../assets/font/FontDejaVuMonoBold.png';
 import fontXml_DejaVuMonoBold from '../assets/font/FontDejaVuMonoBold.xml';
+import { convertRadiansToHeading } from '../utils/convertRadiansToHeading';
 
 export default class Radar06sScene extends Phaser.Scene {
   public Waypoints!: Waypoint[];
   public PlaneList!: Phaser.GameObjects.Group;
+  public Options: GameObjectOptions;
 
-  private isDebug: boolean;
   private lastFrameTime: number;
 
   constructor(options: GameObjectOptions) {
@@ -32,7 +33,7 @@ export default class Radar06sScene extends Phaser.Scene {
     // this.PlaneList = new Phaser.GameObjects.Layer(this);
     this.Waypoints = [];
     this.PlaneList = new Phaser.GameObjects.Group(this);
-    this.isDebug = options?.isDebug;
+    this.Options = options;
     this.lastFrameTime = 0;
   }
 
@@ -49,7 +50,7 @@ export default class Radar06sScene extends Phaser.Scene {
   }
 
   create() {
-    if (this.isDebug) {
+    if (this.Options.isDebug) {
       this.debug();
     }
 
@@ -60,35 +61,10 @@ export default class Radar06sScene extends Phaser.Scene {
 
     // Create objects: Waypoints Layer
     Rwy06sWaypointList.forEach((waypointData) =>
-      this.Waypoints.push(
-        new Waypoint(this, waypointData, { isDebug: this.isDebug })
-      )
+      this.Waypoints.push(new Waypoint(this, waypointData, this.Options))
     );
 
-    // Create object: Plane
-    const testPlaneProps: PlaneProperties = {
-      acId: { abbrev: 'ACA123', spoken: 'Air Canada 1-2-3' },
-      acType: AcType.JET,
-      acModel: AcModel.B738,
-      acWtc: AcWTC.M,
-      filedData: {
-        alt: 300,
-        route: ['GOTIM', 'IKLEN', 'TONNY'],
-        speed: 300,
-        destination: 'CYOW',
-      },
-      takeoffData: {
-        depRunway: DepRunwayYYZ.RWY_05,
-        isNADP1: false,
-        assignedAlt: 5000,
-      },
-      handoffData: {
-        alt: 150,
-        sector: AdjacentSectors.HM,
-      },
-    };
-
-    const newPlane = new Plane(this, testPlaneProps);
+    const newPlane = new Plane(this, testPlaneProps, this.Options);
     this.PlaneList.add(newPlane);
 
     this.input.on(DomEvents.PointerDown, () => {
@@ -99,17 +75,52 @@ export default class Radar06sScene extends Phaser.Scene {
 
   update() {
     // TEMP
-    // const thisCoord = new Phaser.Math.Vector2(this.PlaneList..x, this.y);
-    // const wpCoord = Rwy06sWaypointKeys.ALKUT;
-    // const rad = Phaser.Math.Angle.BetweenPoints(thisCoord, wpCoord);
-    // const deg = Phaser.Math.RadToDeg(rad);
-    // // const deg = convertRadiansToHeading(rad);
-    // console.log({ thisCoord, wpCoord, deg });
-    // // this.Commands.heading.assigned = Math.ceil(deg);
+    const getPlane: Plane = this.PlaneList.getMatching(
+      'name',
+      testPlaneProps.acId.abbrev
+    )[0];
+
+    const thisCoord = new Phaser.Math.Vector2(getPlane.x, getPlane.y);
+
+    const backupCoord = new Phaser.Math.Vector2(0, 0);
+    const wp = this.children.getByName('KEDSI');
+
+    if (wp instanceof Waypoint) {
+      const wpCoord = wp.getCenter();
+      const rad = Phaser.Math.Angle.BetweenPoints(thisCoord, wpCoord);
+      // const deg = Phaser.Math.RadToDeg(rad);
+      const deg = convertRadiansToHeading(rad);
+      const degCeil = Math.ceil(deg);
+      console.log({ degCeil });
+      getPlane.Commands.heading.assigned = degCeil;
+    }
   }
 
   debug() {
     new PointerCoordinates(this);
-    new RunwayOrigins(this, { isDebug: this.isDebug });
+    new RunwayOrigins(this, this.Options);
   }
 }
+
+// Create object: Plane
+const testPlaneProps: PlaneProperties = {
+  acId: { abbrev: 'ACA123', spoken: 'Air Canada 1-2-3' },
+  acType: AcType.JET,
+  acModel: AcModel.B738,
+  acWtc: AcWTC.M,
+  filedData: {
+    alt: 300,
+    route: ['GOTIM', 'IKLEN', 'TONNY'],
+    speed: 300,
+    destination: 'CYOW',
+  },
+  takeoffData: {
+    depRunway: DepRunwayYYZ.RWY_05,
+    isNADP1: false,
+    assignedAlt: 5000,
+  },
+  handoffData: {
+    alt: 150,
+    sector: AdjacentSectors.HM,
+  },
+};

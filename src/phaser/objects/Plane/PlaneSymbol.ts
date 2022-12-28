@@ -4,12 +4,16 @@ import { AssetKeys } from '../../types/AssetKeys';
 import { convertHeadingToRadians } from '../../utils/convertHeadingToRadians';
 import { asKnots } from '../../utils/asKnots';
 import Plane from './Plane';
+import { DomEvents } from '../../types/DomEvents';
 
 export default class PlaneSymbol extends Phaser.GameObjects.Image {
+  private Plane: Plane;
+
   constructor(plane: Plane) {
     super(plane.scene, 0, 0, AssetKeys.PPS_SYMBOL);
 
     // Common setup
+    this.Plane = plane;
     plane.scene.add.existing(this);
 
     // Init properties
@@ -27,5 +31,9 @@ export default class PlaneSymbol extends Phaser.GameObjects.Image {
     /* -------------------------- Init Events -------------------------- */
     this.setInteractive();
     plane.scene.input.enableDebug(this);
+
+    this.on(DomEvents.PointerDown, () => {
+      this.Plane.togglePTL();
+    });
   }
 }
