@@ -15,11 +15,7 @@ import { getRunwayHeading } from '../../config/RunwayHeadingConfig';
 import PlaneDataTagLine from './PlaneDataTagLine';
 import PlaneBehaviour from './PlaneBehaviour';
 import PlanePTL from './PlanePTL';
-import { determineLeftOrRightTurn } from '../../utils/determineLeftOrRightTurn';
-import { Rwy06sWaypointKeys } from '../../config/Rwy06sWaypoints';
-import { convertRadiansToHeading } from '../../utils/convertRadiansToHeading';
 import RadarScene from '../../scenes/RadarScene';
-import Waypoint from '../Waypoint';
 import { GameObjectOptions } from '../../types/GameObjectOptions';
 
 export interface PlanePerformance {

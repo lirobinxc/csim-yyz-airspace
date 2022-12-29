@@ -50,8 +50,9 @@ export default class RadarScene extends Phaser.Scene {
         this.ASSET_KEY = AssetKeys.RADAR_06s;
         break;
       default:
-        this.load.image(AssetKeys.RADAR_06s, img_Radar06s);
-        break;
+        throw new Error(
+          `There is a problem with the SCENE_KEY provided for the RadarScene: ${this.SCENE_KEY}`
+        );
     }
     this.load.image(AssetKeys.PPS_SYMBOL, img_PpsSymbol);
     this.load.bitmapFont(
@@ -62,17 +63,26 @@ export default class RadarScene extends Phaser.Scene {
   }
 
   create() {
+    // Create: Background Image
+    new RadarBg(this, this.ASSET_KEY);
+    console.log({ Rwy06sWaypointDataList: Rwy06sWaypointList });
+    // Create: Waypoints Layer
+    switch (this.SCENE_KEY) {
+      case RadarSceneKeys.RADAR_06s:
+        Rwy06sWaypointList.forEach((waypointData) => {
+          this.Waypoints.push(new Waypoint(this, waypointData));
+        });
+        break;
+      default:
+        throw new Error(
+          `There is a problem with the SCENE_KEY provided for the RadarScene: ${this.SCENE_KEY}`
+        );
+    }
+
+    // Debug:
     if (this.Options.isDebug) {
       this.debug();
     }
-
-    // Create: Background Image
-    new RadarBg(this, this.ASSET_KEY);
-
-    // Create: Waypoints Layer
-    Rwy06sWaypointList.forEach((waypointData) =>
-      this.Waypoints.push(new Waypoint(this, waypointData, this.Options))
-    );
 
     // TEMP Create: Test Plane
     const newPlane = new Plane(this, testPlaneProps, this.Options);

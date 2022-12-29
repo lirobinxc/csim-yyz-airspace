@@ -1,20 +1,18 @@
 import Phaser from 'phaser';
+import { GameConfig } from './config/GameConfig';
 
 import RadarScene from './scenes/RadarScene';
 import { RadarSceneKeys } from './types/SceneKeys';
 
-const GAME_RESOLUTION_HEIGHT = 1080; // square
-const IS_DEBUG_MODE = true;
-
-const config: Phaser.Types.Core.GameConfig = {
+const Config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   parent: 'phaser',
   backgroundColor: '#000',
 
   scale: {
     mode: Phaser.Scale.ScaleModes.HEIGHT_CONTROLS_WIDTH,
-    width: GAME_RESOLUTION_HEIGHT,
-    height: GAME_RESOLUTION_HEIGHT,
+    width: GameConfig.height,
+    height: GameConfig.height,
   },
   physics: {
     default: 'arcade',
@@ -23,11 +21,13 @@ const config: Phaser.Types.Core.GameConfig = {
       fps: 0.5,
     },
   },
-  scene: [new RadarScene(RadarSceneKeys.RADAR_06s, { isDebug: IS_DEBUG_MODE })],
+  scene: [
+    new RadarScene(RadarSceneKeys.RADAR_06s, { isDebug: GameConfig.isDebug }),
+  ],
   render: {
     antialias: true,
   },
   disableContextMenu: true,
 };
 
-export default new Phaser.Game(config);
+export default new Phaser.Game(Config);

@@ -6,7 +6,6 @@ export enum FontColors {
 }
 
 export function genWaypointTextStyles(
-  scene: Phaser.Scene,
   acType: AcType
 ): Phaser.GameObjects.TextStyle {
   const styles = {

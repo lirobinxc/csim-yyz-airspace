@@ -1,5 +1,5 @@
-import RadarScene from '../scenes/RadarScene';
 import { AcType } from '../types/AircraftTypes';
+import { GameConfig } from './GameConfig';
 import { CommonWaypointList } from './shared/CommonWaypoints';
 import type {
   WaypointData06s,
@@ -80,11 +80,16 @@ export const Rwy06sWaypointList: WaypointData06s[] = [
   },
 ];
 
-function genWaypointKeys(wpArr: WaypointData06s[]) {
+function genDictFromWaypointList(wpArr: WaypointData06s[]) {
+  const gameHeight = GameConfig.height;
+
   const wpKeys = wpArr.reduce((acc, item) => {
     acc[item.name] = {
       relativeCoord: item.relativeCoord,
-      displayCoord: item.relativeCoord.scale(1080),
+      displayCoord: new Phaser.Math.Vector2(
+        item.relativeCoord.x,
+        item.relativeCoord.y
+      ).scale(gameHeight),
     };
     return acc;
   }, {} as WaypointKeys06s);
@@ -92,4 +97,4 @@ function genWaypointKeys(wpArr: WaypointData06s[]) {
   return wpKeys;
 }
 
-export const Rwy06sWaypointKeys = genWaypointKeys(Rwy06sWaypointList);
+export const Rwy06sWaypointDict = genDictFromWaypointList(Rwy06sWaypointList);

@@ -3,11 +3,10 @@ import {
   WaypointDataAll,
   WaypointNamesAll,
 } from '../config/shared/WaypointsCollection';
-import { FontColors, genWaypointTextStyles } from '../config/TextStyleConfig';
-import { AcType } from '../types/AircraftTypes';
+import { genWaypointTextStyles } from '../config/TextStyleConfig';
+import RadarScene from '../scenes/RadarScene';
 import { ColorKeys } from '../types/ColorKeys';
 import { DomEvents } from '../types/DomEvents';
-import type { GameObjectOptions } from '../types/GameObjectOptions';
 
 export default class Waypoint extends Phaser.GameObjects.Arc {
   public name: WaypointNamesAll;
@@ -15,11 +14,7 @@ export default class Waypoint extends Phaser.GameObjects.Arc {
   private WpText: Phaser.GameObjects.Text;
   private showName: boolean;
 
-  constructor(
-    scene: Phaser.Scene,
-    waypointData: WaypointDataAll,
-    options: GameObjectOptions
-  ) {
+  constructor(scene: RadarScene, waypointData: WaypointDataAll) {
     const cameraHeight = scene.cameras.main.height;
     const actualX = waypointData.relativeCoord.x * cameraHeight;
     const actualY = waypointData.relativeCoord.y * cameraHeight;
@@ -30,14 +25,16 @@ export default class Waypoint extends Phaser.GameObjects.Arc {
     this.name = waypointData.name;
     this.showName = false;
 
+    // TEMP
+    // console.log(cameraHeight, waypointData);
+
     // Add object to the scene
     scene.add.existing(this);
-    scene.physics.add.existing(this);
 
     this.setDepth(1);
     this.setInteractive();
 
-    if (options.isDebug) {
+    if (scene.Options.isDebug) {
       const colorPink = ColorKeys.DEBUG_PINK;
       scene.input.enableDebug(this, colorPink);
     }
@@ -47,7 +44,7 @@ export default class Waypoint extends Phaser.GameObjects.Arc {
       this.getTopCenter().x,
       this.getTopCenter().y,
       waypointData.name,
-      genWaypointTextStyles(scene, waypointData.type)
+      genWaypointTextStyles(waypointData.type)
     );
     this.WpText.setOrigin(0.5, 1);
 

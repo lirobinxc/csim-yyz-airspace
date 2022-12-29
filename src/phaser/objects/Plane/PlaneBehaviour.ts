@@ -32,7 +32,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
     this.updateClimbRate(dt);
     this.updateVelocity();
 
-    this.updateOnCourse();
+    // this.updateOnCourse();
   }
 
   private updateOnCourse() {
