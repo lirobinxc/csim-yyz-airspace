@@ -26,9 +26,16 @@ export default class PlaneSymbol extends Phaser.GameObjects.Image {
       this.Plane.togglePTL();
     });
 
+    // Setup: Debug
+    this.Plane.scene.input.enableDebug(this);
+  }
+
+  preUpdate() {
     // Debug
     if (this.Plane.Options.isDebug) {
-      this.Plane.scene.input.enableDebug(this);
+      this.input.hitAreaDebug.setVisible(true);
+    } else {
+      this.input.hitAreaDebug.setVisible(false);
     }
   }
 }

@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import RadarScene from '../scenes/RadarScene';
 import {
   DepRunwayAll,
   DepRunwayYHM,
@@ -8,22 +9,16 @@ import {
   DepRunwayYYZ,
   DepRunwayYZD,
 } from '../types/AircraftTypes';
-import { GameObjectOptions } from '../types/GameObjectOptions';
 
 /**
  * Returns Vector2 properties for each
  * runway's origin. Call this object
  * in the init() phase or later.
- *
- * @date 12/24/2022 - 3:14:41 PM
- *
- * @export
- * @class RunwayOrigins
- * @typedef {RunwayOrigins}
  */
 
 export default class RunwayOrigins {
-  private scene: Phaser.Scene;
+  private Scene: RadarScene;
+  private CoordinateDots: Phaser.GameObjects.Layer;
 
   public YYZ: {
     Rwy05_23: Phaser.Math.Vector2;
@@ -47,8 +42,10 @@ export default class RunwayOrigins {
     Rwy08_26: Phaser.Math.Vector2;
   };
 
-  constructor(scene: Phaser.Scene, { isDebug = false }: GameObjectOptions) {
-    this.scene = scene;
+  constructor(scene: RadarScene) {
+    // Common setup:
+    this.Scene = scene;
+    this.CoordinateDots = new Phaser.GameObjects.Layer(scene);
 
     const cameraHeight = scene.cameras.main.height;
 
@@ -99,12 +96,10 @@ export default class RunwayOrigins {
       Rwy08_26: RELATIVE_ORIGINS.YKF.Rwy08_26.scale(cameraHeight),
     };
 
-    if (isDebug) {
-      this.debug();
-    }
+    this.drawCoordinates();
   }
 
-  getOrigin(runway: DepRunwayAll) {
+  public getOrigin(runway: DepRunwayAll) {
     // YYZ
     if (runway === DepRunwayYYZ.RWY_05 || runway === DepRunwayYYZ.RWY_23) {
       return this.YYZ.Rwy05_23;
@@ -137,10 +132,22 @@ export default class RunwayOrigins {
     throw new Error(`Failed getting runway origin coordinates for ${runway}`);
   }
 
-  debug() {
-    const CIRCLE_RADIUS = 2;
-    const CIRCLE_COLOR = 0xff0000;
-    const CIRCLE_DEPTH = 999;
+  public showDots() {
+    if (!this.CoordinateDots) return;
+
+    this.CoordinateDots.setVisible(true);
+  }
+
+  public hideDots() {
+    if (!this.CoordinateDots) return;
+
+    this.CoordinateDots.setVisible(false);
+  }
+
+  private drawCoordinates() {
+    const DOT_RADIUS = 2;
+    const DOT_COLOR = 0xff0000;
+    const DOT_DEPTH = 999;
 
     const originPoints: Phaser.Math.Vector2[] = [];
     const airports = [
@@ -159,9 +166,21 @@ export default class RunwayOrigins {
     });
 
     originPoints.forEach((coord) => {
-      this.scene.add
-        .circle(coord.x, coord.y, CIRCLE_RADIUS, CIRCLE_COLOR)
-        .setDepth(CIRCLE_DEPTH);
+      const dot = new Phaser.GameObjects.Arc(
+        this.Scene,
+        coord.x,
+        coord.y,
+        DOT_RADIUS,
+        0,
+        360,
+        false,
+        DOT_COLOR
+      );
+
+      this.CoordinateDots.add(dot);
     });
+
+    this.CoordinateDots.setDepth(DOT_DEPTH);
+    this.Scene.add.existing(this.CoordinateDots);
   }
 }

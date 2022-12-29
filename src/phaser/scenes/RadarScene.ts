@@ -6,7 +6,7 @@ import Waypoint from '../objects/Waypoint';
 import type { GameObjectOptions } from '../types/GameObjectOptions';
 import { RadarSceneKeys } from '../types/SceneKeys';
 import { AssetKeys } from '../types/AssetKeys';
-import PointerCoordinates from '../utils/PointerCoordinates';
+import LogPointerCoordinates from '../utils/PointerCoordinates';
 import RunwayOrigins from '../config/RunwayOrigins';
 import Plane, { PlaneProperties } from '../objects/Plane/Plane';
 import { AcModel, AcType, AcWTC, DepRunwayYYZ } from '../types/AircraftTypes';
@@ -19,10 +19,12 @@ import img_PpsSymbol from '../assets/PpsSymbol.png';
 import fontTexture_DejaVuMonoBold from '../assets/font/FontDejaVuMonoBold.png';
 import fontXml_DejaVuMonoBold from '../assets/font/FontDejaVuMonoBold.xml';
 import { convertRadiansToHeading } from '../utils/convertRadiansToHeading';
+import DebugButton from '../objects/DebugButton';
 
 export default class RadarScene extends Phaser.Scene {
   public Waypoints!: Waypoint[];
   public PlaneList!: Phaser.GameObjects.Group;
+  public RunwayOrigins!: RunwayOrigins;
   public Options: GameObjectOptions;
 
   // Template props
@@ -65,7 +67,7 @@ export default class RadarScene extends Phaser.Scene {
   create() {
     // Create: Background Image
     new RadarBg(this, this.ASSET_KEY);
-    console.log({ Rwy06sWaypointDataList: Rwy06sWaypointList });
+
     // Create: Waypoints Layer
     switch (this.SCENE_KEY) {
       case RadarSceneKeys.RADAR_06s:
@@ -79,10 +81,11 @@ export default class RadarScene extends Phaser.Scene {
         );
     }
 
-    // Debug:
-    if (this.Options.isDebug) {
-      this.debug();
-    }
+    // Create: RunwayOrigins
+    this.RunwayOrigins = new RunwayOrigins(this);
+
+    // Create: Buttons
+    const debugButton = new DebugButton(this);
 
     // TEMP Create: Test Plane
     const newPlane = new Plane(this, testPlaneProps, this.Options);
@@ -93,6 +96,9 @@ export default class RadarScene extends Phaser.Scene {
       // const newPlane2 = new Plane(this, testPlaneProps);
       // this.PlaneList.push(newPlane2);
     });
+
+    // Init: Debug components
+    const pointerCoord = new LogPointerCoordinates(this);
   }
 
   update() {
@@ -103,8 +109,6 @@ export default class RadarScene extends Phaser.Scene {
     )[0];
 
     const thisCoord = new Phaser.Math.Vector2(testPlane.x, testPlane.y);
-
-    const backupCoord = new Phaser.Math.Vector2(0, 0);
     const wp = this.children.getByName('KEDSI');
 
     if (wp instanceof Waypoint) {
@@ -115,11 +119,18 @@ export default class RadarScene extends Phaser.Scene {
       const degCeil = Math.ceil(deg);
       testPlane.Commands.heading.assigned = degCeil;
     }
+
+    // Debug:
+
+    this.toggleDebug();
   }
 
-  debug() {
-    new PointerCoordinates(this);
-    new RunwayOrigins(this, this.Options);
+  toggleDebug() {
+    if (this.Options.isDebug) {
+      this.RunwayOrigins.showDots();
+      return;
+    }
+    this.RunwayOrigins.hideDots();
   }
 }
 

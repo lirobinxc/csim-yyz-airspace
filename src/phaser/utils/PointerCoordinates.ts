@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import RadarScene from '../scenes/RadarScene';
 import { DomEvents } from '../types/DomEvents';
 
 /**
@@ -9,37 +10,32 @@ import { DomEvents } from '../types/DomEvents';
  * relative to viewport height
  *
  *  Assumes scene aspect ratio is SQUARE.
- *
- * @date 12/24/2022 - 3:18:18 PM
- *
- * @export
- * @class PointerCoordinates
- * @typedef {PointerCoordinates}
  */
-export default class PointerCoordinates {
-  private scene: Phaser.Scene;
+export default class LogPointerCoordinates {
+  private Scene: RadarScene;
   public Actual: Phaser.Math.Vector2;
   public Relative: Phaser.Math.Vector2;
 
-  constructor(scene: Phaser.Scene) {
-    this.scene = scene;
+  constructor(scene: RadarScene) {
+    this.Scene = scene;
     this.Actual = new Phaser.Math.Vector2(0, 0);
     this.Relative = new Phaser.Math.Vector2(0, 0);
 
-    scene.input.on(
-      DomEvents.PointerDown,
-      (pointer: Phaser.Input.Pointer) => this.getCoordinates(pointer),
-      scene
-    );
+    scene.input.on(DomEvents.PointerDown, (pointer: Phaser.Input.Pointer) => {
+      this.getCoordinates(pointer);
+    });
   }
 
   private getCoordinates(pointer: Phaser.Input.Pointer) {
+    // Debug:
+    if (this.Scene.Options.isDebug === false) return;
+
     const x = pointer.x;
     const y = pointer.y;
 
     this.Actual = this.Actual.set(x, y);
 
-    const displayHeight = this.scene.cameras.main.height;
+    const displayHeight = this.Scene.cameras.main.height;
     const relativeX: number = this.Actual.x / displayHeight;
     const relativeY: number = this.Actual.y / displayHeight;
 
@@ -58,8 +54,5 @@ export default class PointerCoordinates {
     const formatFloatY = this.Relative.y.toFixed(3);
 
     console.log(`Click @ relative coord: ${[formatFloatX, formatFloatY]}`);
-    // console.log(
-    //   `Click @ relative coord: ${[this.Relative.x, this.Relative.y]}`
-    // );
   }
 }

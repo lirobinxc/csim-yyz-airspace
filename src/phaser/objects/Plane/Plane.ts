@@ -17,6 +17,7 @@ import PlaneBehaviour from './PlaneBehaviour';
 import PlanePTL from './PlanePTL';
 import RadarScene from '../../scenes/RadarScene';
 import { GameObjectOptions } from '../../types/GameObjectOptions';
+import PlaneHistoryTrail from './PlaneHistoryTrail';
 
 export interface PlanePerformance {
   speed: {
@@ -89,11 +90,15 @@ export default class Plane extends Phaser.GameObjects.Container {
   public DEFAULT_DATATAG_SPACING: number; // px; horizontal space between DataTag & Symbol
   public SHOW_PTL: boolean;
 
+  // Parent scene
+  private Scene: RadarScene;
+
   // Subcomponents
   private Symbol: PlaneSymbol;
   private DataTag: PlaneDataTag;
   private TagLine: PlaneDataTagLine;
   private PTL: PlanePTL;
+  private HistoryTrail: PlaneHistoryTrail;
   private Behaviour: PlaneBehaviour;
 
   constructor(
@@ -106,6 +111,7 @@ export default class Plane extends Phaser.GameObjects.Container {
     // Common setup
     scene.add.existing(this);
     scene.physics.add.existing(this); // Enable physics
+    this.Scene = scene;
 
     this.setDepth(10);
     this.DEFAULT_DATATAG_SPACING = 6; // px
@@ -125,7 +131,14 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.DataTag = new PlaneDataTag(this);
     this.TagLine = new PlaneDataTagLine(this, this.Symbol, this.DataTag);
     this.PTL = new PlanePTL(this, this.Symbol, 60);
-    this.add([this.PTL, this.Symbol, this.TagLine, this.DataTag]);
+    this.HistoryTrail = new PlaneHistoryTrail(this, this.Symbol);
+    this.add([
+      this.HistoryTrail,
+      this.PTL,
+      this.Symbol,
+      this.TagLine,
+      this.DataTag,
+    ]);
 
     // Attach: Behaviour logic
     this.Behaviour = new PlaneBehaviour(this, this.DataTag);
@@ -203,7 +216,7 @@ export default class Plane extends Phaser.GameObjects.Container {
 
     const initialCommands: PlaneCommands = {
       speed: {
-        current: acPerf.speed.initialClimb - 80,
+        current: acPerf.speed.initialClimb + 800, // TEMP: should be - 80
         assigned: acPerf.speed.initialClimb,
       },
       altitude: {
@@ -233,7 +246,7 @@ export default class Plane extends Phaser.GameObjects.Container {
       throw new Error(`Could not determine runway origin for: ${acProps.acId}`);
     }
 
-    const rwyOrigins = new RunwayOrigins(this.scene, { isDebug: false });
+    const rwyOrigins = this.Scene.RunwayOrigins;
 
     const origin = rwyOrigins.getOrigin(acProps.takeoffData.depRunway);
     return origin;

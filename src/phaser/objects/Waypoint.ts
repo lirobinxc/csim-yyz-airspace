@@ -11,7 +11,8 @@ import { DomEvents } from '../types/DomEvents';
 export default class Waypoint extends Phaser.GameObjects.Arc {
   public name: WaypointNamesAll;
 
-  private WpText: Phaser.GameObjects.Text;
+  private Scene: RadarScene;
+  private Label: Phaser.GameObjects.Text;
   private showName: boolean;
 
   constructor(scene: RadarScene, waypointData: WaypointDataAll) {
@@ -22,43 +23,53 @@ export default class Waypoint extends Phaser.GameObjects.Arc {
     const CIRCLE_RADIUS = 8;
 
     super(scene, actualX, actualY, CIRCLE_RADIUS);
+
+    // Common setup
+    scene.add.existing(this);
+    this.Scene = scene;
     this.name = waypointData.name;
     this.showName = false;
-
-    // TEMP
-    // console.log(cameraHeight, waypointData);
-
-    // Add object to the scene
-    scene.add.existing(this);
 
     this.setDepth(1);
     this.setInteractive();
 
-    if (scene.Options.isDebug) {
-      const colorPink = ColorKeys.DEBUG_PINK;
-      scene.input.enableDebug(this, colorPink);
-    }
-
     // Attach new TEXT object: Waypoint Name
-    this.WpText = this.scene.add.text(
+    this.Label = this.scene.add.text(
       this.getTopCenter().x,
       this.getTopCenter().y,
       waypointData.name,
       genWaypointTextStyles(waypointData.type)
     );
-    this.WpText.setOrigin(0.5, 1);
+    this.Label.setOrigin(0.5, 1);
 
-    // Toggle display name
+    // Setup: Debug
+    const colorPink = ColorKeys.DEBUG_PINK;
+    scene.input.enableDebug(this, colorPink);
+
+    // Input: Toggle display name
     this.on(DomEvents.PointerDown, () => {
       this.showName = !this.showName;
     });
   }
 
   preUpdate() {
+    this.toggleDisplayName();
+    this.toggleDebug();
+  }
+
+  private toggleDisplayName() {
     if (this.showName) {
-      this.WpText.setVisible(true);
+      this.Label.setVisible(true);
     } else {
-      this.WpText.setVisible(false);
+      this.Label.setVisible(false);
+    }
+  }
+
+  private toggleDebug() {
+    if (this.Scene.Options.isDebug) {
+      this.input.hitAreaDebug.setVisible(true);
+    } else {
+      this.input.hitAreaDebug.setVisible(false);
     }
   }
 }

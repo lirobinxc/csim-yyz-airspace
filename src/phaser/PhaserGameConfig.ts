@@ -1,8 +1,10 @@
 import Phaser from 'phaser';
-import { GameConfig } from './config/GameConfig';
+import { GameConfig, DebugGameConfig } from './config/GameConfig';
 
 import RadarScene from './scenes/RadarScene';
 import { RadarSceneKeys } from './types/SceneKeys';
+
+const isDebugMode = true;
 
 const Config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -18,12 +20,10 @@ const Config: Phaser.Types.Core.GameConfig = {
     default: 'arcade',
     arcade: {
       gravity: { x: 0, y: 0 },
-      fps: 0.5,
+      fps: isDebugMode ? DebugGameConfig.fps : GameConfig.fps,
     },
   },
-  scene: [
-    new RadarScene(RadarSceneKeys.RADAR_06s, { isDebug: GameConfig.isDebug }),
-  ],
+  scene: [new RadarScene(RadarSceneKeys.RADAR_06s, { isDebug: isDebugMode })],
   render: {
     antialias: true,
   },
