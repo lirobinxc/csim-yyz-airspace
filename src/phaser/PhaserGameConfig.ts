@@ -1,8 +1,10 @@
 import Phaser from 'phaser';
 
-import Radar06sScene from './scenes/Radar06sScene';
+import RadarScene from './scenes/RadarScene';
+import { RadarSceneKeys } from './types/SceneKeys';
 
-const IS_DEBUG_MODE = false;
+const GAME_RESOLUTION_HEIGHT = 1080; // square
+const IS_DEBUG_MODE = true;
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -11,17 +13,17 @@ const config: Phaser.Types.Core.GameConfig = {
 
   scale: {
     mode: Phaser.Scale.ScaleModes.HEIGHT_CONTROLS_WIDTH,
-    width: 1080,
-    height: 1080,
+    width: GAME_RESOLUTION_HEIGHT,
+    height: GAME_RESOLUTION_HEIGHT,
   },
   physics: {
     default: 'arcade',
     arcade: {
       gravity: { x: 0, y: 0 },
-      // fps: 0.5,
+      fps: 0.5,
     },
   },
-  scene: [new Radar06sScene({ isDebug: IS_DEBUG_MODE })],
+  scene: [new RadarScene(RadarSceneKeys.RADAR_06s, { isDebug: IS_DEBUG_MODE })],
   render: {
     antialias: true,
   },

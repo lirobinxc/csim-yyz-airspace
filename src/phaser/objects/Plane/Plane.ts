@@ -18,7 +18,7 @@ import PlanePTL from './PlanePTL';
 import { determineLeftOrRightTurn } from '../../utils/determineLeftOrRightTurn';
 import { Rwy06sWaypointKeys } from '../../config/Rwy06sWaypoints';
 import { convertRadiansToHeading } from '../../utils/convertRadiansToHeading';
-import Radar06sScene from '../../scenes/Radar06sScene';
+import RadarScene from '../../scenes/RadarScene';
 import Waypoint from '../Waypoint';
 import { GameObjectOptions } from '../../types/GameObjectOptions';
 
@@ -70,6 +70,7 @@ export interface PlaneCommands {
   heading: {
     current: number;
     assigned: number;
+    directTo: WaypointNamesAll | null;
   };
   climbRate: {
     current: number;
@@ -86,28 +87,27 @@ export default class Plane extends Phaser.GameObjects.Container {
   public Properties: PlaneProperties;
   public Commands: PlaneCommands;
   public Performance: PlanePerformance;
+  public Options: GameObjectOptions;
 
   // CONSTANTS
   public DEFAULT_DATATAG_SPACING: number; // px; horizontal space between DataTag & Symbol
   public SHOW_PTL: boolean;
 
   // Subcomponents
-  private Scene: Radar06sScene;
   private Symbol: PlaneSymbol;
   private DataTag: PlaneDataTag;
   private TagLine: PlaneDataTagLine;
-  private Behaviour: PlaneBehaviour;
   private PTL: PlanePTL;
+  private Behaviour: PlaneBehaviour;
 
   constructor(
-    scene: Radar06sScene,
+    scene: RadarScene,
     props: PlaneProperties,
     options: GameObjectOptions
   ) {
     super(scene);
 
     // Common setup
-    this.Scene = scene;
     scene.add.existing(this);
     scene.physics.add.existing(this); // Enable physics
 
@@ -122,6 +122,7 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.Properties = props;
     this.Performance = this.initPlanePerformance(props);
     this.Commands = this.initPlaneCommands(props, this.Performance);
+    this.Options = options;
 
     // Attach objs: Plane Subcomponents
     this.Symbol = new PlaneSymbol(this);
@@ -152,6 +153,15 @@ export default class Plane extends Phaser.GameObjects.Container {
 
   preUpdate() {
     this.updateDataTagPosition();
+  }
+
+  /**
+   * Return Vector2 (x,y) coordinates
+   * of the Plane object, centered on the Symbol.
+   */
+  public getPosition() {
+    const coord = new Phaser.Math.Vector2(this.x, this.y);
+    return coord;
   }
 
   public togglePTL() {
@@ -204,7 +214,11 @@ export default class Plane extends Phaser.GameObjects.Container {
         current: 0,
         assigned: acProps.takeoffData.assignedAlt,
       },
-      heading: { current: runwayHeading, assigned: runwayHeading },
+      heading: {
+        current: runwayHeading,
+        assigned: runwayHeading,
+        directTo: null,
+      },
       climbRate: {
         current: 0,
         assigned: acPerf.climbRate.initialClimb,

@@ -4,7 +4,7 @@ import { Rwy06sWaypointList } from '../config/Rwy06sWaypoints';
 import RadarBg from '../objects/RadarBg';
 import Waypoint from '../objects/Waypoint';
 import type { GameObjectOptions } from '../types/GameObjectOptions';
-import { SceneKeys } from '../types/SceneKeys';
+import { RadarSceneKeys } from '../types/SceneKeys';
 import { AssetKeys } from '../types/AssetKeys';
 import PointerCoordinates from '../utils/PointerCoordinates';
 import RunwayOrigins from '../config/RunwayOrigins';
@@ -20,27 +20,39 @@ import fontTexture_DejaVuMonoBold from '../assets/font/FontDejaVuMonoBold.png';
 import fontXml_DejaVuMonoBold from '../assets/font/FontDejaVuMonoBold.xml';
 import { convertRadiansToHeading } from '../utils/convertRadiansToHeading';
 
-export default class Radar06sScene extends Phaser.Scene {
+export default class RadarScene extends Phaser.Scene {
   public Waypoints!: Waypoint[];
   public PlaneList!: Phaser.GameObjects.Group;
   public Options: GameObjectOptions;
 
-  private lastFrameTime: number;
+  // Template props
+  private SCENE_KEY: RadarSceneKeys;
+  private ASSET_KEY: AssetKeys;
 
-  constructor(options: GameObjectOptions) {
-    super(SceneKeys.RADAR_06s);
+  constructor(sceneKey: RadarSceneKeys, options: GameObjectOptions) {
+    super(RadarSceneKeys.RADAR_06s);
 
-    // this.PlaneList = new Phaser.GameObjects.Layer(this);
     this.Waypoints = [];
     this.PlaneList = new Phaser.GameObjects.Group(this);
     this.Options = options;
-    this.lastFrameTime = 0;
+
+    // Init: Template props
+    this.SCENE_KEY = sceneKey;
+    this.ASSET_KEY = AssetKeys.RADAR_06s;
   }
 
   init() {}
 
   preload() {
-    this.load.image(AssetKeys.RADAR_06s, img_Radar06s);
+    switch (this.SCENE_KEY) {
+      case RadarSceneKeys.RADAR_06s:
+        this.load.image(AssetKeys.RADAR_06s, img_Radar06s);
+        this.ASSET_KEY = AssetKeys.RADAR_06s;
+        break;
+      default:
+        this.load.image(AssetKeys.RADAR_06s, img_Radar06s);
+        break;
+    }
     this.load.image(AssetKeys.PPS_SYMBOL, img_PpsSymbol);
     this.load.bitmapFont(
       AssetKeys.FONT_DEJAVU_MONO_BOLD,
@@ -54,19 +66,19 @@ export default class Radar06sScene extends Phaser.Scene {
       this.debug();
     }
 
-    //TEMP
+    // Create: Background Image
+    new RadarBg(this, this.ASSET_KEY);
 
-    // Create object: Background Image
-    new RadarBg(this, AssetKeys.RADAR_06s);
-
-    // Create objects: Waypoints Layer
+    // Create: Waypoints Layer
     Rwy06sWaypointList.forEach((waypointData) =>
       this.Waypoints.push(new Waypoint(this, waypointData, this.Options))
     );
 
+    // TEMP Create: Test Plane
     const newPlane = new Plane(this, testPlaneProps, this.Options);
     this.PlaneList.add(newPlane);
 
+    // TEMP: On click
     this.input.on(DomEvents.PointerDown, () => {
       // const newPlane2 = new Plane(this, testPlaneProps);
       // this.PlaneList.push(newPlane2);
@@ -75,12 +87,12 @@ export default class Radar06sScene extends Phaser.Scene {
 
   update() {
     // TEMP
-    const getPlane: Plane = this.PlaneList.getMatching(
+    const testPlane: Plane = this.PlaneList.getMatching(
       'name',
       testPlaneProps.acId.abbrev
     )[0];
 
-    const thisCoord = new Phaser.Math.Vector2(getPlane.x, getPlane.y);
+    const thisCoord = new Phaser.Math.Vector2(testPlane.x, testPlane.y);
 
     const backupCoord = new Phaser.Math.Vector2(0, 0);
     const wp = this.children.getByName('KEDSI');
@@ -91,8 +103,7 @@ export default class Radar06sScene extends Phaser.Scene {
       // const deg = Phaser.Math.RadToDeg(rad);
       const deg = convertRadiansToHeading(rad);
       const degCeil = Math.ceil(deg);
-      console.log({ degCeil });
-      getPlane.Commands.heading.assigned = degCeil;
+      testPlane.Commands.heading.assigned = degCeil;
     }
   }
 

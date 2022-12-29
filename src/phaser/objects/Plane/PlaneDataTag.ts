@@ -90,7 +90,7 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
       this.isExtendedTag = !this.isExtendedTag;
     });
 
-    // Synced update with FPS
+    // Sync update with FPS (set in Phaser Config)
     this.updateText2();
 
     this.scene.physics.world.on('worldstep', () => {

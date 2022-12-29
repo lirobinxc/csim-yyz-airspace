@@ -16,24 +16,19 @@ export default class PlaneSymbol extends Phaser.GameObjects.Image {
     this.Plane = plane;
     plane.scene.add.existing(this);
 
-    // Init properties
+    // Setup: THIS
     this.setDepth(10);
     this.setScale(0.2);
-
-    // Enable physics on the Plane object
-    // this.scene.physics.add.existing(this);
-
-    // Config the physics body
-    // const body = this.body as Phaser.Physics.Arcade.Body;
-    // body.setCollideWorldBounds(true);
-    // body.setSize(this.displayWidth + 2, this.displayHeight + 2);
-
-    /* -------------------------- Init Events -------------------------- */
     this.setInteractive();
-    plane.scene.input.enableDebug(this);
 
+    // Input: On click
     this.on(DomEvents.PointerDown, () => {
       this.Plane.togglePTL();
     });
+
+    // Debug
+    if (this.Plane.Options.isDebug) {
+      this.Plane.scene.input.enableDebug(this);
+    }
   }
 }

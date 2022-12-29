@@ -18,6 +18,7 @@ export default class PlanePTL extends Phaser.GameObjects.Line {
     this.Symbol = symbol;
     this.TIME_IN_SEC = timeInSeconds;
 
+    // Setup: THIS
     const LINE_ORIGIN = [0, 0];
     const LINE_WIDTH = 0.8;
     const LINE_COLOR = ColorKeys.PTL_GREEN;
@@ -26,9 +27,8 @@ export default class PlanePTL extends Phaser.GameObjects.Line {
     this.setStrokeStyle(LINE_WIDTH, LINE_COLOR);
     this.setLineWidth(LINE_WIDTH);
 
-    // Synced update with FPS
+    // Sync update with FPS (set in Phaser Config)
     this.updatePtlPosition();
-
     this.scene.physics.world.on('worldstep', () => {
       this.updatePtlPosition();
     });

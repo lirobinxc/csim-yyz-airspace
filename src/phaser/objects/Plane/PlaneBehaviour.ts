@@ -31,6 +31,24 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
     this.updateSpeed(dt);
     this.updateClimbRate(dt);
     this.updateVelocity();
+
+    this.updateOnCourse();
+  }
+
+  private updateOnCourse() {
+    const heading = this.Plane.Commands.heading;
+
+    // Base case
+    if (heading.directTo === null) return;
+
+    // Logic Step 1: Check if a/c is close to the waypoint
+
+    const PLANE_POSITION = this.Plane.getPosition();
+    // const WAYPOINT_POSITION =
+    // const DISTANCE_FROM_WAYPOINT = Phaser.Math.Distance.BetweenPoints();
+
+    if (heading.directTo) {
+    }
   }
 
   private updateHeading(dt: number) {

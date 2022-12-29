@@ -16,7 +16,10 @@ export interface WaypointData24s extends WaypointDataAll {
 }
 
 export type WaypointKeysAll = Record<WaypointNamesAll, Phaser.Math.Vector2>;
-export type WaypointKeys06s = Record<WaypointNamesRwy06s, Phaser.Math.Vector2>;
+export type WaypointKeys06s = Record<
+  WaypointNamesRwy06s,
+  { relativeCoord: Phaser.Math.Vector2; displayCoord: Phaser.Math.Vector2 }
+>;
 export type WaypointKeys24s = Record<WaypointNamesRwy24s, Phaser.Math.Vector2>;
 
 export type WaypointNamesAll = WaypointNamesRwy06s | WaypointNamesRwy24s;

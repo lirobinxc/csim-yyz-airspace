@@ -1,11 +1,11 @@
 import phaserGame from './phaser/PhaserGameConfig';
-import Radar06sScene from './phaser/scenes/Radar06sScene';
+import RadarScene from './phaser/scenes/RadarScene';
 
 import styles from './App.module.scss';
 
 function App() {
   const handleClick = () => {
-    const scene = phaserGame.scene.keys.helloworld as Radar06sScene;
+    const scene = phaserGame.scene.keys.helloworld as RadarScene;
     // scene.createEmitter();
   };
 

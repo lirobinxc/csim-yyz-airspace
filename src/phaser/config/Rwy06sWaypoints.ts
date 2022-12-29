@@ -1,3 +1,4 @@
+import RadarScene from '../scenes/RadarScene';
 import { AcType } from '../types/AircraftTypes';
 import { CommonWaypointList } from './shared/CommonWaypoints';
 import type {
@@ -81,7 +82,10 @@ export const Rwy06sWaypointList: WaypointData06s[] = [
 
 function genWaypointKeys(wpArr: WaypointData06s[]) {
   const wpKeys = wpArr.reduce((acc, item) => {
-    acc[item.name] = item.relativeCoord;
+    acc[item.name] = {
+      relativeCoord: item.relativeCoord,
+      displayCoord: item.relativeCoord.scale(1080),
+    };
     return acc;
   }, {} as WaypointKeys06s);
 
