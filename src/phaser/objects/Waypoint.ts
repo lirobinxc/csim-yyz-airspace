@@ -1,37 +1,39 @@
 import Phaser from 'phaser';
-import {
-  WaypointDataAll,
-  WaypointNamesAll,
-} from '../config/shared/WaypointsCollection';
+import { WaypointDataAll, WaypointNamesAll } from '../types/WaypointTypes';
 import { genWaypointTextStyles } from '../config/TextStyleConfig';
 import RadarScene from '../scenes/RadarScene';
 import { ColorKeys } from '../types/ColorKeys';
 import { DomEvents } from '../types/DomEvents';
+import { PhaserCustomEvents } from '../types/CustomEvents';
 
 export default class Waypoint extends Phaser.GameObjects.Arc {
   public name: WaypointNamesAll;
 
   private Scene: RadarScene;
   private Label: Phaser.GameObjects.Text;
-  private showName: boolean;
+
+  public SHOW_NAME: boolean;
+  public WAYPOINT_DATA: WaypointDataAll;
 
   constructor(scene: RadarScene, waypointData: WaypointDataAll) {
-    const cameraHeight = scene.cameras.main.height;
-    const actualX = waypointData.relativeCoord.x * cameraHeight;
-    const actualY = waypointData.relativeCoord.y * cameraHeight;
-
     const CIRCLE_RADIUS = 8;
 
-    super(scene, actualX, actualY, CIRCLE_RADIUS);
+    super(
+      scene,
+      waypointData.getDisplayCoord().x,
+      waypointData.getDisplayCoord().y,
+      CIRCLE_RADIUS
+    );
 
     // Common setup
     scene.add.existing(this);
     this.Scene = scene;
     this.name = waypointData.name;
-    this.showName = false;
+    this.SHOW_NAME = false;
+    this.WAYPOINT_DATA = waypointData;
 
     this.setDepth(1);
-    this.setInteractive();
+    this.setInteractive({ cursor: 'pointer' });
 
     // Attach new TEXT object: Waypoint Name
     this.Label = this.scene.add.text(
@@ -47,8 +49,12 @@ export default class Waypoint extends Phaser.GameObjects.Arc {
     scene.input.enableDebug(this, colorPink);
 
     // Input: Toggle display name
-    this.on(DomEvents.PointerDown, () => {
-      this.showName = !this.showName;
+    this.on(DomEvents.POINTER_DOWN, () => {
+      if (this.Scene.SELECTED_PLANE === null || !this.Scene.SELECTED_PLANE) {
+        this.SHOW_NAME = !this.SHOW_NAME;
+      }
+
+      this.Scene.events.emit(PhaserCustomEvents.WP_CLICKED, this.WAYPOINT_DATA);
     });
   }
 
@@ -58,7 +64,7 @@ export default class Waypoint extends Phaser.GameObjects.Arc {
   }
 
   private toggleDisplayName() {
-    if (this.showName) {
+    if (this.SHOW_NAME) {
       this.Label.setVisible(true);
     } else {
       this.Label.setVisible(false);

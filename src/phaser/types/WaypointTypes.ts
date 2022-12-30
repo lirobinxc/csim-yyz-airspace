@@ -1,8 +1,9 @@
-import { AcType } from '../../types/AircraftTypes';
+import { AcType } from './AircraftTypes';
 
 export interface WaypointDataAll {
   name: WaypointNamesAll;
   relativeCoord: Phaser.Math.Vector2;
+  getDisplayCoord: () => Phaser.Math.Vector2;
   type: AcType;
 }
 export interface WaypointDataCommon extends WaypointDataAll {
@@ -15,16 +16,13 @@ export interface WaypointData24s extends WaypointDataAll {
   name: WaypointNamesRwy24s;
 }
 
-export type WaypointKeysAll = Record<WaypointNamesAll, Phaser.Math.Vector2>;
-export type WaypointKeys06s = Record<
-  WaypointNamesRwy06s,
-  { relativeCoord: Phaser.Math.Vector2; displayCoord: Phaser.Math.Vector2 }
->;
-export type WaypointKeys24s = Record<WaypointNamesRwy24s, Phaser.Math.Vector2>;
+export type WaypointKeysAll = Record<WaypointNamesAll, WaypointDataAll>;
+export type WaypointKeys06s = Record<WaypointNamesRwy06s, WaypointData06s>;
+export type WaypointKeys24s = Record<WaypointNamesRwy24s, WaypointData24s>;
 
 export type WaypointNamesAll = WaypointNamesRwy06s | WaypointNamesRwy24s;
 
-type WaypointNamesCommon =
+export type WaypointNamesCommon =
   | 'ANCOL'
   | 'AVSEP'
   | 'BETES'
@@ -51,7 +49,7 @@ type WaypointNamesCommon =
   | 'URSAL'
   | 'VERDO';
 
-type WaypointNamesRwy06s =
+export type WaypointNamesRwy06s =
   | 'ALKUT'
   | 'ANCOL'
   | 'AVROS'
@@ -92,7 +90,7 @@ type WaypointNamesRwy06s =
   | 'VERDO'
   | 'VIDRA';
 
-type WaypointNamesRwy24s =
+export type WaypointNamesRwy24s =
   | 'ANCOL'
   | 'AVSEP'
   | 'BETES'

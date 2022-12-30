@@ -8,7 +8,7 @@ import {
   DepRunwayYTZ,
   DepRunwayYYZ,
   DepRunwayYZD,
-} from '../types/AircraftTypes';
+} from '../types/AirportTypes';
 
 /**
  * Returns Vector2 properties for each

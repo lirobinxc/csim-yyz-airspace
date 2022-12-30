@@ -1,22 +1,36 @@
 import { getRunwayHeading } from '../../config/RunwayHeadingConfig';
+import { SidRoute06s } from '../../config/Rwy06sSidConfig';
+import { Rwy06sWaypointDict } from '../../config/Rwy06sWaypointConfig';
+import RadarScene from '../../scenes/RadarScene';
+import { RadarSceneKeys } from '../../types/SceneKeys';
+import {
+  WaypointData06s,
+  WaypointData24s,
+  WaypointDataAll,
+  WaypointNamesRwy06s,
+} from '../../types/WaypointTypes';
 import { asKnots } from '../../utils/asKnots';
 import { convertHeadingToRadians } from '../../utils/convertHeadingToRadians';
+import { convertRadiansToHeading } from '../../utils/convertRadiansToHeading';
 import {
   determineLeftOrRightTurn,
   TurnDirection,
 } from '../../utils/determineLeftOrRightTurn';
+import { getSidRoute } from '../../utils/getSidRoute';
 import Plane from './Plane';
 import PlaneDataTag from './PlaneDataTag';
 
 export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
-  // Parent component + Parent properties
+  // Parent component + Reference components
+  private Scene: RadarScene;
   private Plane: Plane;
   private DataTag: PlaneDataTag;
 
   constructor(plane: Plane, dataTag: PlaneDataTag) {
-    super(plane.scene, 'PlaneBehaviour');
+    super(plane.Scene, 'PlaneBehaviour');
 
     // Common setup
+    this.Scene = plane.Scene;
     this.Plane = plane;
     this.DataTag = dataTag;
     plane.scene.add.existing(this);
@@ -25,6 +39,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
   preUpdate(t: number, dt: number) {
     this.ifNadp2UpTo5000();
     this.flySidHeadingAt1100();
+    this.ifAbove5000();
 
     this.updateHeading(dt);
     this.updateAltitude(dt);
@@ -32,23 +47,45 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
     this.updateClimbRate(dt);
     this.updateVelocity();
 
-    // this.updateOnCourse();
+    this.updateOnCourse();
   }
 
   private updateOnCourse() {
     const heading = this.Plane.Commands.heading;
 
     // Base case
-    if (heading.directTo === null) return;
+    if (heading.directTo === null || heading.directTo === undefined) return;
+
+    // Setup:
+    let sidRoute = getSidRoute(
+      this.Scene.RUNWAY_CONFIG,
+      this.Plane.Properties.filedData.sidName
+    );
+
+    // Logic Step 0: Set heading.assigned to the waypoint
+    const WAYPOINT_POSITION = heading.directTo.getDisplayCoord();
+    this.directTo(WAYPOINT_POSITION);
 
     // Logic Step 1: Check if a/c is close to the waypoint
-
     const PLANE_POSITION = this.Plane.getPosition();
-    // const WAYPOINT_POSITION =
-    // const DISTANCE_FROM_WAYPOINT = Phaser.Math.Distance.BetweenPoints();
 
-    if (heading.directTo) {
-    }
+    const DISTANCE_FROM_WAYPOINT = Phaser.Math.Distance.BetweenPoints(
+      PLANE_POSITION,
+      WAYPOINT_POSITION
+    );
+  }
+
+  private directTo(wpCoord: Phaser.Math.Vector2) {
+    const planeCoord = this.Plane.getPosition();
+
+    const radiansBetweenPoints = Phaser.Math.Angle.BetweenPoints(
+      planeCoord,
+      wpCoord
+    );
+    const newHeading = convertRadiansToHeading(radiansBetweenPoints);
+    const newHeadingCeil = Math.ceil(newHeading);
+
+    this.Plane.Commands.heading.assigned = newHeadingCeil;
   }
 
   private updateHeading(dt: number) {

@@ -20,7 +20,7 @@ export default class DebugButton extends Phaser.GameObjects.Text {
     this.setText(this.BUTTON_TEXT);
 
     this.setInteractive();
-    this.on(DomEvents.PointerDown, () => {
+    this.on(DomEvents.POINTER_DOWN, () => {
       this.Scene.Options.isDebug = !this.Scene.Options.isDebug;
       this.setText(this.genButtonText());
     });

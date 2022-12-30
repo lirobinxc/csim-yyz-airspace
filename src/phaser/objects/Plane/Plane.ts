@@ -1,15 +1,14 @@
 import Phaser from 'phaser';
-import {
-  AcModel,
-  AcType,
-  AcWTC,
-  DepRunwayAll,
-} from '../../types/AircraftTypes';
+import { AcModel, AcType, AcWTC } from '../../types/AircraftTypes';
 import PlaneDataTag from './PlaneDataTag';
 import PlaneSymbol from './PlaneSymbol';
-import { WaypointNamesAll } from '../../config/shared/WaypointsCollection';
-import RunwayOrigins from '../../config/RunwayOrigins';
-import { AdjacentSectors, TerminalSectors } from '../../types/AirspaceTypes';
+import {
+  WaypointDataAll,
+  WaypointNamesAll,
+  WaypointNamesRwy06s,
+  WaypointNamesRwy24s,
+} from '../../types/WaypointTypes';
+import { AdjacentSectors, TerminalSectors } from '../../types/SectorTypes';
 import { PlanePerformanceConfig } from '../../config/PlanePerformanceConfig';
 import { getRunwayHeading } from '../../config/RunwayHeadingConfig';
 import PlaneDataTagLine from './PlaneDataTagLine';
@@ -18,6 +17,16 @@ import PlanePTL from './PlanePTL';
 import RadarScene from '../../scenes/RadarScene';
 import { GameObjectOptions } from '../../types/GameObjectOptions';
 import PlaneHistoryTrail from './PlaneHistoryTrail';
+import { SidName } from '../../types/SidTypes';
+import { SidRoute06s } from '../../config/Rwy06sSidConfig';
+import { DepRunwayAll } from '../../types/AirportTypes';
+import { DomEvents } from '../../types/DomEvents';
+import { PhaserCustomEvents } from '../../types/CustomEvents';
+import PlaneCommandMenu from './PlaneOptionsMenu';
+import { getSidRoute } from '../../utils/getSidRoute';
+import { RadarSceneKeys } from '../../types/SceneKeys';
+import { Rwy06sWaypointDict } from '../../config/Rwy06sWaypointConfig';
+import { PlaneSpeech } from './PlaneSpeech';
 
 export interface PlanePerformance {
   speed: {
@@ -39,7 +48,7 @@ export interface PlaneProperties {
   acModel: AcModel;
   acWtc: AcWTC;
   filedData: {
-    route: WaypointNamesAll[];
+    sidName: SidName;
     alt: number;
     speed: number;
     destination: string;
@@ -67,7 +76,7 @@ export interface PlaneCommands {
   heading: {
     current: number;
     assigned: number;
-    directTo: WaypointNamesAll | null;
+    directTo: WaypointDataAll | null;
   };
   climbRate: {
     current: number;
@@ -89,9 +98,12 @@ export default class Plane extends Phaser.GameObjects.Container {
   // CONSTANTS
   public DEFAULT_DATATAG_SPACING: number; // px; horizontal space between DataTag & Symbol
   public SHOW_PTL: boolean;
+  public IS_SELECTED: boolean;
+  public SHOW_COMMAND_OPTIONS: boolean;
+  public IS_TALKING: boolean;
 
   // Parent scene
-  private Scene: RadarScene;
+  public Scene: RadarScene;
 
   // Subcomponents
   private Symbol: PlaneSymbol;
@@ -100,6 +112,8 @@ export default class Plane extends Phaser.GameObjects.Container {
   private PTL: PlanePTL;
   private HistoryTrail: PlaneHistoryTrail;
   private Behaviour: PlaneBehaviour;
+  private CommandMenu: PlaneCommandMenu;
+  public Speech: PlaneSpeech;
 
   constructor(
     scene: RadarScene,
@@ -116,6 +130,9 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.setDepth(10);
     this.DEFAULT_DATATAG_SPACING = 6; // px
     this.SHOW_PTL = false;
+    this.IS_SELECTED = false;
+    this.SHOW_COMMAND_OPTIONS = false;
+    this.IS_TALKING = false;
 
     // Init: Name
     this.name = props.acId.abbrev;
@@ -132,8 +149,11 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.TagLine = new PlaneDataTagLine(this, this.Symbol, this.DataTag);
     this.PTL = new PlanePTL(this, this.Symbol, 60);
     this.HistoryTrail = new PlaneHistoryTrail(this, this.Symbol);
+    this.CommandMenu = new PlaneCommandMenu(this);
+    this.Speech = new PlaneSpeech(this);
     this.add([
       this.HistoryTrail,
+      this.CommandMenu,
       this.PTL,
       this.Symbol,
       this.TagLine,
@@ -153,15 +173,43 @@ export default class Plane extends Phaser.GameObjects.Container {
     // Setup: PTL
     this.PTL.setVisible(this.SHOW_PTL);
 
+    // Input: On click Symbol
+    this.Symbol.on(DomEvents.POINTER_DOWN, (pointer: Phaser.Input.Pointer) => {
+      this.Scene.events.emit(PhaserCustomEvents.PLANE_SELECTED, this);
+
+      if (pointer.rightButtonDown()) {
+      }
+    });
+
+    // Input: On hover over Symbol
+    // this.Symbol.on(DomEvents.POINTER_OVER, () => {
+    //   this.Scene.events.emit(PhaserCustomEvents.PLANE_SELECTED, this);
+    // });
+
     // Debug
-    if (options.isDebug) {
-      this.SHOW_PTL = true;
-      this.PTL.TIME_IN_SEC = 600;
-    }
+    this.onDebug();
   }
 
   preUpdate() {
     this.updateDataTagPosition();
+    this.togglePTL();
+    this.onDebug();
+
+    this.IS_TALKING = this.Speech.IS_TALKING;
+  }
+
+  public commandDirectTo(waypointData: WaypointDataAll) {
+    if (!waypointData) return;
+
+    const sidName = this.Properties.filedData.sidName;
+    const sidRoute = getSidRoute(this.Scene.RUNWAY_CONFIG, sidName);
+
+    if (sidRoute.find((wp) => wp.name === waypointData.name)) {
+      this.talk(`Proceed direct ${waypointData.name}`, this);
+      this.Commands.heading.directTo = waypointData;
+    } else {
+      this.talk(`Unable, ${waypointData.name} is not on our flight plan`, this);
+    }
   }
 
   /**
@@ -173,9 +221,28 @@ export default class Plane extends Phaser.GameObjects.Container {
     return coord;
   }
 
-  public togglePTL() {
-    this.SHOW_PTL = !this.SHOW_PTL;
+  public talk(text: string, plane: Plane) {
+    this.Scene.events.emit(PhaserCustomEvents.PILOT_SPEECH, {
+      text,
+      plane,
+    });
+  }
 
+  private onDebug() {
+    if (this.Options.isDebug) {
+      this.PTL.TIME_IN_SEC = 600;
+      this.SHOW_PTL = true;
+    } else {
+      this.PTL.TIME_IN_SEC = 60;
+    }
+  }
+
+  private ifPlaneIsSelected() {
+    if (this.IS_SELECTED) {
+    }
+  }
+
+  private togglePTL() {
     this.PTL.setVisible(this.SHOW_PTL);
   }
 

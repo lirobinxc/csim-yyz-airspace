@@ -1,4 +1,4 @@
-import { DepRunwayAll, DepRunwayYYZ } from '../types/AircraftTypes';
+import { DepRunwayAll, DepRunwayYYZ } from '../types/AirportTypes';
 
 export function getRunwayHeading(runway: DepRunwayAll) {
   switch (runway) {

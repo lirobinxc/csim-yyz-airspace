@@ -11,7 +11,7 @@ import { DomEvents } from '../types/DomEvents';
  *
  *  Assumes scene aspect ratio is SQUARE.
  */
-export default class LogPointerCoordinates {
+export default class PointerCoordinateLogger {
   private Scene: RadarScene;
   public Actual: Phaser.Math.Vector2;
   public Relative: Phaser.Math.Vector2;
@@ -21,7 +21,7 @@ export default class LogPointerCoordinates {
     this.Actual = new Phaser.Math.Vector2(0, 0);
     this.Relative = new Phaser.Math.Vector2(0, 0);
 
-    scene.input.on(DomEvents.PointerDown, (pointer: Phaser.Input.Pointer) => {
+    scene.input.on(DomEvents.POINTER_DOWN, (pointer: Phaser.Input.Pointer) => {
       this.getCoordinates(pointer);
     });
   }

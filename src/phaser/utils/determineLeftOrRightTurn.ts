@@ -5,6 +5,10 @@ export enum TurnDirection {
   EITHER = 'EITHER', // +1 or -1
 }
 
+/**
+ * Input radar headings (001-360),
+ * returns most optimal turn direction.
+ */
 export function determineLeftOrRightTurn(
   currentHeading: number,
   assignedHeading: number

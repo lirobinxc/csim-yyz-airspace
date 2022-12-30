@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { AssetKeys } from '../../types/AssetKeys';
+import { ColorKeys } from '../../types/ColorKeys';
 import { convertAcWtcToSymbol } from '../../utils/convertAcWtcToSymbol';
 import Plane from './Plane';
 import PlaneSymbol from './PlaneSymbol';
@@ -60,7 +61,7 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
 
     // Setup: Text1
     const FONT_SIZE = 16;
-    const FONT_TINT_COLOR = 0xeae37f; // light yellow
+    const FONT_TINT_COLOR = ColorKeys.PPS_YELLOW; // light yellow
     const FONT_SCALE_Y = 0.9; // vertically squishes font
     const LINE_ORIGIN = [0, 0.5];
 

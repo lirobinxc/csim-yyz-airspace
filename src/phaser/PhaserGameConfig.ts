@@ -4,7 +4,7 @@ import { GameConfig, DebugGameConfig } from './config/GameConfig';
 import RadarScene from './scenes/RadarScene';
 import { RadarSceneKeys } from './types/SceneKeys';
 
-const isDebugMode = true;
+const isDebugMode = false;
 
 const Config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -30,4 +30,5 @@ const Config: Phaser.Types.Core.GameConfig = {
   disableContextMenu: true,
 };
 
-export default new Phaser.Game(Config);
+const PhaserGame = new Phaser.Game(Config);
+export default PhaserGame;
