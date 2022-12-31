@@ -1,4 +1,7 @@
 import clsx from 'clsx';
+import { DepFDE } from '../functions/genDepFdeData';
+import DepartureFDE from './DepartureFDE/DepartureFDE';
+import PendingDepartureFDE from './PendingDepartureFDE/PendingDepartureFDE';
 
 import styles from './StripPanel.module.scss';
 
@@ -11,7 +14,7 @@ export enum Size {
 interface StripPanelProps {
   title: string;
   height: Size;
-  strips?: [];
+  strips: DepFDE[];
 }
 
 const StripPanel = ({ title, height, strips }: StripPanelProps) => {
@@ -19,13 +22,26 @@ const StripPanel = ({ title, height, strips }: StripPanelProps) => {
     return styles[`Size${height}`];
   }
 
+  function displayStrips() {
+    if (height === Size.LG) {
+      //return displayAsFullFDE()
+    }
+    return displayAsPendingFDE();
+  }
+
+  function displayAsPendingFDE() {
+    return strips.map((strip) => {
+      return <PendingDepartureFDE key={strip.acFullName} {...strip} />;
+    });
+  }
+
   return (
     <div className={clsx(styles.StripPanel, getPanelHeightClass())}>
       <header className={clsx(styles.Header)}>
         <div className={clsx(styles.title)}>{title}</div>
-        <div className={clsx(styles.stripCount)}>{strips?.length}</div>
+        <div className={clsx(styles.stripCount)}>{strips?.length || 0}</div>
       </header>
-      <section className={clsx(styles.Strips)}>{strips}</section>
+      <section className={clsx(styles.Strips)}>{displayStrips()}</section>
     </div>
   );
 };

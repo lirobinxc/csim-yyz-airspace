@@ -1,9 +1,10 @@
 import _ from 'lodash';
-import { RunwayId, sidsCollection } from '../data/sidsCollection';
+import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
+import { sidsCollection } from '../data/sidsCollection';
 
 import { AcType } from './genACID';
 
-export function genDepRoute(runwayId: RunwayId, acType: AcType) {
+export function genDepRoute(runwayId: RadarSceneKeys, acType: AcType) {
   if (!sidsCollection[runwayId]) return;
 
   const selectedSidsArr = sidsCollection[runwayId][acType];

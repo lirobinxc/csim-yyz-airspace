@@ -1,6 +1,6 @@
 export const GameConfig = {
   height: 1080,
-  fps: 0.25, // should be 0.25
+  fps: 1, // should be 0.25
   isDebug: false,
 };
 

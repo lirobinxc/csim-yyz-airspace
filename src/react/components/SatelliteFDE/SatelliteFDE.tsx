@@ -7,7 +7,7 @@ import downArrow from '../../images/down-arrow.png';
 import { useAppDispatch } from '../../state/hooks';
 
 import styles from './SatelliteFDE.module.scss';
-import { airborneListActions } from '../../state/slices/airborneSlice';
+import { departureListActions } from '../../state/slices/departureListSlice';
 import { AcType } from '../../functions/genACID';
 import { SatFDE } from '../../functions/genSatFdeData';
 
@@ -93,7 +93,7 @@ function SatelliteFDE({
   }
 
   function removeStrip() {
-    dispatch(airborneListActions.deleteStrip(acId));
+    // dispatch(readyPanelActions.deleteStrip(acId));
   }
 
   function displayAssignedHeading() {

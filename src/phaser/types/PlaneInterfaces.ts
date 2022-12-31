@@ -1,22 +1,9 @@
-import { AcModel, AcType, AcWTC } from './AircraftTypes';
+import { AcWTC } from '../../react/functions/genACID';
+import { AcModel, AcType } from './AircraftTypes';
 import { DepRunwayAll } from './AirportTypes';
 import { AdjacentSectors, TerminalSectors } from './SectorTypes';
 import { SidName } from './SidTypes';
 import { WaypointDataAll } from './WaypointTypes';
-
-export interface PlanePerformance {
-  speed: {
-    initialClimb: number; // to 5000 feet
-    normalClimb: number; // 5000 to FL240
-    maxCruise: number;
-    maxBelow10k: number;
-  };
-  climbRate: {
-    initialClimb: number;
-    normalClimb: number;
-  };
-  accel: number;
-}
 
 export interface PlaneProperties {
   acId: { abbrev: string; spoken: string };
@@ -38,6 +25,20 @@ export interface PlaneProperties {
     alt: number;
     sector: TerminalSectors | AdjacentSectors;
   };
+}
+
+export interface PlanePerformance {
+  speed: {
+    initialClimb: number; // to 5000 feet
+    normalClimb: number; // 5000 to FL240
+    maxCruise: number;
+    maxBelow10k: number;
+  };
+  climbRate: {
+    initialClimb: number;
+    normalClimb: number;
+  };
+  accel: number;
 }
 
 export interface PlaneCommands {

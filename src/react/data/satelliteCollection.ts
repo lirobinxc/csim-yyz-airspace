@@ -1,11 +1,5 @@
+import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
 import { AcType } from '../functions/genACID';
-
-export enum RunwayId {
-  '05, 06LR' = '05, 06LR',
-  '23, 24LR' = '23, 24LR',
-  '15LR' = '15LR',
-  '33LR' = '33LR',
-}
 
 export interface SatelliteData {
   SatRunway: string;
@@ -24,10 +18,10 @@ export interface SatelliteData {
 }
 
 type AcTypeSatRoutes = Record<AcType, SatelliteData[]>;
-type SatelliteCollection = Record<RunwayId, AcTypeSatRoutes>;
+type SatelliteCollection = Record<RadarSceneKeys, AcTypeSatRoutes>;
 
 export const satelliteCollection: SatelliteCollection = {
-  '05, 06LR': {
+  Radar06sScene: {
     Jet: [
       {
         SatRunway: '06',
@@ -483,7 +477,7 @@ export const satelliteCollection: SatelliteCollection = {
       },
     ],
   },
-  '15LR': {
+  Radar15sScene: {
     Jet: [
       {
         SatRunway: '06',
@@ -939,7 +933,7 @@ export const satelliteCollection: SatelliteCollection = {
       },
     ],
   },
-  '23, 24LR': {
+  Radar24sScene: {
     Jet: [
       {
         SatRunway: '06',
@@ -1395,7 +1389,7 @@ export const satelliteCollection: SatelliteCollection = {
       },
     ],
   },
-  '33LR': {
+  Radar33sScene: {
     Jet: [
       {
         SatRunway: '06',

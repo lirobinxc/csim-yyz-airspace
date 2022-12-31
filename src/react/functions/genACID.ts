@@ -1,10 +1,11 @@
 import _ from 'lodash';
+import { AcModel } from '../../phaser/types/AircraftTypes';
 
-export enum WTC {
-  Light = 'L',
-  Medium = 'M',
-  Heavy = 'H',
-  Super = 'S',
+export enum AcWTC {
+  L = 'L',
+  M = 'M',
+  H = 'H',
+  S = 'S',
 }
 
 export enum AcType {
@@ -13,27 +14,27 @@ export enum AcType {
 }
 
 export interface AircraftCollection {
-  [WTC.Light]: { [AcType.Jet]: never[]; [AcType.Prop]: string[] };
-  [WTC.Medium]: {
+  [AcWTC.L]: { [AcType.Jet]: never[]; [AcType.Prop]: string[] };
+  [AcWTC.M]: {
     [AcType.Jet]: string[];
     [AcType.Prop]: string[];
   };
-  [WTC.Heavy]: { [AcType.Jet]: string[]; [AcType.Prop]: never[] };
+  [AcWTC.H]: { [AcType.Jet]: string[]; [AcType.Prop]: never[] };
 }
 
 const aircraftCollection: AircraftCollection = {
-  L: { Jet: [], Prop: ['C208'] },
+  L: { Jet: [], Prop: [AcModel.C208] },
   M: {
-    Jet: ['CRJ9', 'A310', 'A320', 'B738'],
-    Prop: ['DH8A', 'DH8D'],
+    Jet: [AcModel.CRJ9, AcModel.A21N, AcModel.B738, AcModel.CL60, AcModel.C56X],
+    Prop: [AcModel.DH8A, AcModel.DH8D],
   },
-  H: { Jet: ['A343', 'B744', 'B763'], Prop: [] },
+  H: { Jet: [AcModel.A343, AcModel.B744], Prop: [] },
 };
 
 export type ACID = ReturnType<typeof genACID>;
 
 export function genACID() {
-  let wtc: WTC = WTC.Medium;
+  let wtc: AcWTC = AcWTC.M;
   let acType: AcType = AcType.Jet;
   let equipment = 'X';
 
@@ -41,11 +42,11 @@ export function genACID() {
 
   // Generate WTC
   if (num1to10 > 7) {
-    wtc = WTC.Heavy;
+    wtc = AcWTC.H;
   } else if (num1to10 > 1) {
-    wtc = WTC.Medium;
+    wtc = AcWTC.M;
   } else {
-    wtc = WTC.Light;
+    wtc = AcWTC.L;
   }
 
   // Generate equipment type
@@ -55,10 +56,10 @@ export function genACID() {
     equipment = 'S';
   }
 
-  if (wtc === WTC.Heavy) acType = AcType.Jet;
-  if (wtc === WTC.Medium && num1to10 > 4) acType = AcType.Jet;
-  if (wtc === WTC.Medium && num1to10 <= 4) acType = AcType.Prop;
-  if (wtc === WTC.Light) acType = AcType.Prop;
+  if (wtc === AcWTC.H) acType = AcType.Jet;
+  if (wtc === AcWTC.M && num1to10 > 4) acType = AcType.Jet;
+  if (wtc === AcWTC.M && num1to10 <= 4) acType = AcType.Prop;
+  if (wtc === AcWTC.L) acType = AcType.Prop;
 
   const model = _.sample(aircraftCollection[wtc][acType]);
 

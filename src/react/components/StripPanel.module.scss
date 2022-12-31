@@ -1,6 +1,9 @@
 @import '../../variables';
 
 .StripPanel {
+  display: flex;
+  flex-direction: column;
+
   border: 2px inset;
 
   background-color: $darkGrey;
@@ -23,12 +26,21 @@
   }
 
   .Strips {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 2;
+    justify-content: flex-end;
+
     padding: $spacingXs;
+
+    border: 1px solid red;
   }
 }
 
 .SizeSm {
   flex-grow: 0.2;
+
+  // max-height: 10rem;
 }
 
 .SizeMd {

@@ -14,3 +14,15 @@ $darkestGrey: #949494;
 $limeGreen: #00ff00;
 $darkBlue: #0000ff;
 $offWhite: #f3f3f3;
+$babyblue: #c1e9f9;
+
+$borderThin: 1px solid black;
+
+@mixin flexCenterVertical {
+  display: flex;
+  align-items: center;
+}
+@mixin flexCenterHorizontal {
+  display: flex;
+  justify-content: center;
+}

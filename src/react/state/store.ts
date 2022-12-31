@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { airborneListReducer } from './slices/airborneSlice';
+import { departureListReducer } from './slices/departureListSlice';
 
 export const store = configureStore({
   reducer: {
-    airborneList: airborneListReducer,
+    departureList: departureListReducer,
   },
 });
 

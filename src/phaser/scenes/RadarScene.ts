@@ -9,7 +9,8 @@ import { AssetKeys } from '../types/AssetKeys';
 import PointerCoordinateLogger from '../utils/PointerCoordinates';
 import RunwayOrigins from '../config/RunwayOrigins';
 import Plane from '../objects/Plane/Plane';
-import { AcModel, AcType, AcWTC } from '../types/AircraftTypes';
+import { AcModel, AcType } from '../types/AircraftTypes';
+import { AcWTC } from '../../react/functions/genACID';
 import { DomEvents } from '../types/DomEvents';
 import { AdjacentSectors } from '../types/SectorTypes';
 

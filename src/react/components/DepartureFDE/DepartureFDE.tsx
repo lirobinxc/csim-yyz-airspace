@@ -6,7 +6,7 @@ import upArrow from '../../images/up-arrow.png';
 import { useAppDispatch } from '../../state/hooks';
 
 import styles from './DepartureFDE.module.scss';
-import { airborneListActions } from '../../state/slices/airborneSlice';
+import { departureListActions } from '../../state/slices/departureListSlice';
 import { AcType } from '../../functions/genACID';
 import { DepFDE } from '../../functions/genDepFdeData';
 import { SatelliteData } from '../../data/satelliteCollection';
@@ -49,8 +49,8 @@ function DepartureFDE({
   onCourseWP,
   remarks,
   transponderCode,
-  yyzRunwayId,
   isVDP,
+  depRunway,
 }: DepFDE) {
   const dispatch = useAppDispatch();
 
@@ -82,7 +82,7 @@ function DepartureFDE({
   }
 
   function removeStrip() {
-    dispatch(airborneListActions.deleteStrip(acId));
+    // dispatch(readyPanelActions.deleteStrip(acId));
   }
 
   function displayAssignedHeading() {
@@ -94,6 +94,8 @@ function DepartureFDE({
   useInterval(() => {
     setIsAirborne(true);
   }, 8000);
+
+  const departureRunwayFormatted = depRunway?.split(' ')[2];
 
   return (
     <section className={clsx(styles.FlightStrip, styles.flexCol)}>
@@ -224,7 +226,9 @@ function DepartureFDE({
           })}
           onClick={removeStrip}
         >
-          <div className={clsx(styles.runwayId)}>{yyzRunwayId}</div>
+          <div className={clsx(styles.runwayId)}>
+            {departureRunwayFormatted}
+          </div>
         </div>
       </div>
       <div className={clsx(styles.bottomRow, styles.flexRow)}>

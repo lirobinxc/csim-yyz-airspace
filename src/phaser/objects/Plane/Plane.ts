@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
-import { AcModel, AcType, AcWTC } from '../../types/AircraftTypes';
+import { AcModel, AcType } from '../../types/AircraftTypes';
+import { AcWTC } from '../../../react/functions/genACID';
 import PlaneDataTag from './PlaneDataTag';
 import PlaneSymbol from './PlaneSymbol';
 import {
