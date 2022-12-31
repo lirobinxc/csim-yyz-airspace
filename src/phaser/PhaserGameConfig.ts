@@ -1,8 +1,5 @@
 import Phaser from 'phaser';
-import UIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
-
 import { GameConfig, DebugGameConfig } from './config/GameConfig';
-
 import RadarScene from './scenes/RadarScene';
 import { RadarSceneKeys } from './types/SceneKeys';
 

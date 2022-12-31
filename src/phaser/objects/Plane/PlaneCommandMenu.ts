@@ -4,12 +4,6 @@ import { ColorKeys } from '../../types/ColorKeys';
 import { PhaserCustomEvents } from '../../types/CustomEvents';
 import { DomEvents } from '../../types/DomEvents';
 import { WaypointDataAll } from '../../types/WaypointTypes';
-import {
-  DropDownList,
-  Label,
-} from 'phaser3-rex-plugins/templates/ui/ui-components.js';
-
-import Waypoint from '../Waypoint';
 import Plane from './Plane';
 import PlaneCommandSubmenu, {
   PlaneCommandSubmenuValue,
