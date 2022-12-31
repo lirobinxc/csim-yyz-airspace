@@ -21,6 +21,10 @@ import {
   selectAirborneList,
 } from './react/state/slices/airborneSlice';
 import SatelliteFDE from './react/components/SatelliteFDE/SatelliteFDE';
+import clsx from 'clsx';
+import MenuSection from './react/components/MenuSection';
+import StripRow from './react/components/FdeSection';
+import FdeSection from './react/components/FdeSection';
 
 const examplePhaserFunction = () => {
   const RADAR_SCENE = PhaserGame.scene.keys[
@@ -137,7 +141,12 @@ function App() {
   }, 1000 * options.timedAdd);
 
   console.log(airborneList);
-  return <div className={styles.App}></div>;
+  return (
+    <div className={styles.App}>
+      <MenuSection appVersion="1.0" />
+      <FdeSection />
+    </div>
+  );
 }
 
 export default App;

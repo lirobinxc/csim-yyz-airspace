@@ -1,0 +1,98 @@
+@import '../../variables';
+
+.MenuSection {
+  width: 100%;
+
+  // border: 1px solid blue;
+
+  .titleBar {
+    padding: $spacingSm;
+
+    color: white;
+
+    background: rgb(2, 0, 36);
+    background: linear-gradient(
+      90deg,
+      rgba(2, 0, 36, 1) 0%,
+      rgba(9, 9, 121, 1) 27%,
+      rgba(46, 95, 147, 1) 59%,
+      rgba(171, 225, 236, 1) 100%
+    );
+  }
+
+  .infoBar {
+    display: flex;
+    flex-direction: row;
+
+    .spacing {
+      margin: $spacingSm;
+      padding: $spacingSm;
+    }
+
+    button,
+    .button {
+      flex-grow: 2;
+
+      font-weight: bold;
+      font-size: $fontSizeMd;
+
+      border: 2px outset;
+
+      background: $medGrey;
+
+      cursor: pointer;
+
+      &:hover {
+        background-color: $darkestGrey;
+      }
+      &:active {
+        transform: scale(0.95);
+      }
+    }
+
+    .roleSelected {
+      font-weight: bold;
+      font-size: $fontSizeMd;
+      text-align: center;
+
+      background: $medGrey;
+      background-color: $limeGreen;
+    }
+
+    .wind,
+    .timeAltimeter {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      background-color: $offWhite;
+
+      div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        padding-right: $spacingMd;
+        padding-left: $spacingMd;
+
+        font-weight: bold;
+        font-size: $fontSizeSm;
+      }
+    }
+
+    .fir,
+    .unhide {
+      color: white;
+
+      background-color: $darkBlue;
+    }
+
+    .unhide {
+      font-size: $fontSizeSm;
+    }
+
+    .vdp {
+      background-color: $limeGreen;
+    }
+  }
+}

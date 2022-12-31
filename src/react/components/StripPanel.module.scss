@@ -1,0 +1,40 @@
+@import '../../variables';
+
+.StripPanel {
+  border: 2px inset;
+
+  background-color: $darkGrey;
+
+  overflow: auto;
+
+  .Header {
+    display: flex;
+    flex-direction: row;
+
+    padding: $spacingXs;
+
+    font-weight: bold;
+
+    background-color: $medGrey;
+
+    .title {
+      min-width: 12rem;
+    }
+  }
+
+  .Strips {
+    padding: $spacingXs;
+  }
+}
+
+.SizeSm {
+  flex-grow: 0.2;
+}
+
+.SizeMd {
+  flex-grow: 0.6;
+}
+
+.SizeLg {
+  flex-grow: 8;
+}
