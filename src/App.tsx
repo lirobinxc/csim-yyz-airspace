@@ -8,21 +8,15 @@ import {
   ReactCustomEvents,
 } from './phaser/types/CustomEvents';
 
-function App() {
-  const handleClick = () => {
-    const RADAR_SCENE = PhaserGame.scene.keys[
-      RadarSceneKeys.RADAR_06s
-    ] as RadarScene;
-    RADAR_SCENE.events.emit(ReactCustomEvents.CLICK_ME, { name: 'WOW' });
-  };
+const examplePhaserFunction = () => {
+  const RADAR_SCENE = PhaserGame.scene.keys[
+    RadarSceneKeys.RADAR_06s
+  ] as RadarScene;
+  RADAR_SCENE.events.emit(ReactCustomEvents.CLICK_ME, { name: 'WOW' });
+};
 
-  return (
-    <div className={styles.App}>
-      <button className="App-button" onClick={handleClick}>
-        Or click me
-      </button>
-    </div>
-  );
+function App() {
+  return <div className={styles.App}></div>;
 }
 
 export default App;

@@ -167,9 +167,6 @@ export default class RadarScene extends Phaser.Scene {
   }
 
   private handleSpeechQueue() {
-    // console.log(this.CURRENTLY_SPEAKING_PLANE?.IS_TALKING);
-
-    // if (!this.CURRENTLY_SPEAKING_PLANE) return;
     if (this.CURRENTLY_SPEAKING_PLANE?.IS_TALKING) return;
 
     if (this.SpeechQueue.length === 0) {
@@ -185,12 +182,13 @@ export default class RadarScene extends Phaser.Scene {
     const combinedSentence = [];
     combinedSentence.push(currSpeechData.text);
 
-    if (this.SpeechQueue[0]) {
-      while (currSpeechData.plane.name === this.SpeechQueue[0].plane.name) {
-        const nextSpeechData = this.SpeechQueue.shift();
-        combinedSentence.push(nextSpeechData?.text);
-        continue;
-      }
+    while (
+      this.SpeechQueue[0] &&
+      currSpeechData.plane.name === this.SpeechQueue[0].plane.name
+    ) {
+      const nextSpeechData = this.SpeechQueue.shift();
+      combinedSentence.push(nextSpeechData?.text);
+      continue;
     }
 
     combinedSentence.push(currSpeechData.plane.Properties.acId.spoken);
@@ -213,7 +211,7 @@ export default class RadarScene extends Phaser.Scene {
 const testPlaneProps: PlaneProperties = {
   acId: { abbrev: 'ACA123', spoken: 'Air Canada 1 2 3' },
   acType: AcType.JET,
-  acModel: AcModel.B738,
+  acModel: AcModel.A343,
   acWtc: AcWTC.M,
   filedData: {
     alt: 300,

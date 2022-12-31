@@ -2,6 +2,7 @@ import { getRunwayHeading } from '../../config/RunwayHeadingConfig';
 import { SidRoute06s } from '../../config/Rwy06sSidConfig';
 import { Rwy06sWaypointDict } from '../../config/Rwy06sWaypointConfig';
 import RadarScene from '../../scenes/RadarScene';
+import { AcType } from '../../types/AircraftTypes';
 import { RadarSceneKeys } from '../../types/SceneKeys';
 import {
   WaypointData06s,
@@ -52,6 +53,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
 
   private updateOnCourse() {
     const heading = this.Plane.Commands.heading;
+    const speed = this.Plane.Commands.speed;
 
     // Base case
     if (heading.directTo === null || heading.directTo === undefined) return;
@@ -64,18 +66,47 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
 
     // Logic Step 0: Set heading.assigned to the waypoint
     const WAYPOINT_POSITION = heading.directTo.getDisplayCoord();
-    this.directTo(WAYPOINT_POSITION);
+    this.setDirectTo(WAYPOINT_POSITION);
 
     // Logic Step 1: Check if a/c is close to the waypoint
     const PLANE_POSITION = this.Plane.getPosition();
 
-    const DISTANCE_FROM_WAYPOINT = Phaser.Math.Distance.BetweenPoints(
+    const distanceFromWaypoint = Phaser.Math.Distance.BetweenPoints(
       PLANE_POSITION,
       WAYPOINT_POSITION
     );
+    const DISTANCE_IN_SECONDS = (distanceFromWaypoint / speed.current) * 180; // 180 is just a random constant I calculated
+
+    // Logic Step 2: Check if there is a next waypoint on the route
+    let NEXT_WAYPOINT: WaypointDataAll | null = null;
+    const idxOfCurrentWaypoint = sidRoute.findIndex(
+      (waypoint) => waypoint.name === heading.directTo?.name
+    );
+    if (idxOfCurrentWaypoint > -1 && sidRoute[idxOfCurrentWaypoint + 1]) {
+      NEXT_WAYPOINT = sidRoute[idxOfCurrentWaypoint + 1];
+    }
+
+    const PREEMPTIVE_TURN_TIME_IN_SEC = 8;
+
+    // Logic Step 3a: If there IS a next waypoint
+    if (DISTANCE_IN_SECONDS < PREEMPTIVE_TURN_TIME_IN_SEC) {
+      this.Plane.Commands.heading.directTo = NEXT_WAYPOINT;
+      return;
+    }
+
+    // Logic Step 3b: If there IS NO next waypoint
+    if (!NEXT_WAYPOINT && DISTANCE_IN_SECONDS < PREEMPTIVE_TURN_TIME_IN_SEC) {
+      this.Plane.Commands.heading.directTo = null;
+      return;
+    }
   }
 
-  private directTo(wpCoord: Phaser.Math.Vector2) {
+  /**
+   * Input waypoint coordinates;
+   * continuously adjusts Commands.heading.assigned until
+   * a/c is flying directly towards the waypoint.
+   */
+  private setDirectTo(wpCoord: Phaser.Math.Vector2) {
     const planeCoord = this.Plane.getPosition();
 
     const radiansBetweenPoints = Phaser.Math.Angle.BetweenPoints(
@@ -90,6 +121,8 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
 
   private updateHeading(dt: number) {
     const heading = this.Plane.Commands.heading;
+    const altitude = this.Plane.Commands.altitude;
+    const acType = this.Plane.Properties.acType;
 
     const TURN_DIRECTION = determineLeftOrRightTurn(
       heading.current,
@@ -98,6 +131,14 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
 
     // Base case
     if (TURN_DIRECTION === TurnDirection.NO_TURN) return;
+
+    // Base case: Noise abatement & MVA
+    if (acType === AcType.JET && altitude.current < 3600) {
+      return;
+    }
+    if (acType === AcType.PROP && altitude.current < 3000) {
+      return;
+    }
 
     const TURN_RATE_PER_SEC = 3; // degrees per second (Standard Rate Turn)
     const TURN_RATE_PER_MS = TURN_RATE_PER_SEC / 1000;
@@ -146,11 +187,12 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
       this.Plane.Commands.isClimbing = true;
     }
 
-    // Logic: Buffer zone
-    const CLIMB_RATE_PER_SEC = this.Plane.Commands.climbRate.current / 60;
+    let CLIMB_RATE_PER_SEC = this.Plane.Commands.climbRate.current / 60;
+
     const CLIMB_RATE_PER_MS = CLIMB_RATE_PER_SEC / 1000;
     const CLIMB_RATE_PER_FRAME = CLIMB_RATE_PER_MS * dt;
 
+    // Logic: Buffer zone
     const isWithinBufferRange =
       Math.abs(altitude.current - altitude.assigned) < CLIMB_RATE_PER_SEC;
     if (isWithinBufferRange) {
@@ -202,6 +244,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
 
   private updateClimbRate(dt: number) {
     const climbRate = this.Plane.Commands.climbRate; // feet per min
+    const altitude = this.Plane.Commands.altitude;
 
     if (climbRate.current > 200) {
       this.DataTag.showVmi = true;
@@ -209,35 +252,45 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
       this.DataTag.showVmi = false;
     }
 
+    // Realism: Decrease climb rate when near assigned altitude
+    let realisticAssignedClimbRate = climbRate.assigned;
+    const altitudeRemaining = Math.abs(altitude.current - altitude.assigned); // feet
+    if (altitudeRemaining < 500) {
+      realisticAssignedClimbRate = Math.max(
+        climbRate.assigned * (altitudeRemaining / 500),
+        climbRate.assigned / 3
+      );
+    }
+
     // Base cases
     if (this.Plane.Commands.isClimbing === false) {
       climbRate.current = 0;
       return;
     }
-    if (climbRate.current === climbRate.assigned) {
+    if (climbRate.current === realisticAssignedClimbRate) {
       return;
     }
 
-    // Logic: Buffer zone
     const CLIMB_RATE_ACCEL_PER_SEC = 120;
     const CLIMB_RATE_ACCEL_PER_MS = CLIMB_RATE_ACCEL_PER_SEC / 1000;
     const CLIMB_RATE_ACCEL_PER_FRAME = CLIMB_RATE_ACCEL_PER_MS * dt;
 
+    // Logic: Buffer zone
     const isWithinBufferRange =
-      Math.abs(climbRate.current - climbRate.assigned) <
+      Math.abs(climbRate.current - realisticAssignedClimbRate) <
       CLIMB_RATE_ACCEL_PER_SEC;
 
     if (isWithinBufferRange) {
-      climbRate.current = climbRate.assigned;
+      climbRate.current = realisticAssignedClimbRate;
       return;
     }
 
     // Logic: Main
-    if (climbRate.current < climbRate.assigned) {
+    if (climbRate.current < realisticAssignedClimbRate) {
       climbRate.current += CLIMB_RATE_ACCEL_PER_FRAME;
       return;
     }
-    if (climbRate.current > climbRate.assigned) {
+    if (climbRate.current > realisticAssignedClimbRate) {
       climbRate.current -= CLIMB_RATE_ACCEL_PER_FRAME;
       return;
     }
@@ -262,14 +315,14 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
     const altitude = this.Plane.Commands.altitude; // feet
     const heading = this.Plane.Commands.heading;
 
-    const completedSidHeading = this.Plane.Commands.completedSidHeading;
+    const completedSidHeading = this.Plane.Commands.onSidHeading;
     if (completedSidHeading === true) return;
 
     if (altitude.current > 1100 && !completedSidHeading) {
       heading.assigned = getRunwayHeading(
         this.Plane.Properties.takeoffData.depRunway
       ).sid;
-      this.Plane.Commands.completedSidHeading = true;
+      this.Plane.Commands.onSidHeading = true;
     }
   }
 

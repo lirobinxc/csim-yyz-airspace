@@ -22,11 +22,15 @@ import { SidRoute06s } from '../../config/Rwy06sSidConfig';
 import { DepRunwayAll } from '../../types/AirportTypes';
 import { DomEvents } from '../../types/DomEvents';
 import { PhaserCustomEvents } from '../../types/CustomEvents';
-import PlaneCommandMenu from './PlaneOptionsMenu';
+import PlaneCommandMenu from './PlaneCommandMenu';
 import { getSidRoute } from '../../utils/getSidRoute';
 import { RadarSceneKeys } from '../../types/SceneKeys';
 import { Rwy06sWaypointDict } from '../../config/Rwy06sWaypointConfig';
 import { PlaneSpeech } from './PlaneSpeech';
+import {
+  determineLeftOrRightTurn,
+  TurnDirection,
+} from '../../utils/determineLeftOrRightTurn';
 
 export interface PlanePerformance {
   speed: {
@@ -84,8 +88,7 @@ export interface PlaneCommands {
   };
   isClimbing: boolean;
   isDescending: boolean;
-  isLeveling: boolean; // TO DO: not yet implemented in PlaneBehaviour
-  completedSidHeading: boolean;
+  onSidHeading: boolean;
 }
 
 export default class Plane extends Phaser.GameObjects.Container {
@@ -205,11 +208,116 @@ export default class Plane extends Phaser.GameObjects.Container {
     const sidRoute = getSidRoute(this.Scene.RUNWAY_CONFIG, sidName);
 
     if (sidRoute.find((wp) => wp.name === waypointData.name)) {
-      this.talk(`Proceed direct ${waypointData.name}`, this);
+      const altitude = this.Commands.altitude;
+      const acType = this.Properties.acType;
+
+      let lowAltitudePrefix = '';
+
+      if (acType === AcType.JET && altitude.current < 3600) {
+        lowAltitudePrefix = 'After noise,';
+      }
+      if (acType === AcType.PROP && altitude.current < 3000) {
+        lowAltitudePrefix = 'After passing 3000,';
+      }
+
+      this.talk(
+        `${lowAltitudePrefix} Proceed direct ${waypointData.name}`,
+        this
+      );
       this.Commands.heading.directTo = waypointData;
-    } else {
-      this.talk(`Unable, ${waypointData.name} is not on our flight plan`, this);
+      return;
     }
+
+    this.talk(`Unable, ${waypointData.name} is not on our flight plan`, this);
+    return;
+  }
+
+  public commandHeading(desiredHeading: number) {
+    if (!desiredHeading) return;
+
+    const spokenHeading = desiredHeading
+      .toString()
+      .padStart(3, '0')
+      .split('')
+      .join(' ');
+
+    const turnDirection = determineLeftOrRightTurn(
+      this.Commands.heading.current,
+      desiredHeading
+    );
+
+    const altitude = this.Commands.altitude;
+    const acType = this.Properties.acType;
+
+    let lowAltitudePrefix = '';
+
+    if (acType === AcType.JET && altitude.current < 3600) {
+      lowAltitudePrefix = 'After noise,';
+    }
+    if (acType === AcType.PROP && altitude.current < 3000) {
+      lowAltitudePrefix = 'After passing 3000,';
+    }
+
+    if (turnDirection === TurnDirection.LEFT) {
+      this.talk(
+        `${lowAltitudePrefix} Turn left heading ${spokenHeading}`,
+        this
+      );
+    } else if (
+      turnDirection === TurnDirection.RIGHT ||
+      turnDirection === TurnDirection.EITHER
+    ) {
+      this.talk(
+        `${lowAltitudePrefix} Turn right heading ${spokenHeading}`,
+        this
+      );
+    } else {
+      this.talk(`Maintain heading ${spokenHeading}`, this);
+    }
+
+    this.Commands.heading.directTo = null;
+    this.Commands.heading.assigned = desiredHeading;
+    return;
+  }
+
+  public commandAltitude(desiredAlt: number) {
+    if (!desiredAlt) return;
+
+    let spokenAlt: string | number = desiredAlt;
+
+    if (desiredAlt >= 18000) {
+      const flightLevel = desiredAlt / 100;
+      const spokenFlightLevel = flightLevel.toString().split('').join(' ');
+      spokenAlt = `Flight Level ${spokenFlightLevel}`;
+    }
+
+    if (this.Commands.altitude.current < desiredAlt) {
+      this.talk(`Climb ${spokenAlt}`, this);
+      this.Commands.altitude.assigned = desiredAlt;
+      return;
+    }
+    if (this.Commands.altitude.current > desiredAlt) {
+      this.talk(`Descend ${spokenAlt}`, this);
+      this.Commands.altitude.assigned = desiredAlt;
+      return;
+    }
+    this.talk(`Maintain ${spokenAlt}`, this);
+    return;
+  }
+
+  public commandSpeed(desiredSpeed: number) {
+    if (!desiredSpeed) return;
+
+    if (
+      this.Commands.speed.current < desiredSpeed ||
+      this.Commands.speed.current > desiredSpeed
+    ) {
+      this.talk(`Speed ${desiredSpeed} knots`, this);
+      this.Commands.speed.assigned = desiredSpeed;
+      return;
+    }
+    this.talk(`Maintain speed ${desiredSpeed} knots`, this);
+    return;
   }
 
   /**
@@ -281,9 +389,33 @@ export default class Plane extends Phaser.GameObjects.Container {
       acProps.takeoffData.depRunway
     ).initial;
 
-    const initialCommands: PlaneCommands = {
+    // const initialCommands: PlaneCommands = {
+    //   speed: {
+    //     current: acPerf.speed.initialClimb - 80,
+    //     assigned: acPerf.speed.initialClimb,
+    //   },
+    //   altitude: {
+    //     current: 0,
+    //     assigned: acProps.takeoffData.assignedAlt,
+    //   },
+    //   heading: {
+    //     current: runwayHeading,
+    //     assigned: runwayHeading,
+    //     directTo: null,
+    //   },
+    //   climbRate: {
+    //     current: 0,
+    //     assigned: acPerf.climbRate.initialClimb,
+    //   },
+    //   isClimbing: false,
+    //   isDescending: false,
+    //   isLeveling: false,
+    //   completedSidHeading: false,
+    // };
+
+    const testInitialCommands: PlaneCommands = {
       speed: {
-        current: acPerf.speed.initialClimb + 800, // TEMP: should be - 80
+        current: acPerf.speed.initialClimb - 40,
         assigned: acPerf.speed.initialClimb,
       },
       altitude: {
@@ -296,16 +428,15 @@ export default class Plane extends Phaser.GameObjects.Container {
         directTo: null,
       },
       climbRate: {
-        current: 0,
+        current: acPerf.climbRate.initialClimb,
         assigned: acPerf.climbRate.initialClimb,
       },
       isClimbing: false,
       isDescending: false,
-      isLeveling: false,
-      completedSidHeading: false,
+      onSidHeading: false,
     };
 
-    return initialCommands;
+    return testInitialCommands;
   }
 
   private initRunwayOrigin(acProps: PlaneProperties): Phaser.Math.Vector2 {

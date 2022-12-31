@@ -1,4 +1,6 @@
 import Phaser from 'phaser';
+import UIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
+
 import { GameConfig, DebugGameConfig } from './config/GameConfig';
 
 import RadarScene from './scenes/RadarScene';
@@ -10,7 +12,6 @@ const Config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   parent: 'phaser',
   backgroundColor: '#000',
-
   scale: {
     mode: Phaser.Scale.ScaleModes.HEIGHT_CONTROLS_WIDTH,
     width: GameConfig.height,

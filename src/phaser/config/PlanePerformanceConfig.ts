@@ -1,7 +1,9 @@
 import { PlanePerformance } from '../objects/Plane/Plane';
 import { AcModel } from '../types/AircraftTypes';
 
-const BASE_ACCEL = 5; // kts per second
+const BASE_ACCEL = 3; // kts per second
+
+// NOTE: Initial Climb rates should be MINIMUM 2000.
 
 export const PlanePerformanceConfig: {
   [key in AcModel]: PlanePerformance;
@@ -14,7 +16,7 @@ export const PlanePerformanceConfig: {
       maxBelow10k: 250,
     },
     climbRate: {
-      initialClimb: 3500, // feet per minute
+      initialClimb: 2000, // feet per minute
       normalClimb: 1500,
     },
     accel: BASE_ACCEL,
@@ -27,8 +29,8 @@ export const PlanePerformanceConfig: {
       maxBelow10k: 250,
     },
     climbRate: {
-      initialClimb: 1400, // feet per minute
-      normalClimb: 1250,
+      initialClimb: 2000, // feet per minute
+      normalClimb: 1500,
     },
     accel: BASE_ACCEL,
   },
@@ -53,8 +55,8 @@ export const PlanePerformanceConfig: {
       maxBelow10k: 250,
     },
     climbRate: {
-      initialClimb: 3500, // feet per minute
-      normalClimb: 1400,
+      initialClimb: 3000, // feet per minute
+      normalClimb: 1500,
     },
     accel: BASE_ACCEL,
   },
