@@ -1,11 +1,21 @@
 import clsx from 'clsx';
+import { useEffect } from 'react';
+import { DepFDE } from '../functions/genDepFdeData';
 
 import styles from './FdeSection.module.scss';
 import StripPanel, { Size } from './StripPanel';
 
-interface FdeSectionProps {}
+interface FdeSectionProps {
+  strips: DepFDE[];
+}
 
-const FdeSection = () => {
+const FdeSection = ({ strips }: FdeSectionProps) => {
+  useEffect(() => {
+    processStrips();
+  });
+
+  function processStrips() {}
+
   return (
     <main className={styles.FdeSection}>
       <section className={styles.NorthDepCol}>

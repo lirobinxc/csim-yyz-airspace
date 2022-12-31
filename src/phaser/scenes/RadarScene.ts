@@ -8,7 +8,7 @@ import { RadarSceneKeys } from '../types/SceneKeys';
 import { AssetKeys } from '../types/AssetKeys';
 import PointerCoordinateLogger from '../utils/PointerCoordinates';
 import RunwayOrigins from '../config/RunwayOrigins';
-import Plane, { PlaneProperties } from '../objects/Plane/Plane';
+import Plane from '../objects/Plane/Plane';
 import { AcModel, AcType, AcWTC } from '../types/AircraftTypes';
 import { DomEvents } from '../types/DomEvents';
 import { AdjacentSectors } from '../types/SectorTypes';
@@ -24,6 +24,7 @@ import { SidName } from '../types/SidTypes';
 import { SidRoute06s } from '../config/Rwy06sSidConfig';
 import { DepRunwayYYZ } from '../types/AirportTypes';
 import { PhaserCustomEvents, ReactCustomEvents } from '../types/CustomEvents';
+import { PlaneProperties } from '../types/PlaneInterfaces';
 
 export default class RadarScene extends Phaser.Scene {
   public Waypoints!: Waypoint[];
@@ -150,6 +151,13 @@ export default class RadarScene extends Phaser.Scene {
           this.SELECTED_PLANE.IS_SELECTED = false;
         }
         this.SELECTED_PLANE = null;
+      }
+
+      if (this.SELECTED_PLANE instanceof Plane) {
+        if (!this.SELECTED_PLANE.CommandMenu.SELECTED_BUTTON) {
+          this.SELECTED_PLANE.IS_SELECTED = false;
+          this.SELECTED_PLANE = null;
+        }
       }
 
       console.log('bg clicked');

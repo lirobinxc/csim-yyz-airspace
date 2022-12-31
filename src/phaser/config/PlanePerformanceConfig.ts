@@ -1,5 +1,5 @@
-import { PlanePerformance } from '../objects/Plane/Plane';
 import { AcModel } from '../types/AircraftTypes';
+import { PlanePerformance } from '../types/PlaneInterfaces';
 
 const BASE_ACCEL = 3; // kts per second
 

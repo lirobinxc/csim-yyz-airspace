@@ -23,7 +23,7 @@ const StripPanel = ({ title, height, strips }: StripPanelProps) => {
     <div className={clsx(styles.StripPanel, getPanelHeightClass())}>
       <header className={clsx(styles.Header)}>
         <div className={clsx(styles.title)}>{title}</div>
-        <div className={clsx(styles.stripCount)}>3</div>
+        <div className={clsx(styles.stripCount)}>{strips?.length}</div>
       </header>
       <section className={clsx(styles.Strips)}>{strips}</section>
     </div>

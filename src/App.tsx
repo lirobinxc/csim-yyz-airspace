@@ -144,7 +144,7 @@ function App() {
   return (
     <div className={styles.App}>
       <MenuSection appVersion="1.0" />
-      <FdeSection />
+      <FdeSection strips={airborneList} />
     </div>
   );
 }
