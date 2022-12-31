@@ -31,7 +31,7 @@ const StripPanel = ({ title, height, strips }: StripPanelProps) => {
 
   function displayAsPendingFDE() {
     return strips.map((strip) => {
-      return <PendingDepartureFDE key={strip.acFullName} {...strip} />;
+      return <PendingDepartureFDE key={strip.acId} {...strip} />;
     });
   }
 

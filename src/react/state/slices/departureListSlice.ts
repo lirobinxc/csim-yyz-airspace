@@ -50,7 +50,7 @@ function randomStrip(radarScene: RadarSceneKeys, isSingleOps: boolean) {
   return genDepFdeData(radarScene, isSingleOps);
 }
 
-const initialState = [genDepFdeData(RadarSceneKeys.RADAR_06s, false)];
+const initialState = genDepList(RadarSceneKeys.RADAR_06s, 12, false);
 
 export const departureList = createSlice({
   name: 'departureList',
