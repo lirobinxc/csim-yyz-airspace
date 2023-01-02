@@ -10,7 +10,7 @@
   display: flex;
   flex-direction: row;
 
-  max-width: 29rem;
+  max-width: $fdeMaxWidth;
 
   font-weight: bold;
   font-size: $fontSizeMd;
@@ -42,7 +42,8 @@
 }
 
 .widthSm {
-  flex-basis: $fontSizeMd;
+  // flex-basis: $fontSizeMd;
+
   flex-grow: 1;
 }
 
