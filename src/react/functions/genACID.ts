@@ -1,41 +1,29 @@
 import _ from 'lodash';
-import { AcModel } from '../../phaser/types/AircraftTypes';
-
-export enum AcWTC {
-  L = 'L',
-  M = 'M',
-  H = 'H',
-  S = 'S',
-}
-
-export enum AcType {
-  Jet = 'Jet',
-  Prop = 'Prop',
-}
+import { AcModel, AcType, AcWTC } from '../../phaser/types/AircraftTypes';
 
 export interface AircraftCollection {
-  [AcWTC.L]: { [AcType.Jet]: never[]; [AcType.Prop]: string[] };
+  [AcWTC.L]: { [AcType.JET]: never[]; [AcType.PROP]: AcModel[] };
   [AcWTC.M]: {
-    [AcType.Jet]: string[];
-    [AcType.Prop]: string[];
+    [AcType.JET]: AcModel[];
+    [AcType.PROP]: AcModel[];
   };
-  [AcWTC.H]: { [AcType.Jet]: string[]; [AcType.Prop]: never[] };
+  [AcWTC.H]: { [AcType.JET]: AcModel[]; [AcType.PROP]: never[] };
 }
 
 const aircraftCollection: AircraftCollection = {
-  L: { Jet: [], Prop: [AcModel.C208] },
+  L: { JET: [], PROP: [AcModel.C208] },
   M: {
-    Jet: [AcModel.CRJ9, AcModel.A21N, AcModel.B738, AcModel.CL60, AcModel.C56X],
-    Prop: [AcModel.DH8A, AcModel.DH8D],
+    JET: [AcModel.CRJ9, AcModel.A21N, AcModel.B738, AcModel.CL60, AcModel.C56X],
+    PROP: [AcModel.DH8A, AcModel.DH8D],
   },
-  H: { Jet: [AcModel.A343, AcModel.B744], Prop: [] },
+  H: { JET: [AcModel.A343, AcModel.B744], PROP: [] },
 };
 
 export type ACID = ReturnType<typeof genACID>;
 
 export function genACID() {
   let wtc: AcWTC = AcWTC.M;
-  let acType: AcType = AcType.Jet;
+  let acType: AcType = AcType.JET;
   let equipment = 'X';
 
   const num1to10 = _.random(1, 10);
@@ -56,12 +44,16 @@ export function genACID() {
     equipment = 'S';
   }
 
-  if (wtc === AcWTC.H) acType = AcType.Jet;
-  if (wtc === AcWTC.M && num1to10 > 4) acType = AcType.Jet;
-  if (wtc === AcWTC.M && num1to10 <= 4) acType = AcType.Prop;
-  if (wtc === AcWTC.L) acType = AcType.Prop;
+  if (wtc === AcWTC.H) acType = AcType.JET;
+  if (wtc === AcWTC.M && num1to10 > 4) acType = AcType.JET;
+  if (wtc === AcWTC.M && num1to10 <= 4) acType = AcType.PROP;
+  if (wtc === AcWTC.L) acType = AcType.PROP;
 
   const model = _.sample(aircraftCollection[wtc][acType]);
+
+  if (!model) {
+    throw new Error('Error generating an aircraft MODEL.');
+  }
 
   let isQ400 = model === 'DH8D' ? true : false;
 

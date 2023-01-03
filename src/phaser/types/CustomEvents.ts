@@ -8,5 +8,5 @@ export enum PhaserCustomEvents {
 }
 
 export enum ReactCustomEvents {
-  CLICK_ME = 'CLICK_ME',
+  AIRBORNE = 'AIRBORNE',
 }

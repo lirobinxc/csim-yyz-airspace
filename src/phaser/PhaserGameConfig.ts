@@ -5,7 +5,7 @@ import { RadarSceneKeys } from './types/SceneKeys';
 
 const isDebugMode = false;
 
-const Config: Phaser.Types.Core.GameConfig = {
+export const PhaserGameConfig: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   parent: 'phaser',
   backgroundColor: '#000',
@@ -28,5 +28,5 @@ const Config: Phaser.Types.Core.GameConfig = {
   disableContextMenu: true,
 };
 
-const PhaserGame = new Phaser.Game(Config);
+const PhaserGame = new Phaser.Game(PhaserGameConfig);
 export default PhaserGame;

@@ -1,5 +1,5 @@
+import { AcType } from '../../phaser/types/AircraftTypes';
 import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
-import { AcType } from '../functions/genACID';
 
 export interface SatelliteData {
   SatRunway: string;
@@ -22,7 +22,7 @@ type SatelliteCollection = Record<RadarSceneKeys, AcTypeSatRoutes>;
 
 export const satelliteCollection: SatelliteCollection = {
   Radar06sScene: {
-    Jet: [
+    JET: [
       {
         SatRunway: '06',
         SatType: 'Departure',
@@ -174,7 +174,7 @@ export const satelliteCollection: SatelliteCollection = {
         isRare: '',
       },
     ],
-    Prop: [
+    PROP: [
       {
         SatRunway: '06',
         SatType: 'Departure',
@@ -478,7 +478,7 @@ export const satelliteCollection: SatelliteCollection = {
     ],
   },
   Radar15sScene: {
-    Jet: [
+    JET: [
       {
         SatRunway: '06',
         SatType: 'Departure',
@@ -630,7 +630,7 @@ export const satelliteCollection: SatelliteCollection = {
         isRare: '',
       },
     ],
-    Prop: [
+    PROP: [
       {
         SatRunway: '06',
         SatType: 'Departure',
@@ -934,7 +934,7 @@ export const satelliteCollection: SatelliteCollection = {
     ],
   },
   Radar24sScene: {
-    Jet: [
+    JET: [
       {
         SatRunway: '06',
         SatType: 'Departure',
@@ -1086,7 +1086,7 @@ export const satelliteCollection: SatelliteCollection = {
         isRare: '',
       },
     ],
-    Prop: [
+    PROP: [
       {
         SatRunway: '06',
         SatType: 'Departure',
@@ -1390,7 +1390,7 @@ export const satelliteCollection: SatelliteCollection = {
     ],
   },
   Radar33sScene: {
-    Jet: [
+    JET: [
       {
         SatRunway: '06',
         SatType: 'Departure',
@@ -1542,7 +1542,7 @@ export const satelliteCollection: SatelliteCollection = {
         isRare: '',
       },
     ],
-    Prop: [
+    PROP: [
       {
         SatRunway: '06',
         SatType: 'Departure',

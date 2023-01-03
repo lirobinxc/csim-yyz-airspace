@@ -1,8 +1,3 @@
-export enum AcType {
-  JET = 'JET',
-  PROP = 'PROP',
-}
-
 export enum AcModel {
   A21N = 'A21N',
   A343 = 'A343',
@@ -14,4 +9,16 @@ export enum AcModel {
   C56X = 'C56X',
   CL60 = 'CL60',
   CRJ9 = 'CRJ9',
+}
+
+export enum AcType {
+  JET = 'JET',
+  PROP = 'PROP',
+}
+
+export enum AcWTC {
+  L = 'L',
+  M = 'M',
+  H = 'H',
+  S = 'S',
 }

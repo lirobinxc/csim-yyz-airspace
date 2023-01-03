@@ -24,7 +24,7 @@ const StripPanel = ({ title, height, strips }: StripPanelProps) => {
 
   function displayStrips() {
     if (height === Size.LG) {
-      //return displayAsFullFDE()
+      return displayAsPendingFDE();
     }
     return displayAsPendingFDE();
   }

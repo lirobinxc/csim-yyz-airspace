@@ -1,4 +1,4 @@
-import { AcWTC } from '../../react/functions/genACID';
+import { AcWTC } from '../types/AircraftTypes';
 
 export function convertAcWtcToSymbol(acWtc: AcWTC) {
   switch (acWtc) {

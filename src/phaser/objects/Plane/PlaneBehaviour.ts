@@ -38,8 +38,9 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
   }
 
   preUpdate(t: number, dt: number) {
+    this.checkInAfterPassing1200();
     this.ifNadp2UpTo5000();
-    this.flySidHeadingAt1100();
+    this.flySidOrPropHeadingDuringClimb();
     this.ifAbove5000();
 
     this.updateHeading(dt);
@@ -311,18 +312,34 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
     );
   };
 
-  private flySidHeadingAt1100() {
+  private flySidOrPropHeadingDuringClimb() {
     const altitude = this.Plane.Commands.altitude; // feet
     const heading = this.Plane.Commands.heading;
 
-    const completedSidHeading = this.Plane.Commands.onSidHeading;
+    const completedSidHeading = this.Plane.Commands.onSidOrPropHeading;
     if (completedSidHeading === true) return;
 
-    if (altitude.current > 1100 && !completedSidHeading) {
+    // Jets turn to the SID heading
+    if (
+      this.Plane.Properties.acType === AcType.JET &&
+      altitude.current > 1100 &&
+      !completedSidHeading
+    ) {
       heading.assigned = getRunwayHeading(
         this.Plane.Properties.takeoffData.depRunway
       ).sid;
-      this.Plane.Commands.onSidHeading = true;
+      this.Plane.Commands.onSidOrPropHeading = true;
+    }
+
+    // Props turn to the SID heading
+    const PROP_HEADING = this.Plane.Properties.takeoffData.propTurnHeading;
+    if (
+      this.Plane.Properties.acType === AcType.PROP &&
+      altitude.current > 400 &&
+      !completedSidHeading
+    ) {
+      heading.assigned = PROP_HEADING ? PROP_HEADING : heading.assigned;
+      this.Plane.Commands.onSidOrPropHeading = true;
     }
   }
 
@@ -362,6 +379,15 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
     if (altitude.current >= 1000 && altitude.current <= 5000) {
       climbRate.assigned = acPerf.climbRate.initialClimb;
       return;
+    }
+  }
+
+  private checkInAfterPassing1200() {
+    const altitude = this.Plane.Commands.altitude; // feet
+
+    if (this.Plane.Commands.hasCheckedIn === false && altitude.current > 1200) {
+      this.Plane.checkIn();
+      this.Plane.Commands.hasCheckedIn = true;
     }
   }
 }

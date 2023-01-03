@@ -1,9 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import _ from 'lodash';
+import PhaserGame from '../../../phaser/PhaserGameConfig';
+import RadarScene from '../../../phaser/scenes/RadarScene';
+import { ReactCustomEvents } from '../../../phaser/types/CustomEvents';
 import { RadarSceneKeys } from '../../../phaser/types/SceneKeys';
 import { SidName } from '../../../phaser/types/SidTypes';
 import { determineIfVdpAllowed } from '../../functions/determineIfVdpAllowed';
-import { DepFDE, genDepFdeData } from '../../functions/genDepFdeData';
+import {
+  DeparturePhase,
+  DeparturePosition,
+  DepFDE,
+  genDepFdeData,
+} from '../../functions/genDepFdeData';
 import { genSatFdeData } from '../../functions/genSatFdeData';
 import type { RootState } from '../store';
 
@@ -22,19 +30,13 @@ function genDepList(
     //   continue;
     // }
 
-    // VDP Same Sid logic
-    const currDepFde = genDepFdeData(radarScene, isSingleOps);
-    const prevDepFde = defaultDepSequence[defaultDepSequence.length - 1];
+    let prevDepFde = defaultDepSequence[defaultDepSequence.length - 1];
 
-    if (i === 0) {
-      defaultDepSequence.push(currDepFde);
-      continue;
-    }
-
-    if (determineIfVdpAllowed(radarScene, currDepFde, prevDepFde)) {
-      i--;
-      continue;
-    }
+    const currDepFde = genDepFdeData(
+      radarScene,
+      isSingleOps,
+      prevDepFde?.sidName
+    );
 
     defaultDepSequence.push(currDepFde);
   }
@@ -43,14 +45,25 @@ function genDepList(
 }
 
 // Randomly adds Dep or Sat strip
-function randomStrip(radarScene: RadarSceneKeys, isSingleOps: boolean) {
+function addRandomStrip(
+  radarScene: RadarSceneKeys,
+  isSingleOps: boolean,
+  prevFdeSidName: SidName | undefined
+) {
   // const num1to10 = _.random(1, 10);
   // if (num1to10 > 9) return genSatFdeData(radarScene);
 
-  return genDepFdeData(radarScene, isSingleOps);
+  return genDepFdeData(radarScene, isSingleOps, prevFdeSidName);
 }
 
-const initialState = genDepList(RadarSceneKeys.RADAR_06s, 12, false);
+function sendAirborneToPhaser(fde: DepFDE) {
+  const RADAR_SCENE = PhaserGame.scene.keys[
+    RadarSceneKeys.RADAR_06s
+  ] as RadarScene;
+  RADAR_SCENE.events.emit(ReactCustomEvents.AIRBORNE, fde);
+}
+
+const initialState = genDepList(RadarSceneKeys.RADAR_06s, 4, false);
 
 export const departureList = createSlice({
   name: 'departureList',
@@ -62,10 +75,15 @@ export const departureList = createSlice({
       action: PayloadAction<{
         radarScene: RadarSceneKeys;
         isSingleOps: boolean;
+        prevFdeSidName: SidName | undefined;
       }>
     ) => {
       state.push(
-        randomStrip(action.payload.radarScene, action.payload.isSingleOps)
+        addRandomStrip(
+          action.payload.radarScene,
+          action.payload.isSingleOps,
+          action.payload.prevFdeSidName
+        )
       );
     },
     // Use the PayloadAction type to declare the contents of `action.payload`
@@ -73,17 +91,46 @@ export const departureList = createSlice({
     //   console.log('Removed', action.payload);
     //   return state.filter((item) => item.acId !== action.payload);
     // },
+    setToInPosition: (state, action: PayloadAction<DepFDE | undefined>) => {
+      console.log(action.payload);
+
+      if (!action.payload) return state;
+
+      const depPhase = DeparturePhase.IN_POSITION;
+      const selectedFde = action.payload;
+
+      const newList = state.filter((strip) => strip.acId !== selectedFde.acId);
+
+      return [
+        ...newList,
+        { ...selectedFde, depPhase, inPositionTime: Date.now() },
+      ];
+    },
+    setToAirborne: (state, action: PayloadAction<DepFDE | undefined>) => {
+      console.log(action.payload);
+
+      if (!action.payload) return state;
+
+      const depPhase = DeparturePhase.AIRBORNE;
+      const selectedFde = action.payload;
+
+      const newList = state.filter((strip) => strip.acId !== selectedFde.acId);
+
+      sendAirborneToPhaser(selectedFde);
+
+      return [...newList, { ...selectedFde, depPhase }];
+    },
     refreshStrips: (
       state,
       action: PayloadAction<{
-        runwayId: RadarSceneKeys;
+        radarScene: RadarSceneKeys;
         count: number;
         isSingleOps: boolean;
       }>
     ) => {
       console.log('Refresh strips for', action.payload);
       return genDepList(
-        action.payload.runwayId,
+        action.payload.radarScene,
         action.payload.count,
         action.payload.isSingleOps
       );

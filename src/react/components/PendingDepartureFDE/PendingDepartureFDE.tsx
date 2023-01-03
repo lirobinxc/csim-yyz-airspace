@@ -7,7 +7,6 @@ import { useAppDispatch } from '../../state/hooks';
 
 import styles from './PendingDepartureFDE.module.scss';
 import { departureListActions } from '../../state/slices/departureListSlice';
-import { AcType } from '../../functions/genACID';
 import { DepFDE } from '../../functions/genDepFdeData';
 import { SatelliteData } from '../../data/satelliteCollection';
 import useInterval from 'use-interval';
@@ -38,25 +37,27 @@ function PendingDepartureFDE({
 
   return (
     <li className={clsx(styles.PendingDepartureFDE)}>
-      <div className={clsx(styles.box, styles.widthMd, styles.acId)}>
+      <div
+        className={clsx(styles.box, styles.widthLg, styles.acId, {
+          [styles.bgYellow]: isVDP,
+        })}
+      >
         {acId}
       </div>
-      <div className={clsx(styles.box, styles.widthMd, styles.acFullName)}>
+      <div className={clsx(styles.box, styles.widthLg, styles.acFullName)}>
         {acFullName}
       </div>
       <div className={clsx(styles.box, styles.widthSm, styles.depRunway)}>
         {depRunwayFormatted}
       </div>
-      <div className={clsx(styles.box, styles.widthLg, styles.sidName)}>
-        {sidNameFormatted}
-      </div>
+      <div className={clsx(styles.box, styles.sidName)}>{sidNameFormatted}</div>
       <div className={clsx(styles.box, styles.widthMd, styles.filedAlt)}>
         {filedAlt}
       </div>
       <div className={clsx(styles.box, styles.widthSm, styles.assignedAlt)}>
         {assignedAlt}
       </div>
-      <div className={clsx(styles.box, styles.widthSm, styles.emptyBox)}> </div>
+      <div className={clsx(styles.box, styles.widthXs, styles.emptyBox)}> </div>
     </li>
   );
 }

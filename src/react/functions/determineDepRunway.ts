@@ -14,14 +14,18 @@ export function determineDepRunwayYYZ(
         return DepRunwayYYZ.RWY_05;
       if (departurePosition === DeparturePosition.SD)
         return DepRunwayYYZ.RWY_06L;
-      break;
+      throw new Error(
+        `Could not determine DepRunwayYYZ. Args: ${radarScene}, ${departurePosition}, ${isSingleOps}`
+      );
     case RadarSceneKeys.RADAR_24s:
       if (isSingleOps) return DepRunwayYYZ.RWY_24R;
       if (departurePosition === DeparturePosition.ND)
         return DepRunwayYYZ.RWY_23;
       if (departurePosition === DeparturePosition.SD)
         return DepRunwayYYZ.RWY_24R;
-      break;
+      throw new Error(
+        `Could not determine DepRunwayYYZ. Args: ${radarScene}, ${departurePosition}, ${isSingleOps}`
+      );
     case RadarSceneKeys.RADAR_15s:
       return DepRunwayYYZ.RWY_15L;
     case RadarSceneKeys.RADAR_33s:

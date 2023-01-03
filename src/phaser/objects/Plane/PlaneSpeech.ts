@@ -25,7 +25,7 @@ export class PlaneSpeech extends Phaser.GameObjects.GameObject {
   preUpdate() {
     this.IS_TALKING = this.SpeechSynth?.speaking || false;
 
-    this.setPilotVoice();
+    // this.setPilotVoice();
   }
 
   public speak(phrase: string) {
@@ -46,7 +46,9 @@ export class PlaneSpeech extends Phaser.GameObjects.GameObject {
 
   private setPilotVoice() {
     if (this.PilotVoice) return;
-    if (this.SpeechSynth?.onvoiceschanged === undefined) return;
+    if (!this.SpeechSynth?.onvoiceschanged) return;
+
+    console.log('setPilotVoice');
 
     const voices = this.SpeechSynth.getVoices();
 
@@ -59,9 +61,7 @@ export class PlaneSpeech extends Phaser.GameObjects.GameObject {
         voice.name !== 'Google UK English Male'
     );
 
-    console.log(engVoices);
-
     this.PilotVoice = engVoices[Phaser.Math.Between(0, voices.length - 1)];
-    console.log(this.PilotVoice);
+    // console.log(this.PilotVoice);
   }
 }

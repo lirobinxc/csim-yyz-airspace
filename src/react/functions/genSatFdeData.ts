@@ -1,11 +1,11 @@
 import _ from 'lodash';
-import { AcType, genACID } from './genACID';
+import { genACID } from './genACID';
 import { genCallsign } from './genCallsign';
 import { destinationCollection } from '../data/destinationCollection';
 import { genSatRoute } from './genSatRoute';
 import { SatelliteData } from '../data/satelliteCollection';
 import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
-import { AcModel } from '../../phaser/types/AircraftTypes';
+import { AcModel, AcType } from '../../phaser/types/AircraftTypes';
 import { DeparturePhase, DeparturePosition } from './genDepFdeData';
 
 let currentHour = _.sample([12, 13, 14, 15, 16, 17, 18]) || 12;
@@ -54,7 +54,7 @@ export function genSatFdeData(rwyId: RadarSceneKeys) {
   // Set filed speed and altitude
   let filedTAS = 999;
   let filedAlt = 999;
-  if (aircraft.type === AcType.Prop) {
+  if (aircraft.type === AcType.PROP) {
     filedTAS = _.sample([290, 275]) || 275;
     filedAlt = _.sample([60, 160, 190, 220, 250]) || 220;
     if (aircraft.model === AcModel.C208) {
@@ -62,7 +62,7 @@ export function genSatFdeData(rwyId: RadarSceneKeys) {
       filedAlt = 80;
     }
   }
-  if (aircraft.type === AcType.Jet) {
+  if (aircraft.type === AcType.JET) {
     filedTAS = _.sample([350, 375]) || 349;
     filedAlt = _.sample([220, 310, 330, 350, 360]) || 350;
   }

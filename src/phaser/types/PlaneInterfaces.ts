@@ -1,5 +1,4 @@
-import { AcWTC } from '../../react/functions/genACID';
-import { AcModel, AcType } from './AircraftTypes';
+import { AcModel, AcType, AcWTC } from './AircraftTypes';
 import { DepRunwayAll } from './AirportTypes';
 import { AdjacentSectors, TerminalSectors } from './SectorTypes';
 import { SidName } from './SidTypes';
@@ -18,6 +17,8 @@ export interface PlaneProperties {
   };
   takeoffData: {
     assignedAlt: number;
+    assignedHeading: number;
+    propTurnHeading: number | null;
     depRunway: DepRunwayAll;
     isNADP1: boolean;
   };
@@ -61,5 +62,6 @@ export interface PlaneCommands {
   };
   isClimbing: boolean;
   isDescending: boolean;
-  onSidHeading: boolean;
+  onSidOrPropHeading: boolean;
+  hasCheckedIn: boolean;
 }

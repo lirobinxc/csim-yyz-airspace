@@ -7,10 +7,10 @@ import { useAppDispatch } from '../../state/hooks';
 
 import styles from './DepartureFDE.module.scss';
 import { departureListActions } from '../../state/slices/departureListSlice';
-import { AcType } from '../../functions/genACID';
 import { DepFDE } from '../../functions/genDepFdeData';
 import { SatelliteData } from '../../data/satelliteCollection';
 import useInterval from 'use-interval';
+import { AcType } from '../../../phaser/types/AircraftTypes';
 
 // interface DepartureFDEProps {
 //   acFullName: string;
@@ -238,7 +238,7 @@ function DepartureFDE({
         <div className={clsx(styles.col2)}>
           <div
             className={clsx(styles.filedAlt, {
-              colorRed: acType === AcType.Jet && filedAlt < 230,
+              colorRed: acType === AcType.JET && filedAlt < 230,
             })}
           >
             {filedAlt}

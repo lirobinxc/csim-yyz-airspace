@@ -9,8 +9,7 @@ import { AssetKeys } from '../types/AssetKeys';
 import PointerCoordinateLogger from '../utils/PointerCoordinates';
 import RunwayOrigins from '../config/RunwayOrigins';
 import Plane from '../objects/Plane/Plane';
-import { AcModel, AcType } from '../types/AircraftTypes';
-import { AcWTC } from '../../react/functions/genACID';
+import { AcModel, AcType, AcWTC } from '../types/AircraftTypes';
 import { DomEvents } from '../types/DomEvents';
 import { AdjacentSectors } from '../types/SectorTypes';
 
@@ -26,13 +25,15 @@ import { SidRoute06s } from '../config/Rwy06sSidConfig';
 import { DepRunwayYYZ } from '../types/AirportTypes';
 import { PhaserCustomEvents, ReactCustomEvents } from '../types/CustomEvents';
 import { PlaneProperties } from '../types/PlaneInterfaces';
+import { DepFDE } from '../../react/functions/genDepFdeData';
+import { genPlanePropsFromFDE } from '../utils/genPlanePropsFromFDE';
 
 export default class RadarScene extends Phaser.Scene {
   public Waypoints!: Waypoint[];
   public PlaneList!: Phaser.GameObjects.Group;
   public RunwayOrigins!: RunwayOrigins;
   public Options: GameObjectOptions;
-  private SpeechQueue: { text: string; plane: Plane }[];
+  private SpeechQueue: { text: string; plane: Plane; isCheckIn: boolean }[];
 
   public RUNWAY_CONFIG: RadarSceneKeys;
   public SELECTED_PLANE: Plane | null;
@@ -112,8 +113,8 @@ export default class RadarScene extends Phaser.Scene {
     const pointerCoordLogger = new PointerCoordinateLogger(this);
 
     // TEMP Create: Test Plane
-    const newPlane = new Plane(this, testPlaneProps, this.Options);
-    this.PlaneList.addMultiple([newPlane]);
+    // const newPlane = new Plane(this, testPlaneProps, this.Options);
+    // this.PlaneList.addMultiple([newPlane]);
 
     // On CustomPhaserEvent: PLANE_SELECTED
     this.events.on(PhaserCustomEvents.PLANE_SELECTED, (plane: Plane) => {
@@ -130,7 +131,7 @@ export default class RadarScene extends Phaser.Scene {
     // On CustomPhaserEvent: PILOT_SPEECH
     this.events.on(
       PhaserCustomEvents.PILOT_SPEECH,
-      (speechData: { text: string; plane: Plane }) => {
+      (speechData: { text: string; plane: Plane; isCheckIn: boolean }) => {
         const isTextString = typeof speechData.text === 'string';
         const isPlane = speechData.plane instanceof Plane;
         if (isTextString && isPlane) {
@@ -164,9 +165,12 @@ export default class RadarScene extends Phaser.Scene {
       console.log('bg clicked');
     });
 
-    // On React Event: CLICK_ME
-    this.events.on(ReactCustomEvents.CLICK_ME, () => {
-      console.log('REACT CLICK DETECTED!');
+    // On React Event: AIRBORNE
+    this.events.on(ReactCustomEvents.AIRBORNE, (fde: DepFDE) => {
+      const planeProps = genPlanePropsFromFDE(fde);
+
+      const airbornePlane = new Plane(this, planeProps, this.Options);
+      this.PlaneList.add(airbornePlane);
     });
   }
 
@@ -188,6 +192,13 @@ export default class RadarScene extends Phaser.Scene {
 
     this.CURRENTLY_SPEAKING_PLANE = currSpeechData.plane;
 
+    // On Check-ins only
+    if (currSpeechData.isCheckIn) {
+      currSpeechData.plane.Speech.speak(currSpeechData.text);
+      return;
+    }
+
+    // Create combined sentence
     const combinedSentence = [];
     combinedSentence.push(currSpeechData.text);
 
@@ -230,8 +241,10 @@ const testPlaneProps: PlaneProperties = {
   },
   takeoffData: {
     depRunway: DepRunwayYYZ.RWY_05,
-    isNADP1: false,
     assignedAlt: 5000,
+    assignedHeading: 330,
+    propTurnHeading: null,
+    isNADP1: false,
   },
   handoffData: {
     alt: 150,

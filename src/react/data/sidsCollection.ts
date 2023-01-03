@@ -1,7 +1,7 @@
+import { AcType } from '../../phaser/types/AircraftTypes';
 import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
 import { AdjacentSectors } from '../../phaser/types/SectorTypes';
 import { SidName } from '../../phaser/types/SidTypes';
-import { AcType } from '../functions/genACID';
 
 export interface SidData {
   name: SidName;
@@ -22,10 +22,10 @@ type SidsCollection = Record<RadarSceneKeys, AcTypeSids>;
 
 export const sidsCollection: SidsCollection = {
   Radar06sScene: {
-    Jet: [
+    JET: [
       {
         name: SidName.DEDKI,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'ALKUT',
         routeWp: 'KODAL',
         finalWp: 'DEDKI',
@@ -38,7 +38,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.VERDO,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'ALKUT',
         routeWp: 'PUTON',
         finalWp: 'VERDO',
@@ -51,7 +51,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.KEPTA,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'MOBEL',
         routeWp: '',
         finalWp: 'RIKEM',
@@ -64,7 +64,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.ANCOL,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'MOBEL',
         routeWp: 'BIRLI, VIDRA',
         finalWp: 'ANCOL',
@@ -77,7 +77,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.BETES,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'MOBEL',
         routeWp: 'BIRLI, VIDRA',
         finalWp: 'OAKVL',
@@ -90,7 +90,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.MIXUT,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'MOBEL',
         routeWp: 'BIRLI, VIDRA',
         finalWp: 'ANCOL',
@@ -103,7 +103,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.RIGUS,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'MOBEL',
         routeWp: 'BIRLI, VIDRA',
         finalWp: 'DUSOM',
@@ -116,7 +116,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.GOPUP,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'KEDSI',
         routeWp: 'DUVKO',
         finalWp: 'TULEK',
@@ -129,7 +129,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.SEDOG,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'GOTIM',
         routeWp: '',
         finalWp: 'SEDOG',
@@ -142,7 +142,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.AVSEP,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'KEDSI',
         routeWp: 'DUVKO',
         finalWp: 'AVSEP',
@@ -155,7 +155,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.IKLEN,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'GOTIM',
         routeWp: '',
         finalWp: 'IKLEN',
@@ -168,7 +168,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.KISEP,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'GOTIM',
         routeWp: '',
         finalWp: 'EBKIN',
@@ -181,7 +181,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.URSAL,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'KEDSI',
         routeWp: 'DUVKO',
         finalWp: 'URSAL',
@@ -193,10 +193,10 @@ export const sidsCollection: SidsCollection = {
         handoffFreq: '132.57',
       },
     ],
-    Prop: [
+    PROP: [
       {
         name: SidName.BOMET,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'AVROS',
         routeWp: '',
         finalWp: 'TESUK',
@@ -209,7 +209,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.MAVAN,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'PERLO',
         routeWp: '',
         finalWp: 'RIKEM',
@@ -222,7 +222,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.TEVAD,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'PERLO',
         routeWp: '',
         finalWp: 'NADUM',
@@ -235,7 +235,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.DUSOM,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'PERLO',
         routeWp: 'OMAPA',
         finalWp: 'DUSOM',
@@ -248,7 +248,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.OAKVL,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'PERLO',
         routeWp: 'OMAPA',
         finalWp: 'OAKVL',
@@ -261,7 +261,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.PEMBA,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'PERLO',
         routeWp: 'OMAPA',
         finalWp: 'ANCOL',
@@ -274,7 +274,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.PERLO,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'PERLO',
         routeWp: 'OMAPA',
         finalWp: 'ANCOL',
@@ -287,7 +287,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.TULEK,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'MEMPA',
         routeWp: 'SIDVU',
         finalWp: 'TULEK',
@@ -300,7 +300,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.LAKES,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: '',
         routeWp: '',
         finalWp: 'SEDOG',
@@ -313,7 +313,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.EBKIN,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: '',
         routeWp: '',
         finalWp: 'EBKIN',
@@ -326,7 +326,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.MATES,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: '',
         routeWp: '',
         finalWp: 'IKLEN',
@@ -339,7 +339,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.NOSIK,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'MEMPA',
         routeWp: 'SIDVU',
         finalWp: 'URSAL',
@@ -352,7 +352,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.NUGOP,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'MEMPA',
         routeWp: 'SIDVU',
         finalWp: 'AVSEP',
@@ -366,10 +366,10 @@ export const sidsCollection: SidsCollection = {
     ],
   },
   Radar15sScene: {
-    Jet: [
+    JET: [
       {
         name: SidName.DEDKI,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'ALKUT',
         routeWp: 'KODAL',
         finalWp: 'DEDKI',
@@ -382,7 +382,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.VERDO,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'ALKUT',
         routeWp: 'PUTON',
         finalWp: 'VERDO',
@@ -395,7 +395,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.KEPTA,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: '',
         routeWp: '',
         finalWp: 'RIKEM',
@@ -408,7 +408,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.ANCOL,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: '',
         routeWp: '',
         finalWp: 'MIXUT',
@@ -421,7 +421,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.BETES,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: '',
         routeWp: '',
         finalWp: 'OAKVL',
@@ -434,7 +434,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.MIXUT,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: '',
         routeWp: '',
         finalWp: 'MIXUT',
@@ -447,7 +447,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.RIGUS,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: '',
         routeWp: '',
         finalWp: 'DUSOM',
@@ -460,7 +460,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.GOPUP,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'BOVAL',
         routeWp: 'VIBNA, IPSOT',
         finalWp: 'TULEK',
@@ -473,7 +473,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.SEDOG,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'BORUX',
         routeWp: 'ETLER',
         finalWp: 'SEDOG',
@@ -486,7 +486,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.AVSEP,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'BOVAL',
         routeWp: 'VIBNA, IPSOT',
         finalWp: 'URSAL',
@@ -499,7 +499,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.IKLEN,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'BORUX',
         routeWp: 'ETLER',
         finalWp: 'IKLEN',
@@ -512,7 +512,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.KISEP,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'BORUX',
         routeWp: 'ETLER',
         finalWp: 'EBKIN',
@@ -525,7 +525,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.URSAL,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'BOVAL',
         routeWp: 'VIBNA, IPSOT',
         finalWp: 'URSAL',
@@ -537,10 +537,10 @@ export const sidsCollection: SidsCollection = {
         handoffFreq: '132.57',
       },
     ],
-    Prop: [
+    PROP: [
       {
         name: SidName.BOMET,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'DAVSI',
         routeWp: '',
         finalWp: 'TESUK',
@@ -553,7 +553,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.MAVAN,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: '',
         routeWp: '',
         finalWp: 'RIKEM',
@@ -566,7 +566,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.TEVAD,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: '',
         routeWp: '',
         finalWp: 'NADUM',
@@ -579,7 +579,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.DUSOM,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: '',
         routeWp: '',
         finalWp: 'DUSOM',
@@ -592,7 +592,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.OAKVL,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: '',
         routeWp: '',
         finalWp: 'OAKVL',
@@ -605,7 +605,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.PEMBA,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: '',
         routeWp: '',
         finalWp: 'MIXUT',
@@ -618,7 +618,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.PERLO,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: '',
         routeWp: '',
         finalWp: 'MIXUT',
@@ -631,7 +631,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.TULEK,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'IPSOT',
         routeWp: '',
         finalWp: 'TULEK',
@@ -644,7 +644,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.LAKES,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'ETLER',
         routeWp: '',
         finalWp: 'SEDOG',
@@ -657,7 +657,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.EBKIN,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'ETLER',
         routeWp: '',
         finalWp: 'EBKIN',
@@ -670,7 +670,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.MATES,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'ETLER',
         routeWp: '',
         finalWp: 'IKLEN',
@@ -683,7 +683,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.NOSIK,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'IPSOT',
         routeWp: '',
         finalWp: 'URSAL',
@@ -696,7 +696,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.NUGOP,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'IPSOT',
         routeWp: '',
         finalWp: 'URSAL',
@@ -710,10 +710,10 @@ export const sidsCollection: SidsCollection = {
     ],
   },
   Radar24sScene: {
-    Jet: [
+    JET: [
       {
         name: SidName.DEDKI,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'SAVUR',
         routeWp: 'SEKIT',
         finalWp: 'DEDKI',
@@ -726,7 +726,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.VERDO,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'SAVUR',
         routeWp: 'SEKIT',
         finalWp: 'VERDO',
@@ -739,7 +739,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.KEPTA,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'SAVUR',
         routeWp: 'SEKIT',
         finalWp: 'RIKEM',
@@ -752,7 +752,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.ANCOL,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: '',
         routeWp: '',
         finalWp: 'MIXUT',
@@ -765,7 +765,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.BETES,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'MURNO',
         routeWp: '',
         finalWp: 'OAKVL',
@@ -778,7 +778,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.MIXUT,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: '',
         routeWp: '',
         finalWp: 'MIXUT',
@@ -791,7 +791,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.RIGUS,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'MURNO',
         routeWp: '',
         finalWp: 'DUSOM',
@@ -804,7 +804,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.GOPUP,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'TILAM',
         routeWp: '',
         finalWp: 'TULEK',
@@ -817,7 +817,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.SEDOG,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'BISTI',
         routeWp: 'NAMGI',
         finalWp: 'SEDOG',
@@ -830,7 +830,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.AVSEP,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'TILAM',
         routeWp: '',
         finalWp: 'AVSEP',
@@ -843,7 +843,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.IKLEN,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'BISTI',
         routeWp: 'NAMGI',
         finalWp: 'IKLEN',
@@ -856,7 +856,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.KISEP,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'BISTI',
         routeWp: 'NAMGI',
         finalWp: 'EBKIN',
@@ -869,7 +869,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.URSAL,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'TILAM',
         routeWp: '',
         finalWp: 'URSAL',
@@ -881,10 +881,10 @@ export const sidsCollection: SidsCollection = {
         handoffFreq: '132.57',
       },
     ],
-    Prop: [
+    PROP: [
       {
         name: SidName.BOMET,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'MAVAN',
         routeWp: 'GAGPO, DAVSI',
         finalWp: 'TESUK',
@@ -897,7 +897,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.MAVAN,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'MAVAN',
         routeWp: '',
         finalWp: 'RIKEM',
@@ -910,7 +910,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.TEVAD,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'MAVAN',
         routeWp: '',
         finalWp: 'NADUM',
@@ -923,7 +923,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.DUSOM,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'SAVUR',
         routeWp: '',
         finalWp: 'DUSOM',
@@ -936,7 +936,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.OAKVL,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'SAVUR',
         routeWp: '',
         finalWp: 'OAKVL',
@@ -949,7 +949,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.PEMBA,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'TILAM',
         routeWp: '',
         finalWp: 'MIXUT',
@@ -962,7 +962,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.PERLO,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'TILAM',
         routeWp: '',
         finalWp: 'MIXUT',
@@ -975,7 +975,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.TULEK,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: '',
         routeWp: '',
         finalWp: 'TULEK',
@@ -988,7 +988,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.LAKES,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'MATES',
         routeWp: '',
         finalWp: 'SEDOG',
@@ -1001,7 +1001,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.EBKIN,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'MATES',
         routeWp: '',
         finalWp: 'EBKIN',
@@ -1014,7 +1014,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.MATES,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'MATES',
         routeWp: '',
         finalWp: 'IKLEN',
@@ -1027,7 +1027,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.NOSIK,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: '',
         routeWp: '',
         finalWp: 'URSAL',
@@ -1040,7 +1040,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.NUGOP,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: '',
         routeWp: '',
         finalWp: 'AVSEP',
@@ -1054,10 +1054,10 @@ export const sidsCollection: SidsCollection = {
     ],
   },
   Radar33sScene: {
-    Jet: [
+    JET: [
       {
         name: SidName.DEDKI,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'VIVET',
         routeWp: 'DUVAK, PUTON',
         finalWp: 'DEDKI',
@@ -1070,7 +1070,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.VERDO,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'VIVET',
         routeWp: 'DUVAK',
         finalWp: 'VERDO',
@@ -1083,7 +1083,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.KEPTA,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'VIVET',
         routeWp: 'BOTIB',
         finalWp: 'RIKEM',
@@ -1096,7 +1096,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.ANCOL,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'NUBAX',
         routeWp: 'TANGU ',
         finalWp: 'MIXUT',
@@ -1109,7 +1109,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.BETES,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'NUBAX',
         routeWp: 'TANGU',
         finalWp: 'OAKVL',
@@ -1122,7 +1122,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.MIXUT,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'NUBAX',
         routeWp: 'TANGU',
         finalWp: 'MIXUT',
@@ -1135,7 +1135,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.RIGUS,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'NUBAX',
         routeWp: 'TANGU ',
         finalWp: 'DUSOM',
@@ -1148,7 +1148,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.GOPUP,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'TETAD',
         routeWp: '',
         finalWp: 'TULEK',
@@ -1161,7 +1161,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.SEDOG,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: '',
         routeWp: '',
         finalWp: 'SEDOG',
@@ -1174,7 +1174,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.AVSEP,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'TETAD',
         routeWp: '',
         finalWp: 'AVSEP',
@@ -1187,7 +1187,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.IKLEN,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: '',
         routeWp: '',
         finalWp: 'IKLEN',
@@ -1200,7 +1200,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.KISEP,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: '',
         routeWp: '',
         finalWp: 'EBKIN',
@@ -1213,7 +1213,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.URSAL,
-        acType: AcType.Jet,
+        acType: AcType.JET,
         firstWp: 'TETAD',
         routeWp: '',
         finalWp: 'URSAL',
@@ -1225,10 +1225,10 @@ export const sidsCollection: SidsCollection = {
         handoffFreq: '132.57',
       },
     ],
-    Prop: [
+    PROP: [
       {
         name: SidName.BOMET,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'NUBAN',
         routeWp: 'AVROS',
         finalWp: 'TESUK',
@@ -1241,7 +1241,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.MAVAN,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'NUBAN',
         routeWp: 'IGTUL',
         finalWp: 'RIKEM',
@@ -1254,7 +1254,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.TEVAD,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'NUBAN',
         routeWp: 'IGTUL',
         finalWp: 'NADUM',
@@ -1267,7 +1267,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.DUSOM,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'SERPI',
         routeWp: '',
         finalWp: 'DUSOM',
@@ -1280,7 +1280,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.OAKVL,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'SERPI',
         routeWp: '',
         finalWp: 'OAKVL',
@@ -1293,7 +1293,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.PEMBA,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'SERPI',
         routeWp: '',
         finalWp: 'MIXUT',
@@ -1306,7 +1306,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.PERLO,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: 'SERPI',
         routeWp: '',
         finalWp: 'MIXUT',
@@ -1319,7 +1319,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.TULEK,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: '',
         routeWp: '',
         finalWp: 'TULEK',
@@ -1332,7 +1332,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.LAKES,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: '',
         routeWp: '',
         finalWp: 'SEDOG',
@@ -1345,7 +1345,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.EBKIN,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: '',
         routeWp: '',
         finalWp: 'EBKIN',
@@ -1358,7 +1358,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.MATES,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: '',
         routeWp: '',
         finalWp: 'IKLEN',
@@ -1371,7 +1371,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.NOSIK,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: '',
         routeWp: '',
         finalWp: 'URSAL',
@@ -1384,7 +1384,7 @@ export const sidsCollection: SidsCollection = {
       },
       {
         name: SidName.NUGOP,
-        acType: AcType.Prop,
+        acType: AcType.PROP,
         firstWp: '',
         routeWp: '',
         finalWp: 'AVSEP',

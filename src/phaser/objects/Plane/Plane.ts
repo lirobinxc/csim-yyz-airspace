@@ -1,6 +1,5 @@
 import Phaser from 'phaser';
 import { AcModel, AcType } from '../../types/AircraftTypes';
-import { AcWTC } from '../../../react/functions/genACID';
 import PlaneDataTag from './PlaneDataTag';
 import PlaneSymbol from './PlaneSymbol';
 import {
@@ -148,6 +147,18 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.IS_TALKING = this.Speech.IS_TALKING;
   }
 
+  public checkIn() {
+    const altitude = this.Commands.altitude;
+    const acIdSpoken = this.Properties.acId.spoken;
+
+    const currAltRounded = `${altitude.current.toFixed(0).slice(0, 2)}00`;
+
+    this.talk(
+      `Departure, ${acIdSpoken} with you out of ${currAltRounded} for ${altitude.assigned}`,
+      this
+    );
+  }
+
   public commandDirectTo(waypointData: WaypointDataAll) {
     if (!waypointData) return;
 
@@ -276,10 +287,11 @@ export default class Plane extends Phaser.GameObjects.Container {
     return coord;
   }
 
-  public talk(text: string, plane: Plane) {
+  public talk(text: string, plane: Plane, isCheckIn: boolean = false) {
     this.Scene.events.emit(PhaserCustomEvents.PILOT_SPEECH, {
       text,
       plane,
+      isCheckIn,
     });
   }
 
@@ -336,33 +348,9 @@ export default class Plane extends Phaser.GameObjects.Container {
       acProps.takeoffData.depRunway
     ).initial;
 
-    // const initialCommands: PlaneCommands = {
-    //   speed: {
-    //     current: acPerf.speed.initialClimb - 80,
-    //     assigned: acPerf.speed.initialClimb,
-    //   },
-    //   altitude: {
-    //     current: 0,
-    //     assigned: acProps.takeoffData.assignedAlt,
-    //   },
-    //   heading: {
-    //     current: runwayHeading,
-    //     assigned: runwayHeading,
-    //     directTo: null,
-    //   },
-    //   climbRate: {
-    //     current: 0,
-    //     assigned: acPerf.climbRate.initialClimb,
-    //   },
-    //   isClimbing: false,
-    //   isDescending: false,
-    //   isLeveling: false,
-    //   completedSidHeading: false,
-    // };
-
-    const testInitialCommands: PlaneCommands = {
+    const initialCommands: PlaneCommands = {
       speed: {
-        current: acPerf.speed.initialClimb - 40,
+        current: acPerf.speed.initialClimb - 80,
         assigned: acPerf.speed.initialClimb,
       },
       altitude: {
@@ -375,15 +363,16 @@ export default class Plane extends Phaser.GameObjects.Container {
         directTo: null,
       },
       climbRate: {
-        current: acPerf.climbRate.initialClimb,
+        current: 0,
         assigned: acPerf.climbRate.initialClimb,
       },
       isClimbing: false,
       isDescending: false,
-      onSidHeading: false,
+      onSidOrPropHeading: false,
+      hasCheckedIn: false,
     };
 
-    return testInitialCommands;
+    return initialCommands;
   }
 
   private initRunwayOrigin(acProps: PlaneProperties): Phaser.Math.Vector2 {

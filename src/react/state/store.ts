@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { departureListReducer } from './slices/departureListSlice';
+import { simOptionsReducer } from './slices/simOptionsSlice';
 
 export const store = configureStore({
   reducer: {
+    simOptions: simOptionsReducer,
     departureList: departureListReducer,
   },
 });

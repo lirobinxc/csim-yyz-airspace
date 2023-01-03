@@ -39,18 +39,28 @@
   .assignedAlt {
     @include flexCenterHorizontal();
   }
+
+  .sidName {
+    flex-grow: 2;
+  }
+}
+
+.widthXs {
+  width: 1rem;
 }
 
 .widthSm {
-  // flex-basis: $fontSizeMd;
-
-  flex-grow: 1;
+  width: 1.8rem;
 }
 
 .widthMd {
-  flex-grow: 3;
+  width: 2rem;
 }
 
 .widthLg {
-  flex-grow: 6;
+  width: 6rem;
+}
+
+.bgYellow {
+  background-color: $paleYellow;
 }

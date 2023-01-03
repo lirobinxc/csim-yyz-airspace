@@ -1,4 +1,7 @@
 import clsx from 'clsx';
+import { useAppDispatch, useAppSelector } from '../state/hooks';
+import { departureListActions } from '../state/slices/departureListSlice';
+import { selectSimOptions } from '../state/slices/simOptionsSlice';
 
 import styles from './MenuSection.module.scss';
 
@@ -7,6 +10,19 @@ interface MenuSectionProps {
 }
 
 const MenuSection = ({ appVersion }: MenuSectionProps) => {
+  const dispatch = useAppDispatch();
+  const simOptions = useAppSelector(selectSimOptions);
+
+  function refreshStrips() {
+    dispatch(
+      departureListActions.refreshStrips({
+        radarScene: simOptions.radarScene,
+        count: simOptions.startingCount,
+        isSingleOps: simOptions.isSingleOps,
+      })
+    );
+  }
+
   return (
     <header className={styles.MenuSection}>
       <div className={styles.titleBar}>
@@ -34,7 +50,12 @@ const MenuSection = ({ appVersion }: MenuSectionProps) => {
         <button className={clsx(styles.spacing)}>A1</button>
         <button className={clsx(styles.spacing)}>SD</button>
         <button className={clsx(styles.spacing)}>ND</button>
-        <button className={clsx(styles.spacing, styles.unhide)}>UNHIDE</button>
+        <button
+          className={clsx(styles.spacing, styles.unhide)}
+          onClick={refreshStrips}
+        >
+          REFRESH
+        </button>
         <button className={clsx(styles.spacing, styles.vdp)}>VDP</button>
         <button className={clsx(styles.spacing, styles.normalSplit)}>
           NORMAL

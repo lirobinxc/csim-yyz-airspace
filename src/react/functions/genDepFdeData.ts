@@ -1,16 +1,17 @@
 import _ from 'lodash';
-import { AcType, genACID } from './genACID';
+import { genACID } from './genACID';
 import { genCallsign } from './genCallsign';
 import { genDepRoute } from './genDepRoute';
 import { SidData } from '../data/sidsCollection';
 import { destinationCollection } from '../data/destinationCollection';
 import { SatelliteData } from '../data/satelliteCollection';
 import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
-import { AcModel } from '../../phaser/types/AircraftTypes';
+import { AcModel, AcType } from '../../phaser/types/AircraftTypes';
 import { SidName } from '../../phaser/types/SidTypes';
 import { DepRunwayAll } from '../../phaser/types/AirportTypes';
 import { determineIfNorthOrSouthDep } from './determineIfNorthOrSouthDep';
 import { determineDepRunwayYYZ } from './determineDepRunway';
+import { determineIfVdpAllowed } from './determineIfVdpAllowed';
 
 export enum DeparturePhase {
   READY = 'READY',
@@ -31,12 +32,12 @@ export type DepFDE = ReturnType<typeof genDepFdeData>;
 
 export function genDepFdeData(
   radarScene: RadarSceneKeys,
-  isSingleOps: boolean
+  isSingleOps: boolean,
+  prevFdeSidName: SidName | undefined
 ) {
   // Set timestamp
   const minuteJitter = _.sample([1, 1, 1, 1, 2, 2, 3]) || 1;
   currentMinute = currentMinute + minuteJitter;
-
   if (currentMinute > 59) {
     currentHour = currentHour + 1;
     currentMinute = currentMinute - 60;
@@ -58,7 +59,7 @@ export function genDepFdeData(
   // Set filed speed and altitude
   let filedTAS = 999;
   let filedAlt = 999;
-  if (aircraft.type === AcType.Prop) {
+  if (aircraft.type === AcType.PROP) {
     filedTAS = _.sample([293, 275]) || 275;
     filedAlt = _.sample([60, 160, 190, 220, 250]) || 220;
     if (aircraft.model === AcModel.C208) {
@@ -66,7 +67,7 @@ export function genDepFdeData(
       filedAlt = 80;
     }
   }
-  if (aircraft.type === AcType.Jet) {
+  if (aircraft.type === AcType.JET) {
     filedTAS = _.sample([349, 374]) || 349;
     filedAlt = _.sample([220, 310, 330, 350, 360]) || 350;
   }
@@ -74,30 +75,16 @@ export function genDepFdeData(
   // Init route
   const sid = genDepRoute(radarScene, aircraft.type) || ({} as SidData);
 
-  // Init Rwy ID
-  function randomRwyId(): string {
-    let randomRwy: string | undefined = '';
-
-    if (radarScene === RadarSceneKeys.RADAR_06s) randomRwy = _.sample(['06L']);
-    if (radarScene === RadarSceneKeys.RADAR_15s) randomRwy = _.sample(['15L']);
-    if (radarScene === RadarSceneKeys.RADAR_24s) randomRwy = _.sample(['24R']);
-    if (radarScene === RadarSceneKeys.RADAR_33s) randomRwy = _.sample(['33R']);
-
-    return randomRwy || 'ERROR';
-  }
-
-  const yyzRunwayId = randomRwyId();
-
   const sidName = sid.name;
   const filedRoute = `${sid.name} ... ...`;
 
   // Assigned heading
   let assignedHeading =
-    (sid['acType'] !== 'Jet' && sid['propOrJetTurns']) || '';
+    (sid.acType !== AcType.JET && sid['propOrJetTurns']) || '';
 
   // Init assigned altitude
   let assignedAlt = 30; // default PROP altitude
-  if (assignedHeading === 'No turns' || sid['acType'] === 'Jet')
+  if (assignedHeading === 'No turns' || sid.acType === AcType.JET)
     assignedAlt = 50; // default JET altitude
 
   const onCourseWP = sid['finalWp'];
@@ -118,15 +105,34 @@ export function genDepFdeData(
   if (sid['handoffAlt'] === '15,000') handoffAlt = 150;
   if (sid['handoffAlt'] === '8000') handoffAlt = 80;
 
+  let handoffSector = sid.handoffSector;
+
   const acFullName = `${aircraft.wtc}/${aircraft.model}/${aircraft.equipment}`;
 
-  const isVDP = _.random(1, 10) > 7; // should be > 6
+  let isVDP = _.random(1, 10) > 6;
+
+  if (isVDP) {
+    if (!prevFdeSidName) {
+      isVDP = false;
+    }
+    if (determineIfVdpAllowed(radarScene, sidName, prevFdeSidName)) {
+    }
+  }
 
   const depPhase = DeparturePhase.READY;
 
-  const depPosition = determineIfNorthOrSouthDep(radarScene, sidName);
+  let depPosition = determineIfNorthOrSouthDep(radarScene, sidName);
 
-  const depRunway = determineDepRunwayYYZ(radarScene, depPosition, isSingleOps);
+  if (isSingleOps) {
+    depPosition = DeparturePosition.SD;
+  }
+
+  const depRunway: DepRunwayAll = determineDepRunwayYYZ(
+    radarScene,
+    depPosition,
+    isSingleOps
+  );
+  const inPositionTime = 0; // ms
 
   // const satRouteData = genSatFdeData(rwyId);
 
@@ -134,6 +140,8 @@ export function genDepFdeData(
     acFullName,
     acId: callsign.fullCallsign,
     acType: aircraft.type,
+    acModel: aircraft.model,
+    acWtc: aircraft.wtc,
     assignedAlt,
     assignedHeading,
     coordinatedAlt: 0,
@@ -148,6 +156,8 @@ export function genDepFdeData(
     filedRoute,
     filedTAS,
     handoffAlt,
+    handoffSector,
+    inPositionTime,
     isNADP1: false,
     isQ400: aircraft.isQ400,
     isSatellite: false,

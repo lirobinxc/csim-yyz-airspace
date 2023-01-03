@@ -8,8 +8,8 @@ import { useAppDispatch } from '../../state/hooks';
 
 import styles from './SatelliteFDE.module.scss';
 import { departureListActions } from '../../state/slices/departureListSlice';
-import { AcType } from '../../functions/genACID';
 import { SatFDE } from '../../functions/genSatFdeData';
+import { AcType } from '../../../phaser/types/AircraftTypes';
 
 function SatelliteFDE({
   acFullName,
@@ -294,7 +294,7 @@ function SatelliteFDE({
         <div className={clsx(styles.col2)}>
           <div
             className={clsx(styles.filedAlt, {
-              colorRed: acType === AcType.Jet && filedAlt < 230,
+              colorRed: acType === AcType.JET && filedAlt < 230,
             })}
           >
             {filedAlt}

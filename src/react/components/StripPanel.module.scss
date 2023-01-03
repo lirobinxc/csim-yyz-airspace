@@ -27,20 +27,20 @@
 
   .Strips {
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     flex-grow: 2;
-    justify-content: flex-end;
+    justify-content: flex-start;
 
     padding: $spacingXs;
-
-    border: 1px solid red;
   }
 }
 
 .SizeSm {
   flex-grow: 0.2;
 
-  // max-height: 10rem;
+  max-height: 10rem;
+
+  overflow: hidden;
 }
 
 .SizeMd {
