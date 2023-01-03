@@ -211,8 +211,7 @@ export default class RadarScene extends Phaser.Scene {
     });
 
     // On React Event: REFRESH
-    this.events.on(ReactCustomEvents.REFRESH, (radarScene: RadarSceneKeys) => {
-      // this.resetRadar(radarScene);
+    this.events.on(ReactCustomEvents.REFRESH, () => {
       window.location.reload();
     });
   }

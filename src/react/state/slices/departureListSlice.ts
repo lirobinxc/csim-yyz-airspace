@@ -17,6 +17,11 @@ import {
 } from '../../functions/genDepFdeData';
 import { genSatFdeData } from '../../functions/genSatFdeData';
 import type { RootState } from '../store';
+import {
+  defaultSimOptions,
+  LocalStorageKeys,
+  SimOptions,
+} from './simOptionsSlice';
 
 // Define the initial state using that type
 function genDepList(
@@ -71,15 +76,36 @@ function sendAirborneToPhaser(fde: DepFDE) {
   RADAR_SCENE.events.emit(ReactCustomEvents.AIRBORNE, fde);
 }
 
-function restartPhaser(radarScene: RadarSceneKeys) {
+function restartPhaser() {
   const RADAR_SCENE = PhaserGame.scene.keys[
     OtherSceneKeys.RADAR_BASE
   ] as RadarScene;
 
-  RADAR_SCENE.events.emit(ReactCustomEvents.REFRESH, radarScene);
+  RADAR_SCENE.events.emit(ReactCustomEvents.REFRESH);
 }
 
-const initialState = genDepList(RadarSceneKeys.RADAR_06s, 3, true);
+function genInitialState() {
+  let simOptions = defaultSimOptions;
+
+  const storedOptionsStr = localStorage.getItem(LocalStorageKeys.SIM_OPTIONS);
+  const storedSimOptions: SimOptions =
+    storedOptionsStr && JSON.parse(storedOptionsStr);
+
+  // Checks if SimOption property exists
+  if (storedSimOptions && typeof storedSimOptions.startingCount === 'number') {
+    console.log('Retrieved localStorage SimOptions.');
+
+    simOptions = storedSimOptions;
+  }
+
+  return genDepList(
+    simOptions.radarScene,
+    simOptions.startingCount,
+    simOptions.isSingleOps
+  );
+}
+
+const initialState: DepFDE[] = genInitialState();
 
 export const departureList = createSlice({
   name: 'departureList',
@@ -136,22 +162,8 @@ export const departureList = createSlice({
 
       return [...newList, { ...selectedFde, depPhase }];
     },
-    refreshStrips: (
-      state,
-      action: PayloadAction<{
-        radarScene: RadarSceneKeys;
-        count: number;
-        isSingleOps: boolean;
-      }>
-    ) => {
-      // console.log('Refresh strips for', action.payload);
-      restartPhaser(action.payload.radarScene);
-
-      return genDepList(
-        action.payload.radarScene,
-        action.payload.count,
-        action.payload.isSingleOps
-      );
+    restartSim: (state) => {
+      restartPhaser();
     },
   },
 });

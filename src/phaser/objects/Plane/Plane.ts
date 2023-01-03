@@ -136,9 +136,11 @@ export default class Plane extends Phaser.GameObjects.Container {
 
     // Input: On hover over Symbol
     this.Symbol.on(DomEvents.POINTER_OVER, () => {
+      if (this.IS_SELECTED) return;
       this.setDepth(555);
     });
     this.Symbol.on(DomEvents.POINTER_OUT, () => {
+      if (this.IS_SELECTED) return;
       this.setDepth(10);
     });
 

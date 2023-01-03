@@ -13,14 +13,8 @@ const MenuSection = ({ appVersion }: MenuSectionProps) => {
   const dispatch = useAppDispatch();
   const simOptions = useAppSelector(selectSimOptions);
 
-  function refreshStrips() {
-    dispatch(
-      departureListActions.refreshStrips({
-        radarScene: simOptions.radarScene,
-        count: simOptions.startingCount,
-        isSingleOps: simOptions.isSingleOps,
-      })
-    );
+  function restartSim() {
+    dispatch(departureListActions.restartSim());
   }
 
   return (
@@ -52,9 +46,9 @@ const MenuSection = ({ appVersion }: MenuSectionProps) => {
         <button className={clsx(styles.spacing)}>ND</button>
         <button
           className={clsx(styles.spacing, styles.unhide)}
-          onClick={refreshStrips}
+          onClick={restartSim}
         >
-          REFRESH
+          RESTART
         </button>
         <button className={clsx(styles.spacing, styles.vdp)}>VDP</button>
         <button className={clsx(styles.spacing, styles.normalSplit)}>

@@ -4,7 +4,13 @@ import { RadarSceneKeys } from '../../../phaser/types/SceneKeys';
 
 import type { RootState } from '../store';
 
-interface SimOptions {
+interface ILocalStorage extends Storage {
+  simOptions: SimOptions;
+}
+
+const localStorage = window.localStorage;
+
+export interface SimOptions {
   radarScene: RadarSceneKeys;
   startingCount: number;
   isSingleOps: boolean;
@@ -13,14 +19,39 @@ interface SimOptions {
   intervalBetweenVisualDeps: number; // ms
 }
 
-const initialState: SimOptions = {
+export enum LocalStorageKeys {
+  SIM_OPTIONS = 'SIM_OPTIONS',
+}
+
+const initialState: SimOptions = genInitalState();
+
+export const defaultSimOptions: SimOptions = {
   radarScene: RadarSceneKeys.RADAR_06s,
-  startingCount: 1,
+  startingCount: 4,
   isSingleOps: true,
   newStripInterval: [10_000, 20_000],
   intervalBetweenNormalDeps: 50_000, // should be ???
   intervalBetweenVisualDeps: 25_000,
 };
+
+function genInitalState(): SimOptions {
+  const storedOptionsStr = localStorage.getItem(LocalStorageKeys.SIM_OPTIONS);
+  const storedSimOptions: SimOptions =
+    storedOptionsStr && JSON.parse(storedOptionsStr);
+
+  // Checks if SimOption property exists
+  if (storedSimOptions && typeof storedSimOptions.startingCount === 'number') {
+    console.log('Retrieved localStorage SimOptions.');
+
+    return storedSimOptions;
+  }
+
+  localStorage.setItem(
+    LocalStorageKeys.SIM_OPTIONS,
+    JSON.stringify(defaultSimOptions)
+  );
+  return defaultSimOptions;
+}
 
 export const simOptions = createSlice({
   name: 'simOptions',
