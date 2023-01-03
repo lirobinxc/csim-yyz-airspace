@@ -1,6 +1,8 @@
 import Phaser from 'phaser';
 import { AssetKeys } from '../../types/AssetKeys';
 import { ColorKeys } from '../../types/ColorKeys';
+import { PhaserCustomEvents } from '../../types/CustomEvents';
+import { DomEvents } from '../../types/DomEvents';
 import { convertAcWtcToSymbol } from '../../utils/convertAcWtcToSymbol';
 import Plane from './Plane';
 import PlaneSymbol from './PlaneSymbol';
@@ -69,6 +71,7 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
     this.Text1.setTint(FONT_TINT_COLOR);
     this.Text1.scaleY = FONT_SCALE_Y;
     this.Text1.setOrigin(...LINE_ORIGIN);
+    this.Text1.setInteractive();
 
     // Setup: Text2 - CENTER LINE
     this.Text2.setFontSize(FONT_SIZE);
@@ -89,6 +92,11 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
     // Input: On press F10 key, toggle EXT TAG
     this.scene.input.keyboard.on('keydown-F10', () => {
       this.isExtendedTag = !this.isExtendedTag;
+    });
+
+    // Input: On click Text 1
+    this.Text1.on(DomEvents.POINTER_DOWN, () => {
+      this.scene.events.emit(PhaserCustomEvents.ACID_CLICKED, this.Plane);
     });
 
     // Sync update with FPS (set in Phaser Config)

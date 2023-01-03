@@ -55,9 +55,8 @@ export function genDepFdeData(
   // Gen Callsign
   const isC208 = aircraft.model === AcModel.C208;
   const callsign = genCallsign({ isC208 });
-  const spokenWtc = aircraft.wtc === AcWTC.H ? 'Heavy' : '';
 
-  const spokenCallsignFormatted = `${callsign.spokenCallsign} ${spokenWtc}`;
+  const spokenCallsignFormatted = `${callsign.spokenCallsign}`;
 
   // Set filed speed and altitude
   let filedTAS = 999;

@@ -27,12 +27,15 @@ import { PhaserCustomEvents, ReactCustomEvents } from '../types/CustomEvents';
 import { PlaneProperties } from '../types/PlaneInterfaces';
 import { DepFDE } from '../../react/functions/genDepFdeData';
 import { genPlanePropsFromFDE } from '../utils/genPlanePropsFromFDE';
+import SpeechSynth from '../objects/SpeechSynth';
+import PlaneRouteLine from '../objects/Plane/PlaneRouteLine';
 
 export default class RadarScene extends Phaser.Scene {
   public Waypoints!: Waypoint[];
-  public PlaneList!: Phaser.GameObjects.Group;
+  public PlaneList!: Plane[];
   public RunwayOrigins!: RunwayOrigins;
   public Options: GameObjectOptions;
+  public Speech: SpeechSynth;
   private SpeechQueue: { text: string; plane: Plane; isCheckIn: boolean }[];
 
   public RUNWAY_CONFIG: RadarSceneKeys;
@@ -52,6 +55,7 @@ export default class RadarScene extends Phaser.Scene {
     this.Waypoints = [];
     // this.PlaneList = new Phaser.GameObjects.Group(this);
     this.Options = options;
+    this.Speech = new SpeechSynth();
     this.SpeechQueue = [];
 
     // Init: Template props
@@ -66,7 +70,7 @@ export default class RadarScene extends Phaser.Scene {
 
   init() {
     this.Waypoints = [];
-    this.PlaneList = new Phaser.GameObjects.Group(this);
+    this.PlaneList = [];
     this.SpeechQueue = [];
     this.SELECTED_PLANE = null;
     this.CURRENTLY_SPEAKING_PLANE = null;
@@ -126,6 +130,7 @@ export default class RadarScene extends Phaser.Scene {
     this.events.on(PhaserCustomEvents.PLANE_SELECTED, (plane: Plane) => {
       if (plane instanceof Plane) {
         if (this.SELECTED_PLANE) {
+          this.SELECTED_PLANE.IS_SELECTED = false;
           this.SELECTED_PLANE = null;
         }
         this.SELECTED_PLANE = plane;
@@ -155,6 +160,11 @@ export default class RadarScene extends Phaser.Scene {
       }
     );
 
+    // On CustomPhaserEvent: ACID_CLICKED
+    this.events.on(PhaserCustomEvents.ACID_CLICKED, (plane: Plane) => {
+      // new PlaneRouteLine(plane);
+    });
+
     // On Input: Clicked RadarBg
     this.RadarBg.on(DomEvents.POINTER_DOWN, (pointer: Phaser.Input.Pointer) => {
       if (pointer.rightButtonDown()) {
@@ -177,12 +187,13 @@ export default class RadarScene extends Phaser.Scene {
       const planeProps = genPlanePropsFromFDE(fde);
 
       const airbornePlane = new Plane(this, planeProps, this.Options);
-      this.PlaneList.add(airbornePlane);
+      this.PlaneList.push(airbornePlane);
     });
 
     // On React Event: REFRESH
     this.events.on(ReactCustomEvents.REFRESH, (radarScene: RadarSceneKeys) => {
-      this.resetRadar(radarScene);
+      // this.resetRadar(radarScene);
+      window.location.reload();
     });
   }
 
@@ -193,25 +204,21 @@ export default class RadarScene extends Phaser.Scene {
 
   private resetRadar(radarScene: RadarSceneKeys) {
     this.Waypoints.forEach((wp) => wp.destroy());
+    this.PlaneList.forEach((plane) => {
+      plane.destroy(true);
+    });
 
-    // this.PlaneList.getChildren().forEach((plane: Plane) => {
-    //   plane.Speech;
-    // });
-    this.SpeechQueue = [];
-
-    // Init: Template props
     this.SCENE_KEY = radarScene;
     this.ASSET_KEY = AssetKeys.RADAR_06s; // fallback value
 
-    // Init: Constants
     this.RUNWAY_CONFIG = radarScene;
     this.SELECTED_PLANE = null;
     this.CURRENTLY_SPEAKING_PLANE = null;
-    this.scene.restart();
+    this.scene.restart({ radarScene });
   }
 
   private handleSpeechQueue() {
-    if (this.CURRENTLY_SPEAKING_PLANE?.IS_TALKING) return;
+    if (this.Speech.IS_TALKING) return;
 
     if (this.SpeechQueue.length === 0) {
       this.CURRENTLY_SPEAKING_PLANE = null;
@@ -225,7 +232,7 @@ export default class RadarScene extends Phaser.Scene {
 
     // On Check-ins only
     if (currSpeechData.isCheckIn) {
-      currSpeechData.plane.Speech.speak(currSpeechData.text);
+      this.Speech.speak(currSpeechData.text, currSpeechData.plane);
       return;
     }
 
@@ -246,7 +253,7 @@ export default class RadarScene extends Phaser.Scene {
 
     const finalSpokenSentence = combinedSentence.join(' ');
 
-    currSpeechData.plane.Speech.speak(finalSpokenSentence);
+    this.Speech.speak(finalSpokenSentence, currSpeechData.plane);
   }
 
   private toggleDebug() {

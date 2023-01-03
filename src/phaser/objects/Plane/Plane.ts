@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { AcModel, AcType } from '../../types/AircraftTypes';
+import { AcModel, AcType, AcWTC } from '../../types/AircraftTypes';
 import PlaneDataTag from './PlaneDataTag';
 import PlaneSymbol from './PlaneSymbol';
 import {
@@ -26,7 +26,6 @@ import PlaneCommandMenu from './PlaneCommandMenu';
 import { getSidRoute } from '../../utils/getSidRoute';
 import { RadarSceneKeys } from '../../types/SceneKeys';
 import { Rwy06sWaypointDict } from '../../config/Rwy06sWaypointConfig';
-import { PlaneSpeech } from './PlaneSpeech';
 import {
   determineLeftOrRightTurn,
   TurnDirection,
@@ -38,6 +37,7 @@ import {
 } from '../../types/PlaneInterfaces';
 import { convertNumToText } from '../../../react/functions/convertNumToText';
 import { convertHeadingNumToText } from '../../../react/functions/convertHeadingNumToText';
+import PlaneRouteLine from './PlaneRouteLine';
 
 export default class Plane extends Phaser.GameObjects.Container {
   // Plane Properties
@@ -45,6 +45,7 @@ export default class Plane extends Phaser.GameObjects.Container {
   public Commands: PlaneCommands;
   public Performance: PlanePerformance;
   public Options: GameObjectOptions;
+  public PilotVoice: undefined | SpeechSynthesisVoice;
 
   // CONSTANTS
   public DEFAULT_DATATAG_SPACING: number; // px; horizontal space between DataTag & Symbol
@@ -62,9 +63,9 @@ export default class Plane extends Phaser.GameObjects.Container {
   private TagLine: PlaneDataTagLine;
   private PTL: PlanePTL;
   private HistoryTrail: PlaneHistoryTrail;
+  // private PlaneRouteLine: PlaneRouteLine;
   private Behaviour: PlaneBehaviour;
   public CommandMenu: PlaneCommandMenu;
-  public Speech: PlaneSpeech;
 
   constructor(
     scene: RadarScene,
@@ -93,23 +94,23 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.Performance = this.initPlanePerformance(props);
     this.Commands = this.initPlaneCommands(props, this.Performance);
     this.Options = options;
-
+    this.PilotVoice = undefined;
     // Attach objs: Plane Subcomponents
     this.Symbol = new PlaneSymbol(this);
     this.DataTag = new PlaneDataTag(this);
     this.TagLine = new PlaneDataTagLine(this, this.Symbol, this.DataTag);
     this.PTL = new PlanePTL(this, this.Symbol, 60);
     this.HistoryTrail = new PlaneHistoryTrail(this, this.Symbol);
+    // this.PlaneRouteLine = new PlaneRouteLine(this);
     this.CommandMenu = new PlaneCommandMenu(this);
-    this.Speech = new PlaneSpeech(this);
     this.add([
+      // this.PlaneRouteLine,
       this.HistoryTrail,
       this.CommandMenu,
       this.PTL,
       this.Symbol,
       this.TagLine,
       this.DataTag,
-      this.Speech,
     ]);
 
     // Attach: Behaviour logic
@@ -145,9 +146,8 @@ export default class Plane extends Phaser.GameObjects.Container {
   preUpdate() {
     this.updateDataTagPosition();
     this.togglePTL();
+    this.setPilotVoice();
     this.onDebug();
-
-    this.IS_TALKING = this.Speech.IS_TALKING;
   }
 
   public checkIn() {
@@ -155,6 +155,7 @@ export default class Plane extends Phaser.GameObjects.Container {
 
     const altitude = this.Commands.altitude;
     const acIdSpoken = this.Properties.acId.spoken;
+    const spokenWtc = this.Properties.acWtc === AcWTC.H ? ' Heavy' : '';
 
     const currAltRounded = `${Math.round(altitude.current / 100) * 100}`;
     const isCheckIn = true;
@@ -162,14 +163,15 @@ export default class Plane extends Phaser.GameObjects.Container {
     const sidOrPropTurnHeading =
       this.Properties.takeoffData.sidOrPropTurnHeading;
     let sayHeading: string | null = null;
-    if (sidOrPropTurnHeading) {
+    if (sidOrPropTurnHeading && this.Properties.acType === AcType.PROP) {
       sayHeading = `, heading ${convertHeadingNumToText(sidOrPropTurnHeading)}`;
     }
+    console.log({ sayHeading });
 
     this.talk(
-      `Departure, ${acIdSpoken} with you out of ${currAltRounded} for ${
+      `Departure, ${acIdSpoken}${spokenWtc} with you out of ${currAltRounded} for ${
         altitude.assigned
-      } ${sayHeading && sayHeading}`,
+      } ${sayHeading !== null ? sayHeading : ''}`,
       this,
       isCheckIn
     );
@@ -337,6 +339,25 @@ export default class Plane extends Phaser.GameObjects.Container {
         symbolRightCenter.y
       );
     }
+  }
+
+  private setPilotVoice() {
+    if (this.PilotVoice) return;
+    if (!this.Scene.Speech) return;
+
+    const voices = this.Scene.Speech.getVoices();
+    if (!voices) return;
+
+    const engVoices = voices.filter(
+      (voice) =>
+        voice.lang[0] === 'e' &&
+        voice.lang[1] === 'n' &&
+        voice.name !== 'Google US English' &&
+        voice.name !== 'Google UK English Female' &&
+        voice.name !== 'Google UK English Male'
+    );
+
+    this.PilotVoice = engVoices[Phaser.Math.Between(0, voices.length - 1)];
   }
 
   private initPlanePerformance(props: PlaneProperties): PlanePerformance {

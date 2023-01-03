@@ -75,6 +75,7 @@ function restartPhaser(radarScene: RadarSceneKeys) {
   const RADAR_SCENE = PhaserGame.scene.keys[
     OtherSceneKeys.RADAR_BASE
   ] as RadarScene;
+
   RADAR_SCENE.events.emit(ReactCustomEvents.REFRESH, radarScene);
 }
 

@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import { useCallback, useEffect, useState } from 'react';
 import useInterval from 'use-interval';
+import PhaserGame from '../../phaser/PhaserGameConfig';
+import { OtherSceneKeys } from '../../phaser/types/SceneKeys';
 import {
   DeparturePhase,
   DeparturePosition,
