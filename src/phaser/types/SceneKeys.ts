@@ -5,3 +5,8 @@ export enum RadarSceneKeys {
   RADAR_15s = 'Radar15sScene',
   RADAR_33s = 'Radar33sScene',
 }
+
+export enum OtherSceneKeys {
+  PRELOADER = 'PreloaderScene',
+  RADAR_BASE = 'RadarBaseScene',
+}

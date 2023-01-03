@@ -9,4 +9,5 @@ export enum PhaserCustomEvents {
 
 export enum ReactCustomEvents {
   AIRBORNE = 'AIRBORNE',
+  REFRESH = 'REFRESH',
 }

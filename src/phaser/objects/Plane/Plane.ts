@@ -36,6 +36,8 @@ import {
   PlanePerformance,
   PlaneProperties,
 } from '../../types/PlaneInterfaces';
+import { convertNumToText } from '../../../react/functions/convertNumToText';
+import { convertHeadingNumToText } from '../../../react/functions/convertHeadingNumToText';
 
 export default class Plane extends Phaser.GameObjects.Container {
   // Plane Properties
@@ -84,7 +86,7 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.IS_TALKING = false;
 
     // Init: Name
-    this.name = props.acId.abbrev;
+    this.name = props.acId.code;
 
     // Init: Plane data
     this.Properties = props;
@@ -107,6 +109,7 @@ export default class Plane extends Phaser.GameObjects.Container {
       this.Symbol,
       this.TagLine,
       this.DataTag,
+      this.Speech,
     ]);
 
     // Attach: Behaviour logic
@@ -148,14 +151,27 @@ export default class Plane extends Phaser.GameObjects.Container {
   }
 
   public checkIn() {
+    this.Commands.hasCheckedIn = true;
+
     const altitude = this.Commands.altitude;
     const acIdSpoken = this.Properties.acId.spoken;
 
-    const currAltRounded = `${altitude.current.toFixed(0).slice(0, 2)}00`;
+    const currAltRounded = `${Math.round(altitude.current / 100) * 100}`;
+    const isCheckIn = true;
+
+    const sidOrPropTurnHeading =
+      this.Properties.takeoffData.sidOrPropTurnHeading;
+    let sayHeading: string | null = null;
+    if (sidOrPropTurnHeading) {
+      sayHeading = `, heading ${convertHeadingNumToText(sidOrPropTurnHeading)}`;
+    }
 
     this.talk(
-      `Departure, ${acIdSpoken} with you out of ${currAltRounded} for ${altitude.assigned}`,
-      this
+      `Departure, ${acIdSpoken} with you out of ${currAltRounded} for ${
+        altitude.assigned
+      } ${sayHeading && sayHeading}`,
+      this,
+      isCheckIn
     );
   }
 

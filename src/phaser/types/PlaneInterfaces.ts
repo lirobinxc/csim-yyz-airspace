@@ -5,7 +5,7 @@ import { SidName } from './SidTypes';
 import { WaypointDataAll } from './WaypointTypes';
 
 export interface PlaneProperties {
-  acId: { abbrev: string; spoken: string };
+  acId: { code: string; spoken: string };
   acType: AcType;
   acModel: AcModel;
   acWtc: AcWTC;
@@ -18,7 +18,7 @@ export interface PlaneProperties {
   takeoffData: {
     assignedAlt: number;
     assignedHeading: number;
-    propTurnHeading: number | null;
+    sidOrPropTurnHeading: number | null;
     depRunway: DepRunwayAll;
     isNADP1: boolean;
   };

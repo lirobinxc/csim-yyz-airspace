@@ -24,14 +24,20 @@ const StripPanel = ({ title, height, strips }: StripPanelProps) => {
 
   function displayStrips() {
     if (height === Size.LG) {
-      return displayAsPendingFDE();
+      return displayAsAirborneFDE();
     }
     return displayAsPendingFDE();
   }
 
+  function displayAsAirborneFDE() {
+    return strips.map((strip) => {
+      return <DepartureFDE key={strip.acId.code} {...strip} />;
+    });
+  }
+
   function displayAsPendingFDE() {
     return strips.map((strip) => {
-      return <PendingDepartureFDE key={strip.acId} {...strip} />;
+      return <PendingDepartureFDE key={strip.acId.code} {...strip} />;
     });
   }
 

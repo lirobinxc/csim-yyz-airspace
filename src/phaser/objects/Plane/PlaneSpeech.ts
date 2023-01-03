@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { PhaserCustomEvents } from '../../types/CustomEvents';
 import Plane from './Plane';
 
-export class PlaneSpeech extends Phaser.GameObjects.GameObject {
+export class PlaneSpeech extends Phaser.GameObjects.Container {
   public IS_TALKING: boolean;
 
   private Plane: Plane;
@@ -10,7 +10,7 @@ export class PlaneSpeech extends Phaser.GameObjects.GameObject {
   private PilotVoice: undefined | SpeechSynthesisVoice;
 
   constructor(plane: Plane) {
-    super(plane.scene, 'PlaneSpeech');
+    super(plane.scene, 0, 0);
     plane.scene.add.existing(this);
 
     // Init properties
@@ -23,9 +23,11 @@ export class PlaneSpeech extends Phaser.GameObjects.GameObject {
   }
 
   preUpdate() {
-    this.IS_TALKING = this.SpeechSynth?.speaking || false;
+    if (this.SpeechSynth) {
+      this.IS_TALKING = this.SpeechSynth.speaking || false;
+    }
 
-    // this.setPilotVoice();
+    this.setPilotVoice();
   }
 
   public speak(phrase: string) {
@@ -46,9 +48,7 @@ export class PlaneSpeech extends Phaser.GameObjects.GameObject {
 
   private setPilotVoice() {
     if (this.PilotVoice) return;
-    if (!this.SpeechSynth?.onvoiceschanged) return;
-
-    console.log('setPilotVoice');
+    if (!this.SpeechSynth) return;
 
     const voices = this.SpeechSynth.getVoices();
 

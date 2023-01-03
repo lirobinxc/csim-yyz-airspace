@@ -1,3 +1,5 @@
+@import '../../../variables.scss';
+
 $fontSizeXl: 1.6rem;
 $fontSizeLg: 1.3rem;
 $fontSizeMd: 1rem;
@@ -16,7 +18,7 @@ $babyblue: #c1e9f9;
 }
 
 .FlightStrip {
-  max-width: 29rem;
+  max-width: $fdeMaxWidth;
 
   font-weight: bold;
   font-size: 1em;
@@ -36,7 +38,7 @@ $babyblue: #c1e9f9;
     border-bottom: $borderThin;
 
     .col1 {
-      width: 6.8rem;
+      width: 6.4rem;
 
       border-right: $borderThin;
       @include flexCenterVertical();
@@ -220,7 +222,7 @@ $babyblue: #c1e9f9;
     }
 
     .col6 {
-      width: 5rem;
+      width: 4.5rem;
 
       border-right: $borderThin;
 
@@ -255,7 +257,7 @@ $babyblue: #c1e9f9;
     }
 
     .col8 {
-      width: 4rem;
+      width: 3.5rem;
 
       @include flexCenterHorizontal();
       @include flexCenterVertical();
@@ -272,7 +274,7 @@ $babyblue: #c1e9f9;
 
   .bottomRow {
     .col1 {
-      width: 6.8rem;
+      width: 6.4rem;
 
       border-right: $borderThin;
 
@@ -305,7 +307,7 @@ $babyblue: #c1e9f9;
     }
 
     .col3 {
-      width: 3.2rem;
+      width: 2.5rem;
       margin-right: 0.2rem;
       // background-color: #ffff94;
 
@@ -349,6 +351,7 @@ $babyblue: #c1e9f9;
     }
 
     .col6 {
+      width: 1rem;
       @include flexCenterVertical();
       @include flexCenterHorizontal();
 

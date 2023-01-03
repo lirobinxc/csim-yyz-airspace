@@ -6,7 +6,7 @@ import { SidData } from '../data/sidsCollection';
 import { destinationCollection } from '../data/destinationCollection';
 import { SatelliteData } from '../data/satelliteCollection';
 import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
-import { AcModel, AcType } from '../../phaser/types/AircraftTypes';
+import { AcModel, AcType, AcWTC } from '../../phaser/types/AircraftTypes';
 import { SidName } from '../../phaser/types/SidTypes';
 import { DepRunwayAll } from '../../phaser/types/AirportTypes';
 import { determineIfNorthOrSouthDep } from './determineIfNorthOrSouthDep';
@@ -55,6 +55,9 @@ export function genDepFdeData(
   // Gen Callsign
   const isC208 = aircraft.model === AcModel.C208;
   const callsign = genCallsign({ isC208 });
+  const spokenWtc = aircraft.wtc === AcWTC.H ? 'Heavy' : '';
+
+  const spokenCallsignFormatted = `${callsign.spokenCallsign} ${spokenWtc}`;
 
   // Set filed speed and altitude
   let filedTAS = 999;
@@ -76,7 +79,7 @@ export function genDepFdeData(
   const sid = genDepRoute(radarScene, aircraft.type) || ({} as SidData);
 
   const sidName = sid.name;
-  const filedRoute = `${sid.name} ... ...`;
+  const filedRoute = `${sid.name.split(' ')[0]} ... ...`;
 
   // Assigned heading
   let assignedHeading =
@@ -107,7 +110,7 @@ export function genDepFdeData(
 
   let handoffSector = sid.handoffSector;
 
-  const acFullName = `${aircraft.wtc}/${aircraft.model}/${aircraft.equipment}`;
+  const acModelFull = `${aircraft.wtc}/${aircraft.model}/${aircraft.equipment}`;
 
   let isVDP = _.random(1, 10) > 6;
 
@@ -137,8 +140,8 @@ export function genDepFdeData(
   // const satRouteData = genSatFdeData(rwyId);
 
   const depFDE = {
-    acFullName,
-    acId: callsign.fullCallsign,
+    acModelFull,
+    acId: { code: callsign.fullCallsign, spoken: spokenCallsignFormatted },
     acType: aircraft.type,
     acModel: aircraft.model,
     acWtc: aircraft.wtc,

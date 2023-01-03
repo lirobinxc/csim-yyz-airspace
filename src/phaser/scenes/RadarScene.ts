@@ -4,7 +4,7 @@ import { Rwy06sWaypointList } from '../config/Rwy06sWaypointConfig';
 import RadarBg from '../objects/RadarBg';
 import Waypoint from '../objects/Waypoint';
 import type { GameObjectOptions } from '../types/GameObjectOptions';
-import { RadarSceneKeys } from '../types/SceneKeys';
+import { OtherSceneKeys, RadarSceneKeys } from '../types/SceneKeys';
 import { AssetKeys } from '../types/AssetKeys';
 import PointerCoordinateLogger from '../utils/PointerCoordinates';
 import RunwayOrigins from '../config/RunwayOrigins';
@@ -47,10 +47,10 @@ export default class RadarScene extends Phaser.Scene {
   private RadarBg!: RadarBg;
 
   constructor(sceneKey: RadarSceneKeys, options: GameObjectOptions) {
-    super(RadarSceneKeys.RADAR_06s);
+    super(OtherSceneKeys.RADAR_BASE);
 
     this.Waypoints = [];
-    this.PlaneList = new Phaser.GameObjects.Group(this);
+    // this.PlaneList = new Phaser.GameObjects.Group(this);
     this.Options = options;
     this.SpeechQueue = [];
 
@@ -64,7 +64,13 @@ export default class RadarScene extends Phaser.Scene {
     this.CURRENTLY_SPEAKING_PLANE = null;
   }
 
-  init() {}
+  init() {
+    this.Waypoints = [];
+    this.PlaneList = new Phaser.GameObjects.Group(this);
+    this.SpeechQueue = [];
+    this.SELECTED_PLANE = null;
+    this.CURRENTLY_SPEAKING_PLANE = null;
+  }
 
   preload() {
     switch (this.SCENE_KEY) {
@@ -119,6 +125,9 @@ export default class RadarScene extends Phaser.Scene {
     // On CustomPhaserEvent: PLANE_SELECTED
     this.events.on(PhaserCustomEvents.PLANE_SELECTED, (plane: Plane) => {
       if (plane instanceof Plane) {
+        if (this.SELECTED_PLANE) {
+          this.SELECTED_PLANE = null;
+        }
         this.SELECTED_PLANE = plane;
         plane.IS_SELECTED = true;
       } else {
@@ -161,8 +170,6 @@ export default class RadarScene extends Phaser.Scene {
           this.SELECTED_PLANE = null;
         }
       }
-
-      console.log('bg clicked');
     });
 
     // On React Event: AIRBORNE
@@ -172,11 +179,35 @@ export default class RadarScene extends Phaser.Scene {
       const airbornePlane = new Plane(this, planeProps, this.Options);
       this.PlaneList.add(airbornePlane);
     });
+
+    // On React Event: REFRESH
+    this.events.on(ReactCustomEvents.REFRESH, (radarScene: RadarSceneKeys) => {
+      this.resetRadar(radarScene);
+    });
   }
 
   update() {
     this.handleSpeechQueue();
     this.toggleDebug();
+  }
+
+  private resetRadar(radarScene: RadarSceneKeys) {
+    this.Waypoints.forEach((wp) => wp.destroy());
+
+    // this.PlaneList.getChildren().forEach((plane: Plane) => {
+    //   plane.Speech;
+    // });
+    this.SpeechQueue = [];
+
+    // Init: Template props
+    this.SCENE_KEY = radarScene;
+    this.ASSET_KEY = AssetKeys.RADAR_06s; // fallback value
+
+    // Init: Constants
+    this.RUNWAY_CONFIG = radarScene;
+    this.SELECTED_PLANE = null;
+    this.CURRENTLY_SPEAKING_PLANE = null;
+    this.scene.restart();
   }
 
   private handleSpeechQueue() {
@@ -229,7 +260,7 @@ export default class RadarScene extends Phaser.Scene {
 
 // Create object: Plane
 const testPlaneProps: PlaneProperties = {
-  acId: { abbrev: 'ACA123', spoken: 'Air Canada 1 2 3' },
+  acId: { code: 'ACA123', spoken: 'Air Canada 1 2 3' },
   acType: AcType.JET,
   acModel: AcModel.A343,
   acWtc: AcWTC.M,
@@ -243,7 +274,7 @@ const testPlaneProps: PlaneProperties = {
     depRunway: DepRunwayYYZ.RWY_05,
     assignedAlt: 5000,
     assignedHeading: 330,
-    propTurnHeading: null,
+    sidOrPropTurnHeading: null,
     isNADP1: false,
   },
   handoffData: {

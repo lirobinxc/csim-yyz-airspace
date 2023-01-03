@@ -12,28 +12,8 @@ import { SatelliteData } from '../../data/satelliteCollection';
 import useInterval from 'use-interval';
 import { AcType } from '../../../phaser/types/AircraftTypes';
 
-// interface DepartureFDEProps {
-//   acFullName: string;
-//   acId: string;
-//   acType: string;
-//   assignedAlt: number;
-//   assignedHeading: string;
-//   coordinatedAlt?: number;
-//   departurePoint?: string;
-//   destination: string;
-//   ETA: string;
-//   filedAlt: number;
-//   filedRoute: string;
-//   isNADP1?: boolean;
-//   isQ400?: boolean;
-//   onCourseWP: string;
-//   remarks?: string;
-//   yyzRunwayId: string;
-//   transponderCode: string;
-// }
-
 function DepartureFDE({
-  acFullName,
+  acModelFull,
   acId,
   acType,
   assignedAlt,
@@ -101,7 +81,7 @@ function DepartureFDE({
     <section className={clsx(styles.FlightStrip, styles.flexCol)}>
       <div className={clsx(styles.topRow, styles.flexRow)}>
         <div className={clsx(styles.col1, { [styles.bgYellow]: isVDP })}>
-          <div className={clsx(styles.acId)}>{acId}</div>
+          <div className={clsx(styles.acId)}>{acId.code}</div>
         </div>
         <div className={clsx(styles.col2)}>
           <div className={clsx(styles.ETA)}>{ETA}Z</div>
@@ -233,7 +213,7 @@ function DepartureFDE({
       </div>
       <div className={clsx(styles.bottomRow, styles.flexRow)}>
         <div className={clsx(styles.col1, { [styles.bgWhite]: isQ400 })}>
-          <div className={clsx(styles.acType)}>{acFullName}</div>
+          <div className={clsx(styles.acType)}>{acModelFull}</div>
         </div>
         <div className={clsx(styles.col2)}>
           <div

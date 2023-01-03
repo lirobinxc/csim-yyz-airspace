@@ -3,7 +3,10 @@ import _ from 'lodash';
 import PhaserGame from '../../../phaser/PhaserGameConfig';
 import RadarScene from '../../../phaser/scenes/RadarScene';
 import { ReactCustomEvents } from '../../../phaser/types/CustomEvents';
-import { RadarSceneKeys } from '../../../phaser/types/SceneKeys';
+import {
+  OtherSceneKeys,
+  RadarSceneKeys,
+} from '../../../phaser/types/SceneKeys';
 import { SidName } from '../../../phaser/types/SidTypes';
 import { determineIfVdpAllowed } from '../../functions/determineIfVdpAllowed';
 import {
@@ -38,6 +41,11 @@ function genDepList(
       prevDepFde?.sidName
     );
 
+    // Set 1st plane IN_POSITION immediately
+    if (i === 0) {
+      currDepFde.depPhase = DeparturePhase.IN_POSITION;
+    }
+
     defaultDepSequence.push(currDepFde);
   }
 
@@ -58,12 +66,19 @@ function addRandomStrip(
 
 function sendAirborneToPhaser(fde: DepFDE) {
   const RADAR_SCENE = PhaserGame.scene.keys[
-    RadarSceneKeys.RADAR_06s
+    OtherSceneKeys.RADAR_BASE
   ] as RadarScene;
   RADAR_SCENE.events.emit(ReactCustomEvents.AIRBORNE, fde);
 }
 
-const initialState = genDepList(RadarSceneKeys.RADAR_06s, 4, false);
+function restartPhaser(radarScene: RadarSceneKeys) {
+  const RADAR_SCENE = PhaserGame.scene.keys[
+    OtherSceneKeys.RADAR_BASE
+  ] as RadarScene;
+  RADAR_SCENE.events.emit(ReactCustomEvents.REFRESH, radarScene);
+}
+
+const initialState = genDepList(RadarSceneKeys.RADAR_06s, 3, true);
 
 export const departureList = createSlice({
   name: 'departureList',
@@ -92,14 +107,14 @@ export const departureList = createSlice({
     //   return state.filter((item) => item.acId !== action.payload);
     // },
     setToInPosition: (state, action: PayloadAction<DepFDE | undefined>) => {
-      console.log(action.payload);
-
       if (!action.payload) return state;
 
       const depPhase = DeparturePhase.IN_POSITION;
       const selectedFde = action.payload;
 
-      const newList = state.filter((strip) => strip.acId !== selectedFde.acId);
+      const newList = state.filter(
+        (strip) => strip.acId.code !== selectedFde.acId.code
+      );
 
       return [
         ...newList,
@@ -107,14 +122,14 @@ export const departureList = createSlice({
       ];
     },
     setToAirborne: (state, action: PayloadAction<DepFDE | undefined>) => {
-      console.log(action.payload);
-
       if (!action.payload) return state;
 
       const depPhase = DeparturePhase.AIRBORNE;
       const selectedFde = action.payload;
 
-      const newList = state.filter((strip) => strip.acId !== selectedFde.acId);
+      const newList = state.filter(
+        (strip) => strip.acId.code !== selectedFde.acId.code
+      );
 
       sendAirborneToPhaser(selectedFde);
 
@@ -128,7 +143,9 @@ export const departureList = createSlice({
         isSingleOps: boolean;
       }>
     ) => {
-      console.log('Refresh strips for', action.payload);
+      // console.log('Refresh strips for', action.payload);
+      restartPhaser(action.payload.radarScene);
+
       return genDepList(
         action.payload.radarScene,
         action.payload.count,

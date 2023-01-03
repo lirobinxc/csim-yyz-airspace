@@ -15,11 +15,11 @@ interface SimOptions {
 
 const initialState: SimOptions = {
   radarScene: RadarSceneKeys.RADAR_06s,
-  startingCount: 6,
-  isSingleOps: false,
+  startingCount: 1,
+  isSingleOps: true,
   newStripInterval: [10_000, 20_000],
-  intervalBetweenNormalDeps: 90_000,
-  intervalBetweenVisualDeps: 45_000,
+  intervalBetweenNormalDeps: 50_000, // should be ???
+  intervalBetweenVisualDeps: 25_000,
 };
 
 export const simOptions = createSlice({

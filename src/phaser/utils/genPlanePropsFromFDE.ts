@@ -1,11 +1,12 @@
 import { DepFDE } from '../../react/functions/genDepFdeData';
 import { PlanePerformanceConfig } from '../config/PlanePerformanceConfig';
 import { getRunwayHeading } from '../config/RunwayHeadingConfig';
+import { AcType } from '../types/AircraftTypes';
 import { PlaneProperties } from '../types/PlaneInterfaces';
 
 export function genPlanePropsFromFDE(fde: DepFDE): PlaneProperties {
   const props: PlaneProperties = {
-    acId: { abbrev: fde.acId, spoken: fde.acId },
+    acId: { code: fde.acId.code, spoken: fde.acId.spoken },
     acType: fde.acType,
     acModel: fde.acModel,
     acWtc: fde.acWtc,
@@ -18,7 +19,7 @@ export function genPlanePropsFromFDE(fde: DepFDE): PlaneProperties {
     takeoffData: {
       assignedAlt: fde.assignedAlt * 100,
       assignedHeading: getRunwayHeading(fde.depRunway).initial,
-      propTurnHeading: Number(fde.assignedHeading) || null,
+      sidOrPropTurnHeading: getSidOrPropTurnHeading(fde),
       depRunway: fde.depRunway,
       isNADP1: fde.isNADP1,
     },
@@ -29,4 +30,12 @@ export function genPlanePropsFromFDE(fde: DepFDE): PlaneProperties {
   };
 
   return props;
+}
+
+function getSidOrPropTurnHeading(fde: DepFDE) {
+  if (fde.acType === AcType.PROP) {
+    return Number(fde.assignedHeading) || null;
+  }
+
+  return getRunwayHeading(fde.depRunway).sid;
 }

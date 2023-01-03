@@ -33,8 +33,6 @@ const FdeSection = () => {
   });
 
   const processStrips = useCallback((stripList: DepFDE[]) => {
-    console.log('processing strips');
-
     const stripsCue = {
       readyNorthPanel: [] as DepFDE[],
       readySouthPanel: [] as DepFDE[],
@@ -78,6 +76,12 @@ const FdeSection = () => {
     processStrips(strips);
   }, [strips, processStrips]);
 
+  // useEffect(() => {
+  //   if(stripList.airborneNorthPanel.length === 0 && stripList.airborneSouthPanel.length === 0) {
+  //     dispatch()
+  //   }
+  // },[stripList])
+
   // Interval: Add new strip
   useRandomInterval(() => {
     if (
@@ -94,21 +98,39 @@ const FdeSection = () => {
     }
   }, ...simOptions.newStripInterval);
 
-  // Interval: Move from panel READY -> IN POSITION
-  useRandomInterval(() => {
-    if (stripList.inPositionNorthPanel.length === 0) {
-      dispatch(
-        departureListActions.setToInPosition(stripList.readyNorthPanel[0])
-      );
-    }
-  }, ...simOptions.newStripInterval);
-  useRandomInterval(() => {
-    if (stripList.inPositionSouthPanel.length === 0) {
-      dispatch(
-        departureListActions.setToInPosition(stripList.readySouthPanel[0])
-      );
-    }
-  }, ...simOptions.newStripInterval);
+  // Interval: Move from panels READY N/S -> IN POSITION N/S
+  useRandomInterval(
+    () => {
+      if (stripList.inPositionNorthPanel.length === 0) {
+        dispatch(
+          departureListActions.setToInPosition(stripList.readyNorthPanel[0])
+        );
+      }
+      if (stripList.airborneNorthPanel.length === 0) {
+        dispatch(
+          departureListActions.setToAirborne(stripList.inPositionNorthPanel[0])
+        );
+      }
+    },
+    5_000,
+    20_000
+  );
+  useRandomInterval(
+    () => {
+      if (stripList.inPositionSouthPanel.length === 0) {
+        dispatch(
+          departureListActions.setToInPosition(stripList.readySouthPanel[0])
+        );
+      }
+      if (stripList.airborneSouthPanel.length === 0) {
+        dispatch(
+          departureListActions.setToAirborne(stripList.inPositionSouthPanel[0])
+        );
+      }
+    },
+    5_000,
+    20_000
+  );
 
   // Interval: (NORMAL) Move from panel IN POSITION -> AIRBORNE
   useInterval(() => {
@@ -137,17 +159,14 @@ const FdeSection = () => {
       }
     }
   }, 5000);
-  // useRandomInterval(() => {
-  //   dispatch(departureListActions.setToAirborne(stripList.inPositionSPanel[0]));
-  // }, ...simOptions.newStripInterval);
 
   // Interval: (VISUAL DEP) Move from panel IN POSITION -> AIRBORNE
   // useRandomInterval(() => {
-  //   dispatch(departureListActions.setToAirborne(stripList.inPositionNPanel[0]));
+  //   dispatch(departureListActions.setToAirborne({radarScene: simOptions.radarScene, fde: stripList.inPositionNPanel[0]))};
   // }, ...simOptions.newStripInterval);
 
   // useRandomInterval(() => {
-  //   dispatch(departureListActions.setToAirborne(stripList.inPositionSPanel[0]));
+  //   dispatch(departureListActions.setToAirborne({radarScene: simOptions.radarScene, fde: stripList.inPositionSPanel[0]))};
   // }, ...simOptions.newStripInterval);
 
   return (

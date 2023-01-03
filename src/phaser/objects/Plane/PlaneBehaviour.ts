@@ -35,10 +35,14 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
     this.Plane = plane;
     this.DataTag = dataTag;
     plane.scene.add.existing(this);
+
+    // Sync update with FPS (set in Phaser Config)
+    this.scene.physics.world.on('worldstep', () => {
+      this.checkInAfterPassing1200();
+    });
   }
 
   preUpdate(t: number, dt: number) {
-    this.checkInAfterPassing1200();
     this.ifNadp2UpTo5000();
     this.flySidOrPropHeadingDuringClimb();
     this.ifAbove5000();
@@ -134,11 +138,13 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
     if (TURN_DIRECTION === TurnDirection.NO_TURN) return;
 
     // Base case: Noise abatement & MVA
-    if (acType === AcType.JET && altitude.current < 3600) {
-      return;
-    }
-    if (acType === AcType.PROP && altitude.current < 3000) {
-      return;
+    if (this.Plane.Commands.onSidOrPropHeading) {
+      if (acType === AcType.JET && altitude.current < 3600) {
+        return;
+      }
+      if (acType === AcType.PROP && altitude.current < 3000) {
+        return;
+      }
     }
 
     const TURN_RATE_PER_SEC = 3; // degrees per second (Standard Rate Turn)
@@ -316,30 +322,37 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
     const altitude = this.Plane.Commands.altitude; // feet
     const heading = this.Plane.Commands.heading;
 
-    const completedSidHeading = this.Plane.Commands.onSidOrPropHeading;
-    if (completedSidHeading === true) return;
+    const completedSidOrPropHeading = this.Plane.Commands.onSidOrPropHeading;
 
-    // Jets turn to the SID heading
-    if (
-      this.Plane.Properties.acType === AcType.JET &&
-      altitude.current > 1100 &&
-      !completedSidHeading
-    ) {
-      heading.assigned = getRunwayHeading(
-        this.Plane.Properties.takeoffData.depRunway
-      ).sid;
+    if (completedSidOrPropHeading === true) return;
+    const sidOrPropTurnHeading =
+      this.Plane.Properties.takeoffData.sidOrPropTurnHeading;
+
+    if (!sidOrPropTurnHeading || heading.current === sidOrPropTurnHeading) {
       this.Plane.Commands.onSidOrPropHeading = true;
+      return;
     }
 
+    if (heading.current)
+      if (
+        this.Plane.Properties.acType === AcType.JET &&
+        altitude.current > 1100 &&
+        !completedSidOrPropHeading
+      ) {
+        // Jets turn to the SID heading
+        heading.assigned = getRunwayHeading(
+          this.Plane.Properties.takeoffData.depRunway
+        ).sid;
+      }
+
     // Props turn to the SID heading
-    const PROP_HEADING = this.Plane.Properties.takeoffData.propTurnHeading;
+    const PROP_HEADING = this.Plane.Properties.takeoffData.sidOrPropTurnHeading;
+
     if (
       this.Plane.Properties.acType === AcType.PROP &&
-      altitude.current > 400 &&
-      !completedSidHeading
+      altitude.current > 100
     ) {
       heading.assigned = PROP_HEADING ? PROP_HEADING : heading.assigned;
-      this.Plane.Commands.onSidOrPropHeading = true;
     }
   }
 
@@ -383,11 +396,16 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
   }
 
   private checkInAfterPassing1200() {
+    if (this.Plane.Commands.hasCheckedIn) return;
+
     const altitude = this.Plane.Commands.altitude; // feet
 
-    if (this.Plane.Commands.hasCheckedIn === false && altitude.current > 1200) {
-      this.Plane.checkIn();
+    if (altitude.current > 100) {
+      // FIX: should be 1200
       this.Plane.Commands.hasCheckedIn = true;
+
+      this.Plane.checkIn();
+      console.log('PlaneBehaviour: checkIn()');
     }
   }
 }

@@ -12,7 +12,7 @@ import { SatelliteData } from '../../data/satelliteCollection';
 import useInterval from 'use-interval';
 
 function PendingDepartureFDE({
-  acFullName,
+  acModelFull,
   acId,
   acType,
   assignedAlt,
@@ -42,10 +42,14 @@ function PendingDepartureFDE({
           [styles.bgYellow]: isVDP,
         })}
       >
-        {acId}
+        {acId.code}
       </div>
-      <div className={clsx(styles.box, styles.widthLg, styles.acFullName)}>
-        {acFullName}
+      <div
+        className={clsx(styles.box, styles.widthLg, styles.acFullName, {
+          [styles.bgWhite]: isQ400,
+        })}
+      >
+        {acModelFull}
       </div>
       <div className={clsx(styles.box, styles.widthSm, styles.depRunway)}>
         {depRunwayFormatted}

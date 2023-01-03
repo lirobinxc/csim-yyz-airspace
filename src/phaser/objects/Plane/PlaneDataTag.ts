@@ -130,7 +130,7 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
   }
 
   private updateText1() {
-    const acid = this.Plane.Properties.acId.abbrev;
+    const acid = this.Plane.Properties.acId.code;
     const wtcSymbol = convertAcWtcToSymbol(this.Plane.Properties.acWtc);
 
     const currHeading = ` HDG ${this.Plane.Commands.heading.current
