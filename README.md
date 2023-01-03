@@ -1,13 +1,7 @@
-# Phaser 3 + Create React App template
-![image](https://user-images.githubusercontent.com/11501902/149049053-f46a9d1e-7075-4258-9102-cdbcbe7198ba.png)
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# CSiM YYZ Departure 2023
 
-## What's included? - [Check the preview](https://create-react-phaser3-app.netlify.app/)
+Full simulation of YYZ Departures.
 
-- [Phaser 3](https://github.com/photonstorm/phaser) - overlaid canvas with the config in `src/PhaserGame.ts` and a scene in `src/scenes/`
-- [Create React App](https://github.com/facebook/create-react-app) - React, TSX, ES6, TypeScript, no need to install bundler, ...etc
-- An example button in `src/App.tsx` showing how to communicate with Phaser within a React component
-- That's it!
 ## Getting started
 
 Clone the project and in the project directory, you can run:
