@@ -28,7 +28,7 @@ import { PlaneProperties } from '../types/PlaneInterfaces';
 import { DepFDE } from '../../react/functions/genDepFdeData';
 import { genPlanePropsFromFDE } from '../utils/genPlanePropsFromFDE';
 import SpeechSynth from '../objects/SpeechSynth';
-import PlaneRouteLine from '../objects/Plane/PlaneRouteLine';
+import FiledRouteLine from '../objects/FiledRouteLine';
 
 export default class RadarScene extends Phaser.Scene {
   public Waypoints!: Waypoint[];
@@ -37,6 +37,7 @@ export default class RadarScene extends Phaser.Scene {
   public Options: GameObjectOptions;
   public Speech: SpeechSynth;
   private SpeechQueue: { text: string; plane: Plane; isCheckIn: boolean }[];
+  private FiledRouteLine: FiledRouteLine | null;
 
   public RUNWAY_CONFIG: RadarSceneKeys;
   public SELECTED_PLANE: Plane | null;
@@ -57,6 +58,7 @@ export default class RadarScene extends Phaser.Scene {
     this.Options = options;
     this.Speech = new SpeechSynth();
     this.SpeechQueue = [];
+    this.FiledRouteLine = null;
 
     // Init: Template props
     this.SCENE_KEY = sceneKey;
@@ -131,10 +133,12 @@ export default class RadarScene extends Phaser.Scene {
       if (plane instanceof Plane) {
         if (this.SELECTED_PLANE) {
           this.SELECTED_PLANE.IS_SELECTED = false;
+          this.SELECTED_PLANE.setDepth(10);
           this.SELECTED_PLANE = null;
         }
         this.SELECTED_PLANE = plane;
         plane.IS_SELECTED = true;
+        plane.setDepth(999);
       } else {
         throw new Error(
           `A Plane object was not passed to the PLANE_SELECTED event emitter. Argument "${plane}" is of type ${typeof plane}`
@@ -161,15 +165,31 @@ export default class RadarScene extends Phaser.Scene {
     );
 
     // On CustomPhaserEvent: ACID_CLICKED
-    this.events.on(PhaserCustomEvents.ACID_CLICKED, (plane: Plane) => {
-      // new PlaneRouteLine(plane);
-    });
+    this.events.on(
+      PhaserCustomEvents.ACID_CLICKED,
+      ({ plane, pointer }: { plane: Plane; pointer: Phaser.Input.Pointer }) => {
+        if (pointer.rightButtonDown()) return;
+        if (pointer.middleButtonDown()) return;
+
+        if (this.FiledRouteLine) {
+          this.FiledRouteLine.customDestroy();
+        }
+
+        this.FiledRouteLine = new FiledRouteLine(plane);
+      }
+    );
 
     // On Input: Clicked RadarBg
     this.RadarBg.on(DomEvents.POINTER_DOWN, (pointer: Phaser.Input.Pointer) => {
       if (pointer.rightButtonDown()) {
+        if (this.FiledRouteLine) {
+          this.FiledRouteLine.customDestroy();
+          this.FiledRouteLine = null;
+        }
+
         if (this.SELECTED_PLANE instanceof Plane) {
           this.SELECTED_PLANE.IS_SELECTED = false;
+          this.SELECTED_PLANE.setDepth(10);
         }
         this.SELECTED_PLANE = null;
       }

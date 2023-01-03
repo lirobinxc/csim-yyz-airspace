@@ -61,8 +61,8 @@ function DepartureFDE({
     setOnCourse(true);
   }
 
-  function removeStrip() {
-    // dispatch(readyPanelActions.deleteStrip(acId));
+  function deleteStrip() {
+    dispatch(departureListActions.deleteStrip(acId.code));
   }
 
   function displayAssignedHeading() {
@@ -204,9 +204,9 @@ function DepartureFDE({
           className={clsx(styles.col8, {
             [styles.bgGreen]: isCorrectHandoffAlt(),
           })}
-          onClick={removeStrip}
+          onClick={deleteStrip}
         >
-          <div className={clsx(styles.runwayId)}>
+          <div className={clsx(styles.runwayId)} onClick={deleteStrip}>
             {departureRunwayFormatted}
           </div>
         </div>

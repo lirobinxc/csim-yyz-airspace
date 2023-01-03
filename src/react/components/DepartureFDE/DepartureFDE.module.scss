@@ -266,6 +266,10 @@ $babyblue: #c1e9f9;
         // width: 10%;
       }
 
+      &:hover {
+        background-color: darkgray;
+      }
+
       .runwayId {
         font-size: $fontSizeLg;
       }

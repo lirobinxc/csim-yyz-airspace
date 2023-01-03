@@ -385,7 +385,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
       return;
     }
     if (altitude.current >= 800 && speed.current < acPerf.speed.maxBelow10k) {
-      climbRate.assigned = Math.floor(acPerf.climbRate.initialClimb / 2);
+      climbRate.assigned = Math.min(acPerf.climbRate.initialClimb, 2000);
       speed.assigned = acPerf.speed.maxBelow10k;
       return;
     }
@@ -400,8 +400,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
 
     const altitude = this.Plane.Commands.altitude; // feet
 
-    if (altitude.current > 100) {
-      // FIX: should be 1200
+    if (altitude.current > 1200) {
       this.Plane.Commands.hasCheckedIn = true;
 
       this.Plane.checkIn();

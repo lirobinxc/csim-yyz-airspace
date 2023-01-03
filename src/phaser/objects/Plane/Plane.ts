@@ -37,7 +37,7 @@ import {
 } from '../../types/PlaneInterfaces';
 import { convertNumToText } from '../../../react/functions/convertNumToText';
 import { convertHeadingNumToText } from '../../../react/functions/convertHeadingNumToText';
-import PlaneRouteLine from './PlaneRouteLine';
+import FiledRouteLine from '../FiledRouteLine';
 
 export default class Plane extends Phaser.GameObjects.Container {
   // Plane Properties
@@ -135,9 +135,12 @@ export default class Plane extends Phaser.GameObjects.Container {
     });
 
     // Input: On hover over Symbol
-    // this.Symbol.on(DomEvents.POINTER_OVER, () => {
-    //   this.Scene.events.emit(PhaserCustomEvents.PLANE_SELECTED, this);
-    // });
+    this.Symbol.on(DomEvents.POINTER_OVER, () => {
+      this.setDepth(555);
+    });
+    this.Symbol.on(DomEvents.POINTER_OUT, () => {
+      this.setDepth(10);
+    });
 
     // Debug
     this.onDebug();
@@ -315,10 +318,11 @@ export default class Plane extends Phaser.GameObjects.Container {
 
   private onDebug() {
     if (this.Options.isDebug) {
-      this.PTL.TIME_IN_SEC = 600;
+      this.PTL.TIME_IN_SEC = 60;
       this.SHOW_PTL = true;
     } else {
       this.PTL.TIME_IN_SEC = 60;
+      this.SHOW_PTL = false;
     }
   }
 

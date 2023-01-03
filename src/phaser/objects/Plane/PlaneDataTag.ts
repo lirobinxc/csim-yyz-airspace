@@ -95,8 +95,11 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
     });
 
     // Input: On click Text 1
-    this.Text1.on(DomEvents.POINTER_DOWN, () => {
-      this.scene.events.emit(PhaserCustomEvents.ACID_CLICKED, this.Plane);
+    this.Text1.on(DomEvents.POINTER_DOWN, (pointer: Phaser.Input.Pointer) => {
+      this.scene.events.emit(PhaserCustomEvents.ACID_CLICKED, {
+        plane: this.Plane,
+        pointer,
+      });
     });
 
     // Sync update with FPS (set in Phaser Config)

@@ -16,7 +16,7 @@ export const PlanePerformanceConfig: {
       maxBelow10k: 250,
     },
     climbRate: {
-      initialClimb: 2000, // feet per minute
+      initialClimb: 2400, // feet per minute
       normalClimb: 1500,
     },
     accel: BASE_ACCEL,
@@ -29,7 +29,7 @@ export const PlanePerformanceConfig: {
       maxBelow10k: 250,
     },
     climbRate: {
-      initialClimb: 2000, // feet per minute
+      initialClimb: 2400, // feet per minute
       normalClimb: 1500,
     },
     accel: BASE_ACCEL,
@@ -49,13 +49,13 @@ export const PlanePerformanceConfig: {
   },
   B744: {
     speed: {
-      initialClimb: 215, // to 800 feet
+      initialClimb: 200, // to 800 feet
       normalClimb: 300, // 800 to FL240
       maxCruise: 490,
       maxBelow10k: 250,
     },
     climbRate: {
-      initialClimb: 2000, // feet per minute, actual = 1500
+      initialClimb: 2400, // feet per minute, actual = 1500
       normalClimb: 1500,
     },
     accel: BASE_ACCEL,

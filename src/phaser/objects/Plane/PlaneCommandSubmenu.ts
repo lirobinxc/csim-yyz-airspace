@@ -57,6 +57,7 @@ export default class PlaneCommandSubmenu extends Phaser.GameObjects.Container {
       );
 
       // Setup: Button
+      this.setDepth(999);
       button.setX(
         button.width * CURRENT_COLUMN + BUTTON_SPACING_X * CURRENT_COLUMN
       );

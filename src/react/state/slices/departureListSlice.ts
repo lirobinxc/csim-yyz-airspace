@@ -103,10 +103,10 @@ export const departureList = createSlice({
       );
     },
     // Use the PayloadAction type to declare the contents of `action.payload`
-    // deleteStrip: (state, action: PayloadAction<string>) => {
-    //   console.log('Removed', action.payload);
-    //   return state.filter((item) => item.acId !== action.payload);
-    // },
+    deleteStrip: (state, action: PayloadAction<string>) => {
+      console.log('Removed', action.payload);
+      return state.filter((item) => item.acId.code !== action.payload);
+    },
     setToInPosition: (state, action: PayloadAction<DepFDE | undefined>) => {
       if (!action.payload) return state;
 
