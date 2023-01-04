@@ -269,4 +269,148 @@ export const CommonWaypointList: WaypointDataCommon[] = [
     },
     type: AcType.JET,
   },
+  // Satellite points (WIP)
+  {
+    name: 'DAVSI',
+    relativeCoord: new Phaser.Math.Vector2(1, 0.543),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: AcType.PROP,
+  },
+  {
+    name: 'YYZ',
+    relativeCoord: new Phaser.Math.Vector2(1, 0.543),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: AcType.JET,
+  },
+  {
+    name: 'UDMIK',
+    relativeCoord: new Phaser.Math.Vector2(1, 0.543),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: AcType.JET,
+  },
+  {
+    name: 'MUXIG',
+    relativeCoord: new Phaser.Math.Vector2(1, 0.543),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: AcType.JET,
+  },
+  {
+    name: 'ROKTO',
+    relativeCoord: new Phaser.Math.Vector2(1, 0.543),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: AcType.JET,
+  },
+  {
+    name: 'SANIN',
+    relativeCoord: new Phaser.Math.Vector2(1, 0.543),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: AcType.JET,
+  },
+  {
+    name: 'UKPAG',
+    relativeCoord: new Phaser.Math.Vector2(1, 0.543),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: AcType.JET,
+  },
+  {
+    name: 'YFD',
+    relativeCoord: new Phaser.Math.Vector2(1, 0.543),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: AcType.JET,
+  },
+  {
+    name: 'YHM',
+    relativeCoord: new Phaser.Math.Vector2(1, 0.543),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: AcType.JET,
+  },
+  {
+    name: 'YKZ',
+    relativeCoord: new Phaser.Math.Vector2(1, 0.543),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: AcType.JET,
+  },
+  {
+    name: 'OO',
+    relativeCoord: new Phaser.Math.Vector2(1, 0.543),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: AcType.JET,
+  },
+  {
+    name: 'YWT',
+    relativeCoord: new Phaser.Math.Vector2(1, 0.543),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: AcType.JET,
+  },
+  {
+    name: 'TALEB',
+    relativeCoord: new Phaser.Math.Vector2(1, 0.543),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: AcType.PROP,
+  },
 ];

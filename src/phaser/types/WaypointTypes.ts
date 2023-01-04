@@ -20,7 +20,10 @@ export type WaypointKeysAll = Record<WaypointNamesAll, WaypointDataAll>;
 export type WaypointKeys06s = Record<WaypointNamesRwy06s, WaypointData06s>;
 export type WaypointKeys24s = Record<WaypointNamesRwy24s, WaypointData24s>;
 
-export type WaypointNamesAll = WaypointNamesRwy06s | WaypointNamesRwy24s;
+export type WaypointNamesAll =
+  | WaypointNamesCommon
+  | WaypointNamesRwy06s
+  | WaypointNamesRwy24s;
 
 export type WaypointNamesCommon =
   | 'ANCOL'
@@ -47,7 +50,20 @@ export type WaypointNamesCommon =
   | 'TONNY'
   | 'TULEK'
   | 'URSAL'
-  | 'VERDO';
+  | 'VERDO'
+  | 'DAVSI' // Start of satellite points
+  | 'MUXIG'
+  | 'OO'
+  | 'ROKTO'
+  | 'SANIN'
+  | 'TALEB'
+  | 'UDMIK'
+  | 'UKPAG'
+  | 'YFD'
+  | 'YHM'
+  | 'YKZ'
+  | 'YWT'
+  | 'YYZ';
 
 export type WaypointNamesRwy06s =
   | 'ALKUT'
@@ -88,14 +104,26 @@ export type WaypointNamesRwy06s =
   | 'TULEK'
   | 'URSAL'
   | 'VERDO'
-  | 'VIDRA';
+  | 'VIDRA'
+  | 'DAVSI' // Start of satellite points
+  | 'MUXIG'
+  | 'OO'
+  | 'ROKTO'
+  | 'SANIN'
+  | 'TALEB'
+  | 'UDMIK'
+  | 'UKPAG'
+  | 'YFD'
+  | 'YHM'
+  | 'YKZ'
+  | 'YWT'
+  | 'YYZ';
 
 export type WaypointNamesRwy24s =
   | 'ANCOL'
   | 'AVSEP'
   | 'BETES'
   | 'BISTI'
-  | 'DAVSI'
   | 'DEDKI'
   | 'DUSOM'
   | 'EBKIN'
@@ -125,4 +153,17 @@ export type WaypointNamesRwy24s =
   | 'TONNY'
   | 'TULEK'
   | 'URSAL'
-  | 'VERDO';
+  | 'VERDO'
+  | 'DAVSI' // Start of satellite points
+  | 'MUXIG'
+  | 'OO'
+  | 'ROKTO'
+  | 'SANIN'
+  | 'TALEB'
+  | 'UDMIK'
+  | 'UKPAG'
+  | 'YFD'
+  | 'YHM'
+  | 'YKZ'
+  | 'YWT'
+  | 'YYZ';
