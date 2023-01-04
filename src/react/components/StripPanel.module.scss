@@ -32,19 +32,22 @@
     justify-content: flex-start;
 
     padding: $spacingXs;
+
+    overflow: hidden;
   }
 }
 
 .SizeSm {
   flex-grow: 0.2;
 
-  max-height: 10rem;
-
-  overflow: hidden;
+  min-height: 3rem;
+  max-height: 6rem;
 }
 
 .SizeMd {
   flex-grow: 0.6;
+
+  min-height: 6rem;
 }
 
 .SizeLg {

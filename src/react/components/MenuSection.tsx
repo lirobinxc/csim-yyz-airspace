@@ -1,9 +1,14 @@
 import clsx from 'clsx';
+import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../state/hooks';
 import { departureListActions } from '../state/slices/departureListSlice';
-import { selectSimOptions } from '../state/slices/simOptionsSlice';
+import {
+  selectSimOptions,
+  simOptionsActions,
+} from '../state/slices/simOptionsSlice';
 
 import styles from './MenuSection.module.scss';
+import SimOptionsModal from './SimOptionsModal';
 
 interface MenuSectionProps {
   appVersion: string;
@@ -12,13 +17,30 @@ interface MenuSectionProps {
 const MenuSection = ({ appVersion }: MenuSectionProps) => {
   const dispatch = useAppDispatch();
   const simOptions = useAppSelector(selectSimOptions);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    console.log(simOptions.isModalOpen);
+    console.log(simOptions.isModalOpen);
+    console.log(simOptions.isModalOpen);
+    console.log(simOptions.isModalOpen);
+  }, [simOptions.isModalOpen, dispatch]);
 
   function restartSim() {
     dispatch(departureListActions.restartSim());
   }
 
+  function openModal() {
+    setIsModalOpen(true);
+  }
+
+  function closeModal() {
+    setIsModalOpen(false);
+  }
+
   return (
     <header className={styles.MenuSection}>
+      <SimOptionsModal isOpen={isModalOpen} requestCloseModal={closeModal} />
       <div className={styles.titleBar}>
         CSiM EXCDS Workstation Version {appVersion} by lirobinxc @ GitHub
       </div>
@@ -42,8 +64,9 @@ const MenuSection = ({ appVersion }: MenuSectionProps) => {
         <button className={clsx(styles.spacing)}>A3</button>
         <button className={clsx(styles.spacing)}>A2</button>
         <button className={clsx(styles.spacing)}>A1</button>
-        <button className={clsx(styles.spacing)}>SD</button>
-        <button className={clsx(styles.spacing)}>ND</button>
+        <button className={clsx(styles.spacing)} onClick={openModal}>
+          OPTIONS
+        </button>
         <button
           className={clsx(styles.spacing, styles.unhide)}
           onClick={restartSim}

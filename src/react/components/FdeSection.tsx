@@ -17,6 +17,7 @@ import {
 import { selectSimOptions } from '../state/slices/simOptionsSlice';
 
 import styles from './FdeSection.module.scss';
+import SimOptionsModal from './SimOptionsModal';
 import StripPanel, { Size } from './StripPanel';
 
 const FdeSection = () => {
@@ -87,8 +88,8 @@ const FdeSection = () => {
   // Interval: Add new strip
   useRandomInterval(() => {
     if (
-      stripList.readyNorthPanel.length < 4 ||
-      stripList.readySouthPanel.length < 4
+      stripList.readyNorthPanel.length < 3 ||
+      stripList.readySouthPanel.length < 3
     ) {
       dispatch(
         departureListActions.addStrip({

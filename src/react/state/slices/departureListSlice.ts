@@ -16,12 +16,9 @@ import {
   genDepFdeData,
 } from '../../functions/genDepFdeData';
 import { genSatFdeData } from '../../functions/genSatFdeData';
+import { genSimOptions } from '../genSimOptions';
 import type { RootState } from '../store';
-import {
-  defaultSimOptions,
-  LocalStorageKeys,
-  SimOptions,
-} from './simOptionsSlice';
+import { SimOptions } from './simOptionsSlice';
 
 // Define the initial state using that type
 function genDepList(
@@ -85,18 +82,7 @@ function restartPhaser() {
 }
 
 function genInitialState() {
-  let simOptions = defaultSimOptions;
-
-  const storedOptionsStr = localStorage.getItem(LocalStorageKeys.SIM_OPTIONS);
-  const storedSimOptions: SimOptions =
-    storedOptionsStr && JSON.parse(storedOptionsStr);
-
-  // Checks if SimOption property exists
-  if (storedSimOptions && typeof storedSimOptions.startingCount === 'number') {
-    console.log('Retrieved localStorage SimOptions.');
-
-    simOptions = storedSimOptions;
-  }
+  const simOptions: SimOptions = genSimOptions();
 
   return genDepList(
     simOptions.radarScene,
