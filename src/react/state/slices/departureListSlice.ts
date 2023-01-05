@@ -17,8 +17,9 @@ import {
 } from '../../functions/genDepFdeData';
 import { genSatFdeData } from '../../functions/genSatFdeData';
 import { genSimOptions } from '../genSimOptions';
+import { useAppDispatch } from '../hooks';
 import type { RootState } from '../store';
-import { SimOptions } from './simOptionsSlice';
+import { SimOptions, simOptionsActions } from './simOptionsSlice';
 
 // Define the initial state using that type
 function genDepList(
@@ -125,7 +126,7 @@ export const departureList = createSlice({
       const depPhase = DeparturePhase.IN_POSITION;
       const selectedFde = action.payload;
 
-      const newList = state.filter(
+      const newList: DepFDE[] = state.filter(
         (strip) => strip.acId.code !== selectedFde.acId.code
       );
 
@@ -147,6 +148,22 @@ export const departureList = createSlice({
       sendAirborneToPhaser(selectedFde);
 
       return [...newList, { ...selectedFde, depPhase }];
+    },
+    setSelectedStrip: (state, action: PayloadAction<string>) => {
+      const newStrips = state.map((strip) => {
+        if (strip.uniqueKey === action.payload) {
+          return { ...strip, isStripSelected: true };
+        } else {
+          return { ...strip, isStripSelected: false };
+        }
+      });
+      return newStrips;
+    },
+    deselectAllStrips: (state) => {
+      const newStrips = state.map((strip) => {
+        return { ...strip, isStripSelected: false };
+      });
+      return newStrips;
     },
     restartSim: (state) => {
       restartPhaser();

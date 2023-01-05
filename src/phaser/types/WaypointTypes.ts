@@ -21,15 +21,22 @@ export type WaypointKeys06s = Record<WaypointNamesRwy06s, WaypointData06s>;
 export type WaypointKeys24s = Record<WaypointNamesRwy24s, WaypointData24s>;
 
 export type WaypointNamesAll =
-  | WaypointNamesCommon
   | WaypointNamesRwy06s
-  | WaypointNamesRwy24s;
+  | WaypointNamesRwy24s
+  | WaypointNamesRwy15s
+  | WaypointNamesRwy33s;
 
 export type WaypointNamesRwy06s =
   | WaypointNamesRwy06sUnique
   | WaypointNamesCommon;
 export type WaypointNamesRwy24s =
   | WaypointNamesRwy24sUnique
+  | WaypointNamesCommon;
+export type WaypointNamesRwy15s =
+  | WaypointNamesRwy15sUnique
+  | WaypointNamesCommon;
+export type WaypointNamesRwy33s =
+  | WaypointNamesRwy33sUnique
   | WaypointNamesCommon;
 
 export type WaypointNamesCommon =
@@ -102,3 +109,26 @@ type WaypointNamesRwy24sUnique =
   | 'SAVUR'
   | 'SEKIT'
   | 'TILAM';
+
+type WaypointNamesRwy15sUnique =
+  | 'BOVAL'
+  | 'VIBNA'
+  | 'IPSOT'
+  | 'BORUX'
+  | 'ETLER'
+  | 'ALKUT'
+  | 'PUTON'
+  | 'KODAL';
+
+type WaypointNamesRwy33sUnique =
+  | 'NUBAX'
+  | 'TANGU'
+  | 'TETAD'
+  | 'SERPI'
+  | 'VIVET'
+  | 'NUBAN'
+  | 'BOTIB'
+  | 'IGTUL'
+  | 'DUVAK'
+  | 'AVROS'
+  | 'PUTON';

@@ -18,13 +18,12 @@ import { selectSimOptions } from '../state/slices/simOptionsSlice';
 
 import styles from './FdeSection.module.scss';
 import SimOptionsModal from './SimOptionsModal';
-import StripPanel, { Size } from './StripPanel';
+import StripPanel, { Size, StripPanelName } from './StripPanel';
 
 const FdeSection = () => {
   const dispatch = useAppDispatch();
   const strips = useAppSelector(selectDepartureList);
   const simOptions = useAppSelector(selectSimOptions);
-
   const [stripList, setStripList] = useState({
     readyNorthPanel: [] as DepFDE[],
     readySouthPanel: [] as DepFDE[],
@@ -176,39 +175,39 @@ const FdeSection = () => {
     <main className={styles.FdeSection}>
       <section className={styles.NorthDepCol}>
         <StripPanel
-          title="READY - N"
+          title={StripPanelName.READY_N}
           height={Size.SM}
           strips={stripList.readyNorthPanel}
         />
         <StripPanel
-          title="IN POSITION - N"
+          title={StripPanelName.IN_POSITION_N}
           height={Size.SM}
           strips={stripList.inPositionNorthPanel}
         />
         <StripPanel
-          title="AIRBORNE - N"
+          title={StripPanelName.AIRBORNE_N}
           height={Size.LG}
           strips={stripList.airborneNorthPanel}
         />
         <StripPanel
-          title="SATELLITE PENDING"
+          title={StripPanelName.SATELLITE_PENDING}
           height={Size.MD}
           strips={stripList.satellitePendingPanel}
         />
       </section>
       <section className={styles.SouthDepCol}>
         <StripPanel
-          title="READY - S"
+          title={StripPanelName.READY_S}
           height={Size.SM}
           strips={stripList.readySouthPanel}
         />
         <StripPanel
-          title="IN POSITION - S"
+          title={StripPanelName.IN_POSITION_S}
           height={Size.SM}
           strips={stripList.inPositionSouthPanel}
         />
         <StripPanel
-          title="AIRBORNE - S"
+          title={StripPanelName.AIRBORNE_S}
           height={Size.LG}
           strips={stripList.airborneSouthPanel}
         />

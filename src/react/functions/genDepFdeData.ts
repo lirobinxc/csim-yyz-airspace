@@ -139,6 +139,7 @@ export function genDepFdeData(
   // const satRouteData = genSatFdeData(rwyId);
 
   const depFDE = {
+    uniqueKey: `${callsign.fullCallsign}${Math.random().toFixed(5)}`,
     acModelFull,
     acId: { code: callsign.fullCallsign, spoken: spokenCallsignFormatted },
     acType: aircraft.type,
@@ -169,6 +170,7 @@ export function genDepFdeData(
     satFdeData: {} as SatelliteData,
     sidName,
     transponderCode,
+    isStripSelected: false,
   };
 
   return depFDE;

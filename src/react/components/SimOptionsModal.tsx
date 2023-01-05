@@ -1,7 +1,10 @@
 import clsx from 'clsx';
 import { useAppDispatch, useAppSelector } from '../state/hooks';
 import { departureListActions } from '../state/slices/departureListSlice';
-import { selectSimOptions } from '../state/slices/simOptionsSlice';
+import {
+  selectSimOptions,
+  simOptionsActions,
+} from '../state/slices/simOptionsSlice';
 import Modal from 'react-modal';
 
 import styles from './SimOptionsModal.module.scss';
@@ -24,6 +27,7 @@ const SimOptionsModal = ({
   const [tempOptions, setTempOptions] = useState(simOptions);
 
   function applyOptions() {
+    dispatch(simOptionsActions.applyOptions(tempOptions));
     dispatch(departureListActions.restartSim());
   }
 
@@ -34,9 +38,7 @@ const SimOptionsModal = ({
   }
 
   function setIsSingleOps(e: React.FormEvent) {
-    // const target = e.target as HTMLInputElement;
-    // const value = target.value;
-    // setTempOptions({ ...tempOptions, isSingleOps: value });
+    setTempOptions({ ...tempOptions, isSingleOps: !tempOptions.isSingleOps });
   }
 
   function setStartingCount(e: React.FormEvent) {
@@ -83,6 +85,9 @@ const SimOptionsModal = ({
             onChange={setStartingCount}
           />
         </label>
+        <button className={styles.applyButton} onClick={applyOptions}>
+          APPLY OPTIONS
+        </button>
       </form>
     </Modal>
   );

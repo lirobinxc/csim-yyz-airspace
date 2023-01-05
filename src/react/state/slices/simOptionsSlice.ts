@@ -17,6 +17,7 @@ export interface SimOptions {
   intervalBetweenNormalDeps: number; // ms
   intervalBetweenVisualDeps: number; // ms
   isModalOpen: boolean;
+  selectedStrip: string | null;
 }
 
 const initialState: SimOptions = genSimOptions();
@@ -31,6 +32,17 @@ export const simOptions = createSlice({
     },
     closeModal: (state) => {
       return { ...state, isModalOpen: false };
+    },
+    applyOptions: (state, action: PayloadAction<SimOptions>) => {
+      const newOptions: SimOptions = { ...state, ...action.payload };
+      localStorage.setItem(
+        LocalStorageKeys.SIM_OPTIONS,
+        JSON.stringify(newOptions)
+      );
+      return newOptions;
+    },
+    setSelectedStrip: (state, action: PayloadAction<string | null>) => {
+      return { ...state, isStripSelected: action.payload };
     },
     resetLocalStorageToDefaults: () => {
       console.log('resetLocalStorage');

@@ -13,6 +13,7 @@ export const defaultSimOptions: SimOptions = {
   intervalBetweenNormalDeps: 50_000, // should be ???
   intervalBetweenVisualDeps: 25_000,
   isModalOpen: false,
+  selectedStrip: null,
 };
 
 const localStorage = window.localStorage;

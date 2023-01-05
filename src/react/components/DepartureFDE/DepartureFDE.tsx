@@ -11,6 +11,7 @@ import { DepFDE } from '../../functions/genDepFdeData';
 import { SatelliteData } from '../../data/satelliteCollection';
 import useInterval from 'use-interval';
 import { AcType } from '../../../phaser/types/AircraftTypes';
+import { simOptionsActions } from '../../state/slices/simOptionsSlice';
 
 function DepartureFDE({
   acModelFull,
@@ -31,6 +32,8 @@ function DepartureFDE({
   transponderCode,
   isVDP,
   depRunway,
+  uniqueKey,
+  isStripSelected,
 }: DepFDE) {
   const dispatch = useAppDispatch();
 
@@ -71,6 +74,16 @@ function DepartureFDE({
     return assignedHeading;
   }
 
+  function toggleSelectStrip() {
+    if (isStripSelected) {
+      dispatch(departureListActions.deselectAllStrips());
+      dispatch(simOptionsActions.setSelectedStrip(null));
+    } else {
+      dispatch(departureListActions.setSelectedStrip(uniqueKey));
+      dispatch(simOptionsActions.setSelectedStrip(uniqueKey));
+    }
+  }
+
   useInterval(() => {
     setIsAirborne(true);
   }, 8000);
@@ -78,9 +91,16 @@ function DepartureFDE({
   const departureRunwayFormatted = depRunway?.split(' ')[2];
 
   return (
-    <section className={clsx(styles.FlightStrip, styles.flexCol)}>
+    <section
+      className={clsx(styles.FlightStrip, styles.flexCol, {
+        [styles.borderYellow]: isStripSelected,
+      })}
+    >
       <div className={clsx(styles.topRow, styles.flexRow)}>
-        <div className={clsx(styles.col1, { [styles.bgYellow]: isVDP })}>
+        <div
+          className={clsx(styles.col1, { [styles.bgYellow]: isVDP })}
+          onClick={toggleSelectStrip}
+        >
           <div className={clsx(styles.acId)}>{acId.code}</div>
         </div>
         <div className={clsx(styles.col2)}>
