@@ -25,6 +25,13 @@ export type WaypointNamesAll =
   | WaypointNamesRwy06s
   | WaypointNamesRwy24s;
 
+export type WaypointNamesRwy06s =
+  | WaypointNamesRwy06sUnique
+  | WaypointNamesCommon;
+export type WaypointNamesRwy24s =
+  | WaypointNamesRwy24sUnique
+  | WaypointNamesCommon;
+
 export type WaypointNamesCommon =
   | 'ANCOL'
   | 'AVSEP'
@@ -68,111 +75,30 @@ export type WaypointNamesCommon =
   | 'YWT'
   | 'YYZ';
 
-export type WaypointNamesRwy06s =
+type WaypointNamesRwy06sUnique =
   | 'ALKUT'
   | 'ANCOL'
   | 'AVROS'
-  | 'AVSEP'
-  | 'BETES'
   | 'BIRLI'
-  | 'DEDKI'
-  | 'DUSOM'
   | 'DUVKO'
-  | 'EBKIN'
   | 'GOTIM'
-  | 'IKLEN'
   | 'KEDSI'
-  | 'KEPTA'
-  | 'KISEP'
   | 'KODAL'
-  | 'LETOR'
   | 'MEMPA'
-  | 'MIXUT'
   | 'MOBEL'
-  | 'NADUM'
-  | 'NOSIK'
-  | 'NUGOP'
-  | 'OAKVL'
   | 'OMAPA'
   | 'PERLO'
   | 'PUTON'
-  | 'RIGUS'
-  | 'RIKEM'
-  | 'SEDOG'
   | 'SIDVU'
-  | 'TANGI'
-  | 'TESUK'
-  | 'TEVAD'
-  | 'TONNY'
-  | 'TULEK'
-  | 'URSAL'
-  | 'VERDO'
-  | 'VIDRA'
-  | 'BIMTI' // Start of satellite points
-  | 'DAVSI'
-  | 'MUXIG'
-  | 'MUXIG'
-  | 'OO'
-  | 'ROKTO'
-  | 'SANIN'
-  | 'SAXIL'
-  | 'TALEB'
-  | 'UDMIK'
-  | 'UKPAG'
-  | 'YFD'
-  | 'YHM'
-  | 'YKZ'
-  | 'YWT'
-  | 'YYZ';
+  | 'VIDRA';
 
-export type WaypointNamesRwy24s =
-  | 'ANCOL'
-  | 'AVSEP'
-  | 'BETES'
+type WaypointNamesRwy24sUnique =
   | 'BISTI'
-  | 'DEDKI'
-  | 'DUSOM'
-  | 'EBKIN'
   | 'GAGPO'
-  | 'IKLEN'
-  | 'KEPTA'
-  | 'KISEP'
-  | 'LETOR'
   | 'MATES'
   | 'MAVAN'
-  | 'MIXUT'
   | 'MURNO'
-  | 'NADUM'
   | 'NAMGI'
-  | 'NOSIK'
-  | 'NUGOP'
-  | 'OAKVL'
-  | 'RIGUS'
-  | 'RIKEM'
   | 'SAVUR'
-  | 'SEDOG'
   | 'SEKIT'
-  | 'TANGI'
-  | 'TESUK'
-  | 'TEVAD'
-  | 'TILAM'
-  | 'TONNY'
-  | 'TULEK'
-  | 'URSAL'
-  | 'VERDO'
-  | 'BIMTI' // Start of satellite points
-  | 'DAVSI'
-  | 'MUXIG'
-  | 'MUXIG'
-  | 'OO'
-  | 'ROKTO'
-  | 'SANIN'
-  | 'SAXIL'
-  | 'TALEB'
-  | 'UDMIK'
-  | 'UKPAG'
-  | 'YFD'
-  | 'YHM'
-  | 'YKZ'
-  | 'YWT'
-  | 'YYZ';
+  | 'TILAM';
