@@ -171,7 +171,6 @@ export default class Plane extends Phaser.GameObjects.Container {
     if (sidOrPropTurnHeading && this.Properties.acType === AcType.PROP) {
       sayHeading = `, heading ${convertHeadingNumToText(sidOrPropTurnHeading)}`;
     }
-    console.log({ sayHeading });
 
     this.talk(
       `Departure, ${acIdSpoken}${spokenWtc} with you out of ${currAltRounded} for ${

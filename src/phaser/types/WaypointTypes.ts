@@ -51,11 +51,14 @@ export type WaypointNamesCommon =
   | 'TULEK'
   | 'URSAL'
   | 'VERDO'
-  | 'DAVSI' // Start of satellite points
+  | 'BIMTI' // Start of satellite points
+  | 'DAVSI'
+  | 'MUXIG'
   | 'MUXIG'
   | 'OO'
   | 'ROKTO'
   | 'SANIN'
+  | 'SAXIL'
   | 'TALEB'
   | 'UDMIK'
   | 'UKPAG'
@@ -105,11 +108,14 @@ export type WaypointNamesRwy06s =
   | 'URSAL'
   | 'VERDO'
   | 'VIDRA'
-  | 'DAVSI' // Start of satellite points
+  | 'BIMTI' // Start of satellite points
+  | 'DAVSI'
+  | 'MUXIG'
   | 'MUXIG'
   | 'OO'
   | 'ROKTO'
   | 'SANIN'
+  | 'SAXIL'
   | 'TALEB'
   | 'UDMIK'
   | 'UKPAG'
@@ -154,11 +160,14 @@ export type WaypointNamesRwy24s =
   | 'TULEK'
   | 'URSAL'
   | 'VERDO'
-  | 'DAVSI' // Start of satellite points
+  | 'BIMTI' // Start of satellite points
+  | 'DAVSI'
+  | 'MUXIG'
   | 'MUXIG'
   | 'OO'
   | 'ROKTO'
   | 'SANIN'
+  | 'SAXIL'
   | 'TALEB'
   | 'UDMIK'
   | 'UKPAG'

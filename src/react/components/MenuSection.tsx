@@ -19,13 +19,6 @@ const MenuSection = ({ appVersion }: MenuSectionProps) => {
   const simOptions = useAppSelector(selectSimOptions);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    console.log(simOptions.isModalOpen);
-    console.log(simOptions.isModalOpen);
-    console.log(simOptions.isModalOpen);
-    console.log(simOptions.isModalOpen);
-  }, [simOptions.isModalOpen, dispatch]);
-
   function restartSim() {
     dispatch(departureListActions.restartSim());
   }

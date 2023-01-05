@@ -70,7 +70,7 @@ export default class RunwayOrigins {
         Rwy12_30: new Phaser.Math.Vector2(0.176, 0.966),
       },
       YKF: {
-        Rwy08_26: new Phaser.Math.Vector2(-0.1, 0.581),
+        Rwy08_26: new Phaser.Math.Vector2(-0.3, 0.636),
       },
     };
 

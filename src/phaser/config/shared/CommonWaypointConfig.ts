@@ -260,7 +260,7 @@ export const CommonWaypointList: WaypointDataCommon[] = [
   },
   {
     name: 'VERDO',
-    relativeCoord: new Phaser.Math.Vector2(1, 0.543),
+    relativeCoord: new Phaser.Math.Vector2(),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -272,7 +272,7 @@ export const CommonWaypointList: WaypointDataCommon[] = [
   // Satellite points (WIP)
   {
     name: 'DAVSI',
-    relativeCoord: new Phaser.Math.Vector2(1, 0.543),
+    relativeCoord: new Phaser.Math.Vector2(0.792, 0.512),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -283,7 +283,7 @@ export const CommonWaypointList: WaypointDataCommon[] = [
   },
   {
     name: 'YYZ',
-    relativeCoord: new Phaser.Math.Vector2(1, 0.543),
+    relativeCoord: new Phaser.Math.Vector2(0.5, 0.518),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -294,7 +294,7 @@ export const CommonWaypointList: WaypointDataCommon[] = [
   },
   {
     name: 'UDMIK',
-    relativeCoord: new Phaser.Math.Vector2(1, 0.543),
+    relativeCoord: new Phaser.Math.Vector2(0.293, 0.805),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -305,7 +305,29 @@ export const CommonWaypointList: WaypointDataCommon[] = [
   },
   {
     name: 'MUXIG',
-    relativeCoord: new Phaser.Math.Vector2(1, 0.543),
+    relativeCoord: new Phaser.Math.Vector2(0.321, 0.824),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: AcType.JET,
+  },
+  {
+    name: 'BIMTI',
+    relativeCoord: new Phaser.Math.Vector2(0.22, 0.852),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: AcType.JET,
+  },
+  {
+    name: 'SAXIL',
+    relativeCoord: new Phaser.Math.Vector2(0.08, 0.804),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -316,7 +338,7 @@ export const CommonWaypointList: WaypointDataCommon[] = [
   },
   {
     name: 'ROKTO',
-    relativeCoord: new Phaser.Math.Vector2(1, 0.543),
+    relativeCoord: new Phaser.Math.Vector2(0.061, 0.605),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -327,7 +349,7 @@ export const CommonWaypointList: WaypointDataCommon[] = [
   },
   {
     name: 'SANIN',
-    relativeCoord: new Phaser.Math.Vector2(1, 0.543),
+    relativeCoord: new Phaser.Math.Vector2(1.2, 0.14),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -338,7 +360,7 @@ export const CommonWaypointList: WaypointDataCommon[] = [
   },
   {
     name: 'UKPAG',
-    relativeCoord: new Phaser.Math.Vector2(1, 0.543),
+    relativeCoord: new Phaser.Math.Vector2(1.2, 0.317),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -349,7 +371,7 @@ export const CommonWaypointList: WaypointDataCommon[] = [
   },
   {
     name: 'YFD',
-    relativeCoord: new Phaser.Math.Vector2(1, 0.543),
+    relativeCoord: new Phaser.Math.Vector2(-0.2, 0.948),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -360,7 +382,7 @@ export const CommonWaypointList: WaypointDataCommon[] = [
   },
   {
     name: 'YHM',
-    relativeCoord: new Phaser.Math.Vector2(1, 0.543),
+    relativeCoord: new Phaser.Math.Vector2(0.188, 0.974),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -371,7 +393,7 @@ export const CommonWaypointList: WaypointDataCommon[] = [
   },
   {
     name: 'YKZ',
-    relativeCoord: new Phaser.Math.Vector2(1, 0.543),
+    relativeCoord: new Phaser.Math.Vector2(0.724, 0.341),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -382,7 +404,7 @@ export const CommonWaypointList: WaypointDataCommon[] = [
   },
   {
     name: 'OO',
-    relativeCoord: new Phaser.Math.Vector2(1, 0.543),
+    relativeCoord: new Phaser.Math.Vector2(1.2, 0.296),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -393,7 +415,7 @@ export const CommonWaypointList: WaypointDataCommon[] = [
   },
   {
     name: 'YWT',
-    relativeCoord: new Phaser.Math.Vector2(1, 0.543),
+    relativeCoord: new Phaser.Math.Vector2(0.0, 0.619),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -404,7 +426,7 @@ export const CommonWaypointList: WaypointDataCommon[] = [
   },
   {
     name: 'TALEB',
-    relativeCoord: new Phaser.Math.Vector2(1, 0.543),
+    relativeCoord: new Phaser.Math.Vector2(1.2, 0.395),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
