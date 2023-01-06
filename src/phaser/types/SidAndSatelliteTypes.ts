@@ -26,3 +26,10 @@ export enum SidName {
   NOSIK = 'NOSIK DEP',
   NUGOP = 'NUGOP DEP',
 }
+
+export enum SatelliteName {
+  YHM_ARR = 'YHM ARR',
+  YHM_DEP_UKPAG = 'YHM DEP',
+  YHM_DEP_ = 'YHM DEP',
+  YKZ_DEP_DAVSI = 'YKZ_DEP',
+}

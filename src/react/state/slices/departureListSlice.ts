@@ -7,7 +7,7 @@ import {
   OtherSceneKeys,
   RadarSceneKeys,
 } from '../../../phaser/types/SceneKeys';
-import { SidName } from '../../../phaser/types/SidTypes';
+import { SidName } from '../../../phaser/types/SidAndSatelliteTypes';
 import { determineIfVdpAllowed } from '../../functions/determineIfVdpAllowed';
 import {
   DeparturePhase,

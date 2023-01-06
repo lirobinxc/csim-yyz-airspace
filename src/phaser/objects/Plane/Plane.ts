@@ -17,7 +17,7 @@ import PlanePTL from './PlanePTL';
 import RadarScene from '../../scenes/RadarScene';
 import { GameObjectOptions } from '../../types/GameObjectOptions';
 import PlaneHistoryTrail from './PlaneHistoryTrail';
-import { SidName } from '../../types/SidTypes';
+import { SidName } from '../../types/SidAndSatelliteTypes';
 import { SidRoute06s } from '../../config/Rwy06sSidConfig';
 import { DepRunwayAll } from '../../types/AirportTypes';
 import { DomEvents } from '../../types/DomEvents';

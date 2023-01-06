@@ -1,7 +1,7 @@
 import { AcModel, AcType, AcWTC } from './AircraftTypes';
 import { DepRunwayAll } from './AirportTypes';
 import { AdjacentSectors, TerminalSectors } from './SectorTypes';
-import { SidName } from './SidTypes';
+import { SidName } from './SidAndSatelliteTypes';
 import { WaypointDataAll } from './WaypointTypes';
 
 export interface PlaneProperties {

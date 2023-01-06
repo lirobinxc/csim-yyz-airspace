@@ -1,5 +1,5 @@
 import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
-import { SidName } from '../../phaser/types/SidTypes';
+import { SidName } from '../../phaser/types/SidAndSatelliteTypes';
 import { DeparturePosition } from './genDepFdeData';
 
 export function determineIfNorthOrSouthDep(

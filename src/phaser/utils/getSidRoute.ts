@@ -1,7 +1,7 @@
 import { SidRoute06s } from '../config/Rwy06sSidConfig';
 import RadarScene from '../scenes/RadarScene';
 import { RadarSceneKeys } from '../types/SceneKeys';
-import { SidName } from '../types/SidTypes';
+import { SidName } from '../types/SidAndSatelliteTypes';
 
 export function getSidRoute(runwayConfig: RadarSceneKeys, sidName: SidName) {
   switch (runwayConfig) {

@@ -1,6 +1,6 @@
 import { Rwy06sWaypointDict } from './Rwy06sWaypointConfig';
 import { WaypointData06s } from '../types/WaypointTypes';
-import { SidName } from '../types/SidTypes';
+import { SidName } from '../types/SidAndSatelliteTypes';
 
 export const SidRoute06s: {
   [key in SidName]: WaypointData06s[];

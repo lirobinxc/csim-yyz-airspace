@@ -7,7 +7,7 @@ import { destinationCollection } from '../data/destinationCollection';
 import { SatelliteData } from '../data/satelliteCollection';
 import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
 import { AcModel, AcType, AcWTC } from '../../phaser/types/AircraftTypes';
-import { SidName } from '../../phaser/types/SidTypes';
+import { SidName } from '../../phaser/types/SidAndSatelliteTypes';
 import { DepRunwayAll } from '../../phaser/types/AirportTypes';
 import { determineIfNorthOrSouthDep } from './determineIfNorthOrSouthDep';
 import { determineDepRunwayYYZ } from './determineDepRunway';

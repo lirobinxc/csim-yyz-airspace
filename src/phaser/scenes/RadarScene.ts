@@ -20,7 +20,7 @@ import fontXml_DejaVuMonoBold from '../assets/font/FontDejaVuMonoBold.xml';
 import cursor_PlaneCursor from '../assets/PlaneCursor.cur';
 import { convertRadiansToHeading } from '../utils/convertRadiansToHeading';
 import DebugButton from '../objects/DebugButton';
-import { SidName } from '../types/SidTypes';
+import { SidName } from '../types/SidAndSatelliteTypes';
 import { SidRoute06s } from '../config/Rwy06sSidConfig';
 import { DepRunwayYYZ } from '../types/AirportTypes';
 import { PhaserCustomEvents, ReactCustomEvents } from '../types/CustomEvents';
