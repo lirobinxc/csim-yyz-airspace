@@ -38,6 +38,7 @@ import {
 import { convertNumToText } from '../../../react/functions/convertNumToText';
 import { convertHeadingNumToText } from '../../../react/functions/convertHeadingNumToText';
 import FiledRouteLine from '../FiledRouteLine';
+import PlaneHandoffMenu from './PlaneHandoffMenu';
 
 export default class Plane extends Phaser.GameObjects.Container {
   // Plane Properties
@@ -67,6 +68,7 @@ export default class Plane extends Phaser.GameObjects.Container {
   // private PlaneRouteLine: PlaneRouteLine;
   private Behaviour: PlaneBehaviour;
   public CommandMenu: PlaneCommandMenu;
+  public HandoffMenu: PlaneHandoffMenu;
 
   constructor(
     scene: RadarScene,
@@ -103,10 +105,9 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.TagLine = new PlaneDataTagLine(this, this.Symbol, this.DataTag);
     this.PTL = new PlanePTL(this, this.Symbol, 60);
     this.HistoryTrail = new PlaneHistoryTrail(this, this.Symbol);
-    // this.PlaneRouteLine = new PlaneRouteLine(this);
     this.CommandMenu = new PlaneCommandMenu(this);
+    this.HandoffMenu = new PlaneHandoffMenu(this);
     this.add([
-      // this.PlaneRouteLine,
       this.HistoryTrail,
       this.CommandMenu,
       this.PTL,

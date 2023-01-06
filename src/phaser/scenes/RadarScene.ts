@@ -168,7 +168,9 @@ export default class RadarScene extends Phaser.Scene {
     this.events.on(
       PhaserCustomEvents.ACID_CLICKED,
       ({ plane, pointer }: { plane: Plane; pointer: Phaser.Input.Pointer }) => {
-        if (pointer.rightButtonDown()) return;
+        if (pointer.rightButtonDown()) {
+          return;
+        }
         if (pointer.middleButtonDown()) return;
 
         if (this.FiledRouteLine) {
