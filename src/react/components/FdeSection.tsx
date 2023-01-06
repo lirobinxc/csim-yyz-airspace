@@ -86,6 +86,8 @@ const FdeSection = () => {
 
   // Interval: Add new strip
   useRandomInterval(() => {
+    if (simOptions.isPaused) return;
+
     if (
       stripList.readyNorthPanel.length < 3 ||
       stripList.readySouthPanel.length < 3
@@ -103,6 +105,8 @@ const FdeSection = () => {
   // Interval: Move from panels READY N/S -> IN POSITION N/S
   useRandomInterval(
     () => {
+      if (simOptions.isPaused) return;
+
       if (stripList.inPositionNorthPanel.length === 0) {
         dispatch(
           departureListActions.setToInPosition(stripList.readyNorthPanel[0])
@@ -119,6 +123,8 @@ const FdeSection = () => {
   );
   useRandomInterval(
     () => {
+      if (simOptions.isPaused) return;
+
       if (stripList.inPositionSouthPanel.length === 0) {
         dispatch(
           departureListActions.setToInPosition(stripList.readySouthPanel[0])
@@ -136,6 +142,8 @@ const FdeSection = () => {
 
   // Interval: (NORMAL) Move from panel IN POSITION -> AIRBORNE
   useInterval(() => {
+    if (simOptions.isPaused) return;
+
     const currTime = Date.now();
     const currInPositionNFde = stripList.inPositionNorthPanel[0];
     const currInPositionSFde = stripList.inPositionSouthPanel[0];

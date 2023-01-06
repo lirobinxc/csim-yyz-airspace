@@ -18,6 +18,7 @@ export interface SimOptions {
   intervalBetweenVisualDeps: number; // ms
   isModalOpen: boolean;
   selectedStrip: string | null;
+  isPaused: boolean;
 }
 
 const initialState: SimOptions = genSimOptions();
@@ -43,6 +44,9 @@ export const simOptions = createSlice({
     },
     setSelectedStrip: (state, action: PayloadAction<string | null>) => {
       return { ...state, isStripSelected: action.payload };
+    },
+    setPauseSim: (state, action: PayloadAction<boolean>) => {
+      return { ...state, isPaused: action.payload };
     },
     resetLocalStorageToDefaults: () => {
       console.log('resetLocalStorage');

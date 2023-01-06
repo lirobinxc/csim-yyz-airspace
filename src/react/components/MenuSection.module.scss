@@ -94,5 +94,17 @@
     .vdp {
       background-color: $limeGreen;
     }
+
+    .redBg {
+      background-color: red;
+
+      animation: blinker 1s linear infinite;
+    }
+  }
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
   }
 }

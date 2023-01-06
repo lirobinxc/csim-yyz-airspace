@@ -14,6 +14,7 @@ export const defaultSimOptions: SimOptions = {
   intervalBetweenVisualDeps: 25_000,
   isModalOpen: false,
   selectedStrip: null,
+  isPaused: false,
 };
 
 const localStorage = window.localStorage;

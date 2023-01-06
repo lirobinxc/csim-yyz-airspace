@@ -7,32 +7,54 @@
     display: flex;
     justify-content: center;
 
-    margin: 0;
+    margin: $spacingLg;
     padding: 0;
   }
 
-  label {
-    display: block;
+  .formContainer {
+    display: flex;
+    justify-content: center;
 
-    margin: $fontSizeLg;
-  }
+    form {
+      display: flex;
+      flex-direction: column;
 
-  input.checkbox {
-    width: $fontSizeLg;
-    height: $fontSizeLg;
-  }
+      max-width: 30rem;
 
-  input,
-  select {
-    margin-left: $fontSizeMd;
+      label {
+        display: block;
 
-    font-size: $fontSizeLg;
-  }
+        margin: $fontSizeLg;
+      }
 
-  .applyButton {
-    margin: $fontSizeLg;
-    padding: $spacingMd;
+      input.checkbox {
+        width: $fontSizeLg;
+        height: $fontSizeLg;
+      }
 
-    font-size: $fontSizeXl;
+      input,
+      select {
+        margin-left: $fontSizeMd;
+
+        font-size: $fontSizeLg;
+      }
+
+      .applyButton,
+      .restoreDefaultsButton {
+        margin: $spacingMd;
+        padding: $spacingMd;
+      }
+
+      .applyButton {
+        margin-top: $spacingXl;
+
+        font-weight: bold;
+        font-size: $fontSizeXl;
+      }
+
+      .restoreDefaultsButton {
+        font-size: $fontSizeLg;
+      }
+    }
   }
 }

@@ -52,6 +52,10 @@ const SimOptionsModal = ({
     setTempOptions({ ...tempOptions, startingCount: value });
   }
 
+  function restoreDefaults() {
+    dispatch(simOptionsActions.resetLocalStorageToDefaults());
+  }
+
   return (
     <Modal
       isOpen={isOpen}
@@ -60,35 +64,43 @@ const SimOptionsModal = ({
       portalClassName={styles.SimOptionsModal}
     >
       <h2>CSiM Options</h2>
-      <form>
-        <label>
-          CYYZ Runway Config
-          <select onChange={setRadarScene}>
-            <option value={RadarSceneKeys.RADAR_06s}>Rwy 05/06LR</option>
-          </select>
-        </label>
-        <label>
-          Single runway operations
-          <input
-            type="checkbox"
-            className={styles.checkbox}
-            checked={tempOptions.isSingleOps}
-            onChange={setIsSingleOps}
-          />
-        </label>
-        <label>
-          Starting # of strips
-          <input
-            type="number"
-            name="totalItems"
-            value={tempOptions.startingCount}
-            onChange={setStartingCount}
-          />
-        </label>
-        <button className={styles.applyButton} onClick={applyOptions}>
-          APPLY OPTIONS
-        </button>
-      </form>
+      <section className={styles.formContainer}>
+        <form>
+          <label>
+            CYYZ Runway Config
+            <select onChange={setRadarScene}>
+              <option value={RadarSceneKeys.RADAR_06s}>Rwy 05/06LR</option>
+            </select>
+          </label>
+          <label>
+            Single runway operations
+            <input
+              type="checkbox"
+              className={styles.checkbox}
+              checked={tempOptions.isSingleOps}
+              onChange={setIsSingleOps}
+            />
+          </label>
+          <label>
+            Starting # of strips
+            <input
+              type="number"
+              name="totalItems"
+              value={tempOptions.startingCount}
+              onChange={setStartingCount}
+            />
+          </label>
+          <button className={styles.applyButton} onClick={applyOptions}>
+            APPLY OPTIONS
+          </button>
+          <button
+            className={styles.restoreDefaultsButton}
+            onClick={restoreDefaults}
+          >
+            Restore Defaults
+          </button>
+        </form>
+      </section>
     </Modal>
   );
 };

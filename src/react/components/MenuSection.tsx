@@ -31,6 +31,14 @@ const MenuSection = ({ appVersion }: MenuSectionProps) => {
     setIsModalOpen(false);
   }
 
+  function togglePauseSim() {
+    if (simOptions.isPaused) {
+      dispatch(simOptionsActions.setPauseSim(false));
+    } else {
+      dispatch(simOptionsActions.setPauseSim(true));
+    }
+  }
+
   return (
     <header className={styles.MenuSection}>
       <SimOptionsModal isOpen={isModalOpen} requestCloseModal={closeModal} />
@@ -51,7 +59,14 @@ const MenuSection = ({ appVersion }: MenuSectionProps) => {
           <div>1110:29</div>
           <div>*2984*</div>
         </div>
-        <button className={clsx(styles.spacing, styles.fir)}>FIR</button>
+        <button
+          className={clsx(styles.spacing, styles.fir, {
+            [styles.redBg]: simOptions.isPaused,
+          })}
+          onClick={togglePauseSim}
+        >
+          {simOptions.isPaused ? 'PAUSED' : 'PAUSE'}
+        </button>
         <button className={clsx(styles.spacing)}>XX</button>
         <button className={clsx(styles.spacing)}>A4</button>
         <button className={clsx(styles.spacing)}>A3</button>
