@@ -33,9 +33,9 @@ const MenuSection = ({ appVersion }: MenuSectionProps) => {
 
   function togglePauseSim() {
     if (simOptions.isPaused) {
-      dispatch(simOptionsActions.setPauseSim(false));
+      dispatch(simOptionsActions.unpauseSim());
     } else {
-      dispatch(simOptionsActions.setPauseSim(true));
+      dispatch(simOptionsActions.pauseSim());
     }
   }
 

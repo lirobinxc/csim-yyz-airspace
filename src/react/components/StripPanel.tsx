@@ -1,7 +1,11 @@
 import clsx from 'clsx';
-import { DepFDE } from '../functions/genDepFdeData';
+import { DeparturePosition, DepFDE } from '../functions/genDepFdeData';
 import { useAppDispatch, useAppSelector } from '../state/hooks';
-import { selectSimOptions } from '../state/slices/simOptionsSlice';
+import { departureListActions } from '../state/slices/departureListSlice';
+import {
+  selectSimOptions,
+  simOptionsActions,
+} from '../state/slices/simOptionsSlice';
 import DepartureFDE from './DepartureFDE/DepartureFDE';
 import PendingDepartureFDE from './PendingDepartureFDE/PendingDepartureFDE';
 
@@ -25,11 +29,17 @@ export enum StripPanelName {
 
 interface StripPanelProps {
   title: StripPanelName;
+  depPosition: DeparturePosition;
   height: Size;
   strips: DepFDE[];
 }
 
-const StripPanel = ({ title, height, strips }: StripPanelProps) => {
+const StripPanel = ({
+  title,
+  height,
+  depPosition,
+  strips,
+}: StripPanelProps) => {
   const dispatch = useAppDispatch();
   const simOptions = useAppSelector(selectSimOptions);
 
@@ -37,8 +47,21 @@ const StripPanel = ({ title, height, strips }: StripPanelProps) => {
     return styles[`Size${height}`];
   }
 
-  function handlePanelBgClick() {
+  function handlePanelBgClick(e: React.MouseEvent<HTMLElement, MouseEvent>) {
     if (!simOptions.selectedStrip) return;
+
+    if (simOptions.selectedStrip.depPosition === depPosition) {
+      dispatch(simOptionsActions.removeSelectedStrip());
+      return;
+    }
+
+    dispatch(
+      departureListActions.setStripDepPosition({
+        uniqueKey: simOptions.selectedStrip.uniqueKey,
+        depPosition: depPosition,
+      })
+    );
+    dispatch(simOptionsActions.removeSelectedStrip());
   }
 
   function displayStrips() {

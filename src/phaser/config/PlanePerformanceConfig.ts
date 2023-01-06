@@ -16,8 +16,8 @@ export const PlanePerformanceConfig: {
       maxBelow10k: 250,
     },
     climbRate: {
-      initialClimb: 2400, // feet per minute
-      normalClimb: 1500,
+      initialClimb: 2100, // feet per minute
+      normalClimb: 1600,
     },
     accel: BASE_ACCEL,
   },
@@ -29,8 +29,8 @@ export const PlanePerformanceConfig: {
       maxBelow10k: 250,
     },
     climbRate: {
-      initialClimb: 2400, // feet per minute
-      normalClimb: 1500,
+      initialClimb: 2100, // feet per minute
+      normalClimb: 1600,
     },
     accel: BASE_ACCEL,
   },
@@ -55,7 +55,7 @@ export const PlanePerformanceConfig: {
       maxBelow10k: 250,
     },
     climbRate: {
-      initialClimb: 2400, // feet per minute, actual = 1500
+      initialClimb: 2200, // feet per minute, actual = 1500
       normalClimb: 1500,
     },
     accel: BASE_ACCEL,
@@ -120,7 +120,7 @@ export const PlanePerformanceConfig: {
       maxBelow10k: 230,
     },
     climbRate: {
-      initialClimb: 3000, // feet per minute
+      initialClimb: 2500, // feet per minute
       normalClimb: 1500,
     },
     accel: BASE_ACCEL,

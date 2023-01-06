@@ -170,7 +170,6 @@ export function genDepFdeData(
     satFdeData: {} as SatelliteData,
     sidName,
     transponderCode,
-    isStripSelected: false,
   };
 
   return depFDE;

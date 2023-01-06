@@ -349,12 +349,14 @@ export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
 
   private ifDirectToCommandIsSelected() {
     if (this.SELECTED_BUTTON?.name === PlaneCommandMenuButtons.DIRECT_TO) {
+      this.Plane.IS_PENDING_DIRECT_TO_COMMAND = true;
       this.COMMAND_CUE.directTo = null;
       this.Btn_DirectTo.setText(`${PlaneCommandMenuButtons.DIRECT_TO} >`);
       return;
     } else if (!this.COMMAND_CUE.directTo) {
       this.Btn_DirectTo.setText(PlaneCommandMenuButtons.DIRECT_TO);
     }
+    this.Plane.IS_PENDING_DIRECT_TO_COMMAND = false;
   }
 
   private ifAltitudeCommandIsSelected() {

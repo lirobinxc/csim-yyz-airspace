@@ -3,6 +3,7 @@
 .SimOptionsModal {
   font-size: $fontSizeLg;
   font-family: Arial, Helvetica, sans-serif;
+
   h2 {
     display: flex;
     justify-content: center;
@@ -21,15 +22,16 @@
 
       max-width: 30rem;
 
+      h3 {
+        margin: $spacingXl;
+        margin-bottom: $spacingMd;
+        padding: 0;
+      }
+
       label {
         display: block;
 
-        margin: $fontSizeLg;
-      }
-
-      input.checkbox {
-        width: $fontSizeLg;
-        height: $fontSizeLg;
+        margin: $spacingXl;
       }
 
       input,
@@ -37,6 +39,20 @@
         margin-left: $fontSizeMd;
 
         font-size: $fontSizeLg;
+      }
+
+      input.runwayConfig {
+        width: $fontSizeLg;
+        height: $fontSizeLg;
+      }
+
+      input.number {
+        max-width: 4rem;
+      }
+
+      input.checkbox {
+        width: $fontSizeLg;
+        height: $fontSizeLg;
       }
 
       .applyButton,
@@ -54,6 +70,10 @@
 
       .restoreDefaultsButton {
         font-size: $fontSizeLg;
+      }
+
+      .intervalBox {
+        margin: $spacingXs $spacingXl $spacingXs $spacingXl;
       }
     }
   }

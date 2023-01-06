@@ -1,6 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import _ from 'lodash';
-import { RadarSceneKeys } from '../../../phaser/types/SceneKeys';
+import PhaserGame from '../../../phaser/PhaserGameConfig';
+import RadarScene from '../../../phaser/scenes/RadarScene';
+import { ReactCustomEvents } from '../../../phaser/types/CustomEvents';
+import {
+  OtherSceneKeys,
+  RadarSceneKeys,
+} from '../../../phaser/types/SceneKeys';
+import { DeparturePosition, DepFDE } from '../../functions/genDepFdeData';
 import {
   defaultSimOptions,
   genSimOptions,
@@ -17,8 +24,22 @@ export interface SimOptions {
   intervalBetweenNormalDeps: number; // ms
   intervalBetweenVisualDeps: number; // ms
   isModalOpen: boolean;
-  selectedStrip: string | null;
+  selectedStrip: DepFDE | null;
   isPaused: boolean;
+}
+
+function pausePhaser() {
+  const RADAR_SCENE = PhaserGame.scene.keys[
+    OtherSceneKeys.RADAR_BASE
+  ] as RadarScene;
+  RADAR_SCENE.events.emit(ReactCustomEvents.PAUSE);
+}
+
+function unpausePhaser() {
+  const RADAR_SCENE = PhaserGame.scene.keys[
+    OtherSceneKeys.RADAR_BASE
+  ] as RadarScene;
+  RADAR_SCENE.events.emit(ReactCustomEvents.UNPAUSE);
 }
 
 const initialState: SimOptions = genSimOptions();
@@ -40,13 +61,26 @@ export const simOptions = createSlice({
         LocalStorageKeys.SIM_OPTIONS,
         JSON.stringify(newOptions)
       );
+      console.log({ newOptions });
+
       return newOptions;
     },
-    setSelectedStrip: (state, action: PayloadAction<string | null>) => {
-      return { ...state, isStripSelected: action.payload };
+    setSelectedStrip: (state, action: PayloadAction<DepFDE>) => {
+      return { ...state, selectedStrip: action.payload };
     },
-    setPauseSim: (state, action: PayloadAction<boolean>) => {
-      return { ...state, isPaused: action.payload };
+    removeSelectedStrip: (state) => {
+      const newOptions = { ...state, selectedStrip: null };
+      console.log('newOptions', newOptions.selectedStrip);
+
+      return newOptions;
+    },
+    pauseSim: (state) => {
+      pausePhaser();
+      return { ...state, isPaused: true };
+    },
+    unpauseSim: (state) => {
+      unpausePhaser();
+      return { ...state, isPaused: false };
     },
     resetLocalStorageToDefaults: () => {
       console.log('resetLocalStorage');

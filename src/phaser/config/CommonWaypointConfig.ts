@@ -1,6 +1,6 @@
-import { AcType } from '../../types/AircraftTypes';
-import { GameConfig } from '../GameConfig';
-import type { WaypointDataCommon } from '../../types/WaypointTypes';
+import { AcType } from '../types/AircraftTypes';
+import { GameConfig } from './GameConfig';
+import type { WaypointDataCommon } from '../types/WaypointTypes';
 
 const gameHeight = GameConfig.height;
 
@@ -260,7 +260,7 @@ export const CommonWaypointList: WaypointDataCommon[] = [
   },
   {
     name: 'VERDO',
-    relativeCoord: new Phaser.Math.Vector2(),
+    relativeCoord: new Phaser.Math.Vector2(1, 0.54),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,

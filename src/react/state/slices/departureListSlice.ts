@@ -16,6 +16,7 @@ import {
   genDepFdeData,
 } from '../../functions/genDepFdeData';
 import { genSatFdeData } from '../../functions/genSatFdeData';
+import { insertIntoArray } from '../../functions/insertIntoArray';
 import { genSimOptions } from '../genSimOptions';
 import { useAppDispatch } from '../hooks';
 import type { RootState } from '../store';
@@ -149,20 +150,55 @@ export const departureList = createSlice({
 
       return [...newList, { ...selectedFde, depPhase }];
     },
-    setSelectedStrip: (state, action: PayloadAction<string>) => {
-      const newStrips = state.map((strip) => {
-        if (strip.uniqueKey === action.payload) {
-          return { ...strip, isStripSelected: true };
-        } else {
-          return { ...strip, isStripSelected: false };
-        }
-      });
-      return newStrips;
+    setStripDepPosition: (
+      state,
+      action: PayloadAction<{
+        uniqueKey: string;
+        depPosition: DeparturePosition;
+      }>
+    ) => {
+      const selectedStrip = state.find(
+        (strip) => strip.uniqueKey === action.payload.uniqueKey
+      );
+
+      const otherStrips = state.filter(
+        (strip) => strip.uniqueKey !== action.payload.uniqueKey
+      );
+
+      if (selectedStrip) {
+        const newStrip: DepFDE = {
+          ...selectedStrip,
+          depPosition: action.payload.depPosition,
+        };
+
+        return [...otherStrips, newStrip];
+      }
+
+      return state;
     },
-    deselectAllStrips: (state) => {
-      const newStrips = state.map((strip) => {
-        return { ...strip, isStripSelected: false };
-      });
+    insertStripBelow: (
+      state,
+      action: PayloadAction<{ firstStrip: DepFDE; secondStrip: DepFDE }>
+    ) => {
+      const firstStrip: DepFDE = {
+        ...action.payload.firstStrip,
+        depPosition: action.payload.secondStrip.depPosition,
+      };
+
+      const otherStrips = state.filter(
+        (strip) => strip.uniqueKey !== action.payload.firstStrip.uniqueKey
+      );
+
+      const secondStripIndex = otherStrips.findIndex(
+        (strip) => strip.uniqueKey === action.payload.secondStrip.uniqueKey
+      );
+
+      const newStrips = insertIntoArray(
+        otherStrips,
+        secondStripIndex,
+        firstStrip
+      );
+
       return newStrips;
     },
     restartSim: (state) => {

@@ -214,6 +214,15 @@ export default class RadarScene extends Phaser.Scene {
     this.events.on(ReactCustomEvents.REFRESH, () => {
       window.location.reload();
     });
+
+    // On React Event: PAUSE
+    this.events.on(ReactCustomEvents.PAUSE, () => {
+      this.scene.pause();
+    });
+    // On React Event: UNPAUSE
+    this.events.on(ReactCustomEvents.UNPAUSE, () => {
+      this.scene.resume();
+    });
   }
 
   update() {
@@ -273,6 +282,21 @@ export default class RadarScene extends Phaser.Scene {
     const finalSpokenSentence = combinedSentence.join(' ');
 
     this.Speech.speak(finalSpokenSentence, currSpeechData.plane);
+  }
+
+  elevateWaypointsIfDirectToCommandIsSelected() {
+    if (this.SELECTED_PLANE) {
+      if (this.SELECTED_PLANE.IS_PENDING_DIRECT_TO_COMMAND) {
+        this.Waypoints.forEach((wp) => {
+          wp.setDepth(1000000);
+        });
+      }
+      return;
+    } else {
+      this.Waypoints.forEach((wp) => {
+        wp.setDepth(1);
+      });
+    }
   }
 
   private toggleDebug() {

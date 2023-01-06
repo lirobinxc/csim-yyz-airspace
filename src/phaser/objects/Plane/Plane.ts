@@ -51,6 +51,7 @@ export default class Plane extends Phaser.GameObjects.Container {
   public DEFAULT_DATATAG_SPACING: number; // px; horizontal space between DataTag & Symbol
   public SHOW_PTL: boolean;
   public IS_SELECTED: boolean;
+  public IS_PENDING_DIRECT_TO_COMMAND: boolean;
   public SHOW_COMMAND_OPTIONS: boolean;
   public IS_TALKING: boolean;
 
@@ -85,6 +86,7 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.IS_SELECTED = false;
     this.SHOW_COMMAND_OPTIONS = false;
     this.IS_TALKING = false;
+    this.IS_PENDING_DIRECT_TO_COMMAND = false;
 
     // Init: Name
     this.name = props.acId.code;

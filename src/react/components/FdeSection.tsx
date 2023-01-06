@@ -185,21 +185,25 @@ const FdeSection = () => {
         <StripPanel
           title={StripPanelName.READY_N}
           height={Size.SM}
+          depPosition={DeparturePosition.ND}
           strips={stripList.readyNorthPanel}
         />
         <StripPanel
           title={StripPanelName.IN_POSITION_N}
           height={Size.SM}
+          depPosition={DeparturePosition.ND}
           strips={stripList.inPositionNorthPanel}
         />
         <StripPanel
           title={StripPanelName.AIRBORNE_N}
           height={Size.LG}
+          depPosition={DeparturePosition.ND}
           strips={stripList.airborneNorthPanel}
         />
         <StripPanel
           title={StripPanelName.SATELLITE_PENDING}
           height={Size.MD}
+          depPosition={DeparturePosition.SD}
           strips={stripList.satellitePendingPanel}
         />
       </section>
@@ -207,16 +211,19 @@ const FdeSection = () => {
         <StripPanel
           title={StripPanelName.READY_S}
           height={Size.SM}
+          depPosition={DeparturePosition.SD}
           strips={stripList.readySouthPanel}
         />
         <StripPanel
           title={StripPanelName.IN_POSITION_S}
           height={Size.SM}
+          depPosition={DeparturePosition.SD}
           strips={stripList.inPositionSouthPanel}
         />
         <StripPanel
           title={StripPanelName.AIRBORNE_S}
           height={Size.LG}
+          depPosition={DeparturePosition.SD}
           strips={stripList.airborneSouthPanel}
         />
       </section>

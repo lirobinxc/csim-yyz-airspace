@@ -1,6 +1,6 @@
 import { AcType } from '../types/AircraftTypes';
 import { GameConfig } from './GameConfig';
-import { CommonWaypointList } from './shared/CommonWaypointConfig';
+import { CommonWaypointList } from './CommonWaypointConfig';
 import type { WaypointData06s, WaypointKeys06s } from '../types/WaypointTypes';
 
 const gameHeight = GameConfig.height;

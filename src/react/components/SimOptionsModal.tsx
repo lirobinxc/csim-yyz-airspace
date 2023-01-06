@@ -26,11 +26,6 @@ const SimOptionsModal = ({
   const simOptions = useAppSelector(selectSimOptions);
   const [tempOptions, setTempOptions] = useState(simOptions);
 
-  function applyOptions() {
-    dispatch(simOptionsActions.applyOptions(tempOptions));
-    dispatch(departureListActions.restartSim());
-  }
-
   function setRadarScene(e: React.FormEvent) {
     const target = e.target as HTMLOptionElement;
     const value = target.value as RadarSceneKeys;
@@ -50,6 +45,29 @@ const SimOptionsModal = ({
     if (value < 1) value = 1;
 
     setTempOptions({ ...tempOptions, startingCount: value });
+  }
+
+  function setIntervalBetweenNormalDeps(e: React.FormEvent) {
+    const target = e.target as HTMLTextAreaElement;
+    let value = Number(target.value);
+
+    if (isNaN(value)) value = simOptions.startingCount;
+
+    setTempOptions({ ...tempOptions, intervalBetweenNormalDeps: value * 1000 });
+  }
+
+  function setIntervalBetweenVisualDeps(e: React.FormEvent) {
+    const target = e.target as HTMLTextAreaElement;
+    let value = Number(target.value);
+
+    if (isNaN(value)) value = simOptions.startingCount;
+
+    setTempOptions({ ...tempOptions, intervalBetweenNormalDeps: value * 1000 });
+  }
+
+  function applyOptions() {
+    dispatch(simOptionsActions.applyOptions(tempOptions));
+    dispatch(departureListActions.restartSim());
   }
 
   function restoreDefaults() {
@@ -85,10 +103,33 @@ const SimOptionsModal = ({
             Starting # of strips
             <input
               type="number"
-              name="totalItems"
+              name="startingCount"
+              className={styles.number}
               value={tempOptions.startingCount}
               onChange={setStartingCount}
             />
+          </label>
+          <h3>Interval between Normal Departures</h3>
+          <label className={styles.intervalBox}>
+            <input
+              type="number"
+              name="minIntervalNormal"
+              className={styles.number}
+              value={tempOptions.intervalBetweenNormalDeps / 1000}
+              onChange={setIntervalBetweenNormalDeps}
+            />{' '}
+            seconds
+          </label>
+          <h3>Interval between Visual Departures</h3>
+          <label className={styles.intervalBox}>
+            <input
+              type="number"
+              name="minIntervalVisual"
+              className={styles.number}
+              value={tempOptions.intervalBetweenVisualDeps / 1000}
+              onChange={setIntervalBetweenVisualDeps}
+            />{' '}
+            seconds
           </label>
           <button className={styles.applyButton} onClick={applyOptions}>
             APPLY OPTIONS

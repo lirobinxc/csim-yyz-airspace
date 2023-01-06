@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 
 // import { ReactComponent as UpArrow } from '../images/up-arrow.svg';
 import upArrow from '../../images/up-arrow.png';
-import { useAppDispatch } from '../../state/hooks';
+import { useAppDispatch, useAppSelector } from '../../state/hooks';
 
 import styles from './DepartureFDE.module.scss';
 import { departureListActions } from '../../state/slices/departureListSlice';
@@ -11,36 +11,42 @@ import { DepFDE } from '../../functions/genDepFdeData';
 import { SatelliteData } from '../../data/satelliteCollection';
 import useInterval from 'use-interval';
 import { AcType } from '../../../phaser/types/AircraftTypes';
-import { simOptionsActions } from '../../state/slices/simOptionsSlice';
+import {
+  selectSimOptions,
+  simOptions,
+  simOptionsActions,
+} from '../../state/slices/simOptionsSlice';
 
-function DepartureFDE({
-  acModelFull,
-  acId,
-  acType,
-  assignedAlt,
-  assignedHeading,
-  coordinatedAlt,
-  destination,
-  ETA,
-  filedAlt,
-  filedRoute,
-  handoffAlt,
-  isNADP1 = false,
-  isQ400 = false,
-  onCourseWP,
-  remarks,
-  transponderCode,
-  isVDP,
-  depRunway,
-  uniqueKey,
-  isStripSelected,
-}: DepFDE) {
+function DepartureFDE(props: DepFDE) {
+  const {
+    acModelFull,
+    acId,
+    acType,
+    assignedAlt,
+    assignedHeading,
+    coordinatedAlt,
+    destination,
+    ETA,
+    filedAlt,
+    filedRoute,
+    handoffAlt,
+    isNADP1 = false,
+    isQ400 = false,
+    onCourseWP,
+    remarks,
+    transponderCode,
+    isVDP,
+    depRunway,
+    uniqueKey,
+  } = props;
+
   const dispatch = useAppDispatch();
-
+  const simOptions = useAppSelector(selectSimOptions);
   const [currentAlt, setCurrentAlt] = useState(assignedAlt);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [onCourse, setOnCourse] = useState(false);
-  const [isAirborne, setIsAirborne] = useState(false);
+  const [stripIsSelected, setStripIsSelected] = useState(false);
+  const [isCommSwitched, setIsCommSwitched] = useState(false);
 
   function isCorrectHandoffAlt() {
     if (filedAlt < Number(handoffAlt)) {
@@ -74,18 +80,38 @@ function DepartureFDE({
     return assignedHeading;
   }
 
-  function toggleSelectStrip() {
-    if (isStripSelected) {
-      dispatch(departureListActions.deselectAllStrips());
-      dispatch(simOptionsActions.setSelectedStrip(null));
+  //TEMP
+  useEffect(() => {
+    if (simOptions.selectedStrip?.uniqueKey === uniqueKey) {
+      setStripIsSelected(true);
     } else {
-      dispatch(departureListActions.setSelectedStrip(uniqueKey));
-      dispatch(simOptionsActions.setSelectedStrip(uniqueKey));
+      setStripIsSelected(false);
+    }
+  }, [simOptions, uniqueKey]);
+
+  function handleAcIdClick(e: React.MouseEvent<HTMLElement, MouseEvent>) {
+    e.stopPropagation();
+
+    if (!stripIsSelected && simOptions.selectedStrip) {
+      dispatch(
+        departureListActions.insertStripBelow({
+          firstStrip: simOptions.selectedStrip,
+          secondStrip: props,
+        })
+      );
+      dispatch(simOptionsActions.removeSelectedStrip());
+      return;
+    }
+
+    if (stripIsSelected) {
+      dispatch(simOptionsActions.removeSelectedStrip());
+    } else {
+      dispatch(simOptionsActions.setSelectedStrip(props));
     }
   }
 
   useInterval(() => {
-    setIsAirborne(true);
+    setIsCommSwitched(true);
   }, 8000);
 
   const departureRunwayFormatted = depRunway?.split(' ')[2];
@@ -93,13 +119,14 @@ function DepartureFDE({
   return (
     <section
       className={clsx(styles.FlightStrip, styles.flexCol, {
-        [styles.borderYellow]: isStripSelected,
+        [styles.borderYellow]:
+          simOptions.selectedStrip?.uniqueKey === uniqueKey,
       })}
     >
       <div className={clsx(styles.topRow, styles.flexRow)}>
         <div
           className={clsx(styles.col1, { [styles.bgYellow]: isVDP })}
-          onClick={toggleSelectStrip}
+          onClick={handleAcIdClick}
         >
           <div className={clsx(styles.acId)}>{acId.code}</div>
         </div>
@@ -245,7 +272,7 @@ function DepartureFDE({
           </div>
         </div>
         <div
-          className={clsx(styles.col3, { [styles.bgYellow]: !isAirborne })}
+          className={clsx(styles.col3, { [styles.bgYellow]: !isCommSwitched })}
         ></div>
         <div className={clsx(styles.col4)}>
           <div className={clsx(styles.filedRoute)}>{filedRoute}</div>
