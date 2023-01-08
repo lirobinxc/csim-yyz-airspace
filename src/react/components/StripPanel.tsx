@@ -8,6 +8,8 @@ import {
 } from '../state/slices/simOptionsSlice';
 import DepartureFDE from './DepartureFDE/DepartureFDE';
 import PendingDepartureFDE from './PendingDepartureFDE/PendingDepartureFDE';
+import PendingSatelliteFDE from './PendingSatelliteFDE/PendingSatelliteFDE';
+import SatelliteFDE from './SatelliteFDE/SatelliteFDE';
 
 import styles from './StripPanel.module.scss';
 
@@ -68,18 +70,30 @@ const StripPanel = ({
     if (height === Size.LG) {
       return displayAsAirborneFDE();
     }
-    return displayAsPendingFDE();
+    if (height === Size.MD) {
+      return displayAsSatellitePendingFDE();
+    }
+    return displayAsPendingDepFDE();
   }
 
   function displayAsAirborneFDE() {
     return strips.map((strip) => {
+      if (strip.isSatellite) {
+        return <SatelliteFDE key={strip.uniqueKey} {...strip} />;
+      }
       return <DepartureFDE key={strip.uniqueKey} {...strip} />;
     });
   }
 
-  function displayAsPendingFDE() {
+  function displayAsPendingDepFDE() {
     return strips.map((strip) => {
       return <PendingDepartureFDE key={strip.uniqueKey} {...strip} />;
+    });
+  }
+
+  function displayAsSatellitePendingFDE() {
+    return strips.map((strip) => {
+      return <PendingSatelliteFDE key={strip.uniqueKey} {...strip} />;
     });
   }
 

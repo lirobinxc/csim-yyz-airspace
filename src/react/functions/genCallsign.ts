@@ -5,12 +5,16 @@ import { convertNumToText } from './convertNumToText';
 
 export function genCallsign({
   isC208,
-  isSatYTZ,
-  isSatYKZ,
+  isSatYtzDep,
+  isSatYkzDep,
+  isSatYzdAll,
+  isSatYhmAll,
 }: {
   isC208?: boolean;
-  isSatYTZ?: boolean;
-  isSatYKZ?: boolean;
+  isSatYtzDep?: boolean;
+  isSatYkzDep?: boolean;
+  isSatYzdAll?: boolean;
+  isSatYhmAll?: boolean;
 }) {
   const random = _.random(1, 5);
 
@@ -37,8 +41,10 @@ export function genCallsign({
   }
 
   if (isC208) carrierCode = CarrierCode.MAL;
-  if (isSatYTZ) carrierCode = CarrierCode.POE;
-  if (isSatYKZ) carrierCode = CarrierCode.PUL;
+  if (isSatYtzDep) carrierCode = CarrierCode.POE;
+  if (isSatYkzDep) carrierCode = CarrierCode.PUL;
+  if (isSatYzdAll) carrierCode = CarrierCode.BBA;
+  if (isSatYhmAll) carrierCode = CarrierCode.CJT;
 
   const fullCallsign = `${carrierCode}${num}`;
 

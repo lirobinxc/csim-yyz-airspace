@@ -10,8 +10,10 @@ export function genPlanePropsFromFDE(fde: DepFDE): PlaneProperties {
     acType: fde.acType,
     acModel: fde.acModel,
     acWtc: fde.acWtc,
+    isSatellite: fde.isSatellite,
     filedData: {
-      sidName: fde.sidName,
+      sidName: fde.isSatellite ? null : fde.sidName,
+      satelliteName: fde.isSatellite ? fde.satFdeData.name : null,
       alt: fde.assignedAlt * 100,
       speed: PlanePerformanceConfig[fde.acModel].speed.maxCruise,
       destination: fde.destination,
@@ -19,7 +21,7 @@ export function genPlanePropsFromFDE(fde: DepFDE): PlaneProperties {
     takeoffData: {
       assignedAlt: fde.assignedAlt * 100,
       assignedHeading: getRunwayHeading(fde.depRunway).initial,
-      sidOrPropTurnHeading: getSidOrPropTurnHeading(fde),
+      sidOrPropTurnHeading: fde.assignedHeading,
       depRunway: fde.depRunway,
       isNADP1: fde.isNADP1,
     },
@@ -32,10 +34,12 @@ export function genPlanePropsFromFDE(fde: DepFDE): PlaneProperties {
   return props;
 }
 
-function getSidOrPropTurnHeading(fde: DepFDE) {
-  if (fde.acType === AcType.PROP) {
-    return Number(fde.assignedHeading) || null;
-  }
+// function getSidOrPropTurnHeading(fde: DepFDE) {
+//   if (fde.acType === AcType.PROP || fde.isSatellite) {
+//     if (typeof fde.assignedHeading === 'number') {
+//       return Number(fde.assignedHeading) || null;
+//     }
+//   }
 
-  return getRunwayHeading(fde.depRunway).sid;
-}
+//   return getRunwayHeading(fde.depRunway).sid;
+// }

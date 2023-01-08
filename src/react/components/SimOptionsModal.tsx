@@ -51,7 +51,7 @@ const SimOptionsModal = ({
     const target = e.target as HTMLTextAreaElement;
     let value = Number(target.value);
 
-    if (isNaN(value)) value = simOptions.startingCount;
+    if (isNaN(value)) value = simOptions.intervalBetweenNormalDeps;
 
     setTempOptions({ ...tempOptions, intervalBetweenNormalDeps: value * 1000 });
   }
@@ -60,9 +60,21 @@ const SimOptionsModal = ({
     const target = e.target as HTMLTextAreaElement;
     let value = Number(target.value);
 
-    if (isNaN(value)) value = simOptions.startingCount;
+    if (isNaN(value)) value = simOptions.intervalBetweenVisualDeps;
 
     setTempOptions({ ...tempOptions, intervalBetweenNormalDeps: value * 1000 });
+  }
+
+  function setIntervalBetweenSatelliteDeps(e: React.FormEvent) {
+    const target = e.target as HTMLTextAreaElement;
+    let value = Number(target.value);
+
+    if (isNaN(value)) value = simOptions.intervalBetweenSatelliteDeps;
+
+    setTempOptions({
+      ...tempOptions,
+      intervalBetweenSatelliteDeps: value * 1000,
+    });
   }
 
   function applyOptions() {
@@ -128,6 +140,17 @@ const SimOptionsModal = ({
               className={styles.number}
               value={tempOptions.intervalBetweenVisualDeps / 1000}
               onChange={setIntervalBetweenVisualDeps}
+            />{' '}
+            seconds
+          </label>
+          <h3>Interval between Satellite Departures</h3>
+          <label className={styles.intervalBox}>
+            <input
+              type="number"
+              name="minIntervalVisual"
+              className={styles.number}
+              value={tempOptions.intervalBetweenSatelliteDeps / 1000}
+              onChange={setIntervalBetweenSatelliteDeps}
             />{' '}
             seconds
           </label>

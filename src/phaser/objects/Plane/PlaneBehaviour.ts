@@ -1,6 +1,6 @@
 import { getRunwayHeading } from '../../config/RunwayHeadingConfig';
-import { SidRoute06s } from '../../config/Rwy06sSidConfig';
-import { Rwy06sWaypointDict } from '../../config/Rwy06sWaypointConfig';
+import { SID_ROUTES_06s } from '../../config/RouteConfigRwy06sSIDs';
+import { WP_DICT_Rwy06s } from '../../config/WaypointConfigRwy06s';
 import RadarScene from '../../scenes/RadarScene';
 import { AcType } from '../../types/AircraftTypes';
 import { RadarSceneKeys } from '../../types/SceneKeys';
@@ -20,6 +20,7 @@ import {
 import { getSidRoute } from '../../utils/getSidRoute';
 import Plane from './Plane';
 import PlaneDataTag from './PlaneDataTag';
+import { getSatRoute } from '../../utils/getSatRoute';
 
 export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
   // Parent component + Reference components
@@ -64,10 +65,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
     if (heading.directTo === null || heading.directTo === undefined) return;
 
     // Setup:
-    let sidRoute = getSidRoute(
-      this.Scene.RUNWAY_CONFIG,
-      this.Plane.Properties.filedData.sidName
-    );
+    const filedRoute = this.Plane.getFiledRoute();
 
     // Logic Step 0: Set heading.assigned to the waypoint
     const WAYPOINT_POSITION = heading.directTo.getDisplayCoord();
@@ -84,11 +82,11 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
 
     // Logic Step 2: Check if there is a next waypoint on the route
     let NEXT_WAYPOINT: WaypointDataAll | null = null;
-    const idxOfCurrentWaypoint = sidRoute.findIndex(
+    const idxOfCurrentWaypoint = filedRoute.findIndex(
       (waypoint) => waypoint.name === heading.directTo?.name
     );
-    if (idxOfCurrentWaypoint > -1 && sidRoute[idxOfCurrentWaypoint + 1]) {
-      NEXT_WAYPOINT = sidRoute[idxOfCurrentWaypoint + 1];
+    if (idxOfCurrentWaypoint > -1 && filedRoute[idxOfCurrentWaypoint + 1]) {
+      NEXT_WAYPOINT = filedRoute[idxOfCurrentWaypoint + 1];
     }
 
     const PREEMPTIVE_TURN_TIME_IN_SEC = 8;
@@ -333,26 +331,33 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
       return;
     }
 
-    if (heading.current)
-      if (
-        this.Plane.Properties.acType === AcType.JET &&
-        altitude.current > 1100 &&
-        !completedSidOrPropHeading
-      ) {
-        // Jets turn to the SID heading
-        heading.assigned = getRunwayHeading(
-          this.Plane.Properties.takeoffData.depRunway
-        ).sid;
-      }
+    if (
+      this.Plane.Properties.isSatellite === false &&
+      this.Plane.Properties.acType === AcType.JET &&
+      altitude.current > 1100 &&
+      !completedSidOrPropHeading
+    ) {
+      // Jets turn to the SID heading
+      heading.assigned = getRunwayHeading(
+        this.Plane.Properties.takeoffData.depRunway
+      ).sid;
+    }
 
     // Props turn to the SID heading
     const PROP_HEADING = this.Plane.Properties.takeoffData.sidOrPropTurnHeading;
 
     if (
-      this.Plane.Properties.acType === AcType.PROP &&
-      altitude.current > 100
+      this.Plane.Properties.acType === AcType.PROP ||
+      this.Plane.Properties.isSatellite
     ) {
-      heading.assigned = PROP_HEADING ? PROP_HEADING : heading.assigned;
+      if (altitude.current > 100) {
+        if (!PROP_HEADING) return;
+        if (typeof PROP_HEADING === 'number') {
+          heading.assigned = PROP_HEADING;
+        } else {
+          heading.directTo = PROP_HEADING;
+        }
+      }
     }
   }
 

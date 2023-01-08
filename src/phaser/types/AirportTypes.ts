@@ -4,7 +4,13 @@ export type DepRunwayAll =
   | DepRunwayYKZ
   | DepRunwayYZD
   | DepRunwayYHM
-  | DepRunwayYKF;
+  | DepRunwayYKF
+  | DepRunwaySatArrivals;
+
+export enum DepRunwaySatArrivals {
+  YKZ_YOO_YPQ = 'YKZ_YOO_YPQ_ARR',
+  YHM = 'YHM_ARR',
+}
 
 export enum DepRunwayYYZ {
   RWY_05 = 'YYZ Rwy 05',

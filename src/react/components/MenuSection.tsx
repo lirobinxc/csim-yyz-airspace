@@ -61,7 +61,7 @@ const MenuSection = ({ appVersion }: MenuSectionProps) => {
         </div>
         <button
           className={clsx(styles.spacing, styles.fir, {
-            [styles.redBg]: simOptions.isPaused,
+            [styles.blinkingRedBg]: simOptions.isPaused,
           })}
           onClick={togglePauseSim}
         >

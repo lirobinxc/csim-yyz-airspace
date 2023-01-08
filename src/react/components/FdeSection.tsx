@@ -33,6 +33,8 @@ const FdeSection = () => {
     airborneSouthPanel: [] as DepFDE[],
     satellitePendingPanel: [] as DepFDE[],
   });
+  const [timeOfLastAirborneSatellite, setTimeOfLastAirborneSatellite] =
+    useState(0);
 
   const processStrips = useCallback((stripList: DepFDE[]) => {
     const stripsCue = {
@@ -78,13 +80,7 @@ const FdeSection = () => {
     processStrips(strips);
   }, [strips, processStrips]);
 
-  // useEffect(() => {
-  //   if(stripList.airborneNorthPanel.length === 0 && stripList.airborneSouthPanel.length === 0) {
-  //     dispatch()
-  //   }
-  // },[stripList])
-
-  // Interval: Add new strip
+  // Interval: Add new Dep strip
   useRandomInterval(() => {
     if (simOptions.isPaused) return;
 
@@ -93,7 +89,7 @@ const FdeSection = () => {
       stripList.readySouthPanel.length < 3
     ) {
       dispatch(
-        departureListActions.addStrip({
+        departureListActions.addDepStrip({
           radarScene: simOptions.radarScene,
           isSingleOps: simOptions.isSingleOps,
           prevFdeSidName: strips[strips.length - 1].sidName,
@@ -101,6 +97,19 @@ const FdeSection = () => {
       );
     }
   }, ...simOptions.newStripInterval);
+
+  // Interval: Add new Satellite strip
+  useRandomInterval(
+    () => {
+      if (simOptions.isPaused) return;
+
+      if (stripList.satellitePendingPanel.length < 2) {
+        dispatch(departureListActions.addSatStrip(simOptions.radarScene));
+      }
+    },
+    simOptions.intervalBetweenSatelliteDeps,
+    simOptions.intervalBetweenSatelliteDeps * 2
+  );
 
   // Interval: Move from panels READY N/S -> IN POSITION N/S
   useRandomInterval(
@@ -178,6 +187,24 @@ const FdeSection = () => {
   // useRandomInterval(() => {
   //   dispatch(departureListActions.setToAirborne({radarScene: simOptions.radarScene, fde: stripList.inPositionSPanel[0]))};
   // }, ...simOptions.newStripInterval);
+
+  // Interval: Move from panel SATELLITE PENDING -> AIRBORNE
+  useInterval(() => {
+    if (simOptions.isPaused) return;
+
+    const currTime = Date.now();
+    const currSatPendingFde = stripList.satellitePendingPanel[0];
+
+    if (currSatPendingFde) {
+      if (
+        currTime >
+        timeOfLastAirborneSatellite + simOptions.intervalBetweenNormalDeps
+      ) {
+        dispatch(departureListActions.setToAirborne(currSatPendingFde));
+        setTimeOfLastAirborneSatellite(Date.now());
+      }
+    }
+  }, 5000);
 
   return (
     <main className={styles.FdeSection}>

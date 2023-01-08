@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import RadarScene from '../scenes/RadarScene';
 import {
   DepRunwayAll,
+  DepRunwaySatArrivals,
   DepRunwayYHM,
   DepRunwayYKF,
   DepRunwayYKZ,
@@ -41,6 +42,10 @@ export default class RunwayOrigins {
   public YKF: {
     Rwy08_26: Phaser.Math.Vector2;
   };
+  public ArrivalOrigins: {
+    YHM: Phaser.Math.Vector2;
+    YKZ_YOO_YPQ: Phaser.Math.Vector2;
+  };
 
   constructor(scene: RadarScene) {
     // Common setup:
@@ -72,6 +77,10 @@ export default class RunwayOrigins {
       YKF: {
         Rwy08_26: new Phaser.Math.Vector2(-0.3, 0.636),
       },
+      ArrivalOrigins: {
+        YHM: new Phaser.Math.Vector2(1.4, 0),
+        YKZ_YOO_YPQ: new Phaser.Math.Vector2(-0.3, 0.6),
+      },
     };
 
     this.YYZ = {
@@ -94,6 +103,11 @@ export default class RunwayOrigins {
     };
     this.YKF = {
       Rwy08_26: RELATIVE_ORIGINS.YKF.Rwy08_26.scale(cameraHeight),
+    };
+    this.ArrivalOrigins = {
+      YHM: RELATIVE_ORIGINS.ArrivalOrigins.YHM.scale(cameraHeight),
+      YKZ_YOO_YPQ:
+        RELATIVE_ORIGINS.ArrivalOrigins.YKZ_YOO_YPQ.scale(cameraHeight),
     };
 
     this.drawCoordinates();
@@ -129,6 +143,13 @@ export default class RunwayOrigins {
     if (runway === DepRunwayYKF.RWY_08 || runway === DepRunwayYKF.RWY_26) {
       return this.YKF.Rwy08_26;
     }
+    if (runway === DepRunwaySatArrivals.YHM) {
+      return this.ArrivalOrigins.YHM;
+    }
+    if (runway === DepRunwaySatArrivals.YKZ_YOO_YPQ) {
+      return this.ArrivalOrigins.YKZ_YOO_YPQ;
+    }
+
     throw new Error(`Failed getting runway origin coordinates for ${runway}`);
   }
 

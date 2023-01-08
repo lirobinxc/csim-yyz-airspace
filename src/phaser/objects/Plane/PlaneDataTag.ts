@@ -6,6 +6,7 @@ import { DomEvents } from '../../types/DomEvents';
 import { convertAcWtcToSymbol } from '../../utils/convertAcWtcToSymbol';
 import Plane from './Plane';
 import PlaneSymbol from './PlaneSymbol';
+import Flash from 'phaser3-rex-plugins/plugins/flash.js';
 
 export default class PlaneDataTag extends Phaser.GameObjects.Container {
   public isExtendedTag: boolean;
@@ -19,9 +20,9 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
   private Plane: Plane;
 
   // Subcomponents
-  private Text1: Phaser.GameObjects.BitmapText;
-  private Text2: Phaser.GameObjects.DynamicBitmapText;
-  private Text3: Phaser.GameObjects.BitmapText;
+  public Text1: Phaser.GameObjects.BitmapText;
+  public Text2: Phaser.GameObjects.DynamicBitmapText;
+  public Text3: Phaser.GameObjects.BitmapText;
 
   constructor(plane: Plane) {
     super(plane.scene);
@@ -96,11 +97,49 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
 
     // Input: On click Text 1
     this.Text1.on(DomEvents.POINTER_DOWN, (pointer: Phaser.Input.Pointer) => {
+      if (pointer.rightButtonDown()) {
+        this.scene.events.emit(
+          PhaserCustomEvents.ACID_RIGHT_CLICKED,
+          this.Plane
+        );
+        return;
+      }
+
       this.scene.events.emit(PhaserCustomEvents.ACID_CLICKED, {
         plane: this.Plane,
         pointer,
       });
     });
+
+    // On Handoff Event: Flash text
+    const DELAY_BEFORE_HANDOFF_ACCEPTED = 10_000; // ms
+    const ACCEPTED_HANDOFF_FLASH_DURATION = 18_000; // ms
+    this.scene.events.on(
+      PhaserCustomEvents.HANDOFF_BUTTON_CLICKED,
+      (plane: Plane) => {
+        let flashingText: ReturnType<typeof setInterval>;
+        setTimeout(() => {
+          flashingText = setInterval(() => {
+            if (plane.DataTag.Text1.tintTopLeft === ColorKeys.PPS_YELLOW) {
+              plane.DataTag.Text1.setTint(ColorKeys.WHITE);
+              plane.DataTag.Text2.setTint(ColorKeys.WHITE);
+            } else {
+              plane.DataTag.Text1.setTint(ColorKeys.PPS_YELLOW);
+              plane.DataTag.Text2.setTint(ColorKeys.PPS_YELLOW);
+            }
+          }, 450);
+
+          plane.HANDOFF_IN_PROGRESS = false;
+          plane.IS_HANDED_OFF = true;
+        }, DELAY_BEFORE_HANDOFF_ACCEPTED);
+
+        setTimeout(() => {
+          clearInterval(flashingText);
+          plane.DataTag.Text1.setTint(ColorKeys.PPS_YELLOW);
+          plane.DataTag.Text2.setTint(ColorKeys.PPS_YELLOW);
+        }, DELAY_BEFORE_HANDOFF_ACCEPTED + ACCEPTED_HANDOFF_FLASH_DURATION);
+      }
+    );
 
     // Sync update with FPS (set in Phaser Config)
     this.updateText2();
@@ -141,6 +180,11 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
   }
 
   private updateText1() {
+    if (this.Plane.Commands.altitude.current < 300) {
+      this.Text1.setText('?');
+      return;
+    }
+
     const acid = this.Plane.Properties.acId.code;
     const wtcSymbol = convertAcWtcToSymbol(this.Plane.Properties.acWtc);
 
@@ -155,6 +199,11 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
   }
 
   private updateText2() {
+    if (this.Plane.Commands.altitude.current < 300) {
+      this.Text2.setText('');
+      return;
+    }
+
     const currCommands = this.Plane.Commands;
 
     const altitude = Math.floor(currCommands.altitude.current / 100)
@@ -173,7 +222,12 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
       .toString()
       .padStart(2, '0');
 
-    this.Text2.setText(`${altitude}${vmi}${vmr} ${groundSpeed}`); // max 9 chars length
+    let handoffText = '';
+    if (this.Plane.HANDOFF_IN_PROGRESS) {
+      handoffText = ` >${this.Plane.Properties.handoffData.sector}`;
+    }
+
+    this.Text2.setText(`${altitude}${vmi}${vmr} ${groundSpeed}${handoffText}`); // max 9 chars length
   }
 
   private updateText3() {

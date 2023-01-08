@@ -32,10 +32,11 @@ function genDepList(
 
   for (let i = 0; i < count; i++) {
     const num1to10 = _.random(1, 10);
-    // if (num1to10 > 9) {
-    //   defaultDepSequence.push(genSatFdeData(rwyId));
-    //   continue;
-    // }
+    // should be 9
+    if (num1to10 > 0) {
+      defaultDepSequence.push(genSatFdeData(radarScene));
+      continue;
+    }
 
     let prevDepFde = defaultDepSequence[defaultDepSequence.length - 1];
 
@@ -54,18 +55,6 @@ function genDepList(
   }
 
   return defaultDepSequence;
-}
-
-// Randomly adds Dep or Sat strip
-function addRandomStrip(
-  radarScene: RadarSceneKeys,
-  isSingleOps: boolean,
-  prevFdeSidName: SidName | undefined
-) {
-  // const num1to10 = _.random(1, 10);
-  // if (num1to10 > 9) return genSatFdeData(radarScene);
-
-  return genDepFdeData(radarScene, isSingleOps, prevFdeSidName);
 }
 
 function sendAirborneToPhaser(fde: DepFDE) {
@@ -100,7 +89,7 @@ export const departureList = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    addStrip: (
+    addDepStrip: (
       state,
       action: PayloadAction<{
         radarScene: RadarSceneKeys;
@@ -109,12 +98,15 @@ export const departureList = createSlice({
       }>
     ) => {
       state.push(
-        addRandomStrip(
+        genDepFdeData(
           action.payload.radarScene,
           action.payload.isSingleOps,
           action.payload.prevFdeSidName
         )
       );
+    },
+    addSatStrip: (state, action: PayloadAction<RadarSceneKeys>) => {
+      state.push(genSatFdeData(action.payload));
     },
     // Use the PayloadAction type to declare the contents of `action.payload`
     deleteStrip: (state, action: PayloadAction<string>) => {

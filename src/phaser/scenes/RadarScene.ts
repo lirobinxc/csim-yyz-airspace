@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-import { Rwy06sWaypointList } from '../config/Rwy06sWaypointConfig';
+import { WP_LIST_RWY06s } from '../config/WaypointConfigRwy06s';
 import RadarBg from '../objects/RadarBg';
 import Waypoint from '../objects/Waypoint';
 import type { GameObjectOptions } from '../types/GameObjectOptions';
@@ -21,7 +21,7 @@ import cursor_PlaneCursor from '../assets/PlaneCursor.cur';
 import { convertRadiansToHeading } from '../utils/convertRadiansToHeading';
 import DebugButton from '../objects/DebugButton';
 import { SidName } from '../types/SidAndSatelliteTypes';
-import { SidRoute06s } from '../config/Rwy06sSidConfig';
+import { SID_ROUTES_06s } from '../config/RouteConfigRwy06sSIDs';
 import { DepRunwayYYZ } from '../types/AirportTypes';
 import { PhaserCustomEvents, ReactCustomEvents } from '../types/CustomEvents';
 import { PlaneProperties } from '../types/PlaneInterfaces';
@@ -79,6 +79,13 @@ export default class RadarScene extends Phaser.Scene {
   }
 
   preload() {
+    // REX plugins
+    this.load.plugin(
+      'rexflashplugin',
+      'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexflashplugin.min.js',
+      true
+    );
+
     switch (this.SCENE_KEY) {
       case RadarSceneKeys.RADAR_06s:
         this.load.image(AssetKeys.RADAR_06s, img_Radar06s);
@@ -105,7 +112,7 @@ export default class RadarScene extends Phaser.Scene {
     // Create: Waypoints Layer
     switch (this.SCENE_KEY) {
       case RadarSceneKeys.RADAR_06s:
-        Rwy06sWaypointList.forEach((waypointData) => {
+        WP_LIST_RWY06s.forEach((waypointData) => {
           this.Waypoints.push(new Waypoint(this, waypointData));
         });
         break;
@@ -184,6 +191,8 @@ export default class RadarScene extends Phaser.Scene {
     // On Input: Clicked RadarBg
     this.RadarBg.on(DomEvents.POINTER_DOWN, (pointer: Phaser.Input.Pointer) => {
       if (pointer.rightButtonDown()) {
+        this.events.emit(PhaserCustomEvents.RIGHT_CLICKED_RADAR_BG);
+
         if (this.FiledRouteLine) {
           this.FiledRouteLine.customDestroy();
           this.FiledRouteLine = null;
@@ -316,9 +325,11 @@ const testPlaneProps: PlaneProperties = {
   acType: AcType.JET,
   acModel: AcModel.A343,
   acWtc: AcWTC.M,
+  isSatellite: false,
   filedData: {
     alt: 300,
     sidName: SidName.AVSEP,
+    satelliteName: null,
     speed: 300,
     destination: 'CYOW',
   },

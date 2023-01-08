@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { genACID } from './genACID';
+import { ACID, genACID } from './genACID';
 import { genCallsign } from './genCallsign';
 import { genDepRoute } from './genDepRoute';
 import { SidData } from '../data/sidsCollection';
@@ -7,11 +7,16 @@ import { destinationCollection } from '../data/destinationCollection';
 import { SatelliteData } from '../data/satelliteCollection';
 import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
 import { AcModel, AcType, AcWTC } from '../../phaser/types/AircraftTypes';
-import { SidName } from '../../phaser/types/SidAndSatelliteTypes';
+import {
+  SatelliteName,
+  SidName,
+} from '../../phaser/types/SidAndSatelliteTypes';
 import { DepRunwayAll } from '../../phaser/types/AirportTypes';
 import { determineIfNorthOrSouthDep } from './determineIfNorthOrSouthDep';
 import { determineDepRunwayYYZ } from './determineDepRunway';
 import { determineIfVdpAllowed } from './determineIfVdpAllowed';
+import { AdjacentSectors } from '../../phaser/types/SectorTypes';
+import { WaypointDataCommon } from '../../phaser/types/WaypointTypes';
 
 export enum DeparturePhase {
   READY = 'READY',
@@ -28,7 +33,39 @@ export enum DeparturePosition {
 let currentHour = _.sample([12, 13, 14, 15, 16, 17, 18]) || 12;
 let currentMinute = 0;
 
-export type DepFDE = ReturnType<typeof genDepFdeData>;
+export interface DepFDE {
+  uniqueKey: string;
+  acModelFull: string;
+  acId: { code: string; spoken: string };
+  acType: AcType;
+  acModel: AcModel;
+  acWtc: AcWTC;
+  assignedAlt: number;
+  assignedHeading: number | WaypointDataCommon | null;
+  coordinatedAlt: number;
+  debugACID: ACID;
+  depPhase: DeparturePhase;
+  depPoint: string;
+  depPosition: DeparturePosition;
+  depRunway: DepRunwayAll;
+  destination: string;
+  ETA: string;
+  filedAlt: number;
+  filedRoute: string;
+  filedTAS: number;
+  handoffAlt: number;
+  handoffSector: AdjacentSectors;
+  inPositionTime: number;
+  isNADP1: boolean;
+  isQ400: boolean;
+  isSatellite: boolean;
+  isVDP: boolean;
+  onCourseWP: string;
+  remarks: string;
+  satFdeData: SatelliteData;
+  sidName: SidName;
+  transponderCode: string;
+}
 
 export function genDepFdeData(
   radarScene: RadarSceneKeys,
@@ -54,9 +91,7 @@ export function genDepFdeData(
 
   // Gen Callsign
   const isC208 = aircraft.model === AcModel.C208;
-  const callsign = genCallsign({ isC208 });
-
-  const spokenCallsignFormatted = `${callsign.spokenCallsign}`;
+  let callsign = genCallsign({ isC208 });
 
   // Set filed speed and altitude
   let filedTAS = 999;
@@ -66,12 +101,12 @@ export function genDepFdeData(
     filedAlt = _.sample([60, 160, 190, 220, 250]) || 220;
     if (aircraft.model === AcModel.C208) {
       filedTAS = 180;
-      filedAlt = 80;
+      filedAlt = _.sample([70, 80]) || 70;
     }
   }
   if (aircraft.type === AcType.JET) {
     filedTAS = _.sample([349, 374]) || 349;
-    filedAlt = _.sample([220, 310, 330, 350, 360]) || 350;
+    filedAlt = _.sample([210, 220, 310, 330, 350, 360]) || 350;
   }
 
   // Init route
@@ -82,12 +117,13 @@ export function genDepFdeData(
 
   // Assigned heading
   let assignedHeading =
-    (sid.acType !== AcType.JET && sid['propOrJetTurns']) || '';
+    (sid.acType !== AcType.JET && sid['propOrJetTurns']) || null;
 
   // Init assigned altitude
   let assignedAlt = 30; // default PROP altitude
-  if (assignedHeading === 'No turns' || sid.acType === AcType.JET)
-    assignedAlt = 50; // default JET altitude
+  if (!assignedHeading || sid.acType === AcType.JET) {
+    assignedAlt = 50;
+  } // default JET altitude
 
   const onCourseWP = sid['finalWp'];
 
@@ -138,10 +174,10 @@ export function genDepFdeData(
 
   // const satRouteData = genSatFdeData(rwyId);
 
-  const depFDE = {
+  const depFDE: DepFDE = {
     uniqueKey: `${callsign.fullCallsign}${Math.random().toFixed(5)}`,
     acModelFull,
-    acId: { code: callsign.fullCallsign, spoken: spokenCallsignFormatted },
+    acId: { code: callsign.fullCallsign, spoken: callsign.spokenCallsign },
     acType: aircraft.type,
     acModel: aircraft.model,
     acWtc: aircraft.wtc,
@@ -168,7 +204,7 @@ export function genDepFdeData(
     onCourseWP,
     remarks: '',
     satFdeData: {} as SatelliteData,
-    sidName,
+    sidName: sidName,
     transponderCode,
   };
 

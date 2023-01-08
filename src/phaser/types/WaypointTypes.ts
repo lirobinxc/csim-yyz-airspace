@@ -19,6 +19,10 @@ export interface WaypointData24s extends WaypointDataAll {
 export type WaypointKeysAll = Record<WaypointNamesAll, WaypointDataAll>;
 export type WaypointKeys06s = Record<WaypointNamesRwy06s, WaypointData06s>;
 export type WaypointKeys24s = Record<WaypointNamesRwy24s, WaypointData24s>;
+export type WaypointKeysCommon = Record<
+  WaypointNamesCommon,
+  WaypointDataCommon
+>;
 
 export type WaypointNamesAll =
   | WaypointNamesRwy06s
@@ -67,6 +71,7 @@ export type WaypointNamesCommon =
   | 'VERDO'
   | 'BIMTI' // Start of satellite points
   | 'DAVSI'
+  | 'ILUSI'
   | 'MUXIG'
   | 'MUXIG'
   | 'OO'
@@ -78,6 +83,7 @@ export type WaypointNamesCommon =
   | 'UKPAG'
   | 'YFD'
   | 'YHM'
+  | 'YKF'
   | 'YKZ'
   | 'YWT'
   | 'YYZ';

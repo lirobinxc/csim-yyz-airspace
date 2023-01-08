@@ -1,11 +1,11 @@
+@import '../../../variables.scss';
+
 $fontSizeXl: 1.6rem;
 $fontSizeLg: 1.3rem;
 $fontSizeMd: 1rem;
 $fontSizeSm: 0.9rem;
 $fontSizeXs: 0.7rem;
 $borderThin: 1px solid black;
-$salmon: #fbdabf;
-$green: #b9f0a0;
 
 @mixin flexCenterVertical {
   display: flex;
@@ -19,7 +19,7 @@ $green: #b9f0a0;
 .FlightStrip {
   -webkit-tap-highlight-color: transparent;
 
-  max-width: 29rem;
+  max-width: $fdeMaxWidth;
 
   font-weight: bold;
   font-size: 1em;
@@ -27,7 +27,7 @@ $green: #b9f0a0;
 
   border: 2px solid black;
 
-  background-color: $salmon;
+  background-color: $satelliteSalmon;
 
   user-select: none;
 
@@ -124,7 +124,7 @@ $green: #b9f0a0;
             background-color: darkgray;
 
             @media (max-width: 480px) {
-              background-color: $salmon;
+              background-color: $satelliteSalmon;
             }
           }
 
@@ -144,7 +144,7 @@ $green: #b9f0a0;
           background-color: darkgray;
 
           @media (max-width: 480px) {
-            background-color: $salmon;
+            background-color: $satelliteSalmon;
           }
         }
 
@@ -184,7 +184,7 @@ $green: #b9f0a0;
         background-color: darkgray;
 
         @media (max-width: 480px) {
-          background-color: $salmon;
+          background-color: $satelliteSalmon;
         }
       }
 
@@ -414,24 +414,16 @@ $green: #b9f0a0;
   }
 }
 
+.borderYellow {
+  border: 2px solid yellow;
+}
+
 .displayNone {
   display: none;
 }
 
-.bgWhite {
-  background-color: white;
-}
-
-.bgGreen {
-  background-color: #e1fac8;
-}
-
 .bgCorrectAlt {
   background-color: lightgreen;
-}
-
-.colorRed {
-  color: rgb(223, 21, 21);
 }
 
 .borderLeft {

@@ -12,6 +12,7 @@ export const defaultSimOptions: SimOptions = {
   newStripInterval: [10_000, 20_000],
   intervalBetweenNormalDeps: 50_000, // should be ???
   intervalBetweenVisualDeps: 25_000,
+  intervalBetweenSatelliteDeps: 120_000,
   isModalOpen: false,
   selectedStrip: null,
   isPaused: false,

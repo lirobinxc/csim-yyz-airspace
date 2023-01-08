@@ -1,12 +1,12 @@
 import _ from 'lodash';
 import { AcType } from '../../phaser/types/AircraftTypes';
 import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
-import { satelliteCollection } from '../data/satelliteCollection';
+import { SATELLITE_COLLECTION } from '../data/satelliteCollection';
 
-export function genSatRoute(runwayId: RadarSceneKeys, acType: AcType) {
-  if (!satelliteCollection[runwayId]) return;
+export function genSatRoute(radarScene: RadarSceneKeys, acType: AcType) {
+  if (!SATELLITE_COLLECTION[radarScene]) return;
 
-  const selectedRoutes = satelliteCollection[runwayId][acType];
+  const selectedRoutes = SATELLITE_COLLECTION[radarScene][acType];
   const randomRoute = _.sample(selectedRoutes);
 
   if (randomRoute) {

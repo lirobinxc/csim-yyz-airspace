@@ -1,4 +1,13 @@
-import { DepRunwayAll, DepRunwayYYZ } from '../types/AirportTypes';
+import {
+  DepRunwayAll,
+  DepRunwaySatArrivals,
+  DepRunwayYHM,
+  DepRunwayYKF,
+  DepRunwayYKZ,
+  DepRunwayYTZ,
+  DepRunwayYYZ,
+  DepRunwayYZD,
+} from '../types/AirportTypes';
 
 export function getRunwayHeading(runway: DepRunwayAll) {
   switch (runway) {
@@ -19,6 +28,36 @@ export function getRunwayHeading(runway: DepRunwayAll) {
       return { initial: 327, sid: 345 };
     case DepRunwayYYZ.RWY_33R:
       return { initial: 327, sid: 340 };
+    // YHM
+    case DepRunwayYHM.RWY_12:
+      return { initial: 120, sid: 120 };
+    case DepRunwayYHM.RWY_30:
+      return { initial: 300, sid: 300 };
+    // YKF
+    case DepRunwayYKF.RWY_08:
+      return { initial: 80, sid: 80 };
+    case DepRunwayYKF.RWY_26:
+      return { initial: 260, sid: 260 };
+    // YKZ
+    case DepRunwayYKZ.RWY_15:
+      return { initial: 150, sid: 150 };
+    case DepRunwayYKZ.RWY_33:
+      return { initial: 330, sid: 330 };
+    // YZD
+    case DepRunwayYZD.RWY_15:
+      return { initial: 150, sid: 150 };
+    case DepRunwayYZD.RWY_33:
+      return { initial: 330, sid: 330 };
+    // YTZ
+    case DepRunwayYTZ.RWY_08:
+      return { initial: 80, sid: 80 };
+    case DepRunwayYTZ.RWY_26:
+      return { initial: 260, sid: 260 };
+    // SatArrivals
+    case DepRunwaySatArrivals.YHM:
+      return { initial: 240, sid: 240 };
+    case DepRunwaySatArrivals.YKZ_YOO_YPQ:
+      return { initial: 60, sid: 60 };
     default:
       throw new Error(`No RunwayHeading data found for: ${runway}`);
   }

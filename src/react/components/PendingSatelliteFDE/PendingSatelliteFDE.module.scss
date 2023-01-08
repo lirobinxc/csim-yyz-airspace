@@ -1,6 +1,6 @@
 @import '../../../variables.scss';
 
-.PendingDepartureFDE {
+.PendingSatelliteFDE {
   display: flex;
   flex-direction: row;
 
@@ -12,7 +12,7 @@
 
   border: $borderThin;
 
-  background-color: $babyblue;
+  background-color: $satelliteSalmon;
 
   .box {
     display: flex;
@@ -30,7 +30,11 @@
   }
 
   .depRunway,
-  .assignedAlt {
+  .assignedAlt,
+  .acModel,
+  .eta,
+  .depPoint,
+  .filedAlt {
     @include flexCenterHorizontal();
   }
 
@@ -48,9 +52,13 @@
 }
 
 .widthMd {
-  width: 2rem;
+  width: 2.7rem;
 }
 
 .widthLg {
-  width: 6rem;
+  width: 3rem;
+}
+
+.widthXl {
+  width: 5rem;
 }

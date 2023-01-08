@@ -1,66 +1,66 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 
 // import { ReactComponent as UpArrow } from '../images/up-arrow.svg';
 import upArrow from '../../images/up-arrow.png';
 import downArrow from '../../images/down-arrow.png';
-import { useAppDispatch } from '../../state/hooks';
+import { useAppDispatch, useAppSelector } from '../../state/hooks';
 
 import styles from './SatelliteFDE.module.scss';
 import { departureListActions } from '../../state/slices/departureListSlice';
-import { SatFDE } from '../../functions/genSatFdeData';
 import { AcType } from '../../../phaser/types/AircraftTypes';
+import { DepFDE } from '../../functions/genDepFdeData';
+import {
+  selectSimOptions,
+  simOptionsActions,
+} from '../../state/slices/simOptionsSlice';
 
-function SatelliteFDE({
-  acFullName,
-  acId,
-  acType,
-  assignedAlt,
-  assignedHeading,
-  coordinatedAlt,
-  debugACID,
-  departurePoint,
-  destination,
-  ETA,
-  filedAlt,
-  filedRoute,
-  filedTAS,
-  handoffAlt,
-  isNADP1,
-  isQ400,
-  isSatellite,
-  onCourseWP,
-  remarks = '',
-  satFdeData,
-  transponderCode,
-  yyzRunwayId,
-}: SatFDE) {
+function SatelliteFDE(props: DepFDE) {
+  const {
+    acModelFull,
+    acId,
+    acType,
+    assignedAlt,
+    assignedHeading,
+    coordinatedAlt,
+    debugACID,
+    depPoint,
+    depRunway,
+    destination,
+    ETA,
+    filedAlt,
+    filedRoute,
+    filedTAS,
+    handoffAlt,
+    isNADP1,
+    isQ400,
+    isSatellite,
+    onCourseWP,
+    remarks = '',
+    satFdeData,
+    transponderCode,
+    uniqueKey,
+  } = props;
+
   const dispatch = useAppDispatch();
+  const simOptions = useAppSelector(selectSimOptions);
 
   const [currentAlt, setCurrentAlt] = useState(assignedAlt);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [onCourse, setOnCourse] = useState(false);
+  const [stripIsSelected, setStripIsSelected] = useState(false);
 
-  const satType = satFdeData.SatType;
-  const isArrival = satType === 'Arrival';
-  const isDeparture = satType === 'Departure';
-  const isOverflight = satType === 'Overflight';
+  const satName = satFdeData.name;
+  const satType = satFdeData.name.split('_')[1];
+  const isArrival = satType === 'ARR';
+  const isDeparture = satType === 'ARR';
+  // const isOverflight = satType === 'Overflight';
 
-  const isYhmArrival = isArrival && satFdeData.Destination === 'CYHM';
+  const isYhmArrival = isArrival && satFdeData.destination === 'CYHM';
   const isYpqOrYooArrival =
-    (isArrival && satFdeData.Destination === 'CYPQ') ||
-    satFdeData.Destination === 'CYOO';
-
-  const hasExitAltitude = satFdeData.ExitAltitude !== '';
-
-  function isCorrectHandoffAlt() {
-    if (!hasExitAltitude) return false;
-
-    if (filedAlt < Number(satFdeData.ExitAltitude)) {
-      return currentAlt === filedAlt;
-    }
-    return currentAlt === Number(satFdeData.ExitAltitude);
-  }
+    (isArrival && satFdeData.destination === 'CYPQ') ||
+    satFdeData.destination === 'CYOO';
+  const isYzdDep = satFdeData.depPoint === 'CYZD';
 
   function increaseAlt() {
     if (currentAlt % 10 === 5) {
@@ -92,14 +92,46 @@ function SatelliteFDE({
     setOnCourse(true);
   }
 
-  function removeStrip() {
-    // dispatch(readyPanelActions.deleteStrip(acId));
+  function deleteStrip() {
+    dispatch(departureListActions.deleteStrip(acId.code));
+  }
+
+  //TEMP
+  useEffect(() => {
+    if (simOptions.selectedStrip?.uniqueKey === uniqueKey) {
+      setStripIsSelected(true);
+    } else {
+      setStripIsSelected(false);
+    }
+  }, [simOptions, uniqueKey]);
+
+  function handleAcIdClick(e: React.MouseEvent<HTMLElement, MouseEvent>) {
+    e.stopPropagation();
+
+    if (!stripIsSelected && simOptions.selectedStrip) {
+      dispatch(
+        departureListActions.insertStripBelow({
+          firstStrip: simOptions.selectedStrip,
+          secondStrip: props,
+        })
+      );
+      dispatch(simOptionsActions.removeSelectedStrip());
+      return;
+    }
+
+    if (stripIsSelected) {
+      dispatch(simOptionsActions.removeSelectedStrip());
+    } else {
+      dispatch(simOptionsActions.setSelectedStrip(props));
+    }
   }
 
   function displayAssignedHeading() {
-    if (onCourse) return satFdeData.ExitHeading;
-    if (assignedHeading === 'No turns') return '';
-    return assignedHeading;
+    // if (onCourse) return satFdeData.exitHeading;
+    if (!assignedHeading) return '';
+    if (typeof assignedHeading === 'number') {
+      return assignedHeading.toString().padStart(3, '0');
+    }
   }
 
   function displayArrows() {
@@ -126,24 +158,24 @@ function SatelliteFDE({
     return (
       <div
         className={clsx(styles.col1, {
-          [styles.borderRight]: !isYpqOrYooArrival,
+          [styles.borderRight]: !isYpqOrYooArrival && !isYzdDep,
         })}
       >
-        <div className={clsx(styles.acId)}>{acId}</div>
+        <div className={clsx(styles.acId)}>{acId.code}</div>
       </div>
     );
   }
 
+  const departureRunwayFormatted = depRunway?.split(' ')[2];
   function displayRunwayBox() {
     return (
       <div
         className={clsx(styles.col8, {
-          [styles.bgCorrectAlt]: isCorrectHandoffAlt(),
-          [styles.borderRight]: isYpqOrYooArrival,
+          [styles.borderRight]: isYpqOrYooArrival && isYzdDep,
         })}
-        onClick={removeStrip}
+        onClick={deleteStrip}
       >
-        <div className={clsx(styles.runwayId)}>{satFdeData.SatRunway}</div>
+        <div className={clsx(styles.runwayId)}>{departureRunwayFormatted}</div>
       </div>
     );
   }
@@ -151,11 +183,13 @@ function SatelliteFDE({
   return (
     <section
       className={clsx(styles.FlightStrip, styles.flexCol, {
-        [styles.bgGreen]: isYpqOrYooArrival,
+        [styles.bgSatelliteGreen]: isYpqOrYooArrival && isYzdDep,
+        [styles.borderYellow]:
+          simOptions.selectedStrip?.uniqueKey === uniqueKey,
       })}
     >
       <div className={clsx(styles.topRow, styles.flexRow)}>
-        {isYpqOrYooArrival ? displayRunwayBox() : displayAcidBox()}
+        {isYpqOrYooArrival && isYzdDep ? displayRunwayBox() : displayAcidBox()}
         <div className={clsx(styles.col2)}>
           <div className={clsx(styles.ETA)}>{ETA}Z</div>
           <div className={clsx(styles.transponderCode)}>{transponderCode}</div>
@@ -276,14 +310,14 @@ function SatelliteFDE({
         <div className={clsx(styles.col7)}>
           <div className={clsx(styles.isNADP1)}>{isNADP1 && 1}</div>
         </div>
-        {isYpqOrYooArrival ? displayAcidBox() : displayRunwayBox()}
+        {isYpqOrYooArrival && isYzdDep ? displayAcidBox() : displayRunwayBox()}
       </div>
       <div className={clsx(styles.bottomRow, styles.flexRow)}>
         <div className={clsx(styles.col1, { [styles.bgWhite]: isQ400 })}>
-          <div className={clsx(styles.acType)}>{acFullName}</div>
+          <div className={clsx(styles.acType)}>{acModelFull}</div>
         </div>
         <div className={clsx(styles.col3)}>
-          <div className={clsx(styles.departurePoint)}>{departurePoint}</div>
+          <div className={clsx(styles.departurePoint)}>{depPoint}</div>
         </div>
         <div className={clsx(styles.col4)}>
           <div className={clsx(styles.filedRoute)}>{filedRoute}</div>

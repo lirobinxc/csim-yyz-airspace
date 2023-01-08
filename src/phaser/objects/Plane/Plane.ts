@@ -18,14 +18,14 @@ import RadarScene from '../../scenes/RadarScene';
 import { GameObjectOptions } from '../../types/GameObjectOptions';
 import PlaneHistoryTrail from './PlaneHistoryTrail';
 import { SidName } from '../../types/SidAndSatelliteTypes';
-import { SidRoute06s } from '../../config/Rwy06sSidConfig';
+import { SID_ROUTES_06s } from '../../config/RouteConfigRwy06sSIDs';
 import { DepRunwayAll } from '../../types/AirportTypes';
 import { DomEvents } from '../../types/DomEvents';
 import { PhaserCustomEvents } from '../../types/CustomEvents';
 import PlaneCommandMenu from './PlaneCommandMenu';
 import { getSidRoute } from '../../utils/getSidRoute';
 import { RadarSceneKeys } from '../../types/SceneKeys';
-import { Rwy06sWaypointDict } from '../../config/Rwy06sWaypointConfig';
+import { WP_DICT_Rwy06s } from '../../config/WaypointConfigRwy06s';
 import {
   determineLeftOrRightTurn,
   TurnDirection,
@@ -39,6 +39,8 @@ import { convertNumToText } from '../../../react/functions/convertNumToText';
 import { convertHeadingNumToText } from '../../../react/functions/convertHeadingNumToText';
 import FiledRouteLine from '../FiledRouteLine';
 import PlaneHandoffMenu from './PlaneHandoffMenu';
+import { getSatRoute } from '../../utils/getSatRoute';
+import PlaneCjs from './PlaneCjs';
 
 export default class Plane extends Phaser.GameObjects.Container {
   // Plane Properties
@@ -55,13 +57,16 @@ export default class Plane extends Phaser.GameObjects.Container {
   public IS_PENDING_DIRECT_TO_COMMAND: boolean;
   public SHOW_COMMAND_OPTIONS: boolean;
   public IS_TALKING: boolean;
+  public HANDOFF_IN_PROGRESS: boolean;
+  public IS_HANDED_OFF: boolean;
 
   // Parent scene
   public Scene: RadarScene;
 
   // Subcomponents
   private Symbol: PlaneSymbol;
-  private DataTag: PlaneDataTag;
+  public CJS: PlaneCjs;
+  public DataTag: PlaneDataTag;
   private TagLine: PlaneDataTagLine;
   private PTL: PlanePTL;
   private HistoryTrail: PlaneHistoryTrail;
@@ -89,6 +94,8 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.SHOW_COMMAND_OPTIONS = false;
     this.IS_TALKING = false;
     this.IS_PENDING_DIRECT_TO_COMMAND = false;
+    this.HANDOFF_IN_PROGRESS = false;
+    this.IS_HANDED_OFF = false;
 
     // Init: Name
     this.name = props.acId.code;
@@ -101,6 +108,7 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.PilotVoice = undefined;
     // Attach objs: Plane Subcomponents
     this.Symbol = new PlaneSymbol(this);
+    this.CJS = new PlaneCjs(this);
     this.DataTag = new PlaneDataTag(this);
     this.TagLine = new PlaneDataTagLine(this, this.Symbol, this.DataTag);
     this.PTL = new PlanePTL(this, this.Symbol, 60);
@@ -108,7 +116,9 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.CommandMenu = new PlaneCommandMenu(this);
     this.HandoffMenu = new PlaneHandoffMenu(this);
     this.add([
+      this.CJS,
       this.HistoryTrail,
+      this.HandoffMenu,
       this.CommandMenu,
       this.PTL,
       this.Symbol,
@@ -133,8 +143,7 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.Symbol.on(DomEvents.POINTER_DOWN, (pointer: Phaser.Input.Pointer) => {
       this.Scene.events.emit(PhaserCustomEvents.PLANE_SELECTED, this);
 
-      if (pointer.rightButtonDown()) {
-      }
+      if (pointer.rightButtonDown()) return;
     });
 
     // Input: On hover over Symbol
@@ -171,8 +180,25 @@ export default class Plane extends Phaser.GameObjects.Container {
     const sidOrPropTurnHeading =
       this.Properties.takeoffData.sidOrPropTurnHeading;
     let sayHeading: string | null = null;
-    if (sidOrPropTurnHeading && this.Properties.acType === AcType.PROP) {
-      sayHeading = `, heading ${convertHeadingNumToText(sidOrPropTurnHeading)}`;
+    if (sidOrPropTurnHeading && this.Properties.isSatellite) {
+      if (typeof sidOrPropTurnHeading === 'number') {
+        sayHeading = `, heading ${convertHeadingNumToText(
+          sidOrPropTurnHeading
+        )}`;
+      } else {
+        sayHeading = `, direct ${sidOrPropTurnHeading.name}`;
+      }
+    }
+    if (
+      !this.Properties.isSatellite &&
+      sidOrPropTurnHeading &&
+      this.Properties.acType === AcType.PROP
+    ) {
+      if (typeof sidOrPropTurnHeading === 'number') {
+        sayHeading = `, heading ${convertHeadingNumToText(
+          sidOrPropTurnHeading
+        )}`;
+      }
     }
 
     this.talk(
@@ -187,10 +213,11 @@ export default class Plane extends Phaser.GameObjects.Container {
   public commandDirectTo(waypointData: WaypointDataAll) {
     if (!waypointData) return;
 
+    const isSatellite = this.Properties.isSatellite;
     const sidName = this.Properties.filedData.sidName;
-    const sidRoute = getSidRoute(this.Scene.RUNWAY_CONFIG, sidName);
+    const filedRoute = this.getFiledRoute();
 
-    if (sidRoute.find((wp) => wp.name === waypointData.name)) {
+    if (filedRoute.find((wp) => wp.name === waypointData.name)) {
       const altitude = this.Commands.altitude;
       const acType = this.Properties.acType;
 
@@ -303,6 +330,32 @@ export default class Plane extends Phaser.GameObjects.Container {
     return;
   }
 
+  public getFiledRoute() {
+    let filedRoute;
+
+    if (this.Properties.isSatellite) {
+      if (this.Properties.filedData.satelliteName) {
+        filedRoute = getSatRoute(
+          this.Scene.RUNWAY_CONFIG,
+          this.Properties.filedData.satelliteName
+        );
+      }
+    } else {
+      if (this.Properties.filedData.sidName) {
+        filedRoute = getSidRoute(
+          this.Scene.RUNWAY_CONFIG,
+          this.Properties.filedData.sidName
+        );
+      }
+    }
+
+    if (!filedRoute) {
+      throw new Error('Could not find a filed route.');
+    }
+
+    return filedRoute;
+  }
+
   /**
    * Return Vector2 (x,y) coordinates
    * of the Plane object, centered on the Symbol.
@@ -321,13 +374,7 @@ export default class Plane extends Phaser.GameObjects.Container {
   }
 
   private onDebug() {
-    if (this.Options.isDebug) {
-      this.PTL.TIME_IN_SEC = 60;
-      this.SHOW_PTL = true;
-    } else {
-      this.PTL.TIME_IN_SEC = 60;
-      this.SHOW_PTL = false;
-    }
+    return;
   }
 
   private ifPlaneIsSelected() {

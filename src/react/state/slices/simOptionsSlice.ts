@@ -23,6 +23,7 @@ export interface SimOptions {
   newStripInterval: [number, number]; // [min, max] in milliseconds
   intervalBetweenNormalDeps: number; // ms
   intervalBetweenVisualDeps: number; // ms
+  intervalBetweenSatelliteDeps: number; // ms
   isModalOpen: boolean;
   selectedStrip: DepFDE | null;
   isPaused: boolean;

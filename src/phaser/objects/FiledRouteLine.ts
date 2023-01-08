@@ -12,14 +12,12 @@ export default class FiledRouteLine extends Phaser.GameObjects.Polygon {
 
   constructor(plane: Plane) {
     // Pre-super Setup
-    const sidRoute = getSidRoute(
-      plane.Scene.RUNWAY_CONFIG,
-      plane.Properties.filedData.sidName
-    );
+    const filedRoute = plane.getFiledRoute();
+
     const startPoint = plane.Scene.RunwayOrigins.getOrigin(
       plane.Properties.takeoffData.depRunway
     );
-    const routePoints = sidRoute.map((wp) => wp.getDisplayCoord());
+    const routePoints = filedRoute.map((wp) => wp.getDisplayCoord());
 
     const finalPoints = [startPoint, ...routePoints];
 
@@ -37,7 +35,7 @@ export default class FiledRouteLine extends Phaser.GameObjects.Polygon {
     this.setClosePath(false);
 
     // Setup: Waypoint Names
-    sidRoute.forEach((wp) => {
+    filedRoute.forEach((wp) => {
       const wpNameText = new Phaser.GameObjects.BitmapText(
         plane.scene,
         wp.getDisplayCoord().x,

@@ -10,6 +10,7 @@ import { departureListActions } from '../../state/slices/departureListSlice';
 import { DepFDE } from '../../functions/genDepFdeData';
 import { SatelliteData } from '../../data/satelliteCollection';
 import useInterval from 'use-interval';
+import { AcType } from '../../../phaser/types/AircraftTypes';
 
 function PendingDepartureFDE({
   acModelFull,
@@ -35,6 +36,8 @@ function PendingDepartureFDE({
   const depRunwayFormatted = depRunway?.split(' ')[2];
   const sidNameFormatted = sidName.split(' ')[0];
 
+  const isJetFpBelow230 = acType === AcType.JET && filedAlt < 230;
+
   return (
     <li className={clsx(styles.PendingDepartureFDE)}>
       <div
@@ -55,7 +58,11 @@ function PendingDepartureFDE({
         {depRunwayFormatted}
       </div>
       <div className={clsx(styles.box, styles.sidName)}>{sidNameFormatted}</div>
-      <div className={clsx(styles.box, styles.widthMd, styles.filedAlt)}>
+      <div
+        className={clsx(styles.box, styles.widthMd, styles.filedAlt, {
+          [styles.colorRed]: isJetFpBelow230,
+        })}
+      >
         {filedAlt}
       </div>
       <div className={clsx(styles.box, styles.widthSm, styles.assignedAlt)}>

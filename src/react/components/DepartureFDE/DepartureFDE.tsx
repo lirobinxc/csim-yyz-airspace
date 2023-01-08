@@ -48,6 +48,8 @@ function DepartureFDE(props: DepFDE) {
   const [stripIsSelected, setStripIsSelected] = useState(false);
   const [isCommSwitched, setIsCommSwitched] = useState(false);
 
+  const isJetFpBelow230 = acType === AcType.JET && filedAlt < 230;
+
   function isCorrectHandoffAlt() {
     if (filedAlt < Number(handoffAlt)) {
       return currentAlt === filedAlt;
@@ -75,9 +77,10 @@ function DepartureFDE(props: DepFDE) {
   }
 
   function displayAssignedHeading() {
-    if (onCourse) return onCourseWP;
-    if (assignedHeading === 'No turns') return '';
-    return assignedHeading;
+    if (!assignedHeading) return '';
+    if (typeof assignedHeading === 'number') {
+      return assignedHeading.toString().padStart(3, '0');
+    }
   }
 
   //TEMP
@@ -265,7 +268,7 @@ function DepartureFDE(props: DepFDE) {
         <div className={clsx(styles.col2)}>
           <div
             className={clsx(styles.filedAlt, {
-              colorRed: acType === AcType.JET && filedAlt < 230,
+              [styles.colorRed]: isJetFpBelow230,
             })}
           >
             {filedAlt}

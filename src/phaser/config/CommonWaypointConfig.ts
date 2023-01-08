@@ -1,10 +1,14 @@
 import { AcType } from '../types/AircraftTypes';
 import { GameConfig } from './GameConfig';
-import type { WaypointDataCommon } from '../types/WaypointTypes';
+import type {
+  WaypointDataCommon,
+  WaypointKeys06s,
+  WaypointKeysCommon,
+} from '../types/WaypointTypes';
 
 const gameHeight = GameConfig.height;
 
-export const CommonWaypointList: WaypointDataCommon[] = [
+export const WP_LIST_COMMON: WaypointDataCommon[] = [
   {
     name: 'ANCOL',
     relativeCoord: new Phaser.Math.Vector2(0.201, 0.899),
@@ -305,7 +309,7 @@ export const CommonWaypointList: WaypointDataCommon[] = [
   },
   {
     name: 'MUXIG',
-    relativeCoord: new Phaser.Math.Vector2(0.321, 0.824),
+    relativeCoord: new Phaser.Math.Vector2(0.334, 0.871),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -435,4 +439,42 @@ export const CommonWaypointList: WaypointDataCommon[] = [
     },
     type: AcType.PROP,
   },
+  {
+    name: 'ILUSI',
+    relativeCoord: new Phaser.Math.Vector2(1.2, 0.107),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: AcType.PROP,
+  },
+  {
+    name: 'YKF',
+    relativeCoord: new Phaser.Math.Vector2(-0.2, 0.502),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: AcType.PROP,
+  },
 ];
+
+export const WP_DICT_COMMON = genDictFromWaypointList(WP_LIST_COMMON);
+
+function genDictFromWaypointList(wpArr: WaypointDataCommon[]) {
+  const wpDict = wpArr.reduce((acc, item) => {
+    acc[item.name] = {
+      name: item.name,
+      type: item.type,
+      relativeCoord: item.relativeCoord,
+      getDisplayCoord: item.getDisplayCoord,
+    };
+    return acc;
+  }, {} as WaypointKeysCommon);
+
+  return wpDict;
+}

@@ -19,6 +19,8 @@ $darkBlue: #0000ff;
 $offWhite: #f3f3f3;
 $babyblue: #c1e9f9;
 $paleYellow: #fcfdab;
+$satelliteSalmon: #fbdabf;
+$satelliteGreen: #b9f0a0;
 
 $borderThin: 1px solid black;
 
@@ -31,4 +33,32 @@ $fdeMaxWidth: 98%;
 @mixin flexCenterHorizontal {
   display: flex;
   justify-content: center;
+}
+
+.colorRed {
+  color: red;
+}
+
+.bgYellow {
+  background-color: $paleYellow;
+}
+
+.bgWhite {
+  background-color: white;
+}
+
+.bgGreen {
+  background-color: $limeGreen;
+}
+
+.borderYellow {
+  border: 2px solid yellow;
+}
+
+.bgWhite {
+  background-color: white;
+}
+
+.bgSatelliteGreen {
+  background-color: $satelliteGreen;
 }

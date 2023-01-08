@@ -1,16 +1,18 @@
 import { AcModel, AcType, AcWTC } from './AircraftTypes';
 import { DepRunwayAll } from './AirportTypes';
 import { AdjacentSectors, TerminalSectors } from './SectorTypes';
-import { SidName } from './SidAndSatelliteTypes';
-import { WaypointDataAll } from './WaypointTypes';
+import { SatelliteName, SidName } from './SidAndSatelliteTypes';
+import { WaypointDataAll, WaypointDataCommon } from './WaypointTypes';
 
 export interface PlaneProperties {
   acId: { code: string; spoken: string };
   acType: AcType;
   acModel: AcModel;
   acWtc: AcWTC;
+  isSatellite: boolean;
   filedData: {
-    sidName: SidName;
+    sidName: SidName | null;
+    satelliteName: SatelliteName | null;
     alt: number;
     speed: number;
     destination: string;
@@ -18,7 +20,7 @@ export interface PlaneProperties {
   takeoffData: {
     assignedAlt: number;
     assignedHeading: number;
-    sidOrPropTurnHeading: number | null;
+    sidOrPropTurnHeading: number | WaypointDataCommon | null;
     depRunway: DepRunwayAll;
     isNADP1: boolean;
   };
