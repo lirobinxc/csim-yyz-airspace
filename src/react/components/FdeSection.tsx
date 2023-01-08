@@ -107,8 +107,8 @@ const FdeSection = () => {
         dispatch(departureListActions.addSatStrip(simOptions.radarScene));
       }
     },
-    simOptions.intervalBetweenSatelliteDeps,
-    simOptions.intervalBetweenSatelliteDeps * 2
+    simOptions.intervalBetweenSatelliteDeps * 0.5,
+    simOptions.intervalBetweenSatelliteDeps * 1.5
   );
 
   // Interval: Move from panels READY N/S -> IN POSITION N/S
@@ -198,7 +198,7 @@ const FdeSection = () => {
     if (currSatPendingFde) {
       if (
         currTime >
-        timeOfLastAirborneSatellite + simOptions.intervalBetweenNormalDeps
+        timeOfLastAirborneSatellite + simOptions.intervalBetweenSatelliteDeps
       ) {
         dispatch(departureListActions.setToAirborne(currSatPendingFde));
         setTimeOfLastAirborneSatellite(Date.now());

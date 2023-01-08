@@ -160,6 +160,7 @@ function SatelliteFDE(props: DepFDE) {
         className={clsx(styles.col1, {
           [styles.borderRight]: !isYpqOrYooArrival && !isYzdDep,
         })}
+        onClick={handleAcIdClick}
       >
         <div className={clsx(styles.acId)}>{acId.code}</div>
       </div>

@@ -77,6 +77,7 @@ function DepartureFDE(props: DepFDE) {
   }
 
   function displayAssignedHeading() {
+    if (onCourse) return onCourseWP;
     if (!assignedHeading) return '';
     if (typeof assignedHeading === 'number') {
       return assignedHeading.toString().padStart(3, '0');

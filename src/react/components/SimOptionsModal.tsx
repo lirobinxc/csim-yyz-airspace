@@ -62,7 +62,7 @@ const SimOptionsModal = ({
 
     if (isNaN(value)) value = simOptions.intervalBetweenVisualDeps;
 
-    setTempOptions({ ...tempOptions, intervalBetweenNormalDeps: value * 1000 });
+    setTempOptions({ ...tempOptions, intervalBetweenVisualDeps: value * 1000 });
   }
 
   function setIntervalBetweenSatelliteDeps(e: React.FormEvent) {

@@ -33,7 +33,7 @@ function genDepList(
   for (let i = 0; i < count; i++) {
     const num1to10 = _.random(1, 10);
     // should be 9
-    if (num1to10 > 0) {
+    if (num1to10 > 9) {
       defaultDepSequence.push(genSatFdeData(radarScene));
       continue;
     }

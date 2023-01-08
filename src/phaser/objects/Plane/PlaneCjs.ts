@@ -6,13 +6,7 @@ export default class PlaneCjs extends Phaser.GameObjects.BitmapText {
   private Plane: Plane;
 
   constructor(plane: Plane) {
-    super(
-      plane.scene,
-      0,
-      0,
-      AssetKeys.FONT_DEJAVU_MONO_BOLD,
-      plane.Properties.handoffData.sector
-    );
+    super(plane.scene, 0, 0, AssetKeys.FONT_DEJAVU_MONO_BOLD, 'SD');
     this.scene.add.existing(this);
     this.Plane = plane;
 
@@ -25,6 +19,8 @@ export default class PlaneCjs extends Phaser.GameObjects.BitmapText {
   }
 
   preUpdate() {
-    this.setVisible(this.Plane.IS_HANDED_OFF);
+    if (this.Plane.IS_HANDED_OFF) {
+      this.setText(this.Plane.Properties.handoffData.sector);
+    }
   }
 }
