@@ -1,31 +1,32 @@
 import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
 import { SidName } from '../../phaser/types/SidAndSatelliteTypes';
+import { DepFDE } from './genDepFdeData';
 
 export function determineIfVdpAllowed(
   radarScene: RadarSceneKeys,
-  currFdeSidName: SidName,
-  prevFdeSidName: SidName | undefined
+  currFde: DepFDE,
+  prevFde: DepFDE | undefined
 ) {
-  if (!prevFdeSidName) return false;
+  if (!prevFde) return false;
 
   if (
-    sameSidsNorthbound.includes(currFdeSidName) &&
-    sameSidsNorthbound.includes(prevFdeSidName)
+    sameSidsNorthbound.includes(currFde.sidName) &&
+    sameSidsNorthbound.includes(prevFde.sidName)
   ) {
     return false;
   }
 
   if (
     radarScene === RadarSceneKeys.RADAR_06s &&
-    sameSidsSouthbound06s.includes(currFdeSidName) &&
-    sameSidsSouthbound06s.includes(prevFdeSidName)
+    sameSidsSouthbound06s.includes(currFde.sidName) &&
+    sameSidsSouthbound06s.includes(prevFde.sidName)
   ) {
     return false;
   }
 
   if (
-    sameSidsSouthbound.includes(currFdeSidName) &&
-    sameSidsSouthbound.includes(prevFdeSidName)
+    sameSidsSouthbound.includes(currFde.sidName) &&
+    sameSidsSouthbound.includes(prevFde.sidName)
   ) {
     return false;
   }

@@ -149,14 +149,6 @@ export function genDepFdeData(
 
   let isVDP = _.random(1, 10) > 6;
 
-  if (isVDP) {
-    if (!prevFdeSidName) {
-      isVDP = false;
-    }
-    if (determineIfVdpAllowed(radarScene, sidName, prevFdeSidName)) {
-    }
-  }
-
   const depPhase = DeparturePhase.READY;
 
   let depPosition = determineIfNorthOrSouthDep(radarScene, sidName);

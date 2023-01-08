@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import { useCallback, useEffect, useState } from 'react';
 import useInterval from 'use-interval';
 import PhaserGame from '../../phaser/PhaserGameConfig';
+import { AcType } from '../../phaser/types/AircraftTypes';
 import { OtherSceneKeys } from '../../phaser/types/SceneKeys';
 import { determineIfVdpAllowed } from '../functions/determineIfVdpAllowed';
 import {
@@ -96,7 +97,12 @@ const FdeSection = () => {
         northStrips.forEach((strip, idx) => {
           if (strip.isSatellite) return;
 
-          if (!northStrips[idx - 1]) {
+          const prevStrip = northStrips[idx - 1];
+          if (
+            !prevStrip ||
+            prevStrip.acType === AcType.PROP ||
+            strip.acType === AcType.PROP
+          ) {
             strip.isVDP = false;
             return;
           }
@@ -104,8 +110,8 @@ const FdeSection = () => {
           if (
             determineIfVdpAllowed(
               simOptions.radarScene,
-              strip.sidName,
-              northStrips[idx - 1].sidName
+              strip,
+              northStrips[idx - 1]
             )
           ) {
             strip.isVDP = true;
@@ -117,7 +123,12 @@ const FdeSection = () => {
         southStrips.forEach((strip, idx) => {
           if (strip.isSatellite) return;
 
-          if (!southStrips[idx - 1]) {
+          const prevStrip = southStrips[idx - 1];
+          if (
+            !prevStrip ||
+            prevStrip.acType === AcType.PROP ||
+            strip.acType === AcType.PROP
+          ) {
             strip.isVDP = false;
             return;
           }
@@ -125,8 +136,8 @@ const FdeSection = () => {
           if (
             determineIfVdpAllowed(
               simOptions.radarScene,
-              strip.sidName,
-              southStrips[idx - 1].sidName
+              strip,
+              southStrips[idx - 1]
             )
           ) {
             strip.isVDP = true;
@@ -247,7 +258,7 @@ const FdeSection = () => {
 
   // Interval: (VISUAL DEPS) Move from panel IN POSITION -> AIRBORNE
   useInterval(() => {
-    if (simOptions.isPaused) return;
+    if (simOptions.isPaused || !simOptions.allowVdp) return;
 
     const currTime = Date.now();
     const currInPositionNFde = stripList.inPositionNorthPanel[0];
