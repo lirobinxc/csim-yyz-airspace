@@ -357,6 +357,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
         } else {
           heading.directTo = PROP_HEADING;
         }
+        this.Plane.Commands.onSidOrPropHeading = true;
       }
     }
   }

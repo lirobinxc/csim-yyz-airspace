@@ -69,7 +69,7 @@ export default class Plane extends Phaser.GameObjects.Container {
   public DataTag: PlaneDataTag;
   private TagLine: PlaneDataTagLine;
   private PTL: PlanePTL;
-  private HistoryTrail: PlaneHistoryTrail;
+  public HistoryTrail: PlaneHistoryTrail;
   // private PlaneRouteLine: PlaneRouteLine;
   private Behaviour: PlaneBehaviour;
   public CommandMenu: PlaneCommandMenu;

@@ -3,10 +3,11 @@ import Plane from './Plane';
 import PlaneSymbol from './PlaneSymbol';
 
 export default class PlaneHistoryTrail extends Phaser.GameObjects.Container {
-  private DotList: Phaser.GameObjects.Arc[];
+  public DotList: Phaser.GameObjects.Arc[];
 
   // Constants
   public MAX_NUM_OF_DOTS: number;
+  public IS_VISIBLE: boolean;
 
   // Parent component + Reference components
   private Plane: Plane;
@@ -26,11 +27,14 @@ export default class PlaneHistoryTrail extends Phaser.GameObjects.Container {
 
     // Init: Constants
     this.MAX_NUM_OF_DOTS = 7;
+    this.IS_VISIBLE = true;
 
     // Sync update with FPS (set in Phaser Config)
     this.scene.physics.world.on('worldstep', () => {
-      this.addNewDot();
-      this.removeOldDots();
+      if (this.IS_VISIBLE) {
+        this.addNewDot();
+        this.removeOldDots();
+      }
     });
   }
 

@@ -31,6 +31,14 @@ const MenuSection = ({ appVersion }: MenuSectionProps) => {
     setIsModalOpen(false);
   }
 
+  function toggleVdp() {
+    if (simOptions.allowVdp) {
+      dispatch(simOptionsActions.disableVdp());
+    } else {
+      dispatch(simOptionsActions.enableVdp());
+    }
+  }
+
   function togglePauseSim() {
     if (simOptions.isPaused) {
       dispatch(simOptionsActions.unpauseSim());
@@ -81,7 +89,14 @@ const MenuSection = ({ appVersion }: MenuSectionProps) => {
         >
           RESTART
         </button>
-        <button className={clsx(styles.spacing, styles.vdp)}>VDP</button>
+        <button
+          className={clsx(styles.spacing, styles.vdp, {
+            [styles.bgGreen]: simOptions.allowVdp,
+          })}
+          onClick={toggleVdp}
+        >
+          VDP
+        </button>
         <button className={clsx(styles.spacing, styles.normalSplit)}>
           NORMAL
         </button>

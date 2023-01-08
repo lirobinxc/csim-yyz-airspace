@@ -135,12 +135,27 @@ export const departureList = createSlice({
       const selectedFde = action.payload;
 
       const newList = state.filter(
-        (strip) => strip.acId.code !== selectedFde.acId.code
+        (strip) => strip.uniqueKey !== selectedFde.uniqueKey
       );
 
       sendAirborneToPhaser(selectedFde);
 
       return [...newList, { ...selectedFde, depPhase }];
+    },
+    setStripAsVdp: (state, action: PayloadAction<DepFDE | undefined>) => {
+      if (!action.payload) return state;
+
+      const selectedFde = action.payload;
+
+      const selectedFdeIdx = state.findIndex(
+        (strip) => strip.uniqueKey !== selectedFde.uniqueKey
+      );
+
+      let newList: DepFDE[] = [...state];
+      if (selectedFdeIdx > -1) {
+        newList[selectedFdeIdx].isVDP = true;
+      }
+      return newList;
     },
     setStripDepPosition: (
       state,

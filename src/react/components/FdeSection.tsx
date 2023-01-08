@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import useInterval from 'use-interval';
 import PhaserGame from '../../phaser/PhaserGameConfig';
 import { OtherSceneKeys } from '../../phaser/types/SceneKeys';
+import { determineIfVdpAllowed } from '../functions/determineIfVdpAllowed';
 import {
   DeparturePhase,
   DeparturePosition,
@@ -36,45 +37,110 @@ const FdeSection = () => {
   const [timeOfLastAirborneSatellite, setTimeOfLastAirborneSatellite] =
     useState(0);
 
-  const processStrips = useCallback((stripList: DepFDE[]) => {
-    const stripsCue = {
-      readyNorthPanel: [] as DepFDE[],
-      readySouthPanel: [] as DepFDE[],
-      inPositionNorthPanel: [] as DepFDE[],
-      inPositionSouthPanel: [] as DepFDE[],
-      airborneNorthPanel: [] as DepFDE[],
-      airborneSouthPanel: [] as DepFDE[],
-      satellitePendingPanel: [] as DepFDE[],
-    };
+  const processStrips = useCallback(
+    (stripList: DepFDE[]) => {
+      const stripsCue = {
+        readyNorthPanel: [] as DepFDE[],
+        readySouthPanel: [] as DepFDE[],
+        inPositionNorthPanel: [] as DepFDE[],
+        inPositionSouthPanel: [] as DepFDE[],
+        airborneNorthPanel: [] as DepFDE[],
+        airborneSouthPanel: [] as DepFDE[],
+        satellitePendingPanel: [] as DepFDE[],
+      };
 
-    stripList.forEach((strip) => {
-      switch (strip.depPhase) {
-        case DeparturePhase.READY:
-          if (strip.depPosition === DeparturePosition.ND)
-            stripsCue.readyNorthPanel.push(strip);
-          if (strip.depPosition === DeparturePosition.SD)
-            stripsCue.readySouthPanel.push(strip);
-          break;
-        case DeparturePhase.IN_POSITION:
-          if (strip.depPosition === DeparturePosition.ND)
-            stripsCue.inPositionNorthPanel.push(strip);
-          if (strip.depPosition === DeparturePosition.SD)
-            stripsCue.inPositionSouthPanel.push(strip);
-          break;
-        case DeparturePhase.AIRBORNE:
-          if (strip.depPosition === DeparturePosition.ND)
-            stripsCue.airborneNorthPanel.push(strip);
-          if (strip.depPosition === DeparturePosition.SD)
-            stripsCue.airborneSouthPanel.push(strip);
-          break;
-        case DeparturePhase.SATELLITE_PENDING:
-          stripsCue.satellitePendingPanel.push(strip);
-          break;
+      stripList.forEach((strip) => {
+        const newStrip = { ...strip };
+        if (!simOptions.allowVdp) {
+          newStrip.isVDP = false;
+        }
+
+        switch (strip.depPhase) {
+          case DeparturePhase.READY:
+            if (strip.depPosition === DeparturePosition.ND)
+              stripsCue.readyNorthPanel.push(newStrip);
+
+            if (strip.depPosition === DeparturePosition.SD)
+              stripsCue.readySouthPanel.push(newStrip);
+            break;
+          case DeparturePhase.IN_POSITION:
+            if (strip.depPosition === DeparturePosition.ND)
+              stripsCue.inPositionNorthPanel.push(newStrip);
+            if (strip.depPosition === DeparturePosition.SD)
+              stripsCue.inPositionSouthPanel.push(newStrip);
+            break;
+          case DeparturePhase.AIRBORNE:
+            if (strip.depPosition === DeparturePosition.ND)
+              stripsCue.airborneNorthPanel.push(newStrip);
+            if (strip.depPosition === DeparturePosition.SD)
+              stripsCue.airborneSouthPanel.push(newStrip);
+            break;
+          case DeparturePhase.SATELLITE_PENDING:
+            stripsCue.satellitePendingPanel.push(newStrip);
+            break;
+        }
+      });
+
+      const northStrips = [
+        ...stripsCue.airborneNorthPanel,
+        ...stripsCue.inPositionNorthPanel,
+        ...stripsCue.readyNorthPanel,
+      ];
+      const southStrips = [
+        ...stripsCue.airborneSouthPanel,
+        ...stripsCue.inPositionSouthPanel,
+        ...stripsCue.readySouthPanel,
+      ];
+
+      if (simOptions.allowVdp) {
+        northStrips.forEach((strip, idx) => {
+          if (strip.isSatellite) return;
+
+          if (!northStrips[idx - 1]) {
+            strip.isVDP = false;
+            return;
+          }
+
+          if (
+            determineIfVdpAllowed(
+              simOptions.radarScene,
+              strip.sidName,
+              northStrips[idx - 1].sidName
+            )
+          ) {
+            strip.isVDP = true;
+            return;
+          } else {
+            strip.isVDP = false;
+          }
+        });
+        southStrips.forEach((strip, idx) => {
+          if (strip.isSatellite) return;
+
+          if (!southStrips[idx - 1]) {
+            strip.isVDP = false;
+            return;
+          }
+
+          if (
+            determineIfVdpAllowed(
+              simOptions.radarScene,
+              strip.sidName,
+              southStrips[idx - 1].sidName
+            )
+          ) {
+            strip.isVDP = true;
+            return;
+          } else {
+            strip.isVDP = false;
+          }
+        });
       }
-    });
 
-    setStripList(stripsCue);
-  }, []);
+      setStripList(stripsCue);
+    },
+    [simOptions.allowVdp, simOptions.radarScene]
+  );
 
   useEffect(() => {
     processStrips(strips);
@@ -179,14 +245,35 @@ const FdeSection = () => {
     }
   }, 5000);
 
-  // Interval: (VISUAL DEP) Move from panel IN POSITION -> AIRBORNE
-  // useRandomInterval(() => {
-  //   dispatch(departureListActions.setToAirborne({radarScene: simOptions.radarScene, fde: stripList.inPositionNPanel[0]))};
-  // }, ...simOptions.newStripInterval);
+  // Interval: (VISUAL DEPS) Move from panel IN POSITION -> AIRBORNE
+  useInterval(() => {
+    if (simOptions.isPaused) return;
 
-  // useRandomInterval(() => {
-  //   dispatch(departureListActions.setToAirborne({radarScene: simOptions.radarScene, fde: stripList.inPositionSPanel[0]))};
-  // }, ...simOptions.newStripInterval);
+    const currTime = Date.now();
+    const currInPositionNFde = stripList.inPositionNorthPanel[0];
+    const currInPositionSFde = stripList.inPositionSouthPanel[0];
+
+    if (currInPositionNFde && currInPositionNFde.isVDP) {
+      if (
+        currTime >
+        currInPositionNFde.inPositionTime + simOptions.intervalBetweenVisualDeps
+      ) {
+        dispatch(
+          departureListActions.setToAirborne(stripList.inPositionNorthPanel[0])
+        );
+      }
+    }
+    if (currInPositionSFde && currInPositionSFde.isVDP) {
+      if (
+        currTime >
+        currInPositionSFde.inPositionTime + simOptions.intervalBetweenVisualDeps
+      ) {
+        dispatch(
+          departureListActions.setToAirborne(stripList.inPositionSouthPanel[0])
+        );
+      }
+    }
+  }, 5000);
 
   // Interval: Move from panel SATELLITE PENDING -> AIRBORNE
   useInterval(() => {

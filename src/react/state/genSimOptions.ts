@@ -9,6 +9,7 @@ export const defaultSimOptions: SimOptions = {
   radarScene: RadarSceneKeys.RADAR_06s,
   startingCount: 4,
   isSingleOps: true,
+  allowVdp: true,
   newStripInterval: [10_000, 20_000],
   intervalBetweenNormalDeps: 50_000, // should be ???
   intervalBetweenVisualDeps: 25_000,

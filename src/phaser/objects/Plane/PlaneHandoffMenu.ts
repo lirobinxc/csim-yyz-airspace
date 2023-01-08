@@ -12,6 +12,7 @@ import PlaneCommandSubmenu, {
 export enum PlaneHandoffMenuButtons {
   HANDOFF = 'H/O',
   SHOW_PTL = 'Show PTL',
+  HIDE_PLANE = 'Hide Plane',
 }
 
 export default class PlaneHandoffMenu extends Phaser.GameObjects.Container {
@@ -30,6 +31,7 @@ export default class PlaneHandoffMenu extends Phaser.GameObjects.Container {
   private Buttons: Phaser.GameObjects.BitmapText[];
   private Btn_Handoff: Phaser.GameObjects.BitmapText;
   private Btn_ShowPtl: Phaser.GameObjects.BitmapText;
+  private Btn_HidePlane: Phaser.GameObjects.BitmapText;
 
   constructor(plane: Plane) {
     super(plane.scene);
@@ -55,7 +57,6 @@ export default class PlaneHandoffMenu extends Phaser.GameObjects.Container {
       AssetKeys.FONT_DEJAVU_MONO_BOLD,
       `${PlaneHandoffMenuButtons.HANDOFF} > ${this.Plane.Properties.handoffData.sector}`
     );
-
     this.Btn_ShowPtl = new Phaser.GameObjects.BitmapText(
       plane.scene,
       0,
@@ -63,7 +64,14 @@ export default class PlaneHandoffMenu extends Phaser.GameObjects.Container {
       AssetKeys.FONT_DEJAVU_MONO_BOLD,
       PlaneHandoffMenuButtons.SHOW_PTL
     );
-    this.Buttons.push(this.Btn_Handoff, this.Btn_ShowPtl);
+    this.Btn_HidePlane = new Phaser.GameObjects.BitmapText(
+      plane.scene,
+      0,
+      0,
+      AssetKeys.FONT_DEJAVU_MONO_BOLD,
+      PlaneHandoffMenuButtons.HIDE_PLANE
+    );
+    this.Buttons.push(this.Btn_Handoff, this.Btn_ShowPtl, this.Btn_HidePlane);
 
     this.add(this.Buttons);
 
@@ -114,6 +122,20 @@ export default class PlaneHandoffMenu extends Phaser.GameObjects.Container {
         );
         this.Plane.SHOW_PTL = !this.Plane.SHOW_PTL;
         this.IS_VISIBLE = false;
+      }
+    );
+
+    this.Btn_HidePlane.on(
+      DomEvents.POINTER_DOWN,
+      (pointer: Phaser.Input.Pointer) => {
+        this.scene.events.emit(
+          PhaserCustomEvents.HIDE_PLANE_BUTTON_CLICKED,
+          this.Plane
+        );
+        this.Plane.HistoryTrail.DotList.forEach((dot) => dot.setVisible(false));
+        this.Plane.HistoryTrail.IS_VISIBLE = false;
+        this.Plane.HistoryTrail.setVisible(false);
+        this.Plane.setVisible(false);
       }
     );
 

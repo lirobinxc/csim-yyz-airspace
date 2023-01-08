@@ -20,6 +20,7 @@ export interface SimOptions {
   radarScene: RadarSceneKeys;
   startingCount: number;
   isSingleOps: boolean;
+  allowVdp: boolean;
   newStripInterval: [number, number]; // [min, max] in milliseconds
   intervalBetweenNormalDeps: number; // ms
   intervalBetweenVisualDeps: number; // ms
@@ -74,6 +75,12 @@ export const simOptions = createSlice({
       console.log('newOptions', newOptions.selectedStrip);
 
       return newOptions;
+    },
+    enableVdp: (state) => {
+      return { ...state, allowVdp: true };
+    },
+    disableVdp: (state) => {
+      return { ...state, allowVdp: false };
     },
     pauseSim: (state) => {
       pausePhaser();
