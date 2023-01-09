@@ -30,7 +30,7 @@ function PendingSatelliteFDE({
 }: DepFDE) {
   const dispatch = useAppDispatch();
   const depRunwayFormatted = depRunway?.split(' ')[2];
-  const sidNameFormatted = sidName.split(' ')[0];
+  const sidNameFormatted = satFdeData.depRoute.split(' ')[0];
 
   const isJetFpBelow230 = acType === AcType.JET && filedAlt < 230;
 

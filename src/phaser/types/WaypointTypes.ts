@@ -18,11 +18,15 @@ export interface WaypointData24s extends WaypointDataAll {
 export interface WaypointData33s extends WaypointDataAll {
   name: WaypointNamesRwy33s;
 }
+export interface WaypointData15s extends WaypointDataAll {
+  name: WaypointNamesRwy15s;
+}
 
 export type WaypointKeysAll = Record<WaypointNamesAll, WaypointDataAll>;
 export type WaypointKeys06s = Record<WaypointNamesRwy06s, WaypointData06s>;
 export type WaypointKeys24s = Record<WaypointNamesRwy24s, WaypointData24s>;
 export type WaypointKeys33s = Record<WaypointNamesRwy33s, WaypointData33s>;
+export type WaypointKeys15s = Record<WaypointNamesRwy15s, WaypointData15s>;
 export type WaypointKeysCommon = Record<
   WaypointNamesCommon,
   WaypointDataCommon

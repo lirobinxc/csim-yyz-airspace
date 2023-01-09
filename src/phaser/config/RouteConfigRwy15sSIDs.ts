@@ -1,0 +1,89 @@
+import { WaypointData15s } from '../types/WaypointTypes';
+import { SidName } from '../types/SidAndSatelliteTypes';
+import { WP_DICT_Rwy15s } from './WaypointConfigRwy15s';
+
+export const SID_ROUTES_15s: {
+  [key in SidName]: WaypointData15s[];
+} = {
+  'ANCOL DEP': [WP_DICT_Rwy15s.MIXUT, WP_DICT_Rwy15s.LETOR],
+  'AVSEP DEP': [
+    WP_DICT_Rwy15s.BOVAL,
+    WP_DICT_Rwy15s.VIBNA,
+    WP_DICT_Rwy15s.IPSOT,
+    WP_DICT_Rwy15s.URSAL,
+    WP_DICT_Rwy15s.NUGOP,
+  ],
+  'BETES DEP': [WP_DICT_Rwy15s.OAKVL, WP_DICT_Rwy15s.BETES],
+  'BOMET DEP': [WP_DICT_Rwy15s.DAVSI, WP_DICT_Rwy15s.TESUK],
+  'DEDKI DEP': [
+    WP_DICT_Rwy15s.ALKUT,
+    WP_DICT_Rwy15s.KODAL,
+    WP_DICT_Rwy15s.DEDKI,
+  ],
+  'DUSOM DEP': [WP_DICT_Rwy15s.DUSOM, WP_DICT_Rwy15s.RIGUS],
+  'EBKIN DEP': [
+    WP_DICT_Rwy15s.ETLER,
+    WP_DICT_Rwy15s.EBKIN,
+    WP_DICT_Rwy15s.KISEP,
+  ],
+  'GOPUP DEP': [
+    WP_DICT_Rwy15s.BOVAL,
+    WP_DICT_Rwy15s.VIBNA,
+    WP_DICT_Rwy15s.IPSOT,
+    WP_DICT_Rwy15s.TULEK,
+  ],
+  'IKLEN DEP': [
+    WP_DICT_Rwy15s.BORUX,
+    WP_DICT_Rwy15s.ETLER,
+    WP_DICT_Rwy15s.IKLEN,
+    WP_DICT_Rwy15s.TONNY,
+  ],
+  'KEPTA DEP': [WP_DICT_Rwy15s.RIKEM, WP_DICT_Rwy15s.KEPTA],
+  'KISEP DEP': [
+    WP_DICT_Rwy15s.BORUX,
+    WP_DICT_Rwy15s.ETLER,
+    WP_DICT_Rwy15s.EBKIN,
+    WP_DICT_Rwy15s.KISEP,
+  ],
+  'LAKES DEP': [
+    WP_DICT_Rwy15s.ETLER,
+    WP_DICT_Rwy15s.SEDOG,
+    WP_DICT_Rwy15s.TANGI,
+  ],
+  'MATES DEP': [
+    WP_DICT_Rwy15s.ETLER,
+    WP_DICT_Rwy15s.IKLEN,
+    WP_DICT_Rwy15s.TONNY,
+  ],
+  'MAVAN DEP': [WP_DICT_Rwy15s.RIKEM, WP_DICT_Rwy15s.KEPTA],
+  'MIXUT DEP': [WP_DICT_Rwy15s.MIXUT, WP_DICT_Rwy15s.LETOR],
+  'NOSIK DEP': [
+    WP_DICT_Rwy15s.IPSOT,
+    WP_DICT_Rwy15s.URSAL,
+    WP_DICT_Rwy15s.NOSIK,
+  ],
+  'NUGOP DEP': [
+    WP_DICT_Rwy15s.IPSOT,
+    WP_DICT_Rwy15s.URSAL,
+    WP_DICT_Rwy15s.NUGOP,
+  ],
+  'OAKVL DEP': [WP_DICT_Rwy15s.OAKVL, WP_DICT_Rwy15s.BETES],
+  'PEMBA DEP': [WP_DICT_Rwy15s.MIXUT, WP_DICT_Rwy15s.LETOR],
+  'PERLO DEP': [WP_DICT_Rwy15s.MIXUT, WP_DICT_Rwy15s.LETOR],
+  'RIGUS DEP': [WP_DICT_Rwy15s.DUSOM, WP_DICT_Rwy15s.RIGUS],
+  'SEDOG DEP': [WP_DICT_Rwy15s.SEDOG, WP_DICT_Rwy15s.TANGI],
+  'TEVAD DEP': [WP_DICT_Rwy15s.NADUM, WP_DICT_Rwy15s.TEVAD],
+  'TULEK DEP': [WP_DICT_Rwy15s.IPSOT, WP_DICT_Rwy15s.TULEK],
+  'URSAL DEP': [
+    WP_DICT_Rwy15s.BOVAL,
+    WP_DICT_Rwy15s.VIBNA,
+    WP_DICT_Rwy15s.IPSOT,
+    WP_DICT_Rwy15s.URSAL,
+    WP_DICT_Rwy15s.NOSIK,
+  ],
+  'VERDO DEP': [
+    WP_DICT_Rwy15s.ALKUT,
+    WP_DICT_Rwy15s.PUTON,
+    WP_DICT_Rwy15s.VERDO,
+  ],
+};

@@ -107,7 +107,7 @@ const SimOptionsModal = ({
               <option value={RadarSceneKeys.RADAR_06s}>Rwy 05/06LR</option>
               <option value={RadarSceneKeys.RADAR_24s}>Rwy 23/24LR</option>
               <option value={RadarSceneKeys.RADAR_33s}>Rwy 33LR</option>
-              {/* <option value={RadarSceneKeys.RADAR_15s}>Rwy 15LR</option> */}
+              <option value={RadarSceneKeys.RADAR_15s}>Rwy 15LR</option>
             </select>
           </label>
           <label>

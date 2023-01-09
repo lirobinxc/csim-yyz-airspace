@@ -16,6 +16,7 @@ import { AdjacentSectors } from '../types/SectorTypes';
 import img_Radar06s from '../assets/Radar06s.png';
 import img_Radar24s from '../assets/Radar24s.png';
 import img_Radar33s from '../assets/Radar33s.png';
+import img_Radar15s from '../assets/Radar15s.png';
 
 import img_PpsSymbol from '../assets/PpsSymbol.png';
 import fontTexture_DejaVuMonoBold from '../assets/font/FontDejaVuMonoBold.png';
@@ -33,6 +34,7 @@ import { WP_LIST_RWY24s } from '../config/WaypointConfigRwy24s';
 import { LocalStorageKeys } from '../../react/state/genSimOptions';
 import { SimOptions } from '../../react/state/slices/simOptionsSlice';
 import { WP_LIST_RWY33s } from '../config/WaypointConfigRwy33s';
+import { WP_LIST_RWY15s } from '../config/WaypointConfigRwy15s';
 
 const localStorage = window.localStorage;
 
@@ -98,6 +100,10 @@ export default class RadarScene extends Phaser.Scene {
         this.load.image(AssetKeys.RADAR_33s, img_Radar33s);
         this.ASSET_KEY = AssetKeys.RADAR_33s;
         break;
+      case RadarSceneKeys.RADAR_15s:
+        this.load.image(AssetKeys.RADAR_15s, img_Radar15s);
+        this.ASSET_KEY = AssetKeys.RADAR_15s;
+        break;
       default:
         throw new Error(
           `There is a problem with the SCENE_KEY provided for the RadarScene: ${this.SCENE_KEY}`
@@ -130,6 +136,11 @@ export default class RadarScene extends Phaser.Scene {
         break;
       case RadarSceneKeys.RADAR_33s:
         WP_LIST_RWY33s.forEach((waypointData) => {
+          this.Waypoints.push(new Waypoint(this, waypointData));
+        });
+        break;
+      case RadarSceneKeys.RADAR_15s:
+        WP_LIST_RWY15s.forEach((waypointData) => {
           this.Waypoints.push(new Waypoint(this, waypointData));
         });
         break;

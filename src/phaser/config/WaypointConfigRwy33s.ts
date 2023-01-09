@@ -106,6 +106,29 @@ export const WP_LIST_RWY33s: WaypointData33s[] = [
     },
     type: AcType.JET,
   },
+  // Overwrite the common VERDO / DEDKI coordinates (due to map placing issues)
+  {
+    name: 'VERDO',
+    relativeCoord: new Phaser.Math.Vector2(1, 0.504),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: AcType.JET,
+  },
+  {
+    name: 'DEDKI',
+    relativeCoord: new Phaser.Math.Vector2(1, 0.563),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: AcType.JET,
+  },
 ];
 
 export const WP_DICT_Rwy33s = genDictFromWaypointList(WP_LIST_RWY33s);
