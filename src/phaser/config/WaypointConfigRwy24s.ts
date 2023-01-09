@@ -1,21 +1,15 @@
 import { AcType } from '../types/AircraftTypes';
 import { GameConfig } from './GameConfig';
 import { WP_LIST_COMMON } from './WaypointConfigCommon';
-import type {
-  WaypointData06s,
-  WaypointDataAll,
-  WaypointKeys06s,
-  WaypointNamesAll,
-  WaypointNamesRwy06s,
-} from '../types/WaypointTypes';
+import type { WaypointData24s, WaypointKeys24s } from '../types/WaypointTypes';
 
 const gameHeight = GameConfig.height;
 
-export const WP_LIST_RWY06s: WaypointData06s[] = [
+export const WP_LIST_RWY24s: WaypointData24s[] = [
   ...WP_LIST_COMMON,
   {
-    name: 'BIRLI',
-    relativeCoord: new Phaser.Math.Vector2(0.609, 0.652),
+    name: 'BISTI',
+    relativeCoord: new Phaser.Math.Vector2(0.343, 0.393),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -25,52 +19,8 @@ export const WP_LIST_RWY06s: WaypointData06s[] = [
     type: AcType.JET,
   },
   {
-    name: 'DUVKO',
-    relativeCoord: new Phaser.Math.Vector2(0.348, 0.336),
-    getDisplayCoord: function () {
-      return new Phaser.Math.Vector2(
-        this.relativeCoord.x,
-        this.relativeCoord.y
-      ).scale(gameHeight);
-    },
-    type: AcType.JET,
-  },
-  {
-    name: 'GOTIM',
-    relativeCoord: new Phaser.Math.Vector2(0.576, 0.279),
-    getDisplayCoord: function () {
-      return new Phaser.Math.Vector2(
-        this.relativeCoord.x,
-        this.relativeCoord.y
-      ).scale(gameHeight);
-    },
-    type: AcType.JET,
-  },
-  {
-    name: 'KEDSI',
-    relativeCoord: new Phaser.Math.Vector2(0.509, 0.333),
-    getDisplayCoord: function () {
-      return new Phaser.Math.Vector2(
-        this.relativeCoord.x,
-        this.relativeCoord.y
-      ).scale(gameHeight);
-    },
-    type: AcType.JET,
-  },
-  {
-    name: 'KODAL',
-    relativeCoord: new Phaser.Math.Vector2(0.937, 0.605),
-    getDisplayCoord: function () {
-      return new Phaser.Math.Vector2(
-        this.relativeCoord.x,
-        this.relativeCoord.y
-      ).scale(gameHeight);
-    },
-    type: AcType.JET,
-  },
-  {
-    name: 'MEMPA',
-    relativeCoord: new Phaser.Math.Vector2(0.452, 0.375),
+    name: 'GAGPO',
+    relativeCoord: new Phaser.Math.Vector2(0.65, 0.633),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -80,8 +30,30 @@ export const WP_LIST_RWY06s: WaypointData06s[] = [
     type: AcType.PROP,
   },
   {
-    name: 'MOBEL',
-    relativeCoord: new Phaser.Math.Vector2(0.687, 0.554),
+    name: 'MATES',
+    relativeCoord: new Phaser.Math.Vector2(0.414, 0.343),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: AcType.PROP,
+  },
+  {
+    name: 'MAVAN',
+    relativeCoord: new Phaser.Math.Vector2(0.534, 0.628),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: AcType.PROP,
+  },
+  {
+    name: 'MURNO',
+    relativeCoord: new Phaser.Math.Vector2(0.415, 0.758),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -91,42 +63,41 @@ export const WP_LIST_RWY06s: WaypointData06s[] = [
     type: AcType.JET,
   },
   {
-    name: 'OMAPA',
-    relativeCoord: new Phaser.Math.Vector2(0.581, 0.657),
+    name: 'NAMGI',
+    relativeCoord: new Phaser.Math.Vector2(0.449, 0.302),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
         this.relativeCoord.y
       ).scale(gameHeight);
     },
-    type: AcType.PROP,
+    type: AcType.JET,
   },
   {
-    name: 'PERLO',
-    relativeCoord: new Phaser.Math.Vector2(0.604, 0.564),
+    name: 'SAVUR',
+    relativeCoord: new Phaser.Math.Vector2(0.506, 0.679),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
         this.relativeCoord.y
       ).scale(gameHeight);
     },
-    type: AcType.PROP,
+    type: AcType.JET,
   },
   {
-    name: 'SIDVU',
-    relativeCoord: new Phaser.Math.Vector2(0.36, 0.362),
-
+    name: 'SEKIT',
+    relativeCoord: new Phaser.Math.Vector2(0.631, 0.673),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
         this.relativeCoord.y
       ).scale(gameHeight);
     },
-    type: AcType.PROP,
+    type: AcType.JET,
   },
   {
-    name: 'VIDRA',
-    relativeCoord: new Phaser.Math.Vector2(0.554, 0.702),
+    name: 'TILAM',
+    relativeCoord: new Phaser.Math.Vector2(0.275, 0.428),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -137,9 +108,9 @@ export const WP_LIST_RWY06s: WaypointData06s[] = [
   },
 ];
 
-export const WP_DICT_Rwy06s = genDictFromWaypointList(WP_LIST_RWY06s);
+export const WP_DICT_Rwy24s = genDictFromWaypointList(WP_LIST_RWY24s);
 
-function genDictFromWaypointList(wpArr: WaypointData06s[]) {
+function genDictFromWaypointList(wpArr: WaypointData24s[]) {
   const wpDict = wpArr.reduce((acc, item) => {
     acc[item.name] = {
       name: item.name,
@@ -148,7 +119,7 @@ function genDictFromWaypointList(wpArr: WaypointData06s[]) {
       getDisplayCoord: item.getDisplayCoord,
     };
     return acc;
-  }, {} as WaypointKeys06s);
+  }, {} as WaypointKeys24s);
 
   return wpDict;
 }

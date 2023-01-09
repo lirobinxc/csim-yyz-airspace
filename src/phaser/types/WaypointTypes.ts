@@ -15,10 +15,14 @@ export interface WaypointData06s extends WaypointDataAll {
 export interface WaypointData24s extends WaypointDataAll {
   name: WaypointNamesRwy24s;
 }
+export interface WaypointData33s extends WaypointDataAll {
+  name: WaypointNamesRwy33s;
+}
 
 export type WaypointKeysAll = Record<WaypointNamesAll, WaypointDataAll>;
 export type WaypointKeys06s = Record<WaypointNamesRwy06s, WaypointData06s>;
 export type WaypointKeys24s = Record<WaypointNamesRwy24s, WaypointData24s>;
+export type WaypointKeys33s = Record<WaypointNamesRwy33s, WaypointData33s>;
 export type WaypointKeysCommon = Record<
   WaypointNamesCommon,
   WaypointDataCommon
@@ -44,7 +48,9 @@ export type WaypointNamesRwy33s =
   | WaypointNamesCommon;
 
 export type WaypointNamesCommon =
+  | 'ALKUT'
   | 'ANCOL'
+  | 'AVROS'
   | 'AVSEP'
   | 'BETES'
   | 'DEDKI'
@@ -59,6 +65,7 @@ export type WaypointNamesCommon =
   | 'NOSIK'
   | 'NUGOP'
   | 'OAKVL'
+  | 'PUTON'
   | 'RIGUS'
   | 'RIKEM'
   | 'SEDOG'
@@ -89,9 +96,7 @@ export type WaypointNamesCommon =
   | 'YYZ';
 
 type WaypointNamesRwy06sUnique =
-  | 'ALKUT'
   | 'ANCOL'
-  | 'AVROS'
   | 'BIRLI'
   | 'DUVKO'
   | 'GOTIM'
@@ -101,7 +106,6 @@ type WaypointNamesRwy06sUnique =
   | 'MOBEL'
   | 'OMAPA'
   | 'PERLO'
-  | 'PUTON'
   | 'SIDVU'
   | 'VIDRA';
 
@@ -117,24 +121,20 @@ type WaypointNamesRwy24sUnique =
   | 'TILAM';
 
 type WaypointNamesRwy15sUnique =
-  | 'BOVAL'
-  | 'VIBNA'
-  | 'IPSOT'
   | 'BORUX'
+  | 'BOVAL'
   | 'ETLER'
-  | 'ALKUT'
-  | 'PUTON'
-  | 'KODAL';
+  | 'IPSOT'
+  | 'KODAL'
+  | 'VIBNA';
 
 type WaypointNamesRwy33sUnique =
+  | 'BOTIB'
+  | 'DUVAK'
+  | 'IGTUL'
+  | 'NUBAN'
   | 'NUBAX'
+  | 'SERPI'
   | 'TANGU'
   | 'TETAD'
-  | 'SERPI'
-  | 'VIVET'
-  | 'NUBAN'
-  | 'BOTIB'
-  | 'IGTUL'
-  | 'DUVAK'
-  | 'AVROS'
-  | 'PUTON';
+  | 'VIVET';

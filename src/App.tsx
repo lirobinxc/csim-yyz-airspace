@@ -27,7 +27,7 @@ import { PhaserGameConfig } from './phaser/PhaserGameConfig';
 function App() {
   return (
     <div className={styles.App}>
-      <MenuSection appVersion="1.0b" />
+      <MenuSection appVersion="1.0a" />
       <FdeSection />
     </div>
   );

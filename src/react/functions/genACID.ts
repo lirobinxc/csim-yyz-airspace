@@ -45,8 +45,8 @@ export function genACID() {
   }
 
   if (wtc === AcWTC.H) acType = AcType.JET;
-  if (wtc === AcWTC.M && num1to10 > 4) acType = AcType.JET;
-  if (wtc === AcWTC.M && num1to10 <= 4) acType = AcType.PROP;
+  if (wtc === AcWTC.M && num1to10 > 3) acType = AcType.JET;
+  if (wtc === AcWTC.M && num1to10 <= 3) acType = AcType.PROP;
   if (wtc === AcWTC.L) acType = AcType.PROP;
 
   const model = _.sample(aircraftCollection[wtc][acType]);

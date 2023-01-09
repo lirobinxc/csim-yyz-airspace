@@ -10,7 +10,7 @@ export default class PlaneCjs extends Phaser.GameObjects.BitmapText {
     this.scene.add.existing(this);
     this.Plane = plane;
 
-    const FONT_SIZE = 14;
+    const FONT_SIZE = 12;
     // Setup
     this.setFontSize(FONT_SIZE);
     this.setTint(ColorKeys.PPS_YELLOW);

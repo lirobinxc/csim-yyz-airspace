@@ -2,6 +2,8 @@ import clsx from 'clsx';
 import styles from './PendingSatelliteFDE.module.scss';
 import { DepFDE } from '../../functions/genDepFdeData';
 import { AcType } from '../../../phaser/types/AircraftTypes';
+import { departureListActions } from '../../state/slices/departureListSlice';
+import { useAppDispatch } from '../../state/hooks';
 
 function PendingSatelliteFDE({
   acModel,
@@ -26,6 +28,7 @@ function PendingSatelliteFDE({
   satFdeData,
   sidName,
 }: DepFDE) {
+  const dispatch = useAppDispatch();
   const depRunwayFormatted = depRunway?.split(' ')[2];
   const sidNameFormatted = sidName.split(' ')[0];
 
@@ -40,6 +43,10 @@ function PendingSatelliteFDE({
     (isArrival && satFdeData.destination === 'CYPQ') ||
     satFdeData.destination === 'CYOO';
   const isYzdDep = satFdeData.depPoint === 'CYZD';
+
+  function deleteStrip() {
+    dispatch(departureListActions.deleteStrip(acId.code));
+  }
 
   return (
     <li

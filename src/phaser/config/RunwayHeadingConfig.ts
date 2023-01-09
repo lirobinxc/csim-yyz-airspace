@@ -40,19 +40,19 @@ export function getRunwayHeading(runway: DepRunwayAll) {
       return { initial: 260, sid: 260 };
     // YKZ
     case DepRunwayYKZ.RWY_15:
-      return { initial: 150, sid: 150 };
+      return { initial: 147, sid: 147 };
     case DepRunwayYKZ.RWY_33:
       return { initial: 330, sid: 330 };
     // YZD
     case DepRunwayYZD.RWY_15:
-      return { initial: 150, sid: 150 };
+      return { initial: 147, sid: 147 };
     case DepRunwayYZD.RWY_33:
       return { initial: 330, sid: 330 };
     // YTZ
     case DepRunwayYTZ.RWY_08:
       return { initial: 80, sid: 80 };
     case DepRunwayYTZ.RWY_26:
-      return { initial: 260, sid: 260 };
+      return { initial: 237, sid: 237 };
     // SatArrivals
     case DepRunwaySatArrivals.YHM:
       return { initial: 240, sid: 240 };

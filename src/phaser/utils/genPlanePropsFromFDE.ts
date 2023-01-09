@@ -21,7 +21,7 @@ export function genPlanePropsFromFDE(fde: DepFDE): PlaneProperties {
     takeoffData: {
       assignedAlt: fde.assignedAlt * 100,
       assignedHeading: getRunwayHeading(fde.depRunway).initial,
-      sidOrPropTurnHeading: fde.assignedHeading,
+      sidOrPropTurnHeading: getSidOrPropTurnHeading(fde),
       depRunway: fde.depRunway,
       isNADP1: fde.isNADP1,
     },
@@ -34,12 +34,10 @@ export function genPlanePropsFromFDE(fde: DepFDE): PlaneProperties {
   return props;
 }
 
-// function getSidOrPropTurnHeading(fde: DepFDE) {
-//   if (fde.acType === AcType.PROP || fde.isSatellite) {
-//     if (typeof fde.assignedHeading === 'number') {
-//       return Number(fde.assignedHeading) || null;
-//     }
-//   }
+function getSidOrPropTurnHeading(fde: DepFDE) {
+  if (fde.acType === AcType.PROP || fde.isSatellite) {
+    return fde.assignedHeading;
+  }
 
-//   return getRunwayHeading(fde.depRunway).sid;
-// }
+  return getRunwayHeading(fde.depRunway).sid;
+}

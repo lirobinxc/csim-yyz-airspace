@@ -1,6 +1,6 @@
 import { WaypointDataCommon } from '../types/WaypointTypes';
 import { SatelliteName } from '../types/SidAndSatelliteTypes';
-import { WP_DICT_COMMON } from './CommonWaypointConfig';
+import { WP_DICT_COMMON } from './WaypointConfigCommon';
 
 export const SAT_ROUTES: {
   [key in SatelliteName]: WaypointDataCommon[];
@@ -21,8 +21,8 @@ export const SAT_ROUTES: {
     WP_DICT_COMMON.SAXIL,
     WP_DICT_COMMON.YHM,
   ],
-  YHM_DEP_TESUK: [WP_DICT_COMMON.YHM, WP_DICT_COMMON.TESUK],
-  YHM_DEP_UKPAG: [WP_DICT_COMMON.YHM, WP_DICT_COMMON.UKPAG],
+  YHM_DEP_TESUK: [WP_DICT_COMMON.TESUK],
+  YHM_DEP_UKPAG: [WP_DICT_COMMON.UKPAG],
   YKF_DEP_DAVSI: [
     WP_DICT_COMMON.YKF,
     WP_DICT_COMMON.YWT,

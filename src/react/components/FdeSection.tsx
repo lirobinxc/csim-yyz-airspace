@@ -52,9 +52,6 @@ const FdeSection = () => {
 
       stripList.forEach((strip) => {
         const newStrip = { ...strip };
-        if (!simOptions.allowVdp) {
-          newStrip.isVDP = false;
-        }
 
         switch (strip.depPhase) {
           case DeparturePhase.READY:
@@ -82,21 +79,54 @@ const FdeSection = () => {
         }
       });
 
-      const northStrips = [
-        ...stripsCue.airborneNorthPanel,
-        ...stripsCue.inPositionNorthPanel,
-        ...stripsCue.readyNorthPanel,
-      ];
-      const southStrips = [
-        ...stripsCue.airborneSouthPanel,
-        ...stripsCue.inPositionSouthPanel,
-        ...stripsCue.readySouthPanel,
-      ];
+      const lastAirborneNorth = stripsCue.airborneNorthPanel.find(
+        (strip) => !strip.isSatellite
+      );
+      const lastAirborneSouth = stripsCue.airborneSouthPanel.find(
+        (strip) => !strip.isSatellite
+      );
+
+      let northStrips: DepFDE[] = [];
+      let southStrips: DepFDE[] = [];
+
+      if (lastAirborneNorth) {
+        northStrips = [
+          lastAirborneNorth,
+          ...stripsCue.inPositionNorthPanel,
+          ...stripsCue.readyNorthPanel,
+        ];
+      } else {
+        northStrips = [
+          ...stripsCue.inPositionNorthPanel,
+          ...stripsCue.readyNorthPanel,
+        ];
+      }
+
+      if (lastAirborneSouth) {
+        southStrips = [
+          lastAirborneSouth,
+          ...stripsCue.inPositionSouthPanel,
+          ...stripsCue.readySouthPanel,
+        ];
+      } else {
+        southStrips = [
+          ...stripsCue.inPositionSouthPanel,
+          ...stripsCue.readySouthPanel,
+        ];
+      }
+
+      if (!simOptions.allowVdp) {
+        northStrips.forEach((strip) => {
+          strip.isVDP = false;
+        });
+        southStrips.forEach((strip) => {
+          strip.isVDP = false;
+        });
+      }
 
       if (simOptions.allowVdp) {
         northStrips.forEach((strip, idx) => {
           if (strip.isSatellite) return;
-
           const prevStrip = northStrips[idx - 1];
           if (
             !prevStrip ||

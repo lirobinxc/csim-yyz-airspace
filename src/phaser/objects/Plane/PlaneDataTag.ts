@@ -6,7 +6,6 @@ import { DomEvents } from '../../types/DomEvents';
 import { convertAcWtcToSymbol } from '../../utils/convertAcWtcToSymbol';
 import Plane from './Plane';
 import PlaneSymbol from './PlaneSymbol';
-import Flash from 'phaser3-rex-plugins/plugins/flash.js';
 
 export default class PlaneDataTag extends Phaser.GameObjects.Container {
   public isExtendedTag: boolean;

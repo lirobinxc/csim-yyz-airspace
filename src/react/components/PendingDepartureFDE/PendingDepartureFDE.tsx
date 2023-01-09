@@ -33,10 +33,15 @@ function PendingDepartureFDE({
   depRunway,
   sidName,
 }: DepFDE) {
+  const dispatch = useAppDispatch();
   const depRunwayFormatted = depRunway?.split(' ')[2];
   const sidNameFormatted = sidName.split(' ')[0];
 
   const isJetFpBelow230 = acType === AcType.JET && filedAlt < 230;
+
+  function deleteStrip() {
+    dispatch(departureListActions.deleteStrip(acId.code));
+  }
 
   return (
     <li className={clsx(styles.PendingDepartureFDE)}>
@@ -68,7 +73,12 @@ function PendingDepartureFDE({
       <div className={clsx(styles.box, styles.widthSm, styles.assignedAlt)}>
         {assignedAlt}
       </div>
-      <div className={clsx(styles.box, styles.widthXs, styles.emptyBox)}> </div>
+      <div
+        className={clsx(styles.box, styles.widthXs, styles.emptyBox)}
+        onClick={deleteStrip}
+      >
+        {' '}
+      </div>
     </li>
   );
 }

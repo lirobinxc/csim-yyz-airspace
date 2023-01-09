@@ -14,14 +14,14 @@ import { DomEvents } from '../types/DomEvents';
 import { AdjacentSectors } from '../types/SectorTypes';
 
 import img_Radar06s from '../assets/Radar06s.png';
+import img_Radar24s from '../assets/Radar24s.png';
+import img_Radar33s from '../assets/Radar33s.png';
+
 import img_PpsSymbol from '../assets/PpsSymbol.png';
 import fontTexture_DejaVuMonoBold from '../assets/font/FontDejaVuMonoBold.png';
 import fontXml_DejaVuMonoBold from '../assets/font/FontDejaVuMonoBold.xml';
-import cursor_PlaneCursor from '../assets/PlaneCursor.cur';
-import { convertRadiansToHeading } from '../utils/convertRadiansToHeading';
 import DebugButton from '../objects/DebugButton';
 import { SidName } from '../types/SidAndSatelliteTypes';
-import { SID_ROUTES_06s } from '../config/RouteConfigRwy06sSIDs';
 import { DepRunwayYYZ } from '../types/AirportTypes';
 import { PhaserCustomEvents, ReactCustomEvents } from '../types/CustomEvents';
 import { PlaneProperties } from '../types/PlaneInterfaces';
@@ -29,22 +29,27 @@ import { DepFDE } from '../../react/functions/genDepFdeData';
 import { genPlanePropsFromFDE } from '../utils/genPlanePropsFromFDE';
 import SpeechSynth from '../objects/SpeechSynth';
 import FiledRouteLine from '../objects/FiledRouteLine';
+import { WP_LIST_RWY24s } from '../config/WaypointConfigRwy24s';
+import { LocalStorageKeys } from '../../react/state/genSimOptions';
+import { SimOptions } from '../../react/state/slices/simOptionsSlice';
+import { WP_LIST_RWY33s } from '../config/WaypointConfigRwy33s';
+
+const localStorage = window.localStorage;
 
 export default class RadarScene extends Phaser.Scene {
-  public Waypoints!: Waypoint[];
-  public PlaneList!: Plane[];
+  public Waypoints: Waypoint[];
+  public PlaneList: Plane[];
   public RunwayOrigins!: RunwayOrigins;
   public Options: GameObjectOptions;
   public Speech: SpeechSynth;
   private SpeechQueue: { text: string; plane: Plane; isCheckIn: boolean }[];
   private FiledRouteLine: FiledRouteLine | null;
 
-  public RUNWAY_CONFIG: RadarSceneKeys;
   public SELECTED_PLANE: Plane | null;
   public CURRENTLY_SPEAKING_PLANE: Plane | null;
 
   // Template props
-  private SCENE_KEY: RadarSceneKeys;
+  public SCENE_KEY: RadarSceneKeys;
   private ASSET_KEY: AssetKeys;
 
   // Subcomponents
@@ -54,7 +59,7 @@ export default class RadarScene extends Phaser.Scene {
     super(OtherSceneKeys.RADAR_BASE);
 
     this.Waypoints = [];
-    // this.PlaneList = new Phaser.GameObjects.Group(this);
+    this.PlaneList = [];
     this.Options = options;
     this.Speech = new SpeechSynth();
     this.SpeechQueue = [];
@@ -65,31 +70,33 @@ export default class RadarScene extends Phaser.Scene {
     this.ASSET_KEY = AssetKeys.RADAR_06s; // fallback value
 
     // Init: Constants
-    this.RUNWAY_CONFIG = sceneKey;
     this.SELECTED_PLANE = null;
     this.CURRENTLY_SPEAKING_PLANE = null;
   }
 
   init() {
-    this.Waypoints = [];
-    this.PlaneList = [];
-    this.SpeechQueue = [];
-    this.SELECTED_PLANE = null;
-    this.CURRENTLY_SPEAKING_PLANE = null;
+    const SIM_OPTIONS: SimOptions = JSON.parse(
+      localStorage.getItem(LocalStorageKeys.SIM_OPTIONS) || ''
+    );
+
+    if (SIM_OPTIONS) {
+      this.SCENE_KEY = SIM_OPTIONS.radarScene;
+    }
   }
 
   preload() {
-    // REX plugins
-    this.load.plugin(
-      'rexflashplugin',
-      'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexflashplugin.min.js',
-      true
-    );
-
     switch (this.SCENE_KEY) {
       case RadarSceneKeys.RADAR_06s:
         this.load.image(AssetKeys.RADAR_06s, img_Radar06s);
         this.ASSET_KEY = AssetKeys.RADAR_06s;
+        break;
+      case RadarSceneKeys.RADAR_24s:
+        this.load.image(AssetKeys.RADAR_24s, img_Radar24s);
+        this.ASSET_KEY = AssetKeys.RADAR_24s;
+        break;
+      case RadarSceneKeys.RADAR_33s:
+        this.load.image(AssetKeys.RADAR_33s, img_Radar33s);
+        this.ASSET_KEY = AssetKeys.RADAR_33s;
         break;
       default:
         throw new Error(
@@ -113,6 +120,16 @@ export default class RadarScene extends Phaser.Scene {
     switch (this.SCENE_KEY) {
       case RadarSceneKeys.RADAR_06s:
         WP_LIST_RWY06s.forEach((waypointData) => {
+          this.Waypoints.push(new Waypoint(this, waypointData));
+        });
+        break;
+      case RadarSceneKeys.RADAR_24s:
+        WP_LIST_RWY24s.forEach((waypointData) => {
+          this.Waypoints.push(new Waypoint(this, waypointData));
+        });
+        break;
+      case RadarSceneKeys.RADAR_33s:
+        WP_LIST_RWY33s.forEach((waypointData) => {
           this.Waypoints.push(new Waypoint(this, waypointData));
         });
         break;
@@ -250,7 +267,6 @@ export default class RadarScene extends Phaser.Scene {
     this.SCENE_KEY = radarScene;
     this.ASSET_KEY = AssetKeys.RADAR_06s; // fallback value
 
-    this.RUNWAY_CONFIG = radarScene;
     this.SELECTED_PLANE = null;
     this.CURRENTLY_SPEAKING_PLANE = null;
     this.scene.restart({ radarScene });

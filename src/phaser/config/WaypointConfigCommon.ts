@@ -10,8 +10,30 @@ const gameHeight = GameConfig.height;
 
 export const WP_LIST_COMMON: WaypointDataCommon[] = [
   {
+    name: 'ALKUT',
+    relativeCoord: new Phaser.Math.Vector2(0.79, 0.589),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: AcType.JET,
+  },
+  {
     name: 'ANCOL',
     relativeCoord: new Phaser.Math.Vector2(0.201, 0.899),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: AcType.JET,
+  },
+  {
+    name: 'AVROS',
+    relativeCoord: new Phaser.Math.Vector2(0.924, 0.425),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -31,6 +53,7 @@ export const WP_LIST_COMMON: WaypointDataCommon[] = [
     },
     type: AcType.JET,
   },
+
   {
     name: 'BETES',
     relativeCoord: new Phaser.Math.Vector2(0.279, 1),
@@ -120,6 +143,17 @@ export const WP_LIST_COMMON: WaypointDataCommon[] = [
     type: AcType.JET,
   },
   {
+    name: 'MIXUT',
+    relativeCoord: new Phaser.Math.Vector2(0.068, 0.811),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: AcType.JET,
+  },
+  {
     name: 'NADUM',
     relativeCoord: new Phaser.Math.Vector2(0.879, 0.741),
     getDisplayCoord: function () {
@@ -155,6 +189,17 @@ export const WP_LIST_COMMON: WaypointDataCommon[] = [
   {
     name: 'OAKVL',
     relativeCoord: new Phaser.Math.Vector2(0.318, 0.91),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: AcType.JET,
+  },
+  {
+    name: 'PUTON',
+    relativeCoord: new Phaser.Math.Vector2(0.947, 0.551),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -276,7 +321,7 @@ export const WP_LIST_COMMON: WaypointDataCommon[] = [
   // Satellite points (WIP)
   {
     name: 'DAVSI',
-    relativeCoord: new Phaser.Math.Vector2(0.792, 0.512),
+    relativeCoord: new Phaser.Math.Vector2(0.81, 0.529),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -342,7 +387,7 @@ export const WP_LIST_COMMON: WaypointDataCommon[] = [
   },
   {
     name: 'ROKTO',
-    relativeCoord: new Phaser.Math.Vector2(0.061, 0.605),
+    relativeCoord: new Phaser.Math.Vector2(0.051, 0.587),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,

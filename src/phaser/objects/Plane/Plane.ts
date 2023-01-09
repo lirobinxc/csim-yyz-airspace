@@ -217,6 +217,7 @@ export default class Plane extends Phaser.GameObjects.Container {
     const sidName = this.Properties.filedData.sidName;
     const filedRoute = this.getFiledRoute();
 
+    //@ts-ignore
     if (filedRoute.find((wp) => wp.name === waypointData.name)) {
       const altitude = this.Commands.altitude;
       const acType = this.Properties.acType;
@@ -335,15 +336,12 @@ export default class Plane extends Phaser.GameObjects.Container {
 
     if (this.Properties.isSatellite) {
       if (this.Properties.filedData.satelliteName) {
-        filedRoute = getSatRoute(
-          this.Scene.RUNWAY_CONFIG,
-          this.Properties.filedData.satelliteName
-        );
+        filedRoute = getSatRoute(this.Properties.filedData.satelliteName);
       }
     } else {
       if (this.Properties.filedData.sidName) {
         filedRoute = getSidRoute(
-          this.Scene.RUNWAY_CONFIG,
+          this.Scene.SCENE_KEY,
           this.Properties.filedData.sidName
         );
       }

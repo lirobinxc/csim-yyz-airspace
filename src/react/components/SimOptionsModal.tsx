@@ -29,8 +29,10 @@ const SimOptionsModal = ({
   function setRadarScene(e: React.FormEvent) {
     const target = e.target as HTMLOptionElement;
     const value = target.value as RadarSceneKeys;
+
     setTempOptions({ ...tempOptions, radarScene: value });
   }
+  console.log(tempOptions);
 
   function setIsSingleOps(e: React.FormEvent) {
     setTempOptions({ ...tempOptions, isSingleOps: !tempOptions.isSingleOps });
@@ -98,8 +100,14 @@ const SimOptionsModal = ({
         <form>
           <label>
             CYYZ Runway Config
-            <select onChange={setRadarScene}>
+            <select
+              onChange={setRadarScene}
+              defaultValue={simOptions.radarScene}
+            >
               <option value={RadarSceneKeys.RADAR_06s}>Rwy 05/06LR</option>
+              <option value={RadarSceneKeys.RADAR_24s}>Rwy 23/24LR</option>
+              <option value={RadarSceneKeys.RADAR_33s}>Rwy 33LR</option>
+              {/* <option value={RadarSceneKeys.RADAR_15s}>Rwy 15LR</option> */}
             </select>
           </label>
           <label>

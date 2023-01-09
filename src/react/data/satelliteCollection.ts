@@ -1,4 +1,4 @@
-import { WP_DICT_COMMON } from '../../phaser/config/CommonWaypointConfig';
+import { WP_DICT_COMMON } from '../../phaser/config/WaypointConfigCommon';
 import { AcType } from '../../phaser/types/AircraftTypes';
 import {
   DepRunwayAll,
@@ -35,7 +35,7 @@ const CommonSatelliteData: SatelliteData[] = [
     name: SatelliteName.YHM_ARR_MUXIG,
     arrRunway: DepRunwayYHM.RWY_30,
     depRunway: DepRunwaySatArrivals.YHM,
-    depRoute: '... ... ...',
+    depRoute: 'MUXIG BIMTI ...',
     depPoint: '',
     destination: 'CYHM',
     entryAltitude: 160,
@@ -46,7 +46,7 @@ const CommonSatelliteData: SatelliteData[] = [
     name: SatelliteName.YHM_ARR_UDMIK,
     arrRunway: DepRunwayYHM.RWY_30,
     depRunway: DepRunwaySatArrivals.YHM,
-    depRoute: '... ... ...',
+    depRoute: 'UDMIK BIMTI ...',
     depPoint: '',
     destination: 'CYHM',
     entryAltitude: 160,
@@ -212,7 +212,7 @@ const CommonSatelliteData: SatelliteData[] = [
     arrRunway: null,
     depRunway: DepRunwayYZD.RWY_15,
     depRoute: 'SEDOG ... ...',
-    depPoint: 'CYTZ',
+    depPoint: 'CYZD',
     destination: '',
     entryAltitude: 15,
     entryHeading: 330,
@@ -286,7 +286,7 @@ export const SATELLITE_COLLECTION: SatelliteCollection = {
       {
         name: SatelliteName.YHM_DEP_UKPAG,
         arrRunway: null,
-        depRunway: DepRunwayYKF.RWY_26,
+        depRunway: DepRunwayYHM.RWY_12,
         depRoute: 'UKPAG ... ...',
         depPoint: 'CYHM',
         destination: '',

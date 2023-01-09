@@ -31,6 +31,14 @@ export function genSatFdeData(radarScene: RadarSceneKeys): DepFDE {
     tempDepRoute.filedAlt = _.sample([160, 210, 250, 250, 260]) || 250;
     tempDepRoute.acModelFull = `M/DH8D/R`;
   }
+  if (tempDepRoute.acWtc === AcWTC.H) {
+    tempDepRoute.acType = AcType.JET;
+    tempDepRoute.acModel = AcModel.C56X;
+    tempDepRoute.acWtc = AcWTC.M;
+    tempDepRoute.isQ400 = false;
+    tempDepRoute.filedAlt = _.sample([210, 250, 250, 260]) || 250;
+    tempDepRoute.acModelFull = `M/C56X/R`;
+  }
 
   // Fix callsign
   const isC208 = false;
