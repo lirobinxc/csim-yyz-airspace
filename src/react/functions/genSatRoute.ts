@@ -7,7 +7,14 @@ export function genSatRoute(radarScene: RadarSceneKeys, acType: AcType) {
   if (!SATELLITE_COLLECTION[radarScene]) return;
 
   const selectedRoutes = SATELLITE_COLLECTION[radarScene][acType];
-  const randomRoute = _.sample(selectedRoutes);
+  let randomRoute = _.sample(selectedRoutes);
+
+  if (randomRoute && randomRoute.depPoint === 'CYKZ') {
+    const randomNum = _.random(1, 10);
+    if (randomNum > 5) {
+      randomRoute = _.sample(selectedRoutes);
+    }
+  }
 
   if (randomRoute) {
     return randomRoute;

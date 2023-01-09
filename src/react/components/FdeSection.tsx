@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import _ from 'lodash';
 import { useCallback, useEffect, useState } from 'react';
 import useInterval from 'use-interval';
 import PhaserGame from '../../phaser/PhaserGameConfig';
@@ -78,12 +79,17 @@ const FdeSection = () => {
             break;
         }
       });
-
-      const lastAirborneNorth = stripsCue.airborneNorthPanel.find(
-        (strip) => !strip.isSatellite
+      const lastAirborneNorth = _.findLast(
+        stripsCue.airborneNorthPanel,
+        (strip) => {
+          return !strip.isSatellite;
+        }
       );
-      const lastAirborneSouth = stripsCue.airborneSouthPanel.find(
-        (strip) => !strip.isSatellite
+      const lastAirborneSouth = _.findLast(
+        stripsCue.airborneSouthPanel,
+        (strip) => {
+          return !strip.isSatellite;
+        }
       );
 
       let northStrips: DepFDE[] = [];
@@ -117,16 +123,28 @@ const FdeSection = () => {
 
       if (!simOptions.allowVdp) {
         northStrips.forEach((strip) => {
-          strip.isVDP = false;
+          if (strip.depPhase !== DeparturePhase.AIRBORNE) {
+            strip.isVDP = false;
+          }
         });
         southStrips.forEach((strip) => {
-          strip.isVDP = false;
+          if (strip.depPhase !== DeparturePhase.AIRBORNE) {
+            strip.isVDP = false;
+          }
         });
       }
 
       if (simOptions.allowVdp) {
         northStrips.forEach((strip, idx) => {
           if (strip.isSatellite) return;
+
+          if (
+            strip.depPhase === DeparturePhase.AIRBORNE &&
+            strip.isVDP === true
+          ) {
+            return;
+          }
+
           const prevStrip = northStrips[idx - 1];
           if (
             !prevStrip ||
@@ -137,13 +155,7 @@ const FdeSection = () => {
             return;
           }
 
-          if (
-            determineIfVdpAllowed(
-              simOptions.radarScene,
-              strip,
-              northStrips[idx - 1]
-            )
-          ) {
+          if (determineIfVdpAllowed(simOptions.radarScene, strip, prevStrip)) {
             strip.isVDP = true;
             return;
           } else {
@@ -152,6 +164,13 @@ const FdeSection = () => {
         });
         southStrips.forEach((strip, idx) => {
           if (strip.isSatellite) return;
+
+          if (
+            strip.depPhase === DeparturePhase.AIRBORNE &&
+            strip.isVDP === true
+          ) {
+            return;
+          }
 
           const prevStrip = southStrips[idx - 1];
           if (
@@ -163,13 +182,7 @@ const FdeSection = () => {
             return;
           }
 
-          if (
-            determineIfVdpAllowed(
-              simOptions.radarScene,
-              strip,
-              southStrips[idx - 1]
-            )
-          ) {
+          if (determineIfVdpAllowed(simOptions.radarScene, strip, prevStrip)) {
             strip.isVDP = true;
             return;
           } else {
@@ -214,8 +227,8 @@ const FdeSection = () => {
         dispatch(departureListActions.addSatStrip(simOptions.radarScene));
       }
     },
-    simOptions.intervalBetweenSatelliteDeps * 0.5,
-    simOptions.intervalBetweenSatelliteDeps * 1.5
+    simOptions.intervalBetweenSatelliteDeps * 0.25,
+    simOptions.intervalBetweenSatelliteDeps * 0.5
   );
 
   // Interval: Move from panels READY N/S -> IN POSITION N/S

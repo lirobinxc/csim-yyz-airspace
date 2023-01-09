@@ -111,7 +111,7 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.CJS = new PlaneCjs(this);
     this.DataTag = new PlaneDataTag(this);
     this.TagLine = new PlaneDataTagLine(this, this.Symbol, this.DataTag);
-    this.PTL = new PlanePTL(this, this.Symbol, 60);
+    this.PTL = new PlanePTL(this, this.Symbol, 120);
     this.HistoryTrail = new PlaneHistoryTrail(this, this.Symbol);
     this.CommandMenu = new PlaneCommandMenu(this);
     this.HandoffMenu = new PlaneHandoffMenu(this);

@@ -9,10 +9,13 @@ export function determineIfVdpAllowed(
 ) {
   if (!prevFde) return false;
 
+  // console.log(`${currFde.sidName} following ${prevFde.sidName} =`);
+
   if (
     sameSidsNorthbound.includes(currFde.sidName) &&
     sameSidsNorthbound.includes(prevFde.sidName)
   ) {
+    // console.log('No VDP');
     return false;
   }
 
@@ -21,6 +24,7 @@ export function determineIfVdpAllowed(
     sameSidsSouthbound06s.includes(currFde.sidName) &&
     sameSidsSouthbound06s.includes(prevFde.sidName)
   ) {
+    // console.log('No VDP');
     return false;
   }
 
@@ -28,9 +32,11 @@ export function determineIfVdpAllowed(
     sameSidsSouthbound.includes(currFde.sidName) &&
     sameSidsSouthbound.includes(prevFde.sidName)
   ) {
+    // console.log('No VDP');
     return false;
   }
 
+  // console.log('VDP allowed!');
   return true;
 }
 

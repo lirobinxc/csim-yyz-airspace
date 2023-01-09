@@ -147,8 +147,6 @@ export function genDepFdeData(
 
   const acModelFull = `${aircraft.wtc}/${aircraft.model}/${aircraft.equipment}`;
 
-  let isVDP = _.random(1, 10) > 6;
-
   const depPhase = DeparturePhase.READY;
 
   let depPosition = determineIfNorthOrSouthDep(radarScene, sidName);
@@ -192,7 +190,7 @@ export function genDepFdeData(
     isNADP1: false,
     isQ400: aircraft.isQ400,
     isSatellite: false,
-    isVDP,
+    isVDP: false,
     onCourseWP,
     remarks: '',
     satFdeData: {} as SatelliteData,
