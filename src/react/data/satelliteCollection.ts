@@ -295,20 +295,6 @@ export const SATELLITE_COLLECTION: SatelliteCollection = {
         handoffSector: AdjacentSectors.ER,
       },
     ],
-    PROP: [
-      ...CommonSatelliteData,
-      ...PropOnlySatelliteData,
-      {
-        name: SatelliteName.YKF_DEP_DAVSI,
-        arrRunway: null,
-        depRunway: DepRunwayYKF.RWY_26,
-        depRoute: 'UKPAG ... ...',
-        depPoint: 'CYHM',
-        destination: '',
-        entryAltitude: 60,
-        entryHeading: 60,
-        handoffSector: AdjacentSectors.ER,
-      },
-    ],
+    PROP: [...CommonSatelliteData, ...PropOnlySatelliteData],
   },
 };
