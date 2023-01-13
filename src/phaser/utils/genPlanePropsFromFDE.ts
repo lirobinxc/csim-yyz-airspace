@@ -11,6 +11,7 @@ export function genPlanePropsFromFDE(fde: DepFDE): PlaneProperties {
     acModel: fde.acModel,
     acWtc: fde.acWtc,
     isSatellite: fde.isSatellite,
+    isArrival: fde.isArrival,
     filedData: {
       sidName: fde.isSatellite ? null : fde.sidName,
       satelliteName: fde.isSatellite ? fde.satFdeData.name : null,

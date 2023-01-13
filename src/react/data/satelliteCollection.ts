@@ -7,7 +7,6 @@ import {
   DepRunwayYKF,
   DepRunwayYKZ,
   DepRunwayYTZ,
-  DepRunwayYYZ,
   DepRunwayYZD,
 } from '../../phaser/types/AirportTypes';
 import { RadarSceneKeys } from '../../phaser/types/SceneKeys';

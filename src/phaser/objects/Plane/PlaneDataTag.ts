@@ -209,7 +209,7 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
       .toString()
       .padStart(3, '0');
 
-    const vmi = this.showVmi ? '↑' : currCommands.isDescending ? '↓' : ' ';
+    const vmi = this.showVmi ? (currCommands.isDescending ? '↓' : '↑') : ' ';
 
     const vmr = this.showVmi
       ? Math.floor(currCommands.climbRate.current / 100)

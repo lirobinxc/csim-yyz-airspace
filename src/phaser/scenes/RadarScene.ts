@@ -353,6 +353,7 @@ const testPlaneProps: PlaneProperties = {
   acModel: AcModel.A343,
   acWtc: AcWTC.M,
   isSatellite: false,
+  isArrival: false,
   filedData: {
     alt: 300,
     sidName: SidName.AVSEP,

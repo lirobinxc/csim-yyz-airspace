@@ -10,6 +10,7 @@ export interface PlaneProperties {
   acModel: AcModel;
   acWtc: AcWTC;
   isSatellite: boolean;
+  isArrival: boolean;
   filedData: {
     sidName: SidName | null;
     satelliteName: SatelliteName | null;

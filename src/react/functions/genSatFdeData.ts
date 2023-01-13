@@ -74,6 +74,9 @@ export function genSatFdeData(radarScene: RadarSceneKeys): DepFDE {
     newHandoffAlt = Math.min(tempDepRoute.filedAlt, 230);
   }
 
+  // isArrival?
+  const isArrival = satRoute.name.split('_')[1] === 'ARR';
+
   return {
     ...tempDepRoute,
     assignedAlt: satRoute.entryAltitude,
@@ -86,6 +89,7 @@ export function genSatFdeData(radarScene: RadarSceneKeys): DepFDE {
     filedRoute: satRoute.depRoute,
     handoffAlt: newHandoffAlt,
     handoffSector: satRoute.handoffSector,
+    isArrival,
     isNADP1: false,
     isSatellite: true,
     isVDP: false,

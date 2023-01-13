@@ -44,6 +44,8 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
   }
 
   preUpdate(t: number, dt: number) {
+    this.setSatelliteArrivalAlts();
+
     this.ifNadp2UpTo5000();
     this.flySidOrPropHeadingDuringClimb();
     this.ifAbove5000();
@@ -187,9 +189,17 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
     // Base case
     if (altitude.current === altitude.assigned) {
       this.Plane.Commands.isClimbing = false;
+      this.Plane.Commands.isDescending = false;
       return;
     } else {
-      this.Plane.Commands.isClimbing = true;
+      if (altitude.current < altitude.assigned) {
+        this.Plane.Commands.isClimbing = true;
+        this.Plane.Commands.isDescending = false;
+      }
+      if (altitude.current > altitude.assigned) {
+        this.Plane.Commands.isClimbing = false;
+        this.Plane.Commands.isDescending = true;
+      }
     }
 
     let CLIMB_RATE_PER_SEC = this.Plane.Commands.climbRate.current / 60;
@@ -268,7 +278,10 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
     }
 
     // Base cases
-    if (this.Plane.Commands.isClimbing === false) {
+    if (
+      this.Plane.Commands.isClimbing === false &&
+      this.Plane.Commands.isDescending === false
+    ) {
       climbRate.current = 0;
       return;
     }
@@ -413,7 +426,22 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
       this.Plane.Commands.hasCheckedIn = true;
 
       this.Plane.checkIn();
-      console.log('PlaneBehaviour: checkIn()');
+    }
+  }
+
+  private setSatelliteArrivalAlts() {
+    if (this.Plane.Commands.hasCheckedIn) return;
+
+    if (this.Plane.Properties.isSatellite) {
+      const satName = this.Plane.Properties.filedData.satelliteName;
+      if (satName) {
+        const isArr = satName.split('_')[1] === 'ARR';
+
+        if (isArr) {
+          this.Plane.Commands.altitude.current =
+            this.Plane.Properties.takeoffData.assignedAlt;
+        }
+      }
     }
   }
 }

@@ -56,6 +56,7 @@ export interface DepFDE {
   handoffAlt: number;
   handoffSector: AdjacentSectors;
   inPositionTime: number;
+  isArrival: boolean;
   isNADP1: boolean;
   isQ400: boolean;
   isSatellite: boolean;
@@ -186,6 +187,7 @@ export function genDepFdeData(
     filedTAS,
     handoffAlt,
     handoffSector,
+    isArrival: false,
     inPositionTime,
     isNADP1: false,
     isQ400: aircraft.isQ400,

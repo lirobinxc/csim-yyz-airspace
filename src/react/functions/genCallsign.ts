@@ -34,6 +34,8 @@ export function genCallsign({
     carrierCode === CarrierCode.MAL ||
     carrierCode === CarrierCode.POE ||
     carrierCode === CarrierCode.PUL ||
+    carrierCode === CarrierCode.CJT ||
+    carrierCode === CarrierCode.BBA ||
     attempts < REGEN_ATTEMPT_LIMIT
   ) {
     carrierCode = _.sample(allCarriers);

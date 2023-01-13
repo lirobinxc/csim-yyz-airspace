@@ -202,8 +202,10 @@ export default class Plane extends Phaser.GameObjects.Container {
     }
 
     this.talk(
-      `Departure, ${acIdSpoken}${spokenWtc} with you out of ${currAltRounded} for ${
-        altitude.assigned
+      `Departure, ${acIdSpoken}${spokenWtc} with you ${
+        this.Properties.isArrival ? 'level at' : 'out of'
+      } ${currAltRounded} ${
+        this.Properties.isArrival ? '' : `for ${altitude.assigned}`
       } ${sayHeading !== null ? sayHeading : ''}`,
       this,
       isCheckIn
