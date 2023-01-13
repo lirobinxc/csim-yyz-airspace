@@ -79,7 +79,10 @@ function PendingSatelliteFDE({
       >
         {filedAlt}
       </div>
-      <div className={clsx(styles.box, styles.widthLg, styles.destination)}>
+      <div
+        className={clsx(styles.box, styles.widthLg, styles.destination)}
+        onClick={deleteStrip}
+      >
         {destination}
       </div>
     </li>
