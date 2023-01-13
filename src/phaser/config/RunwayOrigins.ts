@@ -181,7 +181,7 @@ export default class RunwayOrigins {
     ];
 
     airports.forEach((airport) => {
-      for (const [rwy, coord] of Object.entries(airport)) {
+      for (const [, coord] of Object.entries(airport)) {
         originPoints.push(coord);
       }
     });

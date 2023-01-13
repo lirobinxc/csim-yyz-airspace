@@ -1,14 +1,8 @@
 import Phaser from 'phaser';
-import { AcModel, AcType, AcWTC } from '../../types/AircraftTypes';
+import { AcType, AcWTC } from '../../types/AircraftTypes';
 import PlaneDataTag from './PlaneDataTag';
 import PlaneSymbol from './PlaneSymbol';
-import {
-  WaypointDataAll,
-  WaypointNamesAll,
-  WaypointNamesRwy06s,
-  WaypointNamesRwy24s,
-} from '../../types/WaypointTypes';
-import { AdjacentSectors, TerminalSectors } from '../../types/SectorTypes';
+import { WaypointDataAll } from '../../types/WaypointTypes';
 import { PlanePerformanceConfig } from '../../config/PlanePerformanceConfig';
 import { getRunwayHeading } from '../../config/RunwayHeadingConfig';
 import PlaneDataTagLine from './PlaneDataTagLine';
@@ -17,15 +11,10 @@ import PlanePTL from './PlanePTL';
 import RadarScene from '../../scenes/RadarScene';
 import { GameObjectOptions } from '../../types/GameObjectOptions';
 import PlaneHistoryTrail from './PlaneHistoryTrail';
-import { SidName } from '../../types/SidAndSatelliteTypes';
-import { SID_ROUTES_06s } from '../../config/RouteConfigRwy06sSIDs';
-import { DepRunwayAll } from '../../types/AirportTypes';
 import { DomEvents } from '../../types/DomEvents';
 import { PhaserCustomEvents } from '../../types/CustomEvents';
 import PlaneCommandMenu from './PlaneCommandMenu';
 import { getSidRoute } from '../../utils/getSidRoute';
-import { RadarSceneKeys } from '../../types/SceneKeys';
-import { WP_DICT_Rwy06s } from '../../config/WaypointConfigRwy06s';
 import {
   determineLeftOrRightTurn,
   TurnDirection,
@@ -35,9 +24,7 @@ import {
   PlanePerformance,
   PlaneProperties,
 } from '../../types/PlaneInterfaces';
-import { convertNumToText } from '../../../react/functions/convertNumToText';
 import { convertHeadingNumToText } from '../../../react/functions/convertHeadingNumToText';
-import FiledRouteLine from '../FiledRouteLine';
 import PlaneHandoffMenu from './PlaneHandoffMenu';
 import { getSatRoute } from '../../utils/getSatRoute';
 import PlaneCjs from './PlaneCjs';
@@ -215,8 +202,6 @@ export default class Plane extends Phaser.GameObjects.Container {
   public commandDirectTo(waypointData: WaypointDataAll) {
     if (!waypointData) return;
 
-    const isSatellite = this.Properties.isSatellite;
-    const sidName = this.Properties.filedData.sidName;
     const filedRoute = this.getFiledRoute();
 
     //@ts-ignore
@@ -375,11 +360,6 @@ export default class Plane extends Phaser.GameObjects.Container {
 
   private onDebug() {
     return;
-  }
-
-  private ifPlaneIsSelected() {
-    if (this.IS_SELECTED) {
-    }
   }
 
   private togglePTL() {

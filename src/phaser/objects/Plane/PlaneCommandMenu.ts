@@ -1,4 +1,3 @@
-import RadarScene from '../../scenes/RadarScene';
 import { AssetKeys } from '../../types/AssetKeys';
 import { ColorKeys } from '../../types/ColorKeys';
 import { PhaserCustomEvents } from '../../types/CustomEvents';

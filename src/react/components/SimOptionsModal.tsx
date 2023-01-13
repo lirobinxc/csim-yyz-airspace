@@ -10,6 +10,7 @@ import Modal from 'react-modal';
 import styles from './SimOptionsModal.module.scss';
 import React, { useState } from 'react';
 import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
+import { TerminalPosition } from '../../phaser/types/SimTypes';
 
 interface SimOptionsModalProps {
   isOpen: boolean;
@@ -32,7 +33,13 @@ const SimOptionsModal = ({
 
     setTempOptions({ ...tempOptions, radarScene: value });
   }
-  console.log(tempOptions);
+
+  function setTerminalPosition(e: React.FormEvent) {
+    const target = e.target as HTMLOptionElement;
+    const value = target.value as TerminalPosition;
+
+    setTempOptions({ ...tempOptions, terminalPosition: value });
+  }
 
   function setIsSingleOps(e: React.FormEvent) {
     setTempOptions({ ...tempOptions, isSingleOps: !tempOptions.isSingleOps });
@@ -99,6 +106,16 @@ const SimOptionsModal = ({
       <section className={styles.formContainer}>
         <form>
           <label>
+            Terminal Position
+            <select
+              onChange={setTerminalPosition}
+              defaultValue={simOptions.terminalPosition}
+            >
+              <option value={TerminalPosition.DEPARTURE}>Departure</option>
+              <option value={TerminalPosition.ARRIVAL}>Arrival</option>
+            </select>
+          </label>
+          <label>
             CYYZ Runway Config
             <select
               onChange={setRadarScene}
@@ -110,58 +127,63 @@ const SimOptionsModal = ({
               <option value={RadarSceneKeys.RADAR_15s}>Rwy 15LR</option>
             </select>
           </label>
-          <label>
-            Single runway operations
-            <input
-              type="checkbox"
-              className={styles.checkbox}
-              checked={tempOptions.isSingleOps}
-              onChange={setIsSingleOps}
-            />
-          </label>
-          <label>
-            Starting # of strips
-            <input
-              type="number"
-              name="startingCount"
-              className={styles.number}
-              value={tempOptions.startingCount}
-              onChange={setStartingCount}
-            />
-          </label>
-          <h3>Interval between Normal Departures</h3>
-          <label className={styles.intervalBox}>
-            <input
-              type="number"
-              name="minIntervalNormal"
-              className={styles.number}
-              value={tempOptions.intervalBetweenNormalDeps / 1000}
-              onChange={setIntervalBetweenNormalDeps}
-            />{' '}
-            seconds
-          </label>
-          <h3>Interval between Visual Departures</h3>
-          <label className={styles.intervalBox}>
-            <input
-              type="number"
-              name="minIntervalVisual"
-              className={styles.number}
-              value={tempOptions.intervalBetweenVisualDeps / 1000}
-              onChange={setIntervalBetweenVisualDeps}
-            />{' '}
-            seconds
-          </label>
-          <h3>Interval between Satellite Departures</h3>
-          <label className={styles.intervalBox}>
-            <input
-              type="number"
-              name="minIntervalVisual"
-              className={styles.number}
-              value={tempOptions.intervalBetweenSatelliteDeps / 1000}
-              onChange={setIntervalBetweenSatelliteDeps}
-            />{' '}
-            seconds
-          </label>
+          {tempOptions.terminalPosition === TerminalPosition.DEPARTURE && (
+            <>
+              <h3 className={styles.optionSubheader}>Departure Settings</h3>
+              <label>
+                Single runway operations
+                <input
+                  type="checkbox"
+                  className={styles.checkbox}
+                  checked={tempOptions.isSingleOps}
+                  onChange={setIsSingleOps}
+                />
+              </label>
+              <label>
+                Starting # of strips
+                <input
+                  type="number"
+                  name="startingCount"
+                  className={styles.number}
+                  value={tempOptions.startingCount}
+                  onChange={setStartingCount}
+                />
+              </label>
+              <h3>Interval between Normal Departures</h3>
+              <label className={styles.intervalBox}>
+                <input
+                  type="number"
+                  name="minIntervalNormal"
+                  className={styles.number}
+                  value={tempOptions.intervalBetweenNormalDeps / 1000}
+                  onChange={setIntervalBetweenNormalDeps}
+                />{' '}
+                seconds
+              </label>
+              <h3>Interval between Visual Departures</h3>
+              <label className={styles.intervalBox}>
+                <input
+                  type="number"
+                  name="minIntervalVisual"
+                  className={styles.number}
+                  value={tempOptions.intervalBetweenVisualDeps / 1000}
+                  onChange={setIntervalBetweenVisualDeps}
+                />{' '}
+                seconds
+              </label>
+              <h3>Interval between Satellite Departures</h3>
+              <label className={styles.intervalBox}>
+                <input
+                  type="number"
+                  name="minIntervalVisual"
+                  className={styles.number}
+                  value={tempOptions.intervalBetweenSatelliteDeps / 1000}
+                  onChange={setIntervalBetweenSatelliteDeps}
+                />{' '}
+                seconds
+              </label>
+            </>
+          )}
           <button className={styles.applyButton} onClick={applyOptions}>
             APPLY OPTIONS
           </button>

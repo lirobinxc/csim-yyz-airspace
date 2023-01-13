@@ -1,10 +1,7 @@
 import Phaser from 'phaser';
 
 import { AssetKeys } from '../../types/AssetKeys';
-import { convertHeadingToRadians } from '../../utils/convertHeadingToRadians';
-import { asKnots } from '../../utils/asKnots';
 import Plane from './Plane';
-import { DomEvents } from '../../types/DomEvents';
 import { ColorKeys } from '../../types/ColorKeys';
 
 export default class PlaneSymbol extends Phaser.GameObjects.Image {

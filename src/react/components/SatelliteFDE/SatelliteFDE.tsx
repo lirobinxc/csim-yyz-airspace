@@ -93,7 +93,7 @@ function SatelliteFDE(props: DepFDE) {
   }
 
   function deleteStrip() {
-    dispatch(departureListActions.deleteStrip(acId.code));
+    dispatch(departureListActions.deleteStrip(props));
   }
 
   //TEMP

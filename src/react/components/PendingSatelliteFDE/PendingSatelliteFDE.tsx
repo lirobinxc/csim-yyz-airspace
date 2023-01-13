@@ -5,29 +5,31 @@ import { AcType } from '../../../phaser/types/AircraftTypes';
 import { departureListActions } from '../../state/slices/departureListSlice';
 import { useAppDispatch } from '../../state/hooks';
 
-function PendingSatelliteFDE({
-  acModel,
-  acId,
-  acType,
-  assignedAlt,
-  assignedHeading,
-  coordinatedAlt,
-  destination,
-  depPoint,
-  ETA,
-  filedAlt,
-  filedRoute,
-  handoffAlt,
-  isNADP1 = false,
-  isQ400 = false,
-  onCourseWP,
-  remarks,
-  transponderCode,
-  isVDP,
-  depRunway,
-  satFdeData,
-  sidName,
-}: DepFDE) {
+function PendingSatelliteFDE(props: DepFDE) {
+  const {
+    acModel,
+    acId,
+    acType,
+    assignedAlt,
+    assignedHeading,
+    coordinatedAlt,
+    destination,
+    depPoint,
+    ETA,
+    filedAlt,
+    filedRoute,
+    handoffAlt,
+    isNADP1 = false,
+    isQ400 = false,
+    onCourseWP,
+    remarks,
+    transponderCode,
+    isVDP,
+    depRunway,
+    satFdeData,
+    sidName,
+  } = props;
+
   const dispatch = useAppDispatch();
   const depRunwayFormatted = depRunway?.split(' ')[2];
   const sidNameFormatted = satFdeData.depRoute.split(' ')[0];
@@ -45,7 +47,7 @@ function PendingSatelliteFDE({
   const isYzdDep = satFdeData.depPoint === 'CYZD';
 
   function deleteStrip() {
-    dispatch(departureListActions.deleteStrip(acId.code));
+    dispatch(departureListActions.deleteStrip(props));
   }
 
   return (

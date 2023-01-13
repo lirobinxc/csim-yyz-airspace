@@ -1,38 +1,26 @@
-import React, { useState } from 'react';
 import clsx from 'clsx';
 
 // import { ReactComponent as UpArrow } from '../images/up-arrow.svg';
-import upArrow from '../../images/up-arrow.png';
 import { useAppDispatch } from '../../state/hooks';
 
 import styles from './PendingDepartureFDE.module.scss';
 import { departureListActions } from '../../state/slices/departureListSlice';
 import { DepFDE } from '../../functions/genDepFdeData';
-import { SatelliteData } from '../../data/satelliteCollection';
-import useInterval from 'use-interval';
 import { AcType } from '../../../phaser/types/AircraftTypes';
 
-function PendingDepartureFDE({
-  acModelFull,
-  acId,
-  acType,
-  assignedAlt,
-  assignedHeading,
-  coordinatedAlt,
-  destination,
-  ETA,
-  filedAlt,
-  filedRoute,
-  handoffAlt,
-  isNADP1 = false,
-  isQ400 = false,
-  onCourseWP,
-  remarks,
-  transponderCode,
-  isVDP,
-  depRunway,
-  sidName,
-}: DepFDE) {
+function PendingDepartureFDE(props: DepFDE) {
+  const {
+    acModelFull,
+    acId,
+    acType,
+    assignedAlt,
+    filedAlt,
+    isQ400 = false,
+    isVDP,
+    depRunway,
+    sidName,
+  } = props;
+
   const dispatch = useAppDispatch();
   const depRunwayFormatted = depRunway?.split(' ')[2];
   const sidNameFormatted = sidName.split(' ')[0];
@@ -40,7 +28,7 @@ function PendingDepartureFDE({
   const isJetFpBelow230 = acType === AcType.JET && filedAlt < 230;
 
   function deleteStrip() {
-    dispatch(departureListActions.deleteStrip(acId.code));
+    dispatch(departureListActions.deleteStrip(props));
   }
 
   return (

@@ -1,4 +1,5 @@
 import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
+import { TerminalPosition } from '../../phaser/types/SimTypes';
 import { SimOptions } from './slices/simOptionsSlice';
 
 export enum LocalStorageKeys {
@@ -7,6 +8,7 @@ export enum LocalStorageKeys {
 
 export const defaultSimOptions: SimOptions = {
   radarScene: RadarSceneKeys.RADAR_06s,
+  terminalPosition: TerminalPosition.DEPARTURE,
   startingCount: 4,
   isSingleOps: true,
   allowVdp: true,
@@ -26,7 +28,7 @@ export function genSimOptions(): SimOptions {
   const storedSimOptions: SimOptions =
     storedOptionsStr && JSON.parse(storedOptionsStr);
 
-  // Checks if SimOption property exists
+  // Checks if new property exists
   if (storedSimOptions && typeof storedSimOptions.isModalOpen === 'boolean') {
     console.log('Retrieved localStorage SimOptions.');
 

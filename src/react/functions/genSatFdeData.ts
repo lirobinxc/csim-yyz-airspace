@@ -1,7 +1,5 @@
 import _ from 'lodash';
-import { genACID } from './genACID';
 import { genCallsign } from './genCallsign';
-import { destinationCollection } from '../data/destinationCollection';
 import { genSatRoute } from './genSatRoute';
 import { SatelliteData } from '../data/satelliteCollection';
 import { RadarSceneKeys } from '../../phaser/types/SceneKeys';

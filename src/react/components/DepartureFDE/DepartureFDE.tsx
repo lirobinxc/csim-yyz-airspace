@@ -8,12 +8,10 @@ import { useAppDispatch, useAppSelector } from '../../state/hooks';
 import styles from './DepartureFDE.module.scss';
 import { departureListActions } from '../../state/slices/departureListSlice';
 import { DepFDE } from '../../functions/genDepFdeData';
-import { SatelliteData } from '../../data/satelliteCollection';
 import useInterval from 'use-interval';
 import { AcType } from '../../../phaser/types/AircraftTypes';
 import {
   selectSimOptions,
-  simOptions,
   simOptionsActions,
 } from '../../state/slices/simOptionsSlice';
 
@@ -73,7 +71,7 @@ function DepartureFDE(props: DepFDE) {
   }
 
   function deleteStrip() {
-    dispatch(departureListActions.deleteStrip(acId.code));
+    dispatch(departureListActions.deleteStrip(props));
   }
 
   function displayAssignedHeading() {

@@ -1,5 +1,3 @@
-import Phaser from 'phaser';
-import { PhaserCustomEvents } from '../types/CustomEvents';
 import Plane from './Plane/Plane';
 
 export default class SpeechSynth {

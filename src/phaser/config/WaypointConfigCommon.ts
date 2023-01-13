@@ -2,7 +2,6 @@ import { AcType } from '../types/AircraftTypes';
 import { GameConfig } from './GameConfig';
 import type {
   WaypointDataCommon,
-  WaypointKeys06s,
   WaypointKeysCommon,
 } from '../types/WaypointTypes';
 

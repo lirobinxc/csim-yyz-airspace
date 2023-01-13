@@ -1,4 +1,4 @@
-import { WaypointData06s, WaypointData24s } from '../types/WaypointTypes';
+import { WaypointData24s } from '../types/WaypointTypes';
 import { SidName } from '../types/SidAndSatelliteTypes';
 import { WP_DICT_Rwy24s } from './WaypointConfigRwy24s';
 

@@ -1,13 +1,7 @@
 import { AcType } from '../types/AircraftTypes';
 import { GameConfig } from './GameConfig';
 import { WP_LIST_COMMON } from './WaypointConfigCommon';
-import type {
-  WaypointData06s,
-  WaypointDataAll,
-  WaypointKeys06s,
-  WaypointNamesAll,
-  WaypointNamesRwy06s,
-} from '../types/WaypointTypes';
+import type { WaypointData06s, WaypointKeys06s } from '../types/WaypointTypes';
 
 const gameHeight = GameConfig.height;
 

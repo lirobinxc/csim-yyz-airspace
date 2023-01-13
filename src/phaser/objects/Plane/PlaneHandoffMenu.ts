@@ -3,11 +3,7 @@ import { AssetKeys } from '../../types/AssetKeys';
 import { ColorKeys } from '../../types/ColorKeys';
 import { PhaserCustomEvents } from '../../types/CustomEvents';
 import { DomEvents } from '../../types/DomEvents';
-import { WaypointDataAll } from '../../types/WaypointTypes';
 import Plane from './Plane';
-import PlaneCommandSubmenu, {
-  PlaneCommandSubmenuValue,
-} from './PlaneCommandSubmenu';
 
 export enum PlaneHandoffMenuButtons {
   HANDOFF = 'H/O',

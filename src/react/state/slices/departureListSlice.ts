@@ -8,7 +8,6 @@ import {
   RadarSceneKeys,
 } from '../../../phaser/types/SceneKeys';
 import { SidName } from '../../../phaser/types/SidAndSatelliteTypes';
-import { determineIfVdpAllowed } from '../../functions/determineIfVdpAllowed';
 import {
   DeparturePhase,
   DeparturePosition,
@@ -18,9 +17,8 @@ import {
 import { genSatFdeData } from '../../functions/genSatFdeData';
 import { insertIntoArray } from '../../functions/insertIntoArray';
 import { genSimOptions } from '../genSimOptions';
-import { useAppDispatch } from '../hooks';
 import type { RootState } from '../store';
-import { SimOptions, simOptionsActions } from './simOptionsSlice';
+import { SimOptions } from './simOptionsSlice';
 
 // Define the initial state using that type
 function genDepList(
@@ -109,9 +107,11 @@ export const departureList = createSlice({
       state.push(genSatFdeData(action.payload));
     },
     // Use the PayloadAction type to declare the contents of `action.payload`
-    deleteStrip: (state, action: PayloadAction<string>) => {
+    deleteStrip: (state, action: PayloadAction<DepFDE>) => {
       console.log('Removed', action.payload);
-      return state.filter((item) => item.acId.code !== action.payload);
+      return state.filter(
+        (item) => item.uniqueKey !== action.payload.uniqueKey
+      );
     },
     setToInPosition: (state, action: PayloadAction<DepFDE | undefined>) => {
       if (!action.payload) return state;
@@ -168,7 +168,7 @@ export const departureList = createSlice({
         (strip) => strip.uniqueKey === action.payload.uniqueKey
       );
 
-      const otherStrips = state.filter(
+      const otherStrips: DepFDE[] = state.filter(
         (strip) => strip.uniqueKey !== action.payload.uniqueKey
       );
 

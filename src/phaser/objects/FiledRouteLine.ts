@@ -1,8 +1,6 @@
 import Plane from './Plane/Plane';
-import { getSidRoute } from '../utils/getSidRoute';
 import { ColorKeys } from '../types/ColorKeys';
 import RadarScene from '../scenes/RadarScene';
-import { DomEvents } from '../types/DomEvents';
 import { AssetKeys } from '../types/AssetKeys';
 
 export default class FiledRouteLine extends Phaser.GameObjects.Polygon {

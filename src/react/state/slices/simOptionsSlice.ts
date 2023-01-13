@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import _ from 'lodash';
 import PhaserGame from '../../../phaser/PhaserGameConfig';
 import RadarScene from '../../../phaser/scenes/RadarScene';
 import { ReactCustomEvents } from '../../../phaser/types/CustomEvents';
@@ -7,7 +6,8 @@ import {
   OtherSceneKeys,
   RadarSceneKeys,
 } from '../../../phaser/types/SceneKeys';
-import { DeparturePosition, DepFDE } from '../../functions/genDepFdeData';
+import { TerminalPosition } from '../../../phaser/types/SimTypes';
+import { DepFDE } from '../../functions/genDepFdeData';
 import {
   defaultSimOptions,
   genSimOptions,
@@ -18,6 +18,7 @@ import type { RootState } from '../store';
 
 export interface SimOptions {
   radarScene: RadarSceneKeys;
+  terminalPosition: TerminalPosition;
   startingCount: number;
   isSingleOps: boolean;
   allowVdp: boolean;

@@ -1,7 +1,7 @@
 {
-  "name": "CSiM YYZ Departure",
+  "name": "csim-yyz-terminal",
   "version": "0.1.0",
-  "homepage": "https://lirobinxc.github.io/csim-yyz-departure",
+  "homepage": "https://lirobinxc.github.io/csim-yyz-terminal",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.1",

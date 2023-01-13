@@ -1,15 +1,7 @@
 import { getRunwayHeading } from '../../config/RunwayHeadingConfig';
-import { SID_ROUTES_06s } from '../../config/RouteConfigRwy06sSIDs';
-import { WP_DICT_Rwy06s } from '../../config/WaypointConfigRwy06s';
 import RadarScene from '../../scenes/RadarScene';
 import { AcType } from '../../types/AircraftTypes';
-import { RadarSceneKeys } from '../../types/SceneKeys';
-import {
-  WaypointData06s,
-  WaypointData24s,
-  WaypointDataAll,
-  WaypointNamesRwy06s,
-} from '../../types/WaypointTypes';
+import { WaypointDataAll } from '../../types/WaypointTypes';
 import { asKnots } from '../../utils/asKnots';
 import { convertHeadingToRadians } from '../../utils/convertHeadingToRadians';
 import { convertRadiansToHeading } from '../../utils/convertRadiansToHeading';
@@ -17,10 +9,8 @@ import {
   determineLeftOrRightTurn,
   TurnDirection,
 } from '../../utils/determineLeftOrRightTurn';
-import { getSidRoute } from '../../utils/getSidRoute';
 import Plane from './Plane';
 import PlaneDataTag from './PlaneDataTag';
-import { getSatRoute } from '../../utils/getSatRoute';
 
 export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
   // Parent component + Reference components

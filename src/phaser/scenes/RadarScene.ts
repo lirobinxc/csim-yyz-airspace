@@ -154,10 +154,10 @@ export default class RadarScene extends Phaser.Scene {
     this.RunwayOrigins = new RunwayOrigins(this);
 
     // Create: Buttons
-    const debugButton = new DebugButton(this);
+    new DebugButton(this);
 
     // Create: Developer components
-    const pointerCoordLogger = new PointerCoordinateLogger(this);
+    new PointerCoordinateLogger(this);
 
     // TEMP Create: Test Plane
     // const newPlane = new Plane(this, testPlaneProps, this.Options);
@@ -345,31 +345,3 @@ export default class RadarScene extends Phaser.Scene {
     this.RunwayOrigins.hideDots();
   }
 }
-
-// Create object: Plane
-const testPlaneProps: PlaneProperties = {
-  acId: { code: 'ACA123', spoken: 'Air Canada 1 2 3' },
-  acType: AcType.JET,
-  acModel: AcModel.A343,
-  acWtc: AcWTC.M,
-  isSatellite: false,
-  isArrival: false,
-  filedData: {
-    alt: 300,
-    sidName: SidName.AVSEP,
-    satelliteName: null,
-    speed: 300,
-    destination: 'CYOW',
-  },
-  takeoffData: {
-    depRunway: DepRunwayYYZ.RWY_05,
-    assignedAlt: 5000,
-    assignedHeading: 330,
-    sidOrPropTurnHeading: null,
-    isNADP1: false,
-  },
-  handoffData: {
-    alt: 150,
-    sector: AdjacentSectors.HM,
-  },
-};

@@ -5,7 +5,6 @@ import { PhaserCustomEvents } from '../../types/CustomEvents';
 import { DomEvents } from '../../types/DomEvents';
 import { convertAcWtcToSymbol } from '../../utils/convertAcWtcToSymbol';
 import Plane from './Plane';
-import PlaneSymbol from './PlaneSymbol';
 
 export default class PlaneDataTag extends Phaser.GameObjects.Container {
   public isExtendedTag: boolean;
