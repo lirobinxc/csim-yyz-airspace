@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { AcType, AcWTC } from '../../types/AircraftTypes';
 import PlaneDataTag from './PlaneDataTag';
 import PlaneSymbol from './PlaneSymbol';
-import { WaypointDataAll } from '../../types/WaypointTypes';
+import { WaypointDataAllDep } from '../../types/WaypointTypesDep';
 import { PlanePerformanceConfig } from '../../config/PlanePerformanceConfig';
 import { getRunwayHeading } from '../../config/RunwayHeadingConfig';
 import PlaneDataTagLine from './PlaneDataTagLine';
@@ -199,7 +199,7 @@ export default class Plane extends Phaser.GameObjects.Container {
     );
   }
 
-  public commandDirectTo(waypointData: WaypointDataAll) {
+  public commandDirectTo(waypointData: WaypointDataAllDep) {
     if (!waypointData) return;
 
     const filedRoute = this.getFiledRoute();

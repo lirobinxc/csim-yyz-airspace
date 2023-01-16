@@ -1,12 +1,15 @@
-import { AcType } from '../types/AircraftTypes';
-import { GameConfig } from './GameConfig';
-import { WP_LIST_COMMON } from './WaypointConfigCommon';
-import type { WaypointData15s, WaypointKeys15s } from '../types/WaypointTypes';
+import { AcType } from '../../types/AircraftTypes';
+import { GameConfig } from '../GameConfig';
+import { WP_LIST_COMMON_DEP } from './WaypointConfigCommon_Dep';
+import type {
+  WaypointData15sDep,
+  WaypointKeys15sDep,
+} from '../../types/WaypointTypesDep';
 
 const gameHeight = GameConfig.height;
 
-export const WP_LIST_RWY15s: WaypointData15s[] = [
-  ...WP_LIST_COMMON,
+export const WP_LIST_RWY15s_DEP: WaypointData15sDep[] = [
+  ...WP_LIST_COMMON_DEP,
   {
     name: 'BORUX',
     relativeCoord: new Phaser.Math.Vector2(0.651, 0.54),
@@ -75,9 +78,9 @@ export const WP_LIST_RWY15s: WaypointData15s[] = [
   },
 ];
 
-export const WP_DICT_Rwy15s = genDictFromWaypointList(WP_LIST_RWY15s);
+export const WP_DICT_Rwy15s = genDictFromWaypointList(WP_LIST_RWY15s_DEP);
 
-function genDictFromWaypointList(wpArr: WaypointData15s[]) {
+function genDictFromWaypointList(wpArr: WaypointData15sDep[]) {
   const wpDict = wpArr.reduce((acc, item) => {
     acc[item.name] = {
       name: item.name,
@@ -86,7 +89,7 @@ function genDictFromWaypointList(wpArr: WaypointData15s[]) {
       getDisplayCoord: item.getDisplayCoord,
     };
     return acc;
-  }, {} as WaypointKeys15s);
+  }, {} as WaypointKeys15sDep);
 
   return wpDict;
 }

@@ -1,5 +1,8 @@
 import Phaser from 'phaser';
-import { WaypointDataAll, WaypointNamesAll } from '../types/WaypointTypes';
+import {
+  WaypointDataAllDep,
+  WaypointNamesAllDep,
+} from '../types/WaypointTypesDep';
 import { genWaypointTextStyles } from '../config/TextStyleConfig';
 import RadarScene from '../scenes/RadarScene';
 import { ColorKeys } from '../types/ColorKeys';
@@ -7,15 +10,15 @@ import { DomEvents } from '../types/DomEvents';
 import { PhaserCustomEvents } from '../types/CustomEvents';
 
 export default class Waypoint extends Phaser.GameObjects.Arc {
-  public name: WaypointNamesAll;
+  public name: WaypointNamesAllDep;
 
   private Scene: RadarScene;
   private Label: Phaser.GameObjects.Text;
 
   public SHOW_NAME: boolean;
-  public WAYPOINT_DATA: WaypointDataAll;
+  public WAYPOINT_DATA: WaypointDataAllDep;
 
-  constructor(scene: RadarScene, waypointData: WaypointDataAll) {
+  constructor(scene: RadarScene, waypointData: WaypointDataAllDep) {
     const CIRCLE_RADIUS = 8;
 
     super(

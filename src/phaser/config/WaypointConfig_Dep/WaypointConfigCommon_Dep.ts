@@ -1,13 +1,13 @@
-import { AcType } from '../types/AircraftTypes';
-import { GameConfig } from './GameConfig';
+import { AcType } from '../../types/AircraftTypes';
+import { GameConfig } from '../GameConfig';
 import type {
-  WaypointDataCommon,
-  WaypointKeysCommon,
-} from '../types/WaypointTypes';
+  WaypointDataCommonDep,
+  WaypointKeysCommonDep,
+} from '../../types/WaypointTypesDep';
 
 const gameHeight = GameConfig.height;
 
-export const WP_LIST_COMMON: WaypointDataCommon[] = [
+export const WP_LIST_COMMON_DEP: WaypointDataCommonDep[] = [
   {
     name: 'ALKUT',
     relativeCoord: new Phaser.Math.Vector2(0.79, 0.589),
@@ -507,9 +507,9 @@ export const WP_LIST_COMMON: WaypointDataCommon[] = [
   },
 ];
 
-export const WP_DICT_COMMON = genDictFromWaypointList(WP_LIST_COMMON);
+export const WP_DICT_COMMON = genDictFromWaypointList(WP_LIST_COMMON_DEP);
 
-function genDictFromWaypointList(wpArr: WaypointDataCommon[]) {
+function genDictFromWaypointList(wpArr: WaypointDataCommonDep[]) {
   const wpDict = wpArr.reduce((acc, item) => {
     acc[item.name] = {
       name: item.name,
@@ -518,7 +518,7 @@ function genDictFromWaypointList(wpArr: WaypointDataCommon[]) {
       getDisplayCoord: item.getDisplayCoord,
     };
     return acc;
-  }, {} as WaypointKeysCommon);
+  }, {} as WaypointKeysCommonDep);
 
   return wpDict;
 }

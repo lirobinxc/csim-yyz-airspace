@@ -1,9 +1,9 @@
-import { WaypointData24s } from '../types/WaypointTypes';
-import { SidName } from '../types/SidAndSatelliteTypes';
-import { WP_DICT_Rwy24s } from './WaypointConfigRwy24s';
+import { WaypointData24sDep } from '../../types/WaypointTypesDep';
+import { SidName } from '../../types/SidAndSatelliteTypes';
+import { WP_DICT_Rwy24s } from '../WaypointConfig_Dep/WaypointConfigRwy24s_Dep';
 
 export const SID_ROUTES_24s: {
-  [key in SidName]: WaypointData24s[];
+  [key in SidName]: WaypointData24sDep[];
 } = {
   'ANCOL DEP': [WP_DICT_Rwy24s.MIXUT, WP_DICT_Rwy24s.LETOR],
   'AVSEP DEP': [

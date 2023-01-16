@@ -1,9 +1,9 @@
-import { WaypointData33s } from '../types/WaypointTypes';
-import { SidName } from '../types/SidAndSatelliteTypes';
-import { WP_DICT_Rwy33s } from './WaypointConfigRwy33s';
+import { WaypointData33sDep } from '../../types/WaypointTypesDep';
+import { SidName } from '../../types/SidAndSatelliteTypes';
+import { WP_DICT_Rwy33s } from '../WaypointConfig_Dep/WaypointConfigRwy33s_Dep';
 
 export const SID_ROUTES_33s: {
-  [key in SidName]: WaypointData33s[];
+  [key in SidName]: WaypointData33sDep[];
 } = {
   'ANCOL DEP': [
     WP_DICT_Rwy33s.NUBAX,

@@ -1,5 +1,7 @@
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
+import { TerminalPosition } from '../../phaser/types/SimTypes';
 import { useAppDispatch, useAppSelector } from '../state/hooks';
 import { departureListActions } from '../state/slices/departureListSlice';
 import {
@@ -47,13 +49,39 @@ const MenuSection = ({ appVersion }: MenuSectionProps) => {
     }
   }
 
-  return (
-    <header className={styles.MenuSection}>
-      <SimOptionsModal isOpen={isModalOpen} requestCloseModal={closeModal} />
-      <div className={styles.titleBar}>
-        CSiM EXCDS Workstation Version {appVersion} by lirobinxc @ GitHub
-      </div>
-      <div className={styles.infoBar}>
+  function getRwyNorth() {
+    switch (simOptions.radarScene) {
+      case RadarSceneKeys.RADAR_06s:
+        return '05';
+      case RadarSceneKeys.RADAR_24s:
+        return '23';
+      case RadarSceneKeys.RADAR_33s:
+        return '33L';
+      case RadarSceneKeys.RADAR_15s:
+        return '15R';
+      default:
+        return 'XX';
+    }
+  }
+
+  function getRwySouth() {
+    switch (simOptions.radarScene) {
+      case RadarSceneKeys.RADAR_06s:
+        return '06L';
+      case RadarSceneKeys.RADAR_24s:
+        return '24R';
+      case RadarSceneKeys.RADAR_33s:
+        return '33R';
+      case RadarSceneKeys.RADAR_15s:
+        return '15L';
+      default:
+        return 'XX';
+    }
+  }
+
+  function displayDepMenu() {
+    return (
+      <div className={styles.depButtonBar}>
         <button className={clsx(styles.spacing)}>UNDO</button>
         <div className={clsx(styles.spacing, styles.roleSelected)}>
           ALL
@@ -101,6 +129,96 @@ const MenuSection = ({ appVersion }: MenuSectionProps) => {
           NORMAL
         </button>
       </div>
+    );
+  }
+
+  function displayArrMenu() {
+    return (
+      <div className={styles.arrButtonBar}>
+        <button className={clsx(styles.spacing)}>UNDO</button>
+        <div>
+          <div className={clsx(styles.spacing, styles.roleSelected)}>ARR 1</div>
+          <div className={clsx(styles.spacing, styles.arrHalfBoxMd)}>
+            1244:48
+          </div>
+        </div>
+        <div>
+          <div className={clsx(styles.spacing, styles.arrHalfBoxLg)}>
+            060/08
+          </div>
+          <div className={clsx(styles.spacing, styles.arrHalfBoxLg)}>
+            080/15
+          </div>
+        </div>
+        <div className={clsx(styles.spacing, styles.arrAltimeter)}>3006</div>
+        <div className={clsx(styles.spacing, styles.arrAtis)}>E</div>
+        <div>
+          <div
+            className={clsx(styles.spacing, styles.arrHalfBoxMd, styles.bgGrey)}
+          >
+            APP1
+          </div>
+          <div
+            className={clsx(styles.spacing, styles.arrHalfBoxMd, styles.bgGrey)}
+          >
+            APP2
+          </div>
+        </div>
+        <div>
+          <div className={clsx(styles.spacing, styles.arrHalfBoxMd)}>
+            {getRwyNorth()}
+          </div>
+          <div className={clsx(styles.spacing, styles.arrHalfBoxMd)}>
+            {getRwySouth()}
+          </div>
+        </div>
+        <div>
+          <div className={clsx(styles.spacing, styles.arrHalfBoxMd)}>
+            60+ 60+
+          </div>
+          <div className={clsx(styles.spacing, styles.arrHalfBoxMd)}>
+            60+ 60+
+          </div>
+        </div>
+        <div>
+          <div className={clsx(styles.spacing, styles.arrHalfBoxMd)}>
+            {getRwyNorth()} C 60+
+          </div>
+          <div className={clsx(styles.spacing, styles.arrHalfBoxMd)}>
+            {getRwySouth()} C 60+
+          </div>
+        </div>
+        <button
+          className={clsx(styles.spacing, styles.fir, {
+            [styles.blinkingRedBg]: simOptions.isPaused,
+          })}
+          onClick={togglePauseSim}
+        >
+          {simOptions.isPaused ? 'PAUSED' : 'PAUSE'}
+        </button>
+        <button className={clsx(styles.spacing)} onClick={openModal}>
+          OPTIONS
+        </button>
+        <button
+          className={clsx(styles.spacing, styles.unhide)}
+          onClick={restartSim}
+        >
+          RESTART
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <header className={styles.MenuSection}>
+      <SimOptionsModal isOpen={isModalOpen} requestCloseModal={closeModal} />
+      <div className={styles.titleBar}>
+        CSiM EXCDS Workstation Version {appVersion} by lirobinxc @ GitHub
+      </div>
+      <div className={styles.menuBar}></div>
+      {simOptions.terminalPosition === TerminalPosition.DEPARTURE
+        ? displayDepMenu()
+        : displayArrMenu()}
     </header>
   );
 };

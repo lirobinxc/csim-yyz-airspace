@@ -1,10 +1,7 @@
-import clsx from 'clsx';
 import _ from 'lodash';
 import { useCallback, useEffect, useState } from 'react';
 import useInterval from 'use-interval';
-import PhaserGame from '../../phaser/PhaserGameConfig';
 import { AcType } from '../../phaser/types/AircraftTypes';
-import { OtherSceneKeys } from '../../phaser/types/SceneKeys';
 import { determineIfVdpAllowed } from '../functions/determineIfVdpAllowed';
 import {
   DeparturePhase,
@@ -19,11 +16,10 @@ import {
 } from '../state/slices/departureListSlice';
 import { selectSimOptions } from '../state/slices/simOptionsSlice';
 
-import styles from './FdeSection.module.scss';
-import SimOptionsModal from './SimOptionsModal';
+import styles from './FdeSectionDep.module.scss';
 import StripPanel, { Size, StripPanelName } from './StripPanel';
 
-const FdeSection = () => {
+const FdeSectionDep = () => {
   const dispatch = useAppDispatch();
   const strips = useAppSelector(selectDepartureList);
   const simOptions = useAppSelector(selectSimOptions);
@@ -348,7 +344,7 @@ const FdeSection = () => {
   }, 5000);
 
   return (
-    <main className={styles.FdeSection}>
+    <main className={styles.FdeSectionDep}>
       <section className={styles.NorthDepCol}>
         <StripPanel
           title={StripPanelName.READY_N}
@@ -399,4 +395,4 @@ const FdeSection = () => {
   );
 };
 
-export default FdeSection;
+export default FdeSectionDep;

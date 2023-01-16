@@ -112,7 +112,9 @@ const SimOptionsModal = ({
               defaultValue={simOptions.terminalPosition}
             >
               <option value={TerminalPosition.DEPARTURE}>Departure</option>
-              <option value={TerminalPosition.ARRIVAL}>Arrival</option>
+              <option value={TerminalPosition.ARRIVAL}>
+                Arrival (WIP, do not use)
+              </option>
             </select>
           </label>
           <label>

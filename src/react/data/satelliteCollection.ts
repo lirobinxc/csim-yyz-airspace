@@ -1,4 +1,4 @@
-import { WP_DICT_COMMON } from '../../phaser/config/WaypointConfigCommon';
+import { WP_DICT_COMMON } from '../../phaser/config/WaypointConfig_Dep/WaypointConfigCommon_Dep';
 import { AcType } from '../../phaser/types/AircraftTypes';
 import {
   DepRunwayAll,
@@ -12,7 +12,7 @@ import {
 import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
 import { AdjacentSectors } from '../../phaser/types/SectorTypes';
 import { SatelliteName } from '../../phaser/types/SidAndSatelliteTypes';
-import { WaypointDataCommon } from '../../phaser/types/WaypointTypes';
+import { WaypointDataCommonDep } from '../../phaser/types/WaypointTypesDep';
 
 export interface SatelliteData {
   name: SatelliteName;
@@ -22,7 +22,7 @@ export interface SatelliteData {
   depPoint: string;
   destination: string;
   entryAltitude: number;
-  entryHeading: number | WaypointDataCommon;
+  entryHeading: number | WaypointDataCommonDep;
   handoffSector: AdjacentSectors;
 }
 

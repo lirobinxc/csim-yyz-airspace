@@ -20,7 +20,8 @@
     );
   }
 
-  .infoBar {
+  .depButtonBar,
+  .arrButtonBar {
     display: flex;
     flex-direction: row;
 
@@ -99,6 +100,46 @@
       background-color: red;
 
       animation: blinker 1s linear infinite;
+    }
+
+    // Arrival specific styles
+    .arrHalfBoxMd {
+      font-weight: bold;
+      font-size: $fontSizeMd;
+      text-align: center;
+
+      background-color: white;
+    }
+
+    .arrHalfBoxLg {
+      width: 6rem;
+
+      font-weight: bold;
+      font-size: $fontSizeMd;
+      text-align: center;
+
+      background-color: white;
+    }
+
+    .arrAltimeter,
+    .arrAtis {
+      width: 5rem;
+
+      font-weight: bold;
+      font-size: $fontSizeXl;
+
+      background-color: white;
+
+      @include flexCenterVertical();
+      @include flexCenterHorizontal();
+    }
+
+    .arrAtis {
+      width: 3rem;
+    }
+
+    .bgGrey {
+      background-color: $lightGrey;
     }
   }
 }

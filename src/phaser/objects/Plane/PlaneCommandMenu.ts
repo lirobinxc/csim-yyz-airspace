@@ -2,7 +2,7 @@ import { AssetKeys } from '../../types/AssetKeys';
 import { ColorKeys } from '../../types/ColorKeys';
 import { PhaserCustomEvents } from '../../types/CustomEvents';
 import { DomEvents } from '../../types/DomEvents';
-import { WaypointDataAll } from '../../types/WaypointTypes';
+import { WaypointDataAllDep } from '../../types/WaypointTypesDep';
 import Plane from './Plane';
 import PlaneCommandSubmenu, {
   PlaneCommandSubmenuValue,
@@ -28,7 +28,7 @@ export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
   private COMMAND_CUE_TIME_LIMIT: number; // ms
   private TIMER_START: number;
   public COMMAND_CUE: {
-    directTo: WaypointDataAll | null;
+    directTo: WaypointDataAllDep | null;
     heading: number | null;
     altitude: number | null;
     speed: number | null; // knots
@@ -213,7 +213,7 @@ export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
     // On PhaserCustomEvent: Waypoint clicked
     this.Plane.Scene.events.on(
       PhaserCustomEvents.WP_CLICKED,
-      (waypoint: WaypointDataAll) => {
+      (waypoint: WaypointDataAllDep) => {
         this.setDirectTo(waypoint);
       }
     );
@@ -288,7 +288,7 @@ export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
     }
   }
 
-  private setDirectTo(waypoint: WaypointDataAll) {
+  private setDirectTo(waypoint: WaypointDataAllDep) {
     if (!waypoint) return;
 
     this.TIMER_START = this.scene.time.now;

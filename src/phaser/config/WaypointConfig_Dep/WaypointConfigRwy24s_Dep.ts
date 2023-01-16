@@ -1,12 +1,15 @@
-import { AcType } from '../types/AircraftTypes';
-import { GameConfig } from './GameConfig';
-import { WP_LIST_COMMON } from './WaypointConfigCommon';
-import type { WaypointData24s, WaypointKeys24s } from '../types/WaypointTypes';
+import { AcType } from '../../types/AircraftTypes';
+import { GameConfig } from '../GameConfig';
+import { WP_LIST_COMMON_DEP } from './WaypointConfigCommon_Dep';
+import type {
+  WaypointData24sDep,
+  WaypointKeys24sDep,
+} from '../../types/WaypointTypesDep';
 
 const gameHeight = GameConfig.height;
 
-export const WP_LIST_RWY24s: WaypointData24s[] = [
-  ...WP_LIST_COMMON,
+export const WP_LIST_RWY24s_DEP: WaypointData24sDep[] = [
+  ...WP_LIST_COMMON_DEP,
   {
     name: 'BISTI',
     relativeCoord: new Phaser.Math.Vector2(0.343, 0.393),
@@ -108,9 +111,9 @@ export const WP_LIST_RWY24s: WaypointData24s[] = [
   },
 ];
 
-export const WP_DICT_Rwy24s = genDictFromWaypointList(WP_LIST_RWY24s);
+export const WP_DICT_Rwy24s = genDictFromWaypointList(WP_LIST_RWY24s_DEP);
 
-function genDictFromWaypointList(wpArr: WaypointData24s[]) {
+function genDictFromWaypointList(wpArr: WaypointData24sDep[]) {
   const wpDict = wpArr.reduce((acc, item) => {
     acc[item.name] = {
       name: item.name,
@@ -119,7 +122,7 @@ function genDictFromWaypointList(wpArr: WaypointData24s[]) {
       getDisplayCoord: item.getDisplayCoord,
     };
     return acc;
-  }, {} as WaypointKeys24s);
+  }, {} as WaypointKeys24sDep);
 
   return wpDict;
 }

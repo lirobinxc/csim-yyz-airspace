@@ -12,7 +12,7 @@ import { DepRunwayAll } from '../../phaser/types/AirportTypes';
 import { determineIfNorthOrSouthDep } from './determineIfNorthOrSouthDep';
 import { determineDepRunwayYYZ } from './determineDepRunway';
 import { AdjacentSectors } from '../../phaser/types/SectorTypes';
-import { WaypointDataCommon } from '../../phaser/types/WaypointTypes';
+import { WaypointDataCommonDep } from '../../phaser/types/WaypointTypesDep';
 
 export enum DeparturePhase {
   READY = 'READY',
@@ -37,7 +37,7 @@ export interface DepFDE {
   acModel: AcModel;
   acWtc: AcWTC;
   assignedAlt: number;
-  assignedHeading: number | WaypointDataCommon | null;
+  assignedHeading: number | WaypointDataCommonDep | null;
   coordinatedAlt: number;
   debugACID: ACID;
   depPhase: DeparturePhase;

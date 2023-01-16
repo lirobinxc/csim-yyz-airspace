@@ -1,9 +1,9 @@
-import { WaypointDataCommon } from '../types/WaypointTypes';
-import { SatelliteName } from '../types/SidAndSatelliteTypes';
-import { WP_DICT_COMMON } from './WaypointConfigCommon';
+import { WaypointDataCommonDep } from '../../types/WaypointTypesDep';
+import { SatelliteName } from '../../types/SidAndSatelliteTypes';
+import { WP_DICT_COMMON } from '../WaypointConfig_Dep/WaypointConfigCommon_Dep';
 
 export const SAT_ROUTES: {
-  [key in SatelliteName]: WaypointDataCommon[];
+  [key in SatelliteName]: WaypointDataCommonDep[];
 } = {
   YHM_ARR_MUXIG: [
     WP_DICT_COMMON.ILUSI,

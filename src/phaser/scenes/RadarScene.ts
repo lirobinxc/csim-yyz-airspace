@@ -1,6 +1,5 @@
 import Phaser from 'phaser';
 
-import { WP_LIST_RWY06s } from '../config/WaypointConfigRwy06s';
 import RadarBg from '../objects/RadarBg';
 import Waypoint from '../objects/Waypoint';
 import type { GameObjectOptions } from '../types/GameObjectOptions';
@@ -9,32 +8,37 @@ import { AssetKeys } from '../types/AssetKeys';
 import PointerCoordinateLogger from '../utils/PointerCoordinates';
 import RunwayOrigins from '../config/RunwayOrigins';
 import Plane from '../objects/Plane/Plane';
-import { AcModel, AcType, AcWTC } from '../types/AircraftTypes';
 import { DomEvents } from '../types/DomEvents';
-import { AdjacentSectors } from '../types/SectorTypes';
 
-import img_Radar06s from '../assets/Radar06s.png';
-import img_Radar24s from '../assets/Radar24s.png';
-import img_Radar33s from '../assets/Radar33s.png';
-import img_Radar15s from '../assets/Radar15s.png';
+import img_Radar06sDep from '../assets/Radar06sDep.png';
+import img_Radar24sDep from '../assets/Radar24sDep.png';
+import img_Radar33sDep from '../assets/Radar33sDep.png';
+import img_Radar15sDep from '../assets/Radar15sDep.png';
+import img_Radar06sArr from '../assets/Radar06sArr.png';
+import img_Radar24sArr from '../assets/Radar24sArr.png';
+import img_Radar33sArr from '../assets/Radar33sArr.png';
+import img_Radar15sArr from '../assets/Radar15sArr.png';
 
 import img_PpsSymbol from '../assets/PpsSymbol.png';
 import fontTexture_DejaVuMonoBold from '../assets/font/FontDejaVuMonoBold.png';
 import fontXml_DejaVuMonoBold from '../assets/font/FontDejaVuMonoBold.xml';
 import DebugButton from '../objects/DebugButton';
-import { SidName } from '../types/SidAndSatelliteTypes';
-import { DepRunwayYYZ } from '../types/AirportTypes';
 import { PhaserCustomEvents, ReactCustomEvents } from '../types/CustomEvents';
-import { PlaneProperties } from '../types/PlaneInterfaces';
 import { DepFDE } from '../../react/functions/genDepFdeData';
 import { genPlanePropsFromFDE } from '../utils/genPlanePropsFromFDE';
 import SpeechSynth from '../objects/SpeechSynth';
 import FiledRouteLine from '../objects/FiledRouteLine';
-import { WP_LIST_RWY24s } from '../config/WaypointConfigRwy24s';
-import { LocalStorageKeys } from '../../react/state/genSimOptions';
+import {
+  defaultSimOptions,
+  genSimOptions,
+  LocalStorageKeys,
+} from '../../react/state/genSimOptions';
 import { SimOptions } from '../../react/state/slices/simOptionsSlice';
-import { WP_LIST_RWY33s } from '../config/WaypointConfigRwy33s';
-import { WP_LIST_RWY15s } from '../config/WaypointConfigRwy15s';
+import { WP_LIST_RWY06s_DEP } from '../config/WaypointConfig_Dep/WaypointConfigRwy06s_Dep';
+import { WP_LIST_RWY24s_DEP } from '../config/WaypointConfig_Dep/WaypointConfigRwy24s_Dep';
+import { WP_LIST_RWY33s_DEP } from '../config/WaypointConfig_Dep/WaypointConfigRwy33s_Dep';
+import { WP_LIST_RWY15s_DEP } from '../config/WaypointConfig_Dep/WaypointConfigRwy15s_Dep';
+import { TerminalPosition } from '../types/SimTypes';
 
 const localStorage = window.localStorage;
 
@@ -46,6 +50,7 @@ export default class RadarScene extends Phaser.Scene {
   public Speech: SpeechSynth;
   private SpeechQueue: { text: string; plane: Plane; isCheckIn: boolean }[];
   private FiledRouteLine: FiledRouteLine | null;
+  public SIM_OPTIONS: SimOptions;
 
   public SELECTED_PLANE: Plane | null;
   public CURRENTLY_SPEAKING_PLANE: Plane | null;
@@ -66,10 +71,11 @@ export default class RadarScene extends Phaser.Scene {
     this.Speech = new SpeechSynth();
     this.SpeechQueue = [];
     this.FiledRouteLine = null;
+    this.SIM_OPTIONS = defaultSimOptions;
 
     // Init: Template props
     this.SCENE_KEY = sceneKey;
-    this.ASSET_KEY = AssetKeys.RADAR_06s; // fallback value
+    this.ASSET_KEY = AssetKeys.RADAR_06s_DEP_BG; // fallback value
 
     // Init: Constants
     this.SELECTED_PLANE = null;
@@ -77,32 +83,47 @@ export default class RadarScene extends Phaser.Scene {
   }
 
   init() {
-    const SIM_OPTIONS: SimOptions = JSON.parse(
-      localStorage.getItem(LocalStorageKeys.SIM_OPTIONS) || ''
-    );
-
-    if (SIM_OPTIONS) {
-      this.SCENE_KEY = SIM_OPTIONS.radarScene;
-    }
+    this.SIM_OPTIONS = genSimOptions();
+    this.SCENE_KEY = this.SIM_OPTIONS.radarScene;
   }
 
   preload() {
     switch (this.SCENE_KEY) {
       case RadarSceneKeys.RADAR_06s:
-        this.load.image(AssetKeys.RADAR_06s, img_Radar06s);
-        this.ASSET_KEY = AssetKeys.RADAR_06s;
+        if (this.SIM_OPTIONS.terminalPosition === TerminalPosition.DEPARTURE) {
+          this.load.image(AssetKeys.RADAR_06s_DEP_BG, img_Radar06sDep);
+          this.ASSET_KEY = AssetKeys.RADAR_06s_DEP_BG;
+        } else {
+          this.load.image(AssetKeys.RADAR_06s_ARR_BG, img_Radar06sArr);
+          this.ASSET_KEY = AssetKeys.RADAR_06s_ARR_BG;
+        }
         break;
       case RadarSceneKeys.RADAR_24s:
-        this.load.image(AssetKeys.RADAR_24s, img_Radar24s);
-        this.ASSET_KEY = AssetKeys.RADAR_24s;
+        if (this.SIM_OPTIONS.terminalPosition === TerminalPosition.DEPARTURE) {
+          this.load.image(AssetKeys.RADAR_24s_DEP_BG, img_Radar24sDep);
+          this.ASSET_KEY = AssetKeys.RADAR_24s_DEP_BG;
+        } else {
+          this.load.image(AssetKeys.RADAR_24s_ARR_BG, img_Radar24sArr);
+          this.ASSET_KEY = AssetKeys.RADAR_24s_ARR_BG;
+        }
         break;
       case RadarSceneKeys.RADAR_33s:
-        this.load.image(AssetKeys.RADAR_33s, img_Radar33s);
-        this.ASSET_KEY = AssetKeys.RADAR_33s;
+        if (this.SIM_OPTIONS.terminalPosition === TerminalPosition.DEPARTURE) {
+          this.load.image(AssetKeys.RADAR_33s_DEP_BG, img_Radar33sDep);
+          this.ASSET_KEY = AssetKeys.RADAR_33s_DEP_BG;
+        } else {
+          this.load.image(AssetKeys.RADAR_33s_ARR_BG, img_Radar33sArr);
+          this.ASSET_KEY = AssetKeys.RADAR_33s_ARR_BG;
+        }
         break;
       case RadarSceneKeys.RADAR_15s:
-        this.load.image(AssetKeys.RADAR_15s, img_Radar15s);
-        this.ASSET_KEY = AssetKeys.RADAR_15s;
+        if (this.SIM_OPTIONS.terminalPosition === TerminalPosition.DEPARTURE) {
+          this.load.image(AssetKeys.RADAR_15s_DEP_BG, img_Radar15sDep);
+          this.ASSET_KEY = AssetKeys.RADAR_15s_DEP_BG;
+        } else {
+          this.load.image(AssetKeys.RADAR_15s_ARR_BG, img_Radar15sArr);
+          this.ASSET_KEY = AssetKeys.RADAR_15s_ARR_BG;
+        }
         break;
       default:
         throw new Error(
@@ -125,22 +146,22 @@ export default class RadarScene extends Phaser.Scene {
     // Create: Waypoints Layer
     switch (this.SCENE_KEY) {
       case RadarSceneKeys.RADAR_06s:
-        WP_LIST_RWY06s.forEach((waypointData) => {
+        WP_LIST_RWY06s_DEP.forEach((waypointData) => {
           this.Waypoints.push(new Waypoint(this, waypointData));
         });
         break;
       case RadarSceneKeys.RADAR_24s:
-        WP_LIST_RWY24s.forEach((waypointData) => {
+        WP_LIST_RWY24s_DEP.forEach((waypointData) => {
           this.Waypoints.push(new Waypoint(this, waypointData));
         });
         break;
       case RadarSceneKeys.RADAR_33s:
-        WP_LIST_RWY33s.forEach((waypointData) => {
+        WP_LIST_RWY33s_DEP.forEach((waypointData) => {
           this.Waypoints.push(new Waypoint(this, waypointData));
         });
         break;
       case RadarSceneKeys.RADAR_15s:
-        WP_LIST_RWY15s.forEach((waypointData) => {
+        WP_LIST_RWY15s_DEP.forEach((waypointData) => {
           this.Waypoints.push(new Waypoint(this, waypointData));
         });
         break;
@@ -276,7 +297,7 @@ export default class RadarScene extends Phaser.Scene {
     });
 
     this.SCENE_KEY = radarScene;
-    this.ASSET_KEY = AssetKeys.RADAR_06s; // fallback value
+    this.ASSET_KEY = AssetKeys.RADAR_06s_DEP_BG; // fallback value
 
     this.SELECTED_PLANE = null;
     this.CURRENTLY_SPEAKING_PLANE = null;

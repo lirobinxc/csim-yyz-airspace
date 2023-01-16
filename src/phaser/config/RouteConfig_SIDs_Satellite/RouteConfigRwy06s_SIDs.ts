@@ -1,9 +1,9 @@
-import { WP_DICT_Rwy06s } from './WaypointConfigRwy06s';
-import { WaypointData06s } from '../types/WaypointTypes';
-import { SidName } from '../types/SidAndSatelliteTypes';
+import { WP_DICT_Rwy06s } from '../WaypointConfig_Dep/WaypointConfigRwy06s_Dep';
+import { WaypointData06sDep } from '../../types/WaypointTypesDep';
+import { SidName } from '../../types/SidAndSatelliteTypes';
 
 export const SID_ROUTES_06s: {
-  [key in SidName]: WaypointData06s[];
+  [key in SidName]: WaypointData06sDep[];
 } = {
   'ANCOL DEP': [
     WP_DICT_Rwy06s.MOBEL,
