@@ -21,7 +21,7 @@ export const PhaserGameConfig: Phaser.Types.Core.GameConfig = {
       fps: isDebugMode ? DebugGameConfig.fps : GameConfig.fps,
     },
   },
-  scene: [new RadarScene(RadarSceneKeys.RADAR_06s, { isDebug: isDebugMode })],
+  scene: [new RadarScene(RadarSceneKeys.RADAR_06s)],
   render: {
     antialias: true,
   },

@@ -1,4 +1,4 @@
-import { WP_DICT_COMMON } from '../../phaser/config/WaypointConfig_Dep/WaypointConfigCommon_Dep';
+import { WP_DICT_DEP_COMMON } from '../../phaser/config/WaypointConfigDep/WaypointConfigDepCommon';
 import { AcType } from '../../phaser/types/AircraftTypes';
 import {
   DepRunwayAll,
@@ -12,7 +12,7 @@ import {
 import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
 import { AdjacentSectors } from '../../phaser/types/SectorTypes';
 import { SatelliteName } from '../../phaser/types/SidAndSatelliteTypes';
-import { WaypointDataCommonDep } from '../../phaser/types/WaypointTypesDep';
+import { WaypointDataDepCommon } from '../../phaser/types/WaypointTypesDep';
 
 export interface SatelliteData {
   name: SatelliteName;
@@ -22,7 +22,7 @@ export interface SatelliteData {
   depPoint: string;
   destination: string;
   entryAltitude: number;
-  entryHeading: number | WaypointDataCommonDep;
+  entryHeading: number | WaypointDataDepCommon;
   handoffSector: AdjacentSectors;
 }
 
@@ -38,7 +38,7 @@ const CommonSatelliteData: SatelliteData[] = [
     depPoint: '',
     destination: 'CYHM',
     entryAltitude: 160,
-    entryHeading: WP_DICT_COMMON.YYZ,
+    entryHeading: WP_DICT_DEP_COMMON.YYZ,
     handoffSector: AdjacentSectors.WS,
   },
   {
@@ -49,7 +49,7 @@ const CommonSatelliteData: SatelliteData[] = [
     depPoint: '',
     destination: 'CYHM',
     entryAltitude: 160,
-    entryHeading: WP_DICT_COMMON.YYZ,
+    entryHeading: WP_DICT_DEP_COMMON.YYZ,
     handoffSector: AdjacentSectors.WS,
   },
   {
@@ -93,7 +93,7 @@ const CommonSatelliteData: SatelliteData[] = [
     depPoint: 'CYKZ',
     destination: 'KMSP',
     entryAltitude: 30,
-    entryHeading: WP_DICT_COMMON.RIKEM,
+    entryHeading: WP_DICT_DEP_COMMON.RIKEM,
     handoffSector: AdjacentSectors.GR,
   },
   {
@@ -137,7 +137,7 @@ const CommonSatelliteData: SatelliteData[] = [
     depPoint: '',
     destination: 'CYOO',
     entryAltitude: 170,
-    entryHeading: WP_DICT_COMMON.YWT,
+    entryHeading: WP_DICT_DEP_COMMON.YWT,
     handoffSector: AdjacentSectors.ES,
   },
   {
@@ -148,7 +148,7 @@ const CommonSatelliteData: SatelliteData[] = [
     depPoint: '',
     destination: 'CYPQ',
     entryAltitude: 220,
-    entryHeading: WP_DICT_COMMON.YWT,
+    entryHeading: WP_DICT_DEP_COMMON.YWT,
     handoffSector: AdjacentSectors.ER,
   },
   {
@@ -159,7 +159,7 @@ const CommonSatelliteData: SatelliteData[] = [
     depPoint: 'CYTZ',
     destination: '',
     entryAltitude: 30,
-    entryHeading: WP_DICT_COMMON.DAVSI,
+    entryHeading: WP_DICT_DEP_COMMON.DAVSI,
     handoffSector: AdjacentSectors.ER,
   },
   {
@@ -181,7 +181,7 @@ const CommonSatelliteData: SatelliteData[] = [
     depPoint: 'CYTZ',
     destination: '',
     entryAltitude: 30,
-    entryHeading: WP_DICT_COMMON.RIKEM,
+    entryHeading: WP_DICT_DEP_COMMON.RIKEM,
     handoffSector: AdjacentSectors.GR,
   },
   {
@@ -203,7 +203,7 @@ const CommonSatelliteData: SatelliteData[] = [
     depPoint: 'CYTZ',
     destination: '',
     entryAltitude: 30,
-    entryHeading: WP_DICT_COMMON.NADUM,
+    entryHeading: WP_DICT_DEP_COMMON.NADUM,
     handoffSector: AdjacentSectors.GR,
   },
   {
@@ -228,7 +228,7 @@ const JetOnlySatelliteData = [
     depPoint: 'CYKF',
     destination: '',
     entryAltitude: 60,
-    entryHeading: WP_DICT_COMMON.YWT,
+    entryHeading: WP_DICT_DEP_COMMON.YWT,
     handoffSector: AdjacentSectors.ER,
   },
 ];
@@ -242,7 +242,7 @@ const PropOnlySatelliteData = [
     depPoint: 'CYKF',
     destination: '',
     entryAltitude: 60,
-    entryHeading: WP_DICT_COMMON.YWT,
+    entryHeading: WP_DICT_DEP_COMMON.YWT,
     handoffSector: AdjacentSectors.ER,
   },
 ];
@@ -256,7 +256,7 @@ const Rwy06OnlySatData = [
     depPoint: '',
     destination: 'YKZ',
     entryAltitude: 70,
-    entryHeading: WP_DICT_COMMON.YKF,
+    entryHeading: WP_DICT_DEP_COMMON.YKF,
     handoffSector: AdjacentSectors.ES,
   },
 ];

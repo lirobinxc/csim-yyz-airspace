@@ -1,7 +1,7 @@
-import { SID_ROUTES_06s } from '../config/RouteConfig_SIDs_Satellite/RouteConfigRwy06s_SIDs';
-import { SID_ROUTES_15s } from '../config/RouteConfig_SIDs_Satellite/RouteConfigRwy15s_SIDs';
-import { SID_ROUTES_24s } from '../config/RouteConfig_SIDs_Satellite/RouteConfigRwy24s_SIDs';
-import { SID_ROUTES_33s } from '../config/RouteConfig_SIDs_Satellite/RouteConfigRwy33s_SIDs';
+import { SID_ROUTES_06s } from '../config/RouteConfigDep/RouteConfigSids06s';
+import { SID_ROUTES_15s } from '../config/RouteConfigDep/RouteConfigSids15s';
+import { SID_ROUTES_24s } from '../config/RouteConfigDep/RouteConfigSids24s';
+import { SID_ROUTES_33s } from '../config/RouteConfigDep/RouteConfigSids33s';
 import { RadarSceneKeys } from '../types/SceneKeys';
 import { SidName } from '../types/SidAndSatelliteTypes';
 

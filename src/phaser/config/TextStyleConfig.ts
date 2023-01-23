@@ -1,17 +1,31 @@
 import { AcType } from '../types/AircraftTypes';
 
 export enum FontColors {
-  Blue = '#2f81e1ff',
-  Pink = '#e54e99',
+  BLUE = '#2f81e1ff',
+  PINK = '#e54e99',
+  GREEN = '#0ab45dff',
 }
 
 export function genWaypointTextStyles(
-  acType: AcType
+  type: AcType | null
 ): Phaser.GameObjects.TextStyle {
+  let labelColor = FontColors.GREEN;
+
+  switch (type) {
+    case AcType.JET:
+      labelColor = FontColors.BLUE;
+      break;
+    case AcType.PROP:
+      labelColor = FontColors.PINK;
+      break;
+    default:
+      break;
+  }
+
   const styles = {
     fontFamily: 'monospace',
     fontSize: `14px`,
-    color: acType === AcType.JET ? FontColors.Blue : FontColors.Pink,
+    color: labelColor,
   } as Phaser.GameObjects.TextStyle;
 
   return styles;

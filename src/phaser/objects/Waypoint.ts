@@ -1,24 +1,31 @@
 import Phaser from 'phaser';
 import {
-  WaypointDataAllDep,
-  WaypointNamesAllDep,
+  WaypointDataDepAll,
+  WaypointNamesDepAll,
 } from '../types/WaypointTypesDep';
 import { genWaypointTextStyles } from '../config/TextStyleConfig';
 import RadarScene from '../scenes/RadarScene';
 import { ColorKeys } from '../types/ColorKeys';
 import { DomEvents } from '../types/DomEvents';
 import { PhaserCustomEvents } from '../types/CustomEvents';
+import {
+  WaypointDataArrAll,
+  WaypointNamesArrAll,
+} from '../types/WaypointTypesArr';
 
 export default class Waypoint extends Phaser.GameObjects.Arc {
-  public name: WaypointNamesAllDep;
+  public name: WaypointNamesDepAll | WaypointNamesArrAll;
 
   private Scene: RadarScene;
   private Label: Phaser.GameObjects.Text;
 
   public SHOW_NAME: boolean;
-  public WAYPOINT_DATA: WaypointDataAllDep;
+  public WAYPOINT_DATA: WaypointDataDepAll | WaypointDataArrAll;
 
-  constructor(scene: RadarScene, waypointData: WaypointDataAllDep) {
+  constructor(
+    scene: RadarScene,
+    waypointData: WaypointDataDepAll | WaypointDataArrAll
+  ) {
     const CIRCLE_RADIUS = 8;
 
     super(
@@ -75,7 +82,7 @@ export default class Waypoint extends Phaser.GameObjects.Arc {
   }
 
   private toggleDebug() {
-    if (this.Scene.Options.isDebug) {
+    if (this.Scene.IS_DEBUG_MODE) {
       this.input.hitAreaDebug.setVisible(true);
     } else {
       this.input.hitAreaDebug.setVisible(false);

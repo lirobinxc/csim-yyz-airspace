@@ -1,0 +1,55 @@
+@import '../../variables';
+
+.DepStripPanel {
+  display: flex;
+  flex-direction: column;
+
+  border: 2px inset;
+
+  background-color: $darkGrey;
+
+  overflow: auto;
+
+  .Header {
+    display: flex;
+    flex-direction: row;
+
+    padding: $spacingXs;
+
+    font-weight: bold;
+
+    background-color: $medGrey;
+
+    .title {
+      min-width: 12rem;
+    }
+  }
+
+  .Strips {
+    display: flex;
+    flex-direction: column-reverse;
+    flex-grow: 2;
+    justify-content: flex-start;
+
+    padding: $spacingXs;
+
+    overflow: hidden;
+  }
+}
+
+.SizeSm {
+  flex-grow: 0.2;
+
+  min-height: 3rem;
+  max-height: 6rem;
+}
+
+.SizeMd {
+  flex-grow: 0.6;
+
+  min-height: 6rem;
+}
+
+.SizeLg {
+  flex-grow: 8;
+}

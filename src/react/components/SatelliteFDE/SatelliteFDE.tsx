@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from '../../state/hooks';
 import styles from './SatelliteFDE.module.scss';
 import { departureListActions } from '../../state/slices/departureListSlice';
 import { AcType } from '../../../phaser/types/AircraftTypes';
-import { DepFDE } from '../../functions/genDepFdeData';
+import { DepFDE } from '../../functions/departure/genDepFDE';
 import {
   selectSimOptions,
   simOptionsActions,
@@ -98,7 +98,7 @@ function SatelliteFDE(props: DepFDE) {
 
   //TEMP
   useEffect(() => {
-    if (simOptions.selectedStrip?.uniqueKey === uniqueKey) {
+    if (simOptions.selectedDepStrip?.uniqueKey === uniqueKey) {
       setStripIsSelected(true);
     } else {
       setStripIsSelected(false);
@@ -108,21 +108,21 @@ function SatelliteFDE(props: DepFDE) {
   function handleAcIdClick(e: React.MouseEvent<HTMLElement, MouseEvent>) {
     e.stopPropagation();
 
-    if (!stripIsSelected && simOptions.selectedStrip) {
+    if (!stripIsSelected && simOptions.selectedDepStrip) {
       dispatch(
         departureListActions.insertStripBelow({
-          firstStrip: simOptions.selectedStrip,
+          firstStrip: simOptions.selectedDepStrip,
           secondStrip: props,
         })
       );
-      dispatch(simOptionsActions.removeSelectedStrip());
+      dispatch(simOptionsActions.removeSelectedDepStrip());
       return;
     }
 
     if (stripIsSelected) {
-      dispatch(simOptionsActions.removeSelectedStrip());
+      dispatch(simOptionsActions.removeSelectedDepStrip());
     } else {
-      dispatch(simOptionsActions.setSelectedStrip(props));
+      dispatch(simOptionsActions.setSelectedDepStrip(props));
     }
   }
 
@@ -186,7 +186,7 @@ function SatelliteFDE(props: DepFDE) {
       className={clsx(styles.FlightStrip, styles.flexCol, {
         [styles.bgSatelliteGreen]: isYpqOrYooArrival && isYzdDep,
         [styles.borderYellow]:
-          simOptions.selectedStrip?.uniqueKey === uniqueKey,
+          simOptions.selectedDepStrip?.uniqueKey === uniqueKey,
       })}
     >
       <div className={clsx(styles.topRow, styles.flexRow)}>

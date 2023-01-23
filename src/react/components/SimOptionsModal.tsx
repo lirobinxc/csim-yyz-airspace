@@ -1,4 +1,3 @@
-import clsx from 'clsx';
 import { useAppDispatch, useAppSelector } from '../state/hooks';
 import { departureListActions } from '../state/slices/departureListSlice';
 import {
@@ -109,7 +108,7 @@ const SimOptionsModal = ({
             Terminal Position
             <select
               onChange={setTerminalPosition}
-              defaultValue={simOptions.terminalPosition}
+              defaultValue={tempOptions.terminalPosition}
             >
               <option value={TerminalPosition.DEPARTURE}>Departure</option>
               <option value={TerminalPosition.ARRIVAL}>

@@ -1,4 +1,4 @@
-import { DepFDE } from '../../react/functions/genDepFdeData';
+import { DepFDE } from '../../react/functions/departure/genDepFDE';
 import { PlanePerformanceConfig } from '../config/PlanePerformanceConfig';
 import { getRunwayHeading } from '../config/RunwayHeadingConfig';
 import { AcType } from '../types/AircraftTypes';

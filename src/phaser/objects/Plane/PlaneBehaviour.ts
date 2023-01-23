@@ -1,7 +1,7 @@
 import { getRunwayHeading } from '../../config/RunwayHeadingConfig';
 import RadarScene from '../../scenes/RadarScene';
 import { AcType } from '../../types/AircraftTypes';
-import { WaypointDataAllDep } from '../../types/WaypointTypesDep';
+import { WaypointDataDepAll } from '../../types/WaypointTypesDep';
 import { asKnots } from '../../utils/asKnots';
 import { convertHeadingToRadians } from '../../utils/convertHeadingToRadians';
 import { convertRadiansToHeading } from '../../utils/convertRadiansToHeading';
@@ -73,7 +73,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
     const DISTANCE_IN_SECONDS = (distanceFromWaypoint / speed.current) * 180; // 180 is just a random constant I calculated
 
     // Logic Step 2: Check if there is a next waypoint on the route
-    let NEXT_WAYPOINT: WaypointDataAllDep | null = null;
+    let NEXT_WAYPOINT: WaypointDataDepAll | null = null;
     const idxOfCurrentWaypoint = filedRoute.findIndex(
       (waypoint) => waypoint.name === heading.directTo?.name
     );

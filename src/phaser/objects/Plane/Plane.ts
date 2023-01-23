@@ -2,14 +2,13 @@ import Phaser from 'phaser';
 import { AcType, AcWTC } from '../../types/AircraftTypes';
 import PlaneDataTag from './PlaneDataTag';
 import PlaneSymbol from './PlaneSymbol';
-import { WaypointDataAllDep } from '../../types/WaypointTypesDep';
+import { WaypointDataDepAll } from '../../types/WaypointTypesDep';
 import { PlanePerformanceConfig } from '../../config/PlanePerformanceConfig';
 import { getRunwayHeading } from '../../config/RunwayHeadingConfig';
 import PlaneDataTagLine from './PlaneDataTagLine';
 import PlaneBehaviour from './PlaneBehaviour';
 import PlanePTL from './PlanePTL';
 import RadarScene from '../../scenes/RadarScene';
-import { GameObjectOptions } from '../../types/GameObjectOptions';
 import PlaneHistoryTrail from './PlaneHistoryTrail';
 import { DomEvents } from '../../types/DomEvents';
 import { PhaserCustomEvents } from '../../types/CustomEvents';
@@ -34,7 +33,6 @@ export default class Plane extends Phaser.GameObjects.Container {
   public Properties: PlaneProperties;
   public Commands: PlaneCommands;
   public Performance: PlanePerformance;
-  public Options: GameObjectOptions;
   public PilotVoice: undefined | SpeechSynthesisVoice;
 
   // CONSTANTS
@@ -62,11 +60,7 @@ export default class Plane extends Phaser.GameObjects.Container {
   public CommandMenu: PlaneCommandMenu;
   public HandoffMenu: PlaneHandoffMenu;
 
-  constructor(
-    scene: RadarScene,
-    props: PlaneProperties,
-    options: GameObjectOptions
-  ) {
+  constructor(scene: RadarScene, props: PlaneProperties) {
     super(scene);
 
     // Common setup
@@ -91,7 +85,6 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.Properties = props;
     this.Performance = this.initPlanePerformance(props);
     this.Commands = this.initPlaneCommands(props, this.Performance);
-    this.Options = options;
     this.PilotVoice = undefined;
     // Attach objs: Plane Subcomponents
     this.Symbol = new PlaneSymbol(this);
@@ -199,7 +192,7 @@ export default class Plane extends Phaser.GameObjects.Container {
     );
   }
 
-  public commandDirectTo(waypointData: WaypointDataAllDep) {
+  public commandDirectTo(waypointData: WaypointDataDepAll) {
     if (!waypointData) return;
 
     const filedRoute = this.getFiledRoute();

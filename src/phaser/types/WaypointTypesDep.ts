@@ -1,72 +1,66 @@
 import { AcType } from './AircraftTypes';
 
-export interface WaypointDataAllDep {
-  name: WaypointNamesAllDep;
+// WAYPOINT DATA object
+export interface WaypointDataDepAll {
+  name: WaypointNamesDepAll;
   relativeCoord: Phaser.Math.Vector2;
   getDisplayCoord: () => Phaser.Math.Vector2;
   type: AcType;
 }
-export interface WaypointDataCommonDep extends WaypointDataAllDep {
-  name: WaypointNamesCommonDep;
+export interface WaypointDataDepCommon extends WaypointDataDepAll {
+  name: WaypointNamesDepCommon;
 }
-export interface WaypointData06sDep extends WaypointDataAllDep {
-  name: WaypointNamesRwy06sDep;
+export interface WaypointDataDep06s extends WaypointDataDepAll {
+  name: WaypointNamesDep06s;
 }
-export interface WaypointData24sDep extends WaypointDataAllDep {
-  name: WaypointNamesRwy24sDep;
+export interface WaypointDataDep24s extends WaypointDataDepAll {
+  name: WaypointNamesDep24s;
 }
-export interface WaypointData33sDep extends WaypointDataAllDep {
-  name: WaypointNamesRwy33sDep;
+export interface WaypointDataDep33s extends WaypointDataDepAll {
+  name: WaypointNamesDep33s;
 }
-export interface WaypointData15sDep extends WaypointDataAllDep {
-  name: WaypointNamesRwy15sDep;
+export interface WaypointDataDep15s extends WaypointDataDepAll {
+  name: WaypointNamesDep15s;
 }
 
-export type WaypointKeysAllDep = Record<
-  WaypointNamesAllDep,
-  WaypointDataAllDep
+// WAYPOINT
+export type WaypointDictDepAll = Record<
+  WaypointNamesDepAll,
+  WaypointDataDepAll
 >;
-export type WaypointKeys06sDep = Record<
-  WaypointNamesRwy06sDep,
-  WaypointData06sDep
+export type WaypointDictDepCommon = Record<
+  WaypointNamesDepCommon,
+  WaypointDataDepCommon
 >;
-export type WaypointKeys24sDep = Record<
-  WaypointNamesRwy24sDep,
-  WaypointData24sDep
+export type WaypointDictDep06s = Record<
+  WaypointNamesDep06s,
+  WaypointDataDep06s
 >;
-export type WaypointKeys33sDep = Record<
-  WaypointNamesRwy33sDep,
-  WaypointData33sDep
+export type WaypointDictDep24s = Record<
+  WaypointNamesDep24s,
+  WaypointDataDep24s
 >;
-export type WaypointKeys15sDep = Record<
-  WaypointNamesRwy15sDep,
-  WaypointData15sDep
+export type WaypointDictDep33s = Record<
+  WaypointNamesDep33s,
+  WaypointDataDep33s
 >;
-export type WaypointKeysCommonDep = Record<
-  WaypointNamesCommonDep,
-  WaypointDataCommonDep
+export type WaypointDictDep15s = Record<
+  WaypointNamesDep15s,
+  WaypointDataDep15s
 >;
 
-export type WaypointNamesAllDep =
-  | WaypointNamesRwy06sDep
-  | WaypointNamesRwy24sDep
-  | WaypointNamesRwy15sDep
-  | WaypointNamesRwy33sDep;
+export type WaypointNamesDepAll =
+  | WaypointNamesDep06s
+  | WaypointNamesDep24s
+  | WaypointNamesDep15s
+  | WaypointNamesDep33s;
 
-export type WaypointNamesRwy06sDep =
-  | WaypointNamesRwy06sDepUnique
-  | WaypointNamesCommonDep;
-export type WaypointNamesRwy24sDep =
-  | WaypointNamesRwy24sDepUnique
-  | WaypointNamesCommonDep;
-export type WaypointNamesRwy15sDep =
-  | WaypointNamesRwy15sDepUnique
-  | WaypointNamesCommonDep;
-export type WaypointNamesRwy33sDep =
-  | WaypointNamesRwy33sDepUnique
-  | WaypointNamesCommonDep;
+type WaypointNamesDep06s = WaypointNamesDep06sUnique | WaypointNamesDepCommon;
+type WaypointNamesDep24s = WaypointNamesDep24sUnique | WaypointNamesDepCommon;
+type WaypointNamesDep15s = WaypointNamesDep15sUnique | WaypointNamesDepCommon;
+type WaypointNamesDep33s = WaypointNamesDep33sUnique | WaypointNamesDepCommon;
 
-export type WaypointNamesCommonDep =
+type WaypointNamesDepCommon =
   | 'ALKUT'
   | 'ANCOL'
   | 'AVROS'
@@ -114,7 +108,7 @@ export type WaypointNamesCommonDep =
   | 'YWT'
   | 'YYZ';
 
-type WaypointNamesRwy06sDepUnique =
+type WaypointNamesDep06sUnique =
   | 'ANCOL'
   | 'BIRLI'
   | 'DUVKO'
@@ -128,7 +122,7 @@ type WaypointNamesRwy06sDepUnique =
   | 'SIDVU'
   | 'VIDRA';
 
-type WaypointNamesRwy24sDepUnique =
+type WaypointNamesDep24sUnique =
   | 'BISTI'
   | 'GAGPO'
   | 'MATES'
@@ -139,7 +133,7 @@ type WaypointNamesRwy24sDepUnique =
   | 'SEKIT'
   | 'TILAM';
 
-type WaypointNamesRwy15sDepUnique =
+type WaypointNamesDep15sUnique =
   | 'BORUX'
   | 'BOVAL'
   | 'ETLER'
@@ -147,7 +141,7 @@ type WaypointNamesRwy15sDepUnique =
   | 'KODAL'
   | 'VIBNA';
 
-type WaypointNamesRwy33sDepUnique =
+type WaypointNamesDep33sUnique =
   | 'BOTIB'
   | 'DUVAK'
   | 'IGTUL'

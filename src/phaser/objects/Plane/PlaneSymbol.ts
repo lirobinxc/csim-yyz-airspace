@@ -33,7 +33,7 @@ export default class PlaneSymbol extends Phaser.GameObjects.Image {
     this.ifPlaneIsSelected();
 
     // Debug
-    if (this.Plane.Options.isDebug) {
+    if (this.Plane.Scene.IS_DEBUG_MODE) {
       this.input.hitAreaDebug.setVisible(true);
     } else {
       this.input.hitAreaDebug.setVisible(false);

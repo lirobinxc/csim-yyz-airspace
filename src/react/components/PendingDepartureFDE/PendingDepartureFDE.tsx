@@ -5,7 +5,7 @@ import { useAppDispatch } from '../../state/hooks';
 
 import styles from './PendingDepartureFDE.module.scss';
 import { departureListActions } from '../../state/slices/departureListSlice';
-import { DepFDE } from '../../functions/genDepFdeData';
+import { DepFDE } from '../../functions/departure/genDepFDE';
 import { AcType } from '../../../phaser/types/AircraftTypes';
 
 function PendingDepartureFDE(props: DepFDE) {

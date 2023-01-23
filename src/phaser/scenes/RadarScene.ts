@@ -2,10 +2,9 @@ import Phaser from 'phaser';
 
 import RadarBg from '../objects/RadarBg';
 import Waypoint from '../objects/Waypoint';
-import type { GameObjectOptions } from '../types/GameObjectOptions';
 import { OtherSceneKeys, RadarSceneKeys } from '../types/SceneKeys';
 import { AssetKeys } from '../types/AssetKeys';
-import PointerCoordinateLogger from '../utils/PointerCoordinates';
+import PointerCoordinateLogger from '../objects/PointerCoordinates';
 import RunwayOrigins from '../config/RunwayOrigins';
 import Plane from '../objects/Plane/Plane';
 import { DomEvents } from '../types/DomEvents';
@@ -24,7 +23,7 @@ import fontTexture_DejaVuMonoBold from '../assets/font/FontDejaVuMonoBold.png';
 import fontXml_DejaVuMonoBold from '../assets/font/FontDejaVuMonoBold.xml';
 import DebugButton from '../objects/DebugButton';
 import { PhaserCustomEvents, ReactCustomEvents } from '../types/CustomEvents';
-import { DepFDE } from '../../react/functions/genDepFdeData';
+import { DepFDE } from '../../react/functions/departure/genDepFDE';
 import { genPlanePropsFromFDE } from '../utils/genPlanePropsFromFDE';
 import SpeechSynth from '../objects/SpeechSynth';
 import FiledRouteLine from '../objects/FiledRouteLine';
@@ -34,23 +33,24 @@ import {
   LocalStorageKeys,
 } from '../../react/state/genSimOptions';
 import { SimOptions } from '../../react/state/slices/simOptionsSlice';
-import { WP_LIST_RWY06s_DEP } from '../config/WaypointConfig_Dep/WaypointConfigRwy06s_Dep';
-import { WP_LIST_RWY24s_DEP } from '../config/WaypointConfig_Dep/WaypointConfigRwy24s_Dep';
-import { WP_LIST_RWY33s_DEP } from '../config/WaypointConfig_Dep/WaypointConfigRwy33s_Dep';
-import { WP_LIST_RWY15s_DEP } from '../config/WaypointConfig_Dep/WaypointConfigRwy15s_Dep';
+import { WP_LIST_DEP_06s } from '../config/WaypointConfigDep/WaypointConfigDep06s';
+import { WP_LIST_DEP_24s } from '../config/WaypointConfigDep/WaypointConfigDep24s';
+import { WP_LIST_DEP_33s } from '../config/WaypointConfigDep/WaypointConfigDep33s';
+import { WP_LIST_DEP_15s } from '../config/WaypointConfigDep/WaypointConfigDep15s';
 import { TerminalPosition } from '../types/SimTypes';
-
-const localStorage = window.localStorage;
+import { WP_LIST_ARR_06s } from '../config/WaypointConfigArr/WaypointConfigArr06s';
+import { GameConfig } from '../config/GameConfig';
 
 export default class RadarScene extends Phaser.Scene {
   public Waypoints: Waypoint[];
   public PlaneList: Plane[];
   public RunwayOrigins!: RunwayOrigins;
-  public Options: GameObjectOptions;
   public Speech: SpeechSynth;
   private SpeechQueue: { text: string; plane: Plane; isCheckIn: boolean }[];
   private FiledRouteLine: FiledRouteLine | null;
+
   public SIM_OPTIONS: SimOptions;
+  public IS_DEBUG_MODE: boolean;
 
   public SELECTED_PLANE: Plane | null;
   public CURRENTLY_SPEAKING_PLANE: Plane | null;
@@ -62,15 +62,16 @@ export default class RadarScene extends Phaser.Scene {
   // Subcomponents
   private RadarBg!: RadarBg;
 
-  constructor(sceneKey: RadarSceneKeys, options: GameObjectOptions) {
+  constructor(sceneKey: RadarSceneKeys) {
     super(OtherSceneKeys.RADAR_BASE);
 
     this.Waypoints = [];
     this.PlaneList = [];
-    this.Options = options;
     this.Speech = new SpeechSynth();
     this.SpeechQueue = [];
     this.FiledRouteLine = null;
+
+    this.IS_DEBUG_MODE = GameConfig.isDebug;
     this.SIM_OPTIONS = defaultSimOptions;
 
     // Init: Template props
@@ -88,6 +89,7 @@ export default class RadarScene extends Phaser.Scene {
   }
 
   preload() {
+    // Create: Radar background
     switch (this.SCENE_KEY) {
       case RadarSceneKeys.RADAR_06s:
         if (this.SIM_OPTIONS.terminalPosition === TerminalPosition.DEPARTURE) {
@@ -144,31 +146,46 @@ export default class RadarScene extends Phaser.Scene {
     this.RadarBg.setInteractive();
 
     // Create: Waypoints Layer
-    switch (this.SCENE_KEY) {
-      case RadarSceneKeys.RADAR_06s:
-        WP_LIST_RWY06s_DEP.forEach((waypointData) => {
-          this.Waypoints.push(new Waypoint(this, waypointData));
-        });
-        break;
-      case RadarSceneKeys.RADAR_24s:
-        WP_LIST_RWY24s_DEP.forEach((waypointData) => {
-          this.Waypoints.push(new Waypoint(this, waypointData));
-        });
-        break;
-      case RadarSceneKeys.RADAR_33s:
-        WP_LIST_RWY33s_DEP.forEach((waypointData) => {
-          this.Waypoints.push(new Waypoint(this, waypointData));
-        });
-        break;
-      case RadarSceneKeys.RADAR_15s:
-        WP_LIST_RWY15s_DEP.forEach((waypointData) => {
-          this.Waypoints.push(new Waypoint(this, waypointData));
-        });
-        break;
-      default:
-        throw new Error(
-          `There is a problem with the SCENE_KEY provided for the RadarScene: ${this.SCENE_KEY}`
-        );
+    if (this.SIM_OPTIONS.terminalPosition === TerminalPosition.DEPARTURE) {
+      switch (this.SCENE_KEY) {
+        case RadarSceneKeys.RADAR_06s:
+          WP_LIST_DEP_06s.forEach((waypointData) => {
+            this.Waypoints.push(new Waypoint(this, waypointData));
+          });
+          break;
+        case RadarSceneKeys.RADAR_24s:
+          WP_LIST_DEP_24s.forEach((waypointData) => {
+            this.Waypoints.push(new Waypoint(this, waypointData));
+          });
+          break;
+        case RadarSceneKeys.RADAR_33s:
+          WP_LIST_DEP_33s.forEach((waypointData) => {
+            this.Waypoints.push(new Waypoint(this, waypointData));
+          });
+          break;
+        case RadarSceneKeys.RADAR_15s:
+          WP_LIST_DEP_15s.forEach((waypointData) => {
+            this.Waypoints.push(new Waypoint(this, waypointData));
+          });
+          break;
+        default:
+          throw new Error(
+            `There is a problem with the SCENE_KEY provided for the RadarScene: ${this.SCENE_KEY}`
+          );
+      }
+    }
+    if (this.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL) {
+      switch (this.SCENE_KEY) {
+        case RadarSceneKeys.RADAR_06s:
+          WP_LIST_ARR_06s.forEach((waypointData) => {
+            this.Waypoints.push(new Waypoint(this, waypointData));
+          });
+          break;
+        default:
+          throw new Error(
+            `There is a problem with the SCENE_KEY provided for the RadarScene: ${this.SCENE_KEY}`
+          );
+      }
     }
 
     // Create: RunwayOrigins
@@ -266,7 +283,7 @@ export default class RadarScene extends Phaser.Scene {
     this.events.on(ReactCustomEvents.AIRBORNE, (fde: DepFDE) => {
       const planeProps = genPlanePropsFromFDE(fde);
 
-      const airbornePlane = new Plane(this, planeProps, this.Options);
+      const airbornePlane = new Plane(this, planeProps);
       this.PlaneList.push(airbornePlane);
     });
 
@@ -359,7 +376,7 @@ export default class RadarScene extends Phaser.Scene {
   }
 
   private toggleDebug() {
-    if (this.Options.isDebug) {
+    if (this.IS_DEBUG_MODE) {
       this.RunwayOrigins.showDots();
       return;
     }

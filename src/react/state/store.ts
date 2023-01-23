@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { arrivalListReducer } from './slices/arrivalListSlice';
 import { departureListReducer } from './slices/departureListSlice';
 import { simOptionsReducer } from './slices/simOptionsSlice';
 
@@ -6,6 +7,7 @@ export const store = configureStore({
   reducer: {
     simOptions: simOptionsReducer,
     departureList: departureListReducer,
+    arrivalList: arrivalListReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

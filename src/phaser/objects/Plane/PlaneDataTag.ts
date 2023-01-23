@@ -192,7 +192,7 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
       .padStart(5, '0')}`;
 
     this.Text1.setText(
-      `${acid}${wtcSymbol}${this.Plane.Options.isDebug ? currHeading : ''}`
+      `${acid}${wtcSymbol}${this.Plane.Scene.IS_DEBUG_MODE ? currHeading : ''}`
     );
   }
 

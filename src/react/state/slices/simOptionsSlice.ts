@@ -7,7 +7,8 @@ import {
   RadarSceneKeys,
 } from '../../../phaser/types/SceneKeys';
 import { TerminalPosition } from '../../../phaser/types/SimTypes';
-import { DepFDE } from '../../functions/genDepFdeData';
+import { ArrFDE } from '../../functions/arrival/genArrFDE';
+import { DepFDE } from '../../functions/departure/genDepFDE';
 import {
   defaultSimOptions,
   genSimOptions,
@@ -26,8 +27,10 @@ export interface SimOptions {
   intervalBetweenNormalDeps: number; // ms
   intervalBetweenVisualDeps: number; // ms
   intervalBetweenSatelliteDeps: number; // ms
+  intervalBetweenArrivals: number;
   isModalOpen: boolean;
-  selectedStrip: DepFDE | null;
+  selectedDepStrip: DepFDE | null;
+  selectedArrStrip: ArrFDE | null;
   isPaused: boolean;
 }
 
@@ -53,10 +56,12 @@ export const simOptions = createSlice({
   initialState,
   reducers: {
     openModal: (state) => {
-      return { ...state, isModalOpen: true };
+      const newOptions: SimOptions = { ...state, isModalOpen: true };
+      return newOptions;
     },
     closeModal: (state) => {
-      return { ...state, isModalOpen: false };
+      const newOptions: SimOptions = { ...state, isModalOpen: false };
+      return newOptions;
     },
     applyOptions: (state, action: PayloadAction<SimOptions>) => {
       const newOptions: SimOptions = { ...state, ...action.payload };
@@ -68,28 +73,45 @@ export const simOptions = createSlice({
 
       return newOptions;
     },
-    setSelectedStrip: (state, action: PayloadAction<DepFDE>) => {
-      return { ...state, selectedStrip: action.payload };
+    setSelectedDepStrip: (state, action: PayloadAction<DepFDE>) => {
+      const newOptions: SimOptions = {
+        ...state,
+        selectedDepStrip: action.payload,
+      };
+      return newOptions;
     },
-    removeSelectedStrip: (state) => {
-      const newOptions = { ...state, selectedStrip: null };
-      console.log('newOptions', newOptions.selectedStrip);
-
+    removeSelectedDepStrip: (state) => {
+      const newOptions: SimOptions = { ...state, selectedDepStrip: null };
+      return newOptions;
+    },
+    setSelectedArrStrip: (state, action: PayloadAction<ArrFDE>) => {
+      const newOptions: SimOptions = {
+        ...state,
+        selectedArrStrip: action.payload,
+      };
+      return newOptions;
+    },
+    removeSelectedArrStrip: (state) => {
+      const newOptions: SimOptions = { ...state, selectedArrStrip: null };
       return newOptions;
     },
     enableVdp: (state) => {
-      return { ...state, allowVdp: true };
+      const newOptions: SimOptions = { ...state, allowVdp: true };
+      return newOptions;
     },
     disableVdp: (state) => {
-      return { ...state, allowVdp: false };
+      const newOptions: SimOptions = { ...state, allowVdp: false };
+      return newOptions;
     },
     pauseSim: (state) => {
       pausePhaser();
-      return { ...state, isPaused: true };
+      const newOptions: SimOptions = { ...state, isPaused: true };
+      return newOptions;
     },
     unpauseSim: (state) => {
       unpausePhaser();
-      return { ...state, isPaused: false };
+      const newOptions: SimOptions = { ...state, isPaused: false };
+      return newOptions;
     },
     resetLocalStorageToDefaults: () => {
       console.log('resetLocalStorage');

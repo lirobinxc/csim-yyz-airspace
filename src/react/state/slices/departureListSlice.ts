@@ -11,10 +11,9 @@ import { SidName } from '../../../phaser/types/SidAndSatelliteTypes';
 import {
   DeparturePhase,
   DeparturePosition,
-  DepFDE,
-  genDepFdeData,
-} from '../../functions/genDepFdeData';
-import { genSatFdeData } from '../../functions/genSatFdeData';
+} from '../../functions/departure/departureTypes';
+import { DepFDE, genDepFDE } from '../../functions/departure/genDepFDE';
+import { genSatFDE } from '../../functions/departure/genSatFDE';
 import { insertIntoArray } from '../../functions/insertIntoArray';
 import { genSimOptions } from '../genSimOptions';
 import type { RootState } from '../store';
@@ -32,17 +31,13 @@ function genDepList(
     const num1to10 = _.random(1, 10);
     // should be 9
     if (num1to10 > 9) {
-      defaultDepSequence.push(genSatFdeData(radarScene));
+      defaultDepSequence.push(genSatFDE(radarScene));
       continue;
     }
 
     let prevDepFde = defaultDepSequence[defaultDepSequence.length - 1];
 
-    const currDepFde = genDepFdeData(
-      radarScene,
-      isSingleOps,
-      prevDepFde?.sidName
-    );
+    const currDepFde = genDepFDE(radarScene, isSingleOps, prevDepFde?.sidName);
 
     // Set 1st plane IN_POSITION immediately
     if (i === 0) {
@@ -96,7 +91,7 @@ export const departureList = createSlice({
       }>
     ) => {
       state.push(
-        genDepFdeData(
+        genDepFDE(
           action.payload.radarScene,
           action.payload.isSingleOps,
           action.payload.prevFdeSidName
@@ -104,7 +99,7 @@ export const departureList = createSlice({
       );
     },
     addSatStrip: (state, action: PayloadAction<RadarSceneKeys>) => {
-      state.push(genSatFdeData(action.payload));
+      state.push(genSatFDE(action.payload));
     },
     // Use the PayloadAction type to declare the contents of `action.payload`
     deleteStrip: (state, action: PayloadAction<DepFDE>) => {

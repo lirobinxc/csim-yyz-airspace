@@ -1,0 +1,400 @@
+@import '../../../variables.scss';
+
+$fontSizeXl: 1.6rem;
+$fontSizeLg: 1.3rem;
+$fontSizeMd: 1rem;
+$fontSizeSm: 0.9rem;
+$fontSizeXs: 0.7rem;
+$borderThin: 1px solid black;
+$babyblue: #c1e9f9;
+
+@mixin flexCenterVertical {
+  display: flex;
+  align-items: center;
+}
+@mixin flexCenterHorizontal {
+  display: flex;
+  justify-content: center;
+}
+
+.ArrivalStrip {
+  max-width: $fdeMaxWidth;
+
+  font-weight: bold;
+  font-size: 1em;
+  font-family: Arial, Helvetica, sans-serif;
+
+  border: 2px solid black;
+
+  background-color: $babyblue;
+
+  user-select: none;
+
+  @media (max-width: 480px) {
+    max-width: 99vw;
+  }
+
+  .topRow {
+    border-bottom: $borderThin;
+
+    .col1 {
+      width: 6.4rem;
+
+      border-right: $borderThin;
+      @include flexCenterVertical();
+
+      @media (max-width: 480px) {
+      }
+
+      .acId {
+        justify-content: start;
+
+        padding: 0.25rem;
+
+        font-weight: bold;
+        font-size: $fontSizeLg;
+      }
+    }
+
+    .col2 {
+      width: $fontSizeLg * 2.2;
+
+      border-right: $borderThin;
+
+      @media (max-width: 480px) {
+      }
+
+      .ETA,
+      .transponderCode {
+        justify-content: start;
+
+        padding: 0.1rem;
+
+        font-size: $fontSizeSm;
+      }
+
+      .ETA {
+        border-bottom: $borderThin;
+      }
+    }
+
+    .col3 {
+      width: 1.2rem;
+
+      border-right: $borderThin;
+
+      @include flexCenterHorizontal();
+
+      @media (max-width: 480px) {
+      }
+
+      &:hover {
+        background-color: darkgray;
+
+        @media (max-width: 480px) {
+          background-color: $babyblue;
+        }
+      }
+
+      .arrow {
+        font-size: $fontSizeMd;
+
+        cursor: pointer;
+
+        &:active {
+          font-size: $fontSizeLg;
+        }
+      }
+
+      .arrowPng {
+        width: 1rem;
+        height: 1rem;
+        padding: 0.2rem;
+
+        cursor: pointer;
+
+        @media (max-width: 480px) {
+        }
+
+        &:active {
+          transform: scale(1.1);
+        }
+      }
+    }
+
+    .col4 {
+      position: relative;
+
+      width: 3.2rem;
+
+      border-right: $borderThin;
+
+      @include flexCenterHorizontal();
+      @include flexCenterVertical();
+
+      @media (max-width: 480px) {
+        // width: 10%;
+      }
+
+      &:hover {
+        background-color: darkgray;
+
+        @media (max-width: 480px) {
+          background-color: $babyblue;
+        }
+      }
+
+      .assignedAlt {
+        // width: 18%;
+        font-size: $fontSizeXl;
+
+        cursor: pointer;
+      }
+
+      .altModalWrapper {
+        .altModalContent {
+          position: absolute;
+          left: -200%;
+          bottom: 0;
+          z-index: 999;
+
+          display: flex;
+          flex-direction: column;
+
+          height: 8rem;
+          padding: 0.5rem;
+
+          border: 1px solid grey;
+
+          background: lightgray;
+
+          .row1 {
+            margin-bottom: 1rem;
+            @include flexCenterHorizontal();
+            @include flexCenterVertical();
+          }
+
+          .row2 {
+            display: flex;
+            flex-direction: row;
+            @include flexCenterHorizontal();
+
+            button {
+              margin: 0.25rem;
+
+              font-weight: bold;
+              font-size: $fontSizeXl;
+
+              cursor: pointer;
+            }
+          }
+        }
+
+        .altModalOverlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          right: 0;
+          z-index: 9;
+
+          background: rgba(255, 255, 255, 0);
+        }
+      }
+    }
+
+    .col5 {
+      flex-grow: 1;
+
+      border-right: $borderThin;
+
+      @include flexCenterHorizontal();
+      @include flexCenterVertical();
+
+      @media (max-width: 480px) {
+        width: 1rem;
+      }
+
+      .remarks {
+        // width: 18%;
+        font-size: $fontSizeMd;
+      }
+    }
+
+    .col6 {
+      width: 4.5rem;
+
+      border-right: $borderThin;
+
+      cursor: pointer;
+
+      @include flexCenterHorizontal();
+      @include flexCenterVertical();
+
+      @media (max-width: 480px) {
+      }
+
+      .assignedHeading {
+        font-size: $fontSizeMd;
+      }
+    }
+
+    .col7 {
+      width: 1.3rem;
+
+      border-right: $borderThin;
+
+      @include flexCenterHorizontal();
+      @include flexCenterVertical();
+
+      @media (max-width: 480px) {
+        // width: 10%;
+      }
+
+      .isNADP1 {
+        font-size: $fontSizeLg;
+      }
+    }
+
+    .col8 {
+      width: 3.5rem;
+
+      @include flexCenterHorizontal();
+      @include flexCenterVertical();
+
+      @media (max-width: 480px) {
+        // width: 10%;
+      }
+
+      &:hover {
+        background-color: darkgray;
+      }
+
+      .runwayId {
+        font-size: $fontSizeLg;
+      }
+    }
+  }
+
+  .bottomRow {
+    .col1 {
+      width: 6.4rem;
+
+      border-right: $borderThin;
+
+      @include flexCenterVertical();
+
+      @media (max-width: 480px) {
+      }
+
+      .acType {
+        padding: 0.15rem;
+
+        font-size: $fontSizeMd;
+      }
+    }
+
+    .col2 {
+      width: $fontSizeLg * 1.7;
+
+      border-right: $borderThin;
+
+      @include flexCenterVertical();
+      @include flexCenterHorizontal();
+
+      @media (max-width: 480px) {
+      }
+
+      .filedAlt {
+        font-size: $fontSizeMd;
+      }
+    }
+
+    .col3 {
+      width: 2.5rem;
+      margin-right: 0.2rem;
+      // background-color: #ffff94;
+
+      @media (max-width: 480px) {
+        width: 1rem;
+      }
+    }
+
+    .col4 {
+      @include flexCenterHorizontal();
+      @include flexCenterVertical();
+
+      @media (max-width: 480px) {
+        flex-grow: 2;
+      }
+
+      .filedRoute {
+        justify-content: start;
+
+        width: 10rem;
+        padding: 0.15rem;
+
+        font-size: $fontSizeMd;
+      }
+    }
+
+    .col5 {
+      width: $fontSizeLg * 2.5;
+
+      border-right: $borderThin;
+
+      @include flexCenterVertical();
+      @include flexCenterHorizontal();
+
+      @media (max-width: 480px) {
+      }
+
+      .destination {
+        font-size: $fontSizeMd;
+      }
+    }
+
+    .col6 {
+      width: 1rem;
+      @include flexCenterVertical();
+      @include flexCenterHorizontal();
+
+      @media (max-width: 480px) {
+        width: 1rem;
+      }
+
+      .coordinatedAlt {
+        font-size: $fontSizeMd;
+      }
+    }
+  }
+}
+
+.borderYellow {
+  border: 2px solid yellow;
+}
+
+.displayNone {
+  display: none;
+}
+
+.flexRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+
+  height: 100%;
+}
+
+.flexCol {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+
+  width: 100%;
+}
+
+.spaceBetween {
+  justify-content: space-between;
+}

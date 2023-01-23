@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '../../state/hooks';
 
 import styles from './DepartureFDE.module.scss';
 import { departureListActions } from '../../state/slices/departureListSlice';
-import { DepFDE } from '../../functions/genDepFdeData';
+import { DepFDE } from '../../functions/departure/genDepFDE';
 import useInterval from 'use-interval';
 import { AcType } from '../../../phaser/types/AircraftTypes';
 import {
@@ -84,7 +84,7 @@ function DepartureFDE(props: DepFDE) {
 
   //TEMP
   useEffect(() => {
-    if (simOptions.selectedStrip?.uniqueKey === uniqueKey) {
+    if (simOptions.selectedDepStrip?.uniqueKey === uniqueKey) {
       setStripIsSelected(true);
     } else {
       setStripIsSelected(false);
@@ -94,21 +94,21 @@ function DepartureFDE(props: DepFDE) {
   function handleAcIdClick(e: React.MouseEvent<HTMLElement, MouseEvent>) {
     e.stopPropagation();
 
-    if (!stripIsSelected && simOptions.selectedStrip) {
+    if (!stripIsSelected && simOptions.selectedDepStrip) {
       dispatch(
         departureListActions.insertStripBelow({
-          firstStrip: simOptions.selectedStrip,
+          firstStrip: simOptions.selectedDepStrip,
           secondStrip: props,
         })
       );
-      dispatch(simOptionsActions.removeSelectedStrip());
+      dispatch(simOptionsActions.removeSelectedDepStrip());
       return;
     }
 
     if (stripIsSelected) {
-      dispatch(simOptionsActions.removeSelectedStrip());
+      dispatch(simOptionsActions.removeSelectedDepStrip());
     } else {
-      dispatch(simOptionsActions.setSelectedStrip(props));
+      dispatch(simOptionsActions.setSelectedDepStrip(props));
     }
   }
 
@@ -122,7 +122,7 @@ function DepartureFDE(props: DepFDE) {
     <section
       className={clsx(styles.FlightStrip, styles.flexCol, {
         [styles.borderYellow]:
-          simOptions.selectedStrip?.uniqueKey === uniqueKey,
+          simOptions.selectedDepStrip?.uniqueKey === uniqueKey,
       })}
     >
       <div className={clsx(styles.topRow, styles.flexRow)}>

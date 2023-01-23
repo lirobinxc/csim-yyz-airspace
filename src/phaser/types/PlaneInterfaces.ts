@@ -2,7 +2,7 @@ import { AcModel, AcType, AcWTC } from './AircraftTypes';
 import { DepRunwayAll } from './AirportTypes';
 import { AdjacentSectors, TerminalSectors } from './SectorTypes';
 import { SatelliteName, SidName } from './SidAndSatelliteTypes';
-import { WaypointDataAllDep, WaypointDataCommonDep } from './WaypointTypesDep';
+import { WaypointDataDepAll, WaypointDataDepCommon } from './WaypointTypesDep';
 
 export interface PlaneProperties {
   acId: { code: string; spoken: string };
@@ -21,7 +21,7 @@ export interface PlaneProperties {
   takeoffData: {
     assignedAlt: number;
     assignedHeading: number;
-    sidOrPropTurnHeading: number | WaypointDataCommonDep | null;
+    sidOrPropTurnHeading: number | WaypointDataDepCommon | null;
     depRunway: DepRunwayAll;
     isNADP1: boolean;
   };
@@ -57,7 +57,7 @@ export interface PlaneCommands {
   heading: {
     current: number;
     assigned: number;
-    directTo: WaypointDataAllDep | null;
+    directTo: WaypointDataDepAll | null;
   };
   climbRate: {
     current: number;
