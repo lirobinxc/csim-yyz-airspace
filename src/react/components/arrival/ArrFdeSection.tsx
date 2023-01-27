@@ -1,18 +1,18 @@
 import { useCallback, useEffect, useState } from 'react';
 import useInterval from 'use-interval';
-import { useRandomInterval } from '../functions/hooks/useRandomInterval';
-import { useAppDispatch, useAppSelector } from '../state/hooks';
-import { selectSimOptions } from '../state/slices/simOptionsSlice';
+import { useRandomInterval } from '../../functions/hooks/useRandomInterval';
+import { useAppDispatch, useAppSelector } from '../../state/hooks';
+import { selectSimOptions } from '../../state/slices/simOptionsSlice';
 import clsx from 'clsx';
 import ArrStripPanel, { ArrStripPanelName } from './ArrStripPanel';
 import {
   arrivalListActions,
   selectArrivalList,
-} from '../state/slices/arrivalListSlice';
+} from '../../state/slices/arrivalListSlice';
 
 import styles from './ArrFdeSection.module.scss';
-import { ArrivalPhase } from '../functions/arrival/arrivalTypes';
-import { ArrFDE } from '../functions/arrival/genArrFDE';
+import { ArrivalPhase } from '../../functions/arrival/arrivalTypes';
+import { ArrFDE } from '../../functions/arrival/genArrFDE';
 
 const FdeSectionArr = () => {
   const dispatch = useAppDispatch();
@@ -63,8 +63,8 @@ const FdeSectionArr = () => {
         );
       }
     },
-    simOptions.intervalBetweenSatelliteDeps * 0.25,
-    simOptions.intervalBetweenSatelliteDeps * 0.5
+    simOptions.intervalBetweenArrivals * 0.25,
+    simOptions.intervalBetweenArrivals * 0.5
   );
 
   // Interval: Move from panel PENDING -> ACTIVE
@@ -91,8 +91,8 @@ const FdeSectionArr = () => {
         strips={stripList.pendingPanel}
       />
       <ArrStripPanel
-        title={ArrStripPanelName.PENDING}
-        strips={stripList.pendingPanel}
+        title={ArrStripPanelName.ACTIVE}
+        strips={stripList.activePanel}
       />
     </main>
   );

@@ -1,11 +1,11 @@
 import clsx from 'clsx';
-import { ArrFDE } from '../functions/arrival/genArrFDE';
-import { useAppDispatch, useAppSelector } from '../state/hooks';
+import { ArrFDE } from '../../functions/arrival/genArrFDE';
+import { useAppDispatch, useAppSelector } from '../../state/hooks';
 import {
   selectSimOptions,
   simOptionsActions,
-} from '../state/slices/simOptionsSlice';
-import ArrivalFDE from './ArrivalFDE/ArrivalFDE';
+} from '../../state/slices/simOptionsSlice';
+import ArrivalFDE from '../arrival/ArrivalFDE/ArrivalFDE';
 
 import styles from './ArrStripPanel.module.scss';
 

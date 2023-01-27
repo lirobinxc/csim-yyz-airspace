@@ -1,9 +1,9 @@
-@import '../../variables';
+@import '../../../variables';
 
-.DepFdeSection {
-  // border: 2px solid blue;
+.ArrFdeSection {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: center;
 
   width: 100%;
   height: 100%;

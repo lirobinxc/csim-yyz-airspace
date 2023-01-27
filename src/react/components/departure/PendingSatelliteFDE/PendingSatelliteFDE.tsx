@@ -1,9 +1,9 @@
 import clsx from 'clsx';
 import styles from './PendingSatelliteFDE.module.scss';
-import { DepFDE } from '../../functions/departure/genDepFDE';
-import { AcType } from '../../../phaser/types/AircraftTypes';
-import { departureListActions } from '../../state/slices/departureListSlice';
-import { useAppDispatch } from '../../state/hooks';
+import { DepFDE } from '../../../functions/departure/genDepFDE';
+import { AcType } from '../../../../phaser/types/AircraftTypes';
+import { departureListActions } from '../../../state/slices/departureListSlice';
+import { useAppDispatch } from '../../../state/hooks';
 
 function PendingSatelliteFDE(props: DepFDE) {
   const {

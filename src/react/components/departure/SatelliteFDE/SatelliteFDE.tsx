@@ -2,18 +2,18 @@ import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 
 // import { ReactComponent as UpArrow } from '../images/up-arrow.svg';
-import upArrow from '../../images/up-arrow.png';
-import downArrow from '../../images/down-arrow.png';
-import { useAppDispatch, useAppSelector } from '../../state/hooks';
+import upArrow from '../../../images/up-arrow.png';
+import downArrow from '../../../images/down-arrow.png';
+import { useAppDispatch, useAppSelector } from '../../../state/hooks';
 
 import styles from './SatelliteFDE.module.scss';
-import { departureListActions } from '../../state/slices/departureListSlice';
-import { AcType } from '../../../phaser/types/AircraftTypes';
-import { DepFDE } from '../../functions/departure/genDepFDE';
+import { departureListActions } from '../../../state/slices/departureListSlice';
+import { AcType } from '../../../../phaser/types/AircraftTypes';
+import { DepFDE } from '../../../functions/departure/genDepFDE';
 import {
   selectSimOptions,
   simOptionsActions,
-} from '../../state/slices/simOptionsSlice';
+} from '../../../state/slices/simOptionsSlice';
 
 function SatelliteFDE(props: DepFDE) {
   const {

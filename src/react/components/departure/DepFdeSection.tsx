@@ -1,23 +1,23 @@
 import _ from 'lodash';
 import { useCallback, useEffect, useState } from 'react';
 import useInterval from 'use-interval';
-import { AcType } from '../../phaser/types/AircraftTypes';
-import { determineIfVdpAllowed } from '../functions/departure/determineIfVdpAllowed';
-import { DepFDE } from '../functions/departure/genDepFDE';
-import { useRandomInterval } from '../functions/hooks/useRandomInterval';
-import { useAppDispatch, useAppSelector } from '../state/hooks';
+import { AcType } from '../../../phaser/types/AircraftTypes';
+import { determineIfVdpAllowed } from '../../functions/departure/determineIfVdpAllowed';
+import { DepFDE } from '../../functions/departure/genDepFDE';
+import { useRandomInterval } from '../../functions/hooks/useRandomInterval';
+import { useAppDispatch, useAppSelector } from '../../state/hooks';
 import {
   departureListActions,
   selectDepartureList,
-} from '../state/slices/departureListSlice';
-import { selectSimOptions } from '../state/slices/simOptionsSlice';
+} from '../../state/slices/departureListSlice';
+import { selectSimOptions } from '../../state/slices/simOptionsSlice';
 
 import styles from './DepFdeSection.module.scss';
 import DepStripPanel, { Size, DepStripPanelName } from './DepStripPanel';
 import {
   DeparturePhase,
   DeparturePosition,
-} from '../functions/departure/departureTypes';
+} from '../../functions/departure/departureTypes';
 
 const DepFdeSection = () => {
   const dispatch = useAppDispatch();

@@ -1,4 +1,4 @@
-@import '../../../variables.scss';
+@import '../../../../variables.scss';
 
 $fontSizeXl: 1.6rem;
 $fontSizeLg: 1.3rem;
@@ -17,7 +17,7 @@ $babyblue: #c1e9f9;
   justify-content: center;
 }
 
-.ArrivalStrip {
+.FlightStrip {
   max-width: $fdeMaxWidth;
 
   font-weight: bold;

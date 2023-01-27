@@ -2,11 +2,11 @@ import styles from './App.module.scss';
 
 import './App.module.scss';
 import MenuSection from './react/components/MenuSection';
-import DepFdeSection from './react/components/DepFdeSection';
+import DepFdeSection from './react/components/departure/DepFdeSection';
 import { useAppSelector } from './react/state/hooks';
 import { selectSimOptions } from './react/state/slices/simOptionsSlice';
 import { TerminalPosition } from './phaser/types/SimTypes';
-import FdeSectionArr from './react/components/ArrFdeSection';
+import FdeSectionArr from './react/components/arrival/ArrFdeSection';
 
 function App() {
   const simOptions = useAppSelector(selectSimOptions);

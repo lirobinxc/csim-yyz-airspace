@@ -1,18 +1,18 @@
 import clsx from 'clsx';
-import { useAppDispatch, useAppSelector } from '../state/hooks';
-import { departureListActions } from '../state/slices/departureListSlice';
+import { useAppDispatch, useAppSelector } from '../../state/hooks';
+import { departureListActions } from '../../state/slices/departureListSlice';
 import {
   selectSimOptions,
   simOptionsActions,
-} from '../state/slices/simOptionsSlice';
+} from '../../state/slices/simOptionsSlice';
 import DepartureFDE from './DepartureFDE/DepartureFDE';
 import PendingDepartureFDE from './PendingDepartureFDE/PendingDepartureFDE';
 import PendingSatelliteFDE from './PendingSatelliteFDE/PendingSatelliteFDE';
 import SatelliteFDE from './SatelliteFDE/SatelliteFDE';
 
 import styles from './DepStripPanel.module.scss';
-import { DepFDE } from '../functions/departure/genDepFDE';
-import { DeparturePosition } from '../functions/departure/departureTypes';
+import { DepFDE } from '../../functions/departure/genDepFDE';
+import { DeparturePosition } from '../../functions/departure/departureTypes';
 
 export enum Size {
   SM = 'Sm',

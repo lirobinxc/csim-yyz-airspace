@@ -1,12 +1,12 @@
 import clsx from 'clsx';
 
 // import { ReactComponent as UpArrow } from '../images/up-arrow.svg';
-import { useAppDispatch } from '../../state/hooks';
+import { useAppDispatch } from '../../../state/hooks';
 
 import styles from './PendingDepartureFDE.module.scss';
-import { departureListActions } from '../../state/slices/departureListSlice';
-import { DepFDE } from '../../functions/departure/genDepFDE';
-import { AcType } from '../../../phaser/types/AircraftTypes';
+import { departureListActions } from '../../../state/slices/departureListSlice';
+import { DepFDE } from '../../../functions/departure/genDepFDE';
+import { AcType } from '../../../../phaser/types/AircraftTypes';
 
 function PendingDepartureFDE(props: DepFDE) {
   const {

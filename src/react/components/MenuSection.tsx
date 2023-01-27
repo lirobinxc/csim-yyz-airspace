@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import _ from 'lodash';
 import { useState } from 'react';
 import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
 import { TerminalPosition } from '../../phaser/types/SimTypes';
@@ -150,8 +151,14 @@ const MenuSection = ({ appVersion }: MenuSectionProps) => {
             080/15
           </div>
         </div>
-        <div className={clsx(styles.spacing, styles.arrAltimeter)}>3006</div>
-        <div className={clsx(styles.spacing, styles.arrAtis)}>E</div>
+        <div className={clsx(styles.spacing, styles.arrAltimeter)}>
+          {_.random(2985, 3006)}
+        </div>
+        <div className={clsx(styles.spacing, styles.arrAtis)}>
+          {_.sample(
+            'A B C D E F G H I J K L M N O P Q R S T U V W X Y Z'.split(' ')
+          )}
+        </div>
         <div>
           <div
             className={clsx(styles.spacing, styles.arrHalfBoxMd, styles.bgGrey)}

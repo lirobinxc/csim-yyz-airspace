@@ -2,35 +2,40 @@ import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 
 // import { ReactComponent as UpArrow } from '../images/up-arrow.svg';
-import downArrow from '../../images/down-arrow.png';
-import { useAppDispatch, useAppSelector } from '../../state/hooks';
-import styles from './ArrivalFDE.module.scss';
+import upArrow from '../../../images/up-arrow.png';
+import { useAppDispatch, useAppSelector } from '../../../state/hooks';
+
+import styles from './DepartureFDE.module.scss';
+import { departureListActions } from '../../../state/slices/departureListSlice';
+import { DepFDE } from '../../../functions/departure/genDepFDE';
+import useInterval from 'use-interval';
+import { AcType } from '../../../../phaser/types/AircraftTypes';
 import {
   selectSimOptions,
   simOptionsActions,
-} from '../../state/slices/simOptionsSlice';
-import { ArrFDE } from '../../functions/arrival/genArrFDE';
-import { arrivalListActions } from '../../state/slices/arrivalListSlice';
+} from '../../../state/slices/simOptionsSlice';
 
-function ArrivalFDE(props: ArrFDE) {
+function DepartureFDE(props: DepFDE) {
   const {
-    uniqueKey,
-    acId,
-    acModel,
     acModelFull,
+    acId,
     acType,
-    acWtc,
-    arrPhase,
-    arrPosition,
-    arrRunway,
     assignedAlt,
-    assignedSpeed,
     assignedHeading,
-    debugACID,
+    coordinatedAlt,
+    destination,
     ETA,
-    isQ400,
-    starName,
+    filedAlt,
+    filedRoute,
+    handoffAlt,
+    isNADP1 = false,
+    isQ400 = false,
+    onCourseWP,
+    remarks,
     transponderCode,
+    isVDP,
+    depRunway,
+    uniqueKey,
   } = props;
 
   const dispatch = useAppDispatch();
@@ -40,6 +45,15 @@ function ArrivalFDE(props: ArrFDE) {
   const [onCourse, setOnCourse] = useState(false);
   const [stripIsSelected, setStripIsSelected] = useState(false);
   const [isCommSwitched, setIsCommSwitched] = useState(false);
+
+  const isJetFpBelow230 = acType === AcType.JET && filedAlt < 230;
+
+  function isCorrectHandoffAlt() {
+    if (filedAlt < Number(handoffAlt)) {
+      return currentAlt === filedAlt;
+    }
+    return currentAlt === Number(handoffAlt);
+  }
 
   function handleClickAlt() {
     setCurrentAlt(currentAlt + 10);
@@ -52,13 +66,25 @@ function ArrivalFDE(props: ArrFDE) {
     setIsModalOpen(false);
   }
 
-  function deleteStrip() {
-    dispatch(arrivalListActions.deleteStrip(props));
+  function handleOnCourse() {
+    setOnCourse(true);
   }
 
-  // TEMP
+  function deleteStrip() {
+    dispatch(departureListActions.deleteStrip(props));
+  }
+
+  function displayAssignedHeading() {
+    if (onCourse) return onCourseWP;
+    if (!assignedHeading) return '';
+    if (typeof assignedHeading === 'number') {
+      return assignedHeading.toString().padStart(3, '0');
+    }
+  }
+
+  //TEMP
   useEffect(() => {
-    if (simOptions.selectedArrStrip?.uniqueKey === uniqueKey) {
+    if (simOptions.selectedDepStrip?.uniqueKey === uniqueKey) {
       setStripIsSelected(true);
     } else {
       setStripIsSelected(false);
@@ -68,33 +94,42 @@ function ArrivalFDE(props: ArrFDE) {
   function handleAcIdClick(e: React.MouseEvent<HTMLElement, MouseEvent>) {
     e.stopPropagation();
 
-    if (!stripIsSelected && simOptions.selectedArrStrip) {
+    if (!stripIsSelected && simOptions.selectedDepStrip) {
       dispatch(
-        arrivalListActions.insertStripBelow({
-          firstStrip: simOptions.selectedArrStrip,
+        departureListActions.insertStripBelow({
+          firstStrip: simOptions.selectedDepStrip,
           secondStrip: props,
         })
       );
-      dispatch(simOptionsActions.removeSelectedArrStrip());
+      dispatch(simOptionsActions.removeSelectedDepStrip());
       return;
     }
 
     if (stripIsSelected) {
-      dispatch(simOptionsActions.removeSelectedArrStrip());
+      dispatch(simOptionsActions.removeSelectedDepStrip());
     } else {
-      dispatch(simOptionsActions.setSelectedArrStrip(props));
+      dispatch(simOptionsActions.setSelectedDepStrip(props));
     }
   }
 
+  useInterval(() => {
+    setIsCommSwitched(true);
+  }, 8000);
+
+  const departureRunwayFormatted = depRunway?.split(' ')[2];
+
   return (
     <section
-      className={clsx(styles.ArrivalStrip, styles.flexCol, {
+      className={clsx(styles.FlightStrip, styles.flexCol, {
         [styles.borderYellow]:
-          simOptions.selectedArrStrip?.uniqueKey === uniqueKey,
+          simOptions.selectedDepStrip?.uniqueKey === uniqueKey,
       })}
     >
       <div className={clsx(styles.topRow, styles.flexRow)}>
-        <div className={clsx(styles.col1)} onClick={handleAcIdClick}>
+        <div
+          className={clsx(styles.col1, { [styles.bgYellow]: isVDP })}
+          onClick={handleAcIdClick}
+        >
           <div className={clsx(styles.acId)}>{acId.code}</div>
         </div>
         <div className={clsx(styles.col2)}>
@@ -102,7 +137,7 @@ function ArrivalFDE(props: ArrFDE) {
           <div className={clsx(styles.transponderCode)}>{transponderCode}</div>
         </div>
         <div className={clsx(styles.col3)} onClick={handleClickAlt}>
-          <img src={downArrow} className={styles.arrowPng} alt="downArrow" />
+          <img src={upArrow} className={styles.arrowPng} alt="upArrow" />
         </div>
         <div className={clsx(styles.col4)}>
           <aside
@@ -199,9 +234,57 @@ function ArrivalFDE(props: ArrFDE) {
             {currentAlt}
           </div>
         </div>
-        <div className={clsx(styles.col8)} onClick={deleteStrip}>
+        <div className={clsx(styles.col5)}>
+          <div className={clsx(styles.remarks)}>{remarks}</div>
+        </div>
+        <div className={clsx(styles.col6)} onClick={handleOnCourse}>
+          <div
+            className={clsx(styles.assignedHeading, {
+              [styles.colorRed]: !onCourse,
+            })}
+          >
+            {displayAssignedHeading()}
+          </div>
+        </div>
+        <div className={clsx(styles.col7)}>
+          <div className={clsx(styles.isNADP1)}>{isNADP1 && 1}</div>
+        </div>
+        <div
+          className={clsx(styles.col8, {
+            [styles.bgGreen]: isCorrectHandoffAlt(),
+          })}
+          onClick={deleteStrip}
+        >
           <div className={clsx(styles.runwayId)} onClick={deleteStrip}>
-            {'XX'}
+            {departureRunwayFormatted}
+          </div>
+        </div>
+      </div>
+      <div className={clsx(styles.bottomRow, styles.flexRow)}>
+        <div className={clsx(styles.col1, { [styles.bgWhite]: isQ400 })}>
+          <div className={clsx(styles.acType)}>{acModelFull}</div>
+        </div>
+        <div className={clsx(styles.col2)}>
+          <div
+            className={clsx(styles.filedAlt, {
+              [styles.colorRed]: isJetFpBelow230,
+            })}
+          >
+            {filedAlt}
+          </div>
+        </div>
+        <div
+          className={clsx(styles.col3, { [styles.bgYellow]: !isCommSwitched })}
+        ></div>
+        <div className={clsx(styles.col4)}>
+          <div className={clsx(styles.filedRoute)}>{filedRoute}</div>
+        </div>
+        <div className={clsx(styles.col5)}>
+          <div className={clsx(styles.destination)}>{destination}</div>
+        </div>
+        <div className={clsx(styles.col6)}>
+          <div className={clsx(styles.coordinatedAlt)}>
+            {coordinatedAlt !== 0 && coordinatedAlt}
           </div>
         </div>
       </div>
@@ -209,4 +292,4 @@ function ArrivalFDE(props: ArrFDE) {
   );
 }
 
-export default ArrivalFDE;
+export default DepartureFDE;
