@@ -27,6 +27,13 @@ import { convertHeadingNumToText } from '../../../react/functions/convertHeading
 import PlaneHandoffMenu from './PlaneHandoffMenu';
 import { getSatRoute } from '../../utils/getSatRoute';
 import PlaneCjs from './PlaneCjs';
+import { TerminalPosition } from '../../types/SimTypes';
+import { getStarRoute } from '../../utils/getStarRoute';
+import {
+  ArrBedpost,
+  StarName,
+} from '../../../react/functions/arrival/genArrRoute';
+import { getBedpostOrigin } from '../../config/BedpostOrigins';
 
 export default class Plane extends Phaser.GameObjects.Container {
   // Plane Properties
@@ -109,9 +116,9 @@ export default class Plane extends Phaser.GameObjects.Container {
     // Attach: Behaviour logic
     this.Behaviour = new PlaneBehaviour(this, this.DataTag);
 
-    // Setup: Plane Container @ runway origin
-    this.setX(this.initRunwayOrigin(props).x);
-    this.setY(this.initRunwayOrigin(props).y);
+    // Setup: Plane Container @ origin
+    this.setX(this.getPlaneOrigin(props).x);
+    this.setY(this.getPlaneOrigin(props).y);
 
     // Setup: DataTag
     this.updateDataTagPosition();
@@ -183,9 +190,9 @@ export default class Plane extends Phaser.GameObjects.Container {
 
     this.talk(
       `Departure, ${acIdSpoken}${spokenWtc} with you ${
-        this.Properties.isArrival ? 'level at' : 'out of'
+        this.Properties.isSatArrival ? 'level at' : 'out of'
       } ${currAltRounded} ${
-        this.Properties.isArrival ? '' : `for ${altitude.assigned}`
+        this.Properties.isSatArrival ? '' : `for ${altitude.assigned}`
       } ${sayHeading !== null ? sayHeading : ''}`,
       this,
       isCheckIn
@@ -312,19 +319,33 @@ export default class Plane extends Phaser.GameObjects.Container {
   }
 
   public getFiledRoute() {
+    const isDepartureMode =
+      this.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.DEPARTURE;
+    const isArrivalMode = !isDepartureMode;
+
     let filedRoute;
 
-    if (this.Properties.isSatellite) {
-      if (this.Properties.filedData.satelliteName) {
-        filedRoute = getSatRoute(this.Properties.filedData.satelliteName);
+    if (isDepartureMode) {
+      if (this.Properties.isSatellite) {
+        if (this.Properties.filedData.satelliteName) {
+          filedRoute = getSatRoute(this.Properties.filedData.satelliteName);
+        }
+      } else {
+        if (this.Properties.filedData.sidName) {
+          filedRoute = getSidRoute(
+            this.Scene.SCENE_KEY,
+            this.Properties.filedData.sidName
+          );
+        }
       }
-    } else {
-      if (this.Properties.filedData.sidName) {
-        filedRoute = getSidRoute(
-          this.Scene.SCENE_KEY,
-          this.Properties.filedData.sidName
-        );
-      }
+    }
+
+    if (isArrivalMode) {
+      filedRoute = getStarRoute(
+        this.Scene.SCENE_KEY,
+        this.Properties.arrivalData.arrBedpost,
+        this.Properties.arrivalData.arrPosition
+      );
     }
 
     if (!filedRoute) {
@@ -403,29 +424,60 @@ export default class Plane extends Phaser.GameObjects.Container {
     acProps: PlaneProperties,
     acPerf: PlanePerformance
   ): PlaneCommands {
+    const isDepartureMode =
+      this.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.DEPARTURE;
+
     if (!acPerf) {
       throw new Error(
         `Could not find PlanePerformance data for Plane: ${this.name}`
       );
     }
 
-    const runwayHeading = getRunwayHeading(
-      acProps.takeoffData.depRunway
-    ).initial;
+    if (isDepartureMode) {
+      const runwayHeading = getRunwayHeading(
+        acProps.takeoffData.depRunway
+      ).initial;
 
-    const initialCommands: PlaneCommands = {
+      const initialCommandsDeparture: PlaneCommands = {
+        speed: {
+          current: acPerf.speed.initialClimb - 80,
+          assigned: acPerf.speed.initialClimb,
+        },
+        altitude: {
+          current: 0,
+          assigned: acProps.takeoffData.assignedAlt,
+        },
+        heading: {
+          current: runwayHeading,
+          assigned: runwayHeading,
+          directTo: null,
+        },
+        climbRate: {
+          current: 0,
+          assigned: acPerf.climbRate.initialClimb,
+        },
+        isClimbing: false,
+        isDescending: false,
+        onSidOrPropHeading: false,
+        hasCheckedIn: false,
+      };
+
+      return initialCommandsDeparture;
+    }
+
+    const initialCommandsArrival: PlaneCommands = {
       speed: {
-        current: acPerf.speed.initialClimb - 80,
-        assigned: acPerf.speed.initialClimb,
+        current: acProps.arrivalData.assignedSpeed,
+        assigned: acProps.arrivalData.assignedSpeed,
       },
       altitude: {
-        current: 0,
-        assigned: acProps.takeoffData.assignedAlt,
+        current: acProps.arrivalData.assignedAlt + 2000,
+        assigned: acProps.arrivalData.assignedAlt,
       },
       heading: {
-        current: runwayHeading,
-        assigned: runwayHeading,
-        directTo: null,
+        current: 0,
+        assigned: 0,
+        directTo: acProps.arrivalData.assignedHeading,
       },
       climbRate: {
         current: 0,
@@ -437,10 +489,21 @@ export default class Plane extends Phaser.GameObjects.Container {
       hasCheckedIn: false,
     };
 
-    return initialCommands;
+    return initialCommandsArrival;
   }
 
-  private initRunwayOrigin(acProps: PlaneProperties): Phaser.Math.Vector2 {
+  private getPlaneOrigin(acProps: PlaneProperties): Phaser.Math.Vector2 {
+    if (acProps.terminalPosition === TerminalPosition.ARRIVAL) {
+      if (!acProps.arrivalData.arrBedpost) {
+        throw new Error(
+          `Could not determine runway origin for: ${acProps.acId}`
+        );
+      }
+
+      const origin = getBedpostOrigin(acProps.arrivalData.arrBedpost);
+      return origin;
+    }
+
     if (!acProps.takeoffData.depRunway) {
       throw new Error(`Could not determine runway origin for: ${acProps.acId}`);
     }

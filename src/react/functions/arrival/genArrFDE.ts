@@ -14,7 +14,7 @@ import { AdjacentSectors } from '../../../phaser/types/SectorTypes';
 import { WaypointDataDepCommon } from '../../../phaser/types/WaypointTypesDep';
 import { WaypointDataArrAll } from '../../../phaser/types/WaypointTypesArr';
 import { determineDepRunwayYYZ } from '../departure/determineDepRunway';
-import { genArrRoute, StarName } from './genArrRoute';
+import { ArrBedpost, genArrRoute, StarName } from './genArrRoute';
 import { getArrEntryAlt } from './getArrEntryAlt';
 import { getArrEntrySpeed } from './getArrEntrySpeed';
 import { WP_DICT_ARR_COMMON } from '../../../phaser/config/WaypointConfigArr/WaypointConfigArrCommon';
@@ -52,6 +52,7 @@ export interface ArrFDE {
   acModelFull: string;
   acType: AcType;
   acWtc: AcWTC;
+  arrBedpost: ArrBedpost;
   arrPhase: ArrivalPhase;
   arrPosition: ArrivalPosition;
   arrRunway: DepRunwayYYZ;
@@ -60,13 +61,18 @@ export interface ArrFDE {
   assignedSpeed: number;
   debugACID: ACID;
   ETA: string;
-  inPositionTime: number;
+  arrivalTime: number;
   isQ400: boolean;
+  isStraightIn: boolean;
   starName: StarName;
   transponderCode: string;
 }
 
-export function genArrFDE(radarScene: RadarSceneKeys, isSingleOps: boolean) {
+export function genArrFDE(
+  radarScene: RadarSceneKeys,
+  isSingleOps: boolean,
+  activeBedposts: ArrBedpost[]
+) {
   // Set timestamp
   const minuteJitter = _.sample([1, 1, 1, 1, 2, 2, 3]) || 1;
   currentMinute = currentMinute + minuteJitter;
@@ -82,14 +88,14 @@ export function genArrFDE(radarScene: RadarSceneKeys, isSingleOps: boolean) {
   ).padStart(2, '0')}`;
 
   // Gen aircraft
-  const aircraft = genACID();
+  const aircraft = genACID({ allowC208: false });
 
   // Gen Callsign
   const isC208 = aircraft.model === AcModel.C208;
   let callsign = genCallsign({ isC208 });
 
   // Init route
-  const starName = genArrRoute(radarScene, aircraft.type);
+  const starName = genArrRoute(aircraft.type, activeBedposts);
 
   // Arrival position
   let arrPosition = ArrivalPosition.NORTH;
@@ -123,6 +129,67 @@ export function genArrFDE(radarScene: RadarSceneKeys, isSingleOps: boolean) {
     }
   }
 
+  // Arrival Bedpost
+  let arrBedpost: ArrBedpost = ArrBedpost.BOXUM;
+
+  switch (starName) {
+    case StarName.BOXUM:
+      arrBedpost = ArrBedpost.BOXUM;
+      break;
+    case StarName.DUVOS:
+      arrBedpost = ArrBedpost.BOXUM;
+      break;
+    case StarName.NUBER:
+      arrBedpost = ArrBedpost.NUBER;
+      break;
+    case StarName.NAKBO:
+      arrBedpost = ArrBedpost.NUBER;
+      break;
+    case StarName.LINNG:
+      arrBedpost = ArrBedpost.LINNG;
+      break;
+    case StarName.VERKO:
+      arrBedpost = ArrBedpost.LINNG;
+      break;
+    case StarName.IMEBA:
+      arrBedpost = ArrBedpost.IMEBA;
+      break;
+    case StarName.VIBLI:
+      arrBedpost = ArrBedpost.IMEBA;
+      break;
+    case StarName.RAGID:
+      arrBedpost = ArrBedpost.RAGID;
+      break;
+    case StarName.UDNOX:
+      arrBedpost = ArrBedpost.RAGID;
+      break;
+  }
+
+  // Is Straight in?
+  let isStraightIn = false;
+  switch (radarScene) {
+    case RadarSceneKeys.RADAR_06s:
+      if (arrBedpost === ArrBedpost.NUBER) {
+        isStraightIn = true;
+      }
+      break;
+    case RadarSceneKeys.RADAR_15s:
+      if (arrBedpost === ArrBedpost.BOXUM) {
+        isStraightIn = true;
+      }
+      break;
+    case RadarSceneKeys.RADAR_24s:
+      if (arrBedpost === ArrBedpost.IMEBA || arrBedpost === ArrBedpost.RAGID) {
+        isStraightIn = true;
+      }
+      break;
+    case RadarSceneKeys.RADAR_33s:
+      if (arrBedpost === ArrBedpost.LINNG) {
+        isStraightIn = true;
+      }
+      break;
+  }
+
   // Arrival Runway
   const arrRunway = ARR_RUNWAYS[radarScene][arrPosition];
 
@@ -131,7 +198,7 @@ export function genArrFDE(radarScene: RadarSceneKeys, isSingleOps: boolean) {
 
   switch (radarScene) {
     case RadarSceneKeys.RADAR_06s:
-      assignedHeading = STAR_ROUTES_06s[starName][arrPosition][0];
+      assignedHeading = STAR_ROUTES_06s[arrBedpost][arrPosition][0];
   }
 
   // Entry altitude
@@ -156,6 +223,7 @@ export function genArrFDE(radarScene: RadarSceneKeys, isSingleOps: boolean) {
     acModelFull,
     acType: aircraft.type,
     acWtc: aircraft.wtc,
+    arrBedpost,
     arrPhase,
     arrPosition,
     arrRunway,
@@ -164,11 +232,13 @@ export function genArrFDE(radarScene: RadarSceneKeys, isSingleOps: boolean) {
     assignedHeading,
     debugACID: aircraft,
     ETA: currentTime,
-    inPositionTime: 0,
+    arrivalTime: 0,
     isQ400: aircraft.isQ400,
+    isStraightIn,
     starName,
     transponderCode,
   };
 
+  console.log(arrFde);
   return arrFde;
 }

@@ -10,6 +10,7 @@ import styles from './SimOptionsModal.module.scss';
 import React, { useState } from 'react';
 import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
 import { TerminalPosition } from '../../phaser/types/SimTypes';
+import { ArrBedpost, StarName } from '../functions/arrival/genArrRoute';
 
 interface SimOptionsModalProps {
   isOpen: boolean;
@@ -85,6 +86,55 @@ const SimOptionsModal = ({
     });
   }
 
+  function setIntervalBetweenArrivalsNormal(e: React.FormEvent) {
+    const target = e.target as HTMLTextAreaElement;
+    let value = Number(target.value);
+
+    if (isNaN(value)) value = simOptions.intervalBetweenNormalArrs;
+
+    setTempOptions({
+      ...tempOptions,
+      intervalBetweenNormalArrs: value,
+    });
+  }
+
+  function setIntervalBetweenArrivalsStraightIn(e: React.FormEvent) {
+    const target = e.target as HTMLTextAreaElement;
+    let value = Number(target.value);
+
+    if (isNaN(value)) value = simOptions.intervalBetweenStraightInArrs;
+
+    setTempOptions({
+      ...tempOptions,
+      intervalBetweenStraightInArrs: value,
+    });
+  }
+
+  function handleActiveBedposts(e: React.FormEvent) {
+    const target = e.target as HTMLInputElement;
+    let value = target.value as ArrBedpost;
+
+    if (tempOptions.activeArrBedposts.includes(value)) {
+      const newActiveBedposts = tempOptions.activeArrBedposts.filter(
+        (bedpost) => bedpost !== value
+      );
+
+      setTempOptions({
+        ...tempOptions,
+        activeArrBedposts: newActiveBedposts,
+      });
+    }
+
+    if (!tempOptions.activeArrBedposts.includes(value)) {
+      const newActiveBedposts = [...tempOptions.activeArrBedposts, value];
+
+      setTempOptions({
+        ...tempOptions,
+        activeArrBedposts: newActiveBedposts,
+      });
+    }
+  }
+
   function applyOptions() {
     dispatch(simOptionsActions.applyOptions(tempOptions));
     dispatch(departureListActions.restartSim());
@@ -111,9 +161,7 @@ const SimOptionsModal = ({
               defaultValue={tempOptions.terminalPosition}
             >
               <option value={TerminalPosition.DEPARTURE}>Departure</option>
-              <option value={TerminalPosition.ARRIVAL}>
-                Arrival (WIP, do not use)
-              </option>
+              <option value={TerminalPosition.ARRIVAL}>Arrival</option>
             </select>
           </label>
           <label>
@@ -180,6 +228,108 @@ const SimOptionsModal = ({
                   className={styles.number}
                   value={tempOptions.intervalBetweenSatelliteDeps / 1000}
                   onChange={setIntervalBetweenSatelliteDeps}
+                />{' '}
+                seconds
+              </label>
+            </>
+          )}
+          {tempOptions.terminalPosition === TerminalPosition.ARRIVAL && (
+            <>
+              <h3 className={styles.optionSubheader}>Arrival Settings</h3>
+              <label>
+                Single runway operations
+                <input
+                  type="checkbox"
+                  className={styles.checkbox}
+                  checked={tempOptions.isSingleOps}
+                  onChange={setIsSingleOps}
+                />
+              </label>
+              <label>
+                Starting # of strips
+                <input
+                  type="number"
+                  name="startingCount"
+                  className={styles.number}
+                  value={tempOptions.startingCount}
+                  onChange={setStartingCount}
+                />
+              </label>
+              <h3>Active Bedposts</h3>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={tempOptions.activeArrBedposts.includes(
+                    ArrBedpost.BOXUM
+                  )}
+                  value={ArrBedpost.BOXUM}
+                  onChange={handleActiveBedposts}
+                ></input>
+                BOXUM / DUVOS
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={tempOptions.activeArrBedposts.includes(
+                    ArrBedpost.NUBER
+                  )}
+                  value={ArrBedpost.NUBER}
+                  onChange={handleActiveBedposts}
+                ></input>
+                NUBER / NAKBO
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={tempOptions.activeArrBedposts.includes(
+                    ArrBedpost.LINNG
+                  )}
+                  value={ArrBedpost.LINNG}
+                  onChange={handleActiveBedposts}
+                ></input>
+                LINNG / VERKO
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={tempOptions.activeArrBedposts.includes(
+                    ArrBedpost.IMEBA
+                  )}
+                  value={ArrBedpost.IMEBA}
+                  onChange={handleActiveBedposts}
+                ></input>
+                IMEBA / VIBLI
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={tempOptions.activeArrBedposts.includes(
+                    ArrBedpost.RAGID
+                  )}
+                  value={ArrBedpost.RAGID}
+                  onChange={handleActiveBedposts}
+                ></input>
+                RAGID / UDNOX
+              </label>
+              <h3>Interval between Normal Arrivals (per Bedpost)</h3>
+              <label className={styles.intervalBox}>
+                <input
+                  type="number"
+                  name="minIntervalArrivalNormal"
+                  className={styles.number}
+                  value={tempOptions.intervalBetweenNormalArrs / 1000}
+                  onChange={setIntervalBetweenArrivalsNormal}
+                />{' '}
+                seconds
+              </label>
+              <h3>Interval between Straight-in Arrivals (per Bedpost)</h3>
+              <label className={styles.intervalBox}>
+                <input
+                  type="number"
+                  name="minIntervalArrivalNormal"
+                  className={styles.number}
+                  value={tempOptions.intervalBetweenStraightInArrs / 1000}
+                  onChange={setIntervalBetweenArrivalsStraightIn}
                 />{' '}
                 seconds
               </label>

@@ -2,6 +2,7 @@ import _, { sample } from 'lodash';
 import { AcType } from '../../../phaser/types/AircraftTypes';
 import { RadarSceneKeys } from '../../../phaser/types/SceneKeys';
 import { sidsCollection } from '../../data/sidsCollection';
+import { getSimOptions } from '../../state/genSimOptions';
 
 export enum StarName {
   BOXUM = 'BOXUM',
@@ -16,30 +17,44 @@ export enum StarName {
   UDNOX = 'UDNOX',
 }
 
-const jetStars = [
-  StarName.BOXUM,
-  StarName.NUBER,
-  StarName.LINNG,
-  StarName.IMEBA,
-  StarName.RAGID,
-];
-const propStars = [
-  StarName.DUVOS,
-  StarName.NAKBO,
-  StarName.VERKO,
-  StarName.VIBLI,
-  StarName.UDNOX,
-];
+export enum ArrBedpost {
+  BOXUM = 'BOXUM',
+  NUBER = 'NUBER',
+  LINNG = 'LINNG',
+  IMEBA = 'IMEBA',
+  RAGID = 'RAGID',
+}
 
-export function genArrRoute(radarScene: RadarSceneKeys, acType: AcType) {
+const jetStars: { [key in ArrBedpost]: StarName } = {
+  BOXUM: StarName.BOXUM,
+  NUBER: StarName.NUBER,
+  LINNG: StarName.LINNG,
+  IMEBA: StarName.IMEBA,
+  RAGID: StarName.RAGID,
+};
+const propStars: { [key in ArrBedpost]: StarName } = {
+  BOXUM: StarName.DUVOS,
+  NUBER: StarName.NAKBO,
+  LINNG: StarName.VERKO,
+  IMEBA: StarName.VIBLI,
+  RAGID: StarName.UDNOX,
+};
+
+export function genArrRoute(acType: AcType, activeBedposts: ArrBedpost[]) {
   let route: StarName | undefined;
+
+  const selectedBedpost = _.sample(activeBedposts);
+
+  if (!selectedBedpost) {
+    throw new Error('No bedpost could be selected to generate an arrival');
+  }
 
   switch (acType) {
     case AcType.JET:
-      route = _.sample(jetStars);
+      route = jetStars[selectedBedpost];
       break;
     case AcType.PROP:
-      route = _.sample(propStars);
+      route = propStars[selectedBedpost];
       break;
   }
 

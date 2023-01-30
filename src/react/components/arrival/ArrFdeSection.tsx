@@ -13,19 +13,26 @@ import {
 import styles from './ArrFdeSection.module.scss';
 import { ArrivalPhase } from '../../functions/arrival/arrivalTypes';
 import { ArrFDE } from '../../functions/arrival/genArrFDE';
+import { ArrBedpost, StarName } from '../../functions/arrival/genArrRoute';
+import _ from 'lodash';
+
+interface StripsList {
+  pendingPanel: ArrFDE[];
+  activePanel: ArrFDE[];
+}
 
 const FdeSectionArr = () => {
   const dispatch = useAppDispatch();
 
   const strips = useAppSelector(selectArrivalList);
   const simOptions = useAppSelector(selectSimOptions);
-  const [stripList, setStripList] = useState({
+  const [stripList, setStripList] = useState<StripsList>({
     pendingPanel: [] as ArrFDE[],
     activePanel: [] as ArrFDE[],
   });
 
   const processStrips = useCallback((stripList: ArrFDE[]) => {
-    const stripsCue = {
+    const stripsCue: StripsList = {
       pendingPanel: [] as ArrFDE[],
       activePanel: [] as ArrFDE[],
     };
@@ -33,15 +40,14 @@ const FdeSectionArr = () => {
     stripList.forEach((strip) => {
       const newStrip = { ...strip };
 
-      switch (strip.arrPhase) {
-        case ArrivalPhase.PENDING:
-          stripsCue.pendingPanel.push(newStrip);
-          break;
-        case ArrivalPhase.ACTIVE:
-          stripsCue.activePanel.push(newStrip);
-          break;
+      if (strip.arrPhase === ArrivalPhase.PENDING) {
+        stripsCue.pendingPanel.push(newStrip);
+      }
+      if (strip.arrPhase === ArrivalPhase.ACTIVE) {
+        stripsCue.activePanel.push(newStrip);
       }
     });
+
     setStripList(stripsCue);
   }, []);
 
@@ -49,23 +55,20 @@ const FdeSectionArr = () => {
     processStrips(strips);
   }, [strips, processStrips]);
 
-  // Interval: Add new Arrival strip
-  useRandomInterval(
-    () => {
-      if (simOptions.isPaused) return;
+  // Interval: Add new pending Arrival strip
+  useInterval(() => {
+    if (simOptions.isPaused) return;
 
-      if (stripList.pendingPanel.length < 6) {
-        dispatch(
-          arrivalListActions.addArrStrip({
-            radarScene: simOptions.radarScene,
-            isSingleOps: simOptions.isSingleOps,
-          })
-        );
-      }
-    },
-    simOptions.intervalBetweenArrivals * 0.25,
-    simOptions.intervalBetweenArrivals * 0.5
-  );
+    if (stripList.pendingPanel.length < 6) {
+      dispatch(
+        arrivalListActions.addArrStrip({
+          radarScene: simOptions.radarScene,
+          isSingleOps: simOptions.isSingleOps,
+          activeBedposts: simOptions.activeArrBedposts,
+        })
+      );
+    }
+  }, 5000);
 
   // Interval: Move from panel PENDING -> ACTIVE
   useInterval(() => {
@@ -75,11 +78,37 @@ const FdeSectionArr = () => {
     const currPendingFde = stripList.pendingPanel[0];
 
     if (currPendingFde) {
-      if (
-        currTime >
-        currPendingFde.inPositionTime + simOptions.intervalBetweenArrivals
-      ) {
+      const currBedpost = currPendingFde.arrBedpost;
+      const prevStripSameBedpost = _.findLast(
+        stripList.activePanel,
+        (strip) => {
+          return strip.arrBedpost === currBedpost;
+        }
+      );
+
+      if (!prevStripSameBedpost) {
         dispatch(arrivalListActions.setToActive(currPendingFde));
+      }
+
+      if (prevStripSameBedpost) {
+        if (currPendingFde.isStraightIn) {
+          if (
+            currTime >
+            prevStripSameBedpost.arrivalTime +
+              simOptions.intervalBetweenStraightInArrs
+          ) {
+            dispatch(arrivalListActions.setToActive(currPendingFde));
+          }
+        }
+        if (!currPendingFde.isStraightIn) {
+          if (
+            currTime >
+            prevStripSameBedpost.arrivalTime +
+              simOptions.intervalBetweenNormalArrs
+          ) {
+            dispatch(arrivalListActions.setToActive(currPendingFde));
+          }
+        }
       }
     }
   }, 5000);
@@ -87,11 +116,11 @@ const FdeSectionArr = () => {
   return (
     <main className={styles.ArrFdeSection}>
       <ArrStripPanel
-        title={ArrStripPanelName.PENDING}
+        panelName={ArrStripPanelName.PENDING}
         strips={stripList.pendingPanel}
       />
       <ArrStripPanel
-        title={ArrStripPanelName.ACTIVE}
+        panelName={ArrStripPanelName.ACTIVE}
         strips={stripList.activePanel}
       />
     </main>

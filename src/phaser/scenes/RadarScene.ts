@@ -24,12 +24,12 @@ import fontXml_DejaVuMonoBold from '../assets/font/FontDejaVuMonoBold.xml';
 import DebugButton from '../objects/DebugButton';
 import { PhaserCustomEvents, ReactCustomEvents } from '../types/CustomEvents';
 import { DepFDE } from '../../react/functions/departure/genDepFDE';
-import { genPlanePropsFromFDE } from '../utils/genPlanePropsFromFDE';
+import { genPlanePropsFromDepFDE } from '../utils/genPlanePropsFromDepFDE';
 import SpeechSynth from '../objects/SpeechSynth';
 import FiledRouteLine from '../objects/FiledRouteLine';
 import {
   defaultSimOptions,
-  genSimOptions,
+  getSimOptions,
   LocalStorageKeys,
 } from '../../react/state/genSimOptions';
 import { SimOptions } from '../../react/state/slices/simOptionsSlice';
@@ -39,7 +39,9 @@ import { WP_LIST_DEP_33s } from '../config/WaypointConfigDep/WaypointConfigDep33
 import { WP_LIST_DEP_15s } from '../config/WaypointConfigDep/WaypointConfigDep15s';
 import { TerminalPosition } from '../types/SimTypes';
 import { WP_LIST_ARR_06s } from '../config/WaypointConfigArr/WaypointConfigArr06s';
-import { GameConfig } from '../config/GameConfig';
+import { MasterGameConfig } from '../config/GameConfig';
+import { ArrFDE } from '../../react/functions/arrival/genArrFDE';
+import { genPlanePropsFromArrFDE } from '../utils/genPlanePropsFromArrFDE';
 
 export default class RadarScene extends Phaser.Scene {
   public Waypoints: Waypoint[];
@@ -71,7 +73,7 @@ export default class RadarScene extends Phaser.Scene {
     this.SpeechQueue = [];
     this.FiledRouteLine = null;
 
-    this.IS_DEBUG_MODE = GameConfig.isDebug;
+    this.IS_DEBUG_MODE = MasterGameConfig.isDebug;
     this.SIM_OPTIONS = defaultSimOptions;
 
     // Init: Template props
@@ -84,7 +86,7 @@ export default class RadarScene extends Phaser.Scene {
   }
 
   init() {
-    this.SIM_OPTIONS = genSimOptions();
+    this.SIM_OPTIONS = getSimOptions();
     this.SCENE_KEY = this.SIM_OPTIONS.radarScene;
   }
 
@@ -279,9 +281,19 @@ export default class RadarScene extends Phaser.Scene {
       }
     });
 
-    // On React Event: AIRBORNE
-    this.events.on(ReactCustomEvents.AIRBORNE, (fde: DepFDE) => {
-      const planeProps = genPlanePropsFromFDE(fde);
+    // On React Event: Departure Mode - AIRBORNE
+    this.events.on(ReactCustomEvents.AIRBORNE_DEP, (fde: DepFDE) => {
+      console.log('pushing DEP airborne');
+
+      const planeProps = genPlanePropsFromDepFDE(fde);
+
+      const airbornePlane = new Plane(this, planeProps);
+      this.PlaneList.push(airbornePlane);
+    });
+    // On React Event: Arrival Mode - ACTIVE
+    this.events.on(ReactCustomEvents.ACTIVE_ARR, (fde: ArrFDE) => {
+      console.log('pushing ARR airborne');
+      const planeProps = genPlanePropsFromArrFDE(fde);
 
       const airbornePlane = new Plane(this, planeProps);
       this.PlaneList.push(airbornePlane);

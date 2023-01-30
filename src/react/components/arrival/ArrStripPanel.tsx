@@ -8,6 +8,7 @@ import {
 import ArrivalFDE from '../arrival/ArrivalFDE/ArrivalFDE';
 
 import styles from './ArrStripPanel.module.scss';
+import PendingArrivalFDE from './PendingArrivalFDE/PendingArrivalFDE';
 
 export enum Size {
   SM = 'Sm',
@@ -21,23 +22,26 @@ export enum ArrStripPanelName {
 }
 
 interface ArrStripPanelProps {
-  title: ArrStripPanelName;
+  panelName: ArrStripPanelName;
   strips: ArrFDE[];
 }
 
-const ArrStripPanel = ({ title, strips }: ArrStripPanelProps) => {
+const ArrStripPanel = ({ panelName, strips }: ArrStripPanelProps) => {
   const dispatch = useAppDispatch();
   const simOptions = useAppSelector(selectSimOptions);
 
   function displayStrips() {
-    if (title === ArrStripPanelName.PENDING) {
+    if (panelName === ArrStripPanelName.PENDING) {
+      return displayPendingFDE();
+    }
+    if (panelName === ArrStripPanelName.ACTIVE) {
       return displayActiveFDE();
     }
   }
 
   function displayPendingFDE() {
     return strips.map((strip) => {
-      return <ArrivalFDE key={strip.uniqueKey} {...strip} />;
+      return <PendingArrivalFDE key={strip.uniqueKey} {...strip} />;
     });
   }
 
@@ -48,12 +52,23 @@ const ArrStripPanel = ({ title, strips }: ArrStripPanelProps) => {
   }
 
   return (
-    <div className={clsx(styles.ArrStripPanel)}>
+    <div
+      className={clsx(styles.ArrStripPanel, {
+        [styles.SizeLg]: panelName === ArrStripPanelName.ACTIVE,
+      })}
+    >
       <header className={clsx(styles.Header)}>
-        <div className={clsx(styles.title)}>{title}</div>
+        <div className={clsx(styles.panelName)}>{panelName}</div>
         <div className={clsx(styles.stripCount)}>{strips?.length || 0}</div>
       </header>
-      <section className={clsx(styles.Strips)}>{displayStrips()}</section>
+      <section
+        className={clsx({
+          [styles.PendingStrips]: panelName === ArrStripPanelName.PENDING,
+          [styles.ActiveStrips]: panelName === ArrStripPanelName.ACTIVE,
+        })}
+      >
+        {displayStrips()}
+      </section>
     </div>
   );
 };

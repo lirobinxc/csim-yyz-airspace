@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { GameConfig, DebugGameConfig } from './config/GameConfig';
+import { MasterGameConfig, DebugGameConfig } from './config/GameConfig';
 import RadarScene from './scenes/RadarScene';
 import { RadarSceneKeys } from './types/SceneKeys';
 
@@ -11,14 +11,14 @@ export const PhaserGameConfig: Phaser.Types.Core.GameConfig = {
   backgroundColor: '#000',
   scale: {
     mode: Phaser.Scale.ScaleModes.HEIGHT_CONTROLS_WIDTH,
-    width: GameConfig.height,
-    height: GameConfig.height,
+    width: MasterGameConfig.height,
+    height: MasterGameConfig.height,
   },
   physics: {
     default: 'arcade',
     arcade: {
       gravity: { x: 0, y: 0 },
-      fps: isDebugMode ? DebugGameConfig.fps : GameConfig.fps,
+      fps: isDebugMode ? DebugGameConfig.fps : MasterGameConfig.fps,
     },
   },
   scene: [new RadarScene(RadarSceneKeys.RADAR_06s)],

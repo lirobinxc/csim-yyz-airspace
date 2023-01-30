@@ -1,7 +1,13 @@
+import { ArrivalPosition } from '../../react/functions/arrival/arrivalTypes';
+import { ArrFDE } from '../../react/functions/arrival/genArrFDE';
+import { ArrBedpost } from '../../react/functions/arrival/genArrRoute';
+import { DepFDE } from '../../react/functions/departure/genDepFDE';
 import { AcModel, AcType, AcWTC } from './AircraftTypes';
 import { DepRunwayAll } from './AirportTypes';
 import { AdjacentSectors, TerminalSectors } from './SectorTypes';
 import { SatelliteName, SidName } from './SidAndSatelliteTypes';
+import { TerminalPosition } from './SimTypes';
+import { WaypointDataArrAll } from './WaypointTypesArr';
 import { WaypointDataDepAll, WaypointDataDepCommon } from './WaypointTypesDep';
 
 export interface PlaneProperties {
@@ -10,7 +16,8 @@ export interface PlaneProperties {
   acModel: AcModel;
   acWtc: AcWTC;
   isSatellite: boolean;
-  isArrival: boolean;
+  isSatArrival: boolean;
+  terminalPosition: TerminalPosition;
   filedData: {
     sidName: SidName | null;
     satelliteName: SatelliteName | null;
@@ -24,6 +31,13 @@ export interface PlaneProperties {
     sidOrPropTurnHeading: number | WaypointDataDepCommon | null;
     depRunway: DepRunwayAll;
     isNADP1: boolean;
+  };
+  arrivalData: {
+    assignedAlt: number;
+    assignedSpeed: number;
+    assignedHeading: WaypointDataArrAll;
+    arrBedpost: ArrBedpost;
+    arrPosition: ArrivalPosition;
   };
   handoffData: {
     alt: number;
@@ -57,7 +71,7 @@ export interface PlaneCommands {
   heading: {
     current: number;
     assigned: number;
-    directTo: WaypointDataDepAll | null;
+    directTo: WaypointDataDepAll | WaypointDataArrAll | null;
   };
   climbRate: {
     current: number;

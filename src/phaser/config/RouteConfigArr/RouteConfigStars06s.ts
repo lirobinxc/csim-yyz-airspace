@@ -1,4 +1,7 @@
-import { StarName } from '../../../react/functions/arrival/genArrRoute';
+import {
+  ArrBedpost,
+  StarName,
+} from '../../../react/functions/arrival/genArrRoute';
 import { WaypointDataArr06s } from '../../types/WaypointTypesArr';
 import { WP_DICT_ARR_06s } from '../WaypointConfigArr/WaypointConfigArr06s';
 import { ArrivalPosition } from '../../../react/functions/arrival/arrivalTypes';
@@ -89,7 +92,7 @@ const ragidUdnox06L = [
 ];
 
 export const STAR_ROUTES_06s: {
-  [key in StarName]: {
+  [key in ArrBedpost]: {
     [key in ArrivalPosition]: WaypointDataArr06s[];
   };
 } = {
@@ -97,15 +100,7 @@ export const STAR_ROUTES_06s: {
     [ArrivalPosition.NORTH]: boxumDuvos,
     [ArrivalPosition.SOUTH]: boxumDuvos,
   },
-  DUVOS: {
-    [ArrivalPosition.NORTH]: boxumDuvos,
-    [ArrivalPosition.SOUTH]: boxumDuvos,
-  },
   NUBER: {
-    [ArrivalPosition.NORTH]: nuberNakbo05,
-    [ArrivalPosition.SOUTH]: nuberNakbo06L,
-  },
-  NAKBO: {
     [ArrivalPosition.NORTH]: nuberNakbo05,
     [ArrivalPosition.SOUTH]: nuberNakbo06L,
   },
@@ -113,23 +108,11 @@ export const STAR_ROUTES_06s: {
     [ArrivalPosition.NORTH]: linngVerko,
     [ArrivalPosition.SOUTH]: linngVerko,
   },
-  VERKO: {
-    [ArrivalPosition.NORTH]: linngVerko,
-    [ArrivalPosition.SOUTH]: linngVerko,
-  },
   IMEBA: {
     [ArrivalPosition.NORTH]: imebaVibli05,
     [ArrivalPosition.SOUTH]: imebaVibli06L,
   },
-  VIBLI: {
-    [ArrivalPosition.NORTH]: imebaVibli05,
-    [ArrivalPosition.SOUTH]: imebaVibli06L,
-  },
   RAGID: {
-    [ArrivalPosition.NORTH]: ragidUdnox05s,
-    [ArrivalPosition.SOUTH]: ragidUdnox06L,
-  },
-  UDNOX: {
     [ArrivalPosition.NORTH]: ragidUdnox05s,
     [ArrivalPosition.SOUTH]: ragidUdnox06L,
   },

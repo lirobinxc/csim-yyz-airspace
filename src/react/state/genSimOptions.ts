@@ -1,5 +1,6 @@
 import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
 import { TerminalPosition } from '../../phaser/types/SimTypes';
+import { ArrBedpost } from '../functions/arrival/genArrRoute';
 import { SimOptions } from './slices/simOptionsSlice';
 
 export enum LocalStorageKeys {
@@ -8,24 +9,32 @@ export enum LocalStorageKeys {
 
 export const defaultSimOptions: SimOptions = {
   radarScene: RadarSceneKeys.RADAR_06s,
-  terminalPosition: TerminalPosition.DEPARTURE,
+  terminalPosition: TerminalPosition.ARRIVAL,
   startingCount: 4,
   isSingleOps: true,
   allowVdp: true,
   newStripInterval: [10_000, 20_000],
-  intervalBetweenNormalDeps: 65_000, // should be ???
+  intervalBetweenNormalDeps: 65_000, // should be 65_000
   intervalBetweenVisualDeps: 32_000,
   intervalBetweenSatelliteDeps: 250_000,
-  intervalBetweenArrivals: 65_000,
+  intervalBetweenNormalArrs: 5_000,
+  intervalBetweenStraightInArrs: 10_000,
   isModalOpen: false,
   selectedDepStrip: null,
   selectedArrStrip: null,
   isPaused: false,
+  activeArrBedposts: [
+    ArrBedpost.BOXUM,
+    ArrBedpost.IMEBA,
+    ArrBedpost.LINNG,
+    ArrBedpost.NUBER,
+    ArrBedpost.RAGID,
+  ],
 };
 
 const localStorage = window.localStorage;
 
-export function genSimOptions(): SimOptions {
+export function getSimOptions(): SimOptions {
   const storedOptionsStr = localStorage.getItem(LocalStorageKeys.SIM_OPTIONS);
   const storedSimOptions: SimOptions =
     storedOptionsStr && JSON.parse(storedOptionsStr);

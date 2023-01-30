@@ -1,0 +1,35 @@
+@import '../../../../variables.scss';
+
+$fontSizeXl: 1.6rem;
+$fontSizeLg: 1.3rem;
+$fontSizeMd: 1rem;
+$fontSizeSm: 0.9rem;
+$fontSizeXs: 0.7rem;
+$borderThin: 1px solid black;
+$babyblue: #c1e9f9;
+
+.PendingArrivalFDE {
+  width: 6.4rem;
+
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+
+  border: 2px solid black;
+  border-bottom: $borderThin;
+
+  background-color: $arrivalTan;
+
+  user-select: none;
+  @include flexCenterVertical();
+
+  .col1 {
+    .acId {
+      justify-content: start;
+
+      padding: $spacingSm;
+
+      font-weight: bold;
+      font-size: $fontSizeLg;
+    }
+  }
+}

@@ -73,7 +73,7 @@ export function genDepFDE(
   ).padStart(2, '0')}`;
 
   // Gen aircraft
-  const aircraft = genACID();
+  const aircraft = genACID({ allowC208: true });
 
   // Gen Callsign
   const isC208 = aircraft.model === AcModel.C208;

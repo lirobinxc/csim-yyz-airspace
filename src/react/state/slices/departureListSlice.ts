@@ -15,7 +15,7 @@ import {
 import { DepFDE, genDepFDE } from '../../functions/departure/genDepFDE';
 import { genSatFDE } from '../../functions/departure/genSatFDE';
 import { insertIntoArray } from '../../functions/insertIntoArray';
-import { genSimOptions } from '../genSimOptions';
+import { getSimOptions } from '../genSimOptions';
 import type { RootState } from '../store';
 import { SimOptions } from './simOptionsSlice';
 
@@ -54,7 +54,7 @@ function sendAirborneToPhaser(fde: DepFDE) {
   const RADAR_SCENE = PhaserGame.scene.keys[
     OtherSceneKeys.RADAR_BASE
   ] as RadarScene;
-  RADAR_SCENE.events.emit(ReactCustomEvents.AIRBORNE, fde);
+  RADAR_SCENE.events.emit(ReactCustomEvents.AIRBORNE_DEP, fde);
 }
 
 function restartPhaser() {
@@ -66,7 +66,7 @@ function restartPhaser() {
 }
 
 function genInitialState() {
-  const simOptions: SimOptions = genSimOptions();
+  const simOptions: SimOptions = getSimOptions();
 
   return genDepList(
     simOptions.radarScene,

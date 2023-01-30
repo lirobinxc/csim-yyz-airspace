@@ -1,6 +1,8 @@
 import { getRunwayHeading } from '../../config/RunwayHeadingConfig';
 import RadarScene from '../../scenes/RadarScene';
 import { AcType } from '../../types/AircraftTypes';
+import { TerminalPosition } from '../../types/SimTypes';
+import { WaypointDataArrAll } from '../../types/WaypointTypesArr';
 import { WaypointDataDepAll } from '../../types/WaypointTypesDep';
 import { asKnots } from '../../utils/asKnots';
 import { convertHeadingToRadians } from '../../utils/convertHeadingToRadians';
@@ -34,11 +36,17 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
   }
 
   preUpdate(t: number, dt: number) {
-    this.setSatelliteArrivalAlts();
+    const isDepartureMode =
+      this.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.DEPARTURE;
+    const isArrivalMode =
+      this.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL;
 
-    this.ifNadp2UpTo5000();
-    this.flySidOrPropHeadingDuringClimb();
-    this.ifAbove5000();
+    if (isDepartureMode) {
+      this.setSatelliteArrivalAlts();
+      this.ifNadp2UpTo5000();
+      this.flySidOrPropHeadingDuringClimb();
+      this.ifAbove5000();
+    }
 
     this.updateHeading(dt);
     this.updateAltitude(dt);
@@ -61,7 +69,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
 
     // Logic Step 0: Set heading.assigned to the waypoint
     const WAYPOINT_POSITION = heading.directTo.getDisplayCoord();
-    this.setDirectTo(WAYPOINT_POSITION);
+    this.setAssignedHeadingDirectToWaypoint(WAYPOINT_POSITION);
 
     // Logic Step 1: Check if a/c is close to the waypoint
     const PLANE_POSITION = this.Plane.getPosition();
@@ -73,7 +81,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
     const DISTANCE_IN_SECONDS = (distanceFromWaypoint / speed.current) * 180; // 180 is just a random constant I calculated
 
     // Logic Step 2: Check if there is a next waypoint on the route
-    let NEXT_WAYPOINT: WaypointDataDepAll | null = null;
+    let NEXT_WAYPOINT: WaypointDataDepAll | WaypointDataArrAll | null = null;
     const idxOfCurrentWaypoint = filedRoute.findIndex(
       (waypoint) => waypoint.name === heading.directTo?.name
     );
@@ -101,7 +109,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
    * continuously adjusts Commands.heading.assigned until
    * a/c is flying directly towards the waypoint.
    */
-  private setDirectTo(wpCoord: Phaser.Math.Vector2) {
+  private setAssignedHeadingDirectToWaypoint(wpCoord: Phaser.Math.Vector2) {
     const planeCoord = this.Plane.getPosition();
 
     const radiansBetweenPoints = Phaser.Math.Angle.BetweenPoints(

@@ -10,9 +10,10 @@ import {
 import { SidName } from '../../../phaser/types/SidAndSatelliteTypes';
 import { ArrivalPhase } from '../../functions/arrival/arrivalTypes';
 import { ArrFDE, genArrFDE } from '../../functions/arrival/genArrFDE';
+import { ArrBedpost } from '../../functions/arrival/genArrRoute';
 import { genSatFDE } from '../../functions/departure/genSatFDE';
 import { insertIntoArray } from '../../functions/insertIntoArray';
-import { genSimOptions } from '../genSimOptions';
+import { getSimOptions } from '../genSimOptions';
 import type { RootState } from '../store';
 import { SimOptions } from './simOptionsSlice';
 
@@ -20,17 +21,13 @@ import { SimOptions } from './simOptionsSlice';
 function genArrList(
   radarScene: RadarSceneKeys,
   count: number,
-  isSingleOps: boolean
+  isSingleOps: boolean,
+  activeBedposts: ArrBedpost[]
 ) {
   const defaultArrSequence: ArrFDE[] = [];
 
   for (let i = 0; i < count; i++) {
-    const newArrFde = genArrFDE(radarScene, isSingleOps);
-
-    // Set 1st plane ACTIVE immediately
-    if (i === 0) {
-      newArrFde.arrPhase = ArrivalPhase.ACTIVE;
-    }
+    const newArrFde = genArrFDE(radarScene, isSingleOps, activeBedposts);
 
     defaultArrSequence.push(newArrFde);
   }
@@ -38,11 +35,11 @@ function genArrList(
   return defaultArrSequence;
 }
 
-function sendAirborneToPhaser(fde: ArrFDE) {
+function sendActiveToPhaser(fde: ArrFDE) {
   const RADAR_SCENE = PhaserGame.scene.keys[
     OtherSceneKeys.RADAR_BASE
   ] as RadarScene;
-  RADAR_SCENE.events.emit(ReactCustomEvents.AIRBORNE, fde);
+  RADAR_SCENE.events.emit(ReactCustomEvents.ACTIVE_ARR, fde);
 }
 
 function restartPhaser() {
@@ -54,12 +51,13 @@ function restartPhaser() {
 }
 
 function genInitialState() {
-  const simOptions: SimOptions = genSimOptions();
+  const simOptions: SimOptions = getSimOptions();
 
   return genArrList(
     simOptions.radarScene,
     simOptions.startingCount,
-    simOptions.isSingleOps
+    simOptions.isSingleOps,
+    simOptions.activeArrBedposts
   );
 }
 
@@ -75,10 +73,15 @@ export const arrivalList = createSlice({
       action: PayloadAction<{
         radarScene: RadarSceneKeys;
         isSingleOps: boolean;
+        activeBedposts: ArrBedpost[];
       }>
     ) => {
       state.push(
-        genArrFDE(action.payload.radarScene, action.payload.isSingleOps)
+        genArrFDE(
+          action.payload.radarScene,
+          action.payload.isSingleOps,
+          action.payload.activeBedposts
+        )
       );
     },
     // Use the PayloadAction type to declare the contents of `action.payload`
@@ -98,7 +101,7 @@ export const arrivalList = createSlice({
         (strip) => strip.uniqueKey !== selectedFde.uniqueKey
       );
 
-      sendAirborneToPhaser(selectedFde);
+      sendActiveToPhaser(selectedFde);
 
       return [...newList, { ...selectedFde, arrPhase }];
     },

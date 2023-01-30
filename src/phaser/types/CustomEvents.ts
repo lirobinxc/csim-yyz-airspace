@@ -14,7 +14,8 @@ export enum PhaserCustomEvents {
 }
 
 export enum ReactCustomEvents {
-  AIRBORNE = 'AIRBORNE',
+  ACTIVE_ARR = 'ACTIVE_ARR',
+  AIRBORNE_DEP = 'AIRBORNE_DEP',
   REFRESH = 'REFRESH',
   PAUSE = 'PAUSE',
   UNPAUSE = 'UNPAUSE',

@@ -8,10 +8,11 @@ import {
 } from '../../../phaser/types/SceneKeys';
 import { TerminalPosition } from '../../../phaser/types/SimTypes';
 import { ArrFDE } from '../../functions/arrival/genArrFDE';
+import { ArrBedpost } from '../../functions/arrival/genArrRoute';
 import { DepFDE } from '../../functions/departure/genDepFDE';
 import {
   defaultSimOptions,
-  genSimOptions,
+  getSimOptions,
   LocalStorageKeys,
 } from '../genSimOptions';
 
@@ -27,11 +28,13 @@ export interface SimOptions {
   intervalBetweenNormalDeps: number; // ms
   intervalBetweenVisualDeps: number; // ms
   intervalBetweenSatelliteDeps: number; // ms
-  intervalBetweenArrivals: number;
+  intervalBetweenNormalArrs: number; // ms
+  intervalBetweenStraightInArrs: number; // ms
   isModalOpen: boolean;
   selectedDepStrip: DepFDE | null;
   selectedArrStrip: ArrFDE | null;
   isPaused: boolean;
+  activeArrBedposts: ArrBedpost[];
 }
 
 function pausePhaser() {
@@ -48,7 +51,7 @@ function unpausePhaser() {
   RADAR_SCENE.events.emit(ReactCustomEvents.UNPAUSE);
 }
 
-const initialState: SimOptions = genSimOptions();
+const initialState: SimOptions = getSimOptions();
 
 export const simOptions = createSlice({
   name: 'simOptions',
