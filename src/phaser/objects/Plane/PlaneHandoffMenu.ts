@@ -3,10 +3,12 @@ import { AssetKeys } from '../../types/AssetKeys';
 import { ColorKeys } from '../../types/ColorKeys';
 import { PhaserCustomEvents } from '../../types/CustomEvents';
 import { DomEvents } from '../../types/DomEvents';
+import { TerminalPosition } from '../../types/SimTypes';
 import Plane from './Plane';
 
 export enum PlaneHandoffMenuButtons {
   HANDOFF = 'H/O',
+  ACCEPT_HANDOFF = 'ACCEPT H/O',
   SHOW_PTL = 'Show PTL',
   HIDE_PLANE = 'Hide Plane',
 }
@@ -26,6 +28,7 @@ export default class PlaneHandoffMenu extends Phaser.GameObjects.Container {
   // Subcomponents
   private Buttons: Phaser.GameObjects.BitmapText[];
   private Btn_Handoff: Phaser.GameObjects.BitmapText;
+  private Btn_AcceptHandoff: Phaser.GameObjects.BitmapText;
   private Btn_ShowPtl: Phaser.GameObjects.BitmapText;
   private Btn_HidePlane: Phaser.GameObjects.BitmapText;
 
@@ -53,6 +56,13 @@ export default class PlaneHandoffMenu extends Phaser.GameObjects.Container {
       AssetKeys.FONT_DEJAVU_MONO_BOLD,
       `${PlaneHandoffMenuButtons.HANDOFF} > ${this.Plane.Properties.handoffData.sector}`
     );
+    this.Btn_AcceptHandoff = new Phaser.GameObjects.BitmapText(
+      plane.scene,
+      0,
+      0,
+      AssetKeys.FONT_DEJAVU_MONO_BOLD,
+      `${PlaneHandoffMenuButtons.ACCEPT_HANDOFF}`
+    );
     this.Btn_ShowPtl = new Phaser.GameObjects.BitmapText(
       plane.scene,
       0,
@@ -67,7 +77,16 @@ export default class PlaneHandoffMenu extends Phaser.GameObjects.Container {
       AssetKeys.FONT_DEJAVU_MONO_BOLD,
       PlaneHandoffMenuButtons.HIDE_PLANE
     );
-    this.Buttons.push(this.Btn_Handoff, this.Btn_ShowPtl, this.Btn_HidePlane);
+    if (this.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL) {
+      this.Buttons.push(this.Btn_AcceptHandoff);
+    }
+    if (
+      this.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.DEPARTURE
+    ) {
+      this.Buttons.push(this.Btn_Handoff);
+    }
+
+    this.Buttons.push(this.Btn_ShowPtl, this.Btn_HidePlane);
 
     this.add(this.Buttons);
 
@@ -105,7 +124,20 @@ export default class PlaneHandoffMenu extends Phaser.GameObjects.Container {
         );
 
         this.IS_VISIBLE = false;
-        this.Plane.HANDOFF_IN_PROGRESS = true;
+        this.Plane.DEP_HANDOFF_IN_PROGRESS = true;
+      }
+    );
+
+    this.Btn_AcceptHandoff.on(
+      DomEvents.POINTER_DOWN,
+      (pointer: Phaser.Input.Pointer) => {
+        this.scene.events.emit(
+          PhaserCustomEvents.ACCEPT_HANDOFF_BUTTON_CLICKED,
+          this.Plane
+        );
+
+        this.IS_VISIBLE = false;
+        this.Plane.ARR_HANDOFF_IN_PROGRESS = false;
       }
     );
 

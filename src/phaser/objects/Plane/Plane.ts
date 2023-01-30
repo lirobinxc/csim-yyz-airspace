@@ -49,7 +49,8 @@ export default class Plane extends Phaser.GameObjects.Container {
   public IS_PENDING_DIRECT_TO_COMMAND: boolean;
   public SHOW_COMMAND_OPTIONS: boolean;
   public IS_TALKING: boolean;
-  public HANDOFF_IN_PROGRESS: boolean;
+  public DEP_HANDOFF_IN_PROGRESS: boolean;
+  public ARR_HANDOFF_IN_PROGRESS: boolean;
   public IS_HANDED_OFF: boolean;
 
   // Parent scene
@@ -82,7 +83,8 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.SHOW_COMMAND_OPTIONS = false;
     this.IS_TALKING = false;
     this.IS_PENDING_DIRECT_TO_COMMAND = false;
-    this.HANDOFF_IN_PROGRESS = false;
+    this.DEP_HANDOFF_IN_PROGRESS = false;
+    this.ARR_HANDOFF_IN_PROGRESS = false;
     this.IS_HANDED_OFF = false;
 
     // Init: Name
@@ -189,7 +191,9 @@ export default class Plane extends Phaser.GameObjects.Container {
     }
 
     this.talk(
-      `Departure, ${acIdSpoken}${spokenWtc} with you ${
+      `${
+        this.Properties.terminalPosition
+      }, ${acIdSpoken}${spokenWtc} with you ${
         this.Properties.isSatArrival ? 'level at' : 'out of'
       } ${currAltRounded} ${
         this.Properties.isSatArrival ? '' : `for ${altitude.assigned}`

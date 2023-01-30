@@ -1,5 +1,7 @@
 import { AssetKeys } from '../../types/AssetKeys';
 import { ColorKeys } from '../../types/ColorKeys';
+import { TerminalSectors } from '../../types/SectorTypes';
+import { TerminalPosition } from '../../types/SimTypes';
 import Plane from './Plane';
 
 export default class PlaneCjs extends Phaser.GameObjects.BitmapText {
@@ -16,11 +18,24 @@ export default class PlaneCjs extends Phaser.GameObjects.BitmapText {
     this.setTint(ColorKeys.PPS_YELLOW);
     this.setOrigin(0.5, 0);
     this.setPosition(0, FONT_SIZE / 2);
+
+    if (
+      this.Plane.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL
+    ) {
+      this.setText(this.Plane.Properties.handoffData.sector);
+    }
   }
 
   preUpdate() {
     if (this.Plane.IS_HANDED_OFF) {
-      this.setText(this.Plane.Properties.handoffData.sector);
+      switch (this.Plane.Scene.SIM_OPTIONS.terminalPosition) {
+        case TerminalPosition.ARRIVAL:
+          this.setText(TerminalSectors.AA);
+          break;
+        case TerminalPosition.DEPARTURE:
+          this.setText(this.Plane.Properties.handoffData.sector);
+          break;
+      }
     }
   }
 }

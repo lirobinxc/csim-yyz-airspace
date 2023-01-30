@@ -103,7 +103,10 @@ export const arrivalList = createSlice({
 
       sendActiveToPhaser(selectedFde);
 
-      return [...newList, { ...selectedFde, arrPhase }];
+      return [
+        ...newList,
+        { ...selectedFde, arrPhase, arrivalTime: Date.now() },
+      ];
     },
     insertStripBelow: (
       state,

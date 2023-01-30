@@ -17,7 +17,7 @@ export function genPlanePropsFromArrFDE(arrFde: ArrFDE): PlaneProperties {
     acModel: arrFde.acModel,
     acWtc: arrFde.acWtc,
     isSatellite: false,
-    isSatArrival: true,
+    isSatArrival: false,
     terminalPosition: TerminalPosition.ARRIVAL,
     // Dummy data (unused on ArrFDEs)
     filedData: {
@@ -44,7 +44,7 @@ export function genPlanePropsFromArrFDE(arrFde: ArrFDE): PlaneProperties {
     },
     handoffData: {
       alt: 0 * 100,
-      sector: TerminalSectors.AA,
+      sector: arrFde.handoffSector,
     },
   };
 

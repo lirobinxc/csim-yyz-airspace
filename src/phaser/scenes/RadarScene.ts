@@ -283,8 +283,6 @@ export default class RadarScene extends Phaser.Scene {
 
     // On React Event: Departure Mode - AIRBORNE
     this.events.on(ReactCustomEvents.AIRBORNE_DEP, (fde: DepFDE) => {
-      console.log('pushing DEP airborne');
-
       const planeProps = genPlanePropsFromDepFDE(fde);
 
       const airbornePlane = new Plane(this, planeProps);
@@ -292,7 +290,6 @@ export default class RadarScene extends Phaser.Scene {
     });
     // On React Event: Arrival Mode - ACTIVE
     this.events.on(ReactCustomEvents.ACTIVE_ARR, (fde: ArrFDE) => {
-      console.log('pushing ARR airborne');
       const planeProps = genPlanePropsFromArrFDE(fde);
 
       const airbornePlane = new Plane(this, planeProps);

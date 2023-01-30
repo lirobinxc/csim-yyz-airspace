@@ -53,6 +53,7 @@ export interface ArrFDE {
   acType: AcType;
   acWtc: AcWTC;
   arrBedpost: ArrBedpost;
+  arrivalTime: number;
   arrPhase: ArrivalPhase;
   arrPosition: ArrivalPosition;
   arrRunway: DepRunwayYYZ;
@@ -61,7 +62,7 @@ export interface ArrFDE {
   assignedSpeed: number;
   debugACID: ACID;
   ETA: string;
-  arrivalTime: number;
+  handoffSector: AdjacentSectors;
   isQ400: boolean;
   isStraightIn: boolean;
   starName: StarName;
@@ -129,39 +130,50 @@ export function genArrFDE(
     }
   }
 
-  // Arrival Bedpost
+  // Arrival Bedpost & Sector
   let arrBedpost: ArrBedpost = ArrBedpost.BOXUM;
+  let handoffSector = AdjacentSectors.ER;
 
   switch (starName) {
     case StarName.BOXUM:
       arrBedpost = ArrBedpost.BOXUM;
+      handoffSector = AdjacentSectors.VV;
       break;
     case StarName.DUVOS:
       arrBedpost = ArrBedpost.BOXUM;
+      handoffSector = AdjacentSectors.VV;
       break;
     case StarName.NUBER:
       arrBedpost = ArrBedpost.NUBER;
+      handoffSector = AdjacentSectors.KF;
       break;
     case StarName.NAKBO:
       arrBedpost = ArrBedpost.NUBER;
+      handoffSector = AdjacentSectors.KF;
       break;
     case StarName.LINNG:
       arrBedpost = ArrBedpost.LINNG;
+      handoffSector = AdjacentSectors.GR;
       break;
     case StarName.VERKO:
       arrBedpost = ArrBedpost.LINNG;
+      handoffSector = AdjacentSectors.GR;
       break;
     case StarName.IMEBA:
       arrBedpost = ArrBedpost.IMEBA;
+      handoffSector = AdjacentSectors.SI;
       break;
     case StarName.VIBLI:
       arrBedpost = ArrBedpost.IMEBA;
+      handoffSector = AdjacentSectors.SI;
       break;
     case StarName.RAGID:
       arrBedpost = ArrBedpost.RAGID;
+      handoffSector = AdjacentSectors.SI;
       break;
     case StarName.UDNOX:
       arrBedpost = ArrBedpost.RAGID;
+      handoffSector = AdjacentSectors.SI;
       break;
   }
 
@@ -224,15 +236,16 @@ export function genArrFDE(
     acType: aircraft.type,
     acWtc: aircraft.wtc,
     arrBedpost,
+    arrivalTime: 0,
     arrPhase,
     arrPosition,
     arrRunway,
     assignedAlt,
-    assignedSpeed,
     assignedHeading,
+    assignedSpeed,
     debugACID: aircraft,
     ETA: currentTime,
-    arrivalTime: 0,
+    handoffSector,
     isQ400: aircraft.isQ400,
     isStraightIn,
     starName,

@@ -94,7 +94,7 @@ const SimOptionsModal = ({
 
     setTempOptions({
       ...tempOptions,
-      intervalBetweenNormalArrs: value,
+      intervalBetweenNormalArrs: value * 1000,
     });
   }
 
@@ -106,7 +106,7 @@ const SimOptionsModal = ({
 
     setTempOptions({
       ...tempOptions,
-      intervalBetweenStraightInArrs: value,
+      intervalBetweenStraightInArrs: value * 1000,
     });
   }
 

@@ -2,6 +2,7 @@ import { AssetKeys } from '../../types/AssetKeys';
 import { ColorKeys } from '../../types/ColorKeys';
 import { PhaserCustomEvents } from '../../types/CustomEvents';
 import { DomEvents } from '../../types/DomEvents';
+import { TerminalPosition } from '../../types/SimTypes';
 import { WaypointDataDepAll } from '../../types/WaypointTypesDep';
 import Plane from './Plane';
 import PlaneCommandSubmenu, {
@@ -146,16 +147,36 @@ export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
 
     // Create: Altitude Submenu
     const altOptions: PlaneCommandSubmenuValue[] = [];
-    for (let i = 3; i < 24; i++) {
-      const altNum = i * 10;
-      const altValue = i * 1000;
-      const isSpecial = [50, 70, 80, 150, 230].includes(altNum);
+    let ALT_COLUMNS = 4;
 
-      altOptions.push({
-        text: altNum.toString().padStart(3, ' '),
-        value: altValue,
-        isSpecial,
-      });
+    switch (this.Plane.Scene.SIM_OPTIONS.terminalPosition) {
+      case TerminalPosition.DEPARTURE:
+        for (let i = 3; i < 24; i++) {
+          const altNum = i * 10;
+          const altValue = i * 1000;
+          const isSpecial = [50, 70, 80, 150, 230].includes(altNum);
+
+          altOptions.push({
+            text: altNum.toString().padStart(3, ' '),
+            value: altValue,
+            isSpecial,
+          });
+        }
+        break;
+      case TerminalPosition.ARRIVAL:
+        for (let i = 13; i >= 3; i--) {
+          const altNum = i * 10;
+          const altValue = i * 1000;
+          const isSpecial = [30, 40, 60, 80].includes(altNum);
+
+          altOptions.push({
+            text: altNum.toString().padStart(3, ' '),
+            value: altValue,
+            isSpecial,
+          });
+        }
+        ALT_COLUMNS = 3;
+        break;
     }
 
     this.Btn_Altitude_Submenu = new PlaneCommandSubmenu(
@@ -163,7 +184,7 @@ export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
       this.Btn_Altitude.x + this.Btn_Altitude.width,
       this.Btn_Altitude.y,
       altOptions,
-      4,
+      ALT_COLUMNS,
       PhaserCustomEvents.ALTITUDE_SUBMENU_CLICKED
     );
 
@@ -191,15 +212,31 @@ export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
 
     // Create: Speed Submenu
     const speedOptions: PlaneCommandSubmenuValue[] = [];
-    [140, 160, 230, 250, 260, 280].forEach((speed) => {
-      // const isSpecial = [].includes(speed)
 
-      speedOptions.push({
-        text: speed.toString().padStart(3, ' '),
-        value: speed,
-        isSpecial: false,
-      });
-    });
+    switch (this.Plane.Scene.SIM_OPTIONS.terminalPosition) {
+      case TerminalPosition.DEPARTURE:
+        [140, 160, 230, 250, 260, 280].forEach((speed) => {
+          // const isSpecial = [].includes(speed)
+
+          speedOptions.push({
+            text: speed.toString().padStart(3, ' '),
+            value: speed,
+            isSpecial: false,
+          });
+        });
+        break;
+      case TerminalPosition.ARRIVAL:
+        [160, 170, 180, 190, 200, 210, 220, 230, 240].forEach((speed) => {
+          const isSpecial = [170, 190, 210].includes(speed);
+
+          speedOptions.push({
+            text: speed.toString().padStart(3, ' '),
+            value: speed,
+            isSpecial,
+          });
+        });
+        break;
+    }
 
     this.Btn_Speed_Submenu = new PlaneCommandSubmenu(
       this,

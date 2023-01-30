@@ -79,33 +79,36 @@ const FdeSectionArr = () => {
 
     if (currPendingFde) {
       const currBedpost = currPendingFde.arrBedpost;
-      const prevStripSameBedpost = _.findLast(
+      const prevStripWithSameBedpost = _.findLast(
         stripList.activePanel,
         (strip) => {
           return strip.arrBedpost === currBedpost;
         }
       );
 
-      if (!prevStripSameBedpost) {
+      if (!prevStripWithSameBedpost) {
         dispatch(arrivalListActions.setToActive(currPendingFde));
       }
 
-      if (prevStripSameBedpost) {
+      if (prevStripWithSameBedpost) {
         if (currPendingFde.isStraightIn) {
           if (
             currTime >
-            prevStripSameBedpost.arrivalTime +
+            prevStripWithSameBedpost.arrivalTime +
               simOptions.intervalBetweenStraightInArrs
           ) {
+            console.log('dispatching Straightin');
             dispatch(arrivalListActions.setToActive(currPendingFde));
           }
         }
         if (!currPendingFde.isStraightIn) {
           if (
             currTime >
-            prevStripSameBedpost.arrivalTime +
+            prevStripWithSameBedpost.arrivalTime +
               simOptions.intervalBetweenNormalArrs
           ) {
+            console.log('dispatching Normal');
+
             dispatch(arrivalListActions.setToActive(currPendingFde));
           }
         }

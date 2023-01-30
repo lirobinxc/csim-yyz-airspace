@@ -58,7 +58,7 @@ export function genACID({ allowC208 }: { allowC208: boolean }) {
   let isQ400 = model === 'DH8D' ? true : false;
 
   // Override: Convert C208 to Q400s
-  if (allowC208 === false) {
+  if (allowC208 === false && model === AcModel.C208) {
     model = AcModel.DH8D;
     wtc = AcWTC.M;
     acType = AcType.PROP;

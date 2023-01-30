@@ -31,7 +31,14 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
 
     // Sync update with FPS (set in Phaser Config)
     this.scene.physics.world.on('worldstep', () => {
-      this.checkInAfterPassing1200();
+      switch (this.Plane.Scene.SIM_OPTIONS.terminalPosition) {
+        case TerminalPosition.DEPARTURE:
+          this.depCheckInAfterPassing1200();
+          break;
+        case TerminalPosition.ARRIVAL:
+          this.arrCheckInAfterHandoffAccepted();
+          break;
+      }
     });
   }
 
@@ -415,7 +422,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
     }
   }
 
-  private checkInAfterPassing1200() {
+  private depCheckInAfterPassing1200() {
     if (this.Plane.Commands.hasCheckedIn) return;
 
     const altitude = this.Plane.Commands.altitude; // feet
@@ -424,6 +431,17 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
       this.Plane.Commands.hasCheckedIn = true;
 
       this.Plane.checkIn();
+    }
+  }
+  private arrCheckInAfterHandoffAccepted() {
+    if (this.Plane.Commands.hasCheckedIn) return;
+
+    if (this.Plane.IS_HANDED_OFF) {
+      this.Plane.Commands.hasCheckedIn = true;
+
+      setTimeout(() => {
+        this.Plane.checkIn();
+      }, 6000);
     }
   }
 
