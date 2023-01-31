@@ -42,10 +42,13 @@ import { WP_LIST_ARR_06s } from '../config/WaypointConfigArr/WaypointConfigArr06
 import { MasterGameConfig } from '../config/GameConfig';
 import { ArrFDE } from '../../react/functions/arrival/genArrFDE';
 import { genPlanePropsFromArrFDE } from '../utils/genPlanePropsFromArrFDE';
+import { ColorKeys } from '../types/ColorKeys';
+import { RunwayLocalizers } from '../config/RunwayLocalizers';
 
 export default class RadarScene extends Phaser.Scene {
   public Waypoints: Waypoint[];
   public PlaneList: Plane[];
+  public Localizers: RunwayLocalizers | null;
   public RunwayOrigins!: RunwayOrigins;
   public Speech: SpeechSynth;
   private SpeechQueue: { text: string; plane: Plane; isCheckIn: boolean }[];
@@ -69,15 +72,16 @@ export default class RadarScene extends Phaser.Scene {
 
     this.Waypoints = [];
     this.PlaneList = [];
+    this.Localizers = null;
     this.Speech = new SpeechSynth();
     this.SpeechQueue = [];
     this.FiledRouteLine = null;
 
     this.IS_DEBUG_MODE = MasterGameConfig.isDebug;
-    this.SIM_OPTIONS = defaultSimOptions;
+    this.SIM_OPTIONS = getSimOptions();
 
     // Init: Template props
-    this.SCENE_KEY = sceneKey;
+    this.SCENE_KEY = this.SIM_OPTIONS.radarScene;
     this.ASSET_KEY = AssetKeys.RADAR_06s_DEP_BG; // fallback value
 
     // Init: Constants
@@ -86,8 +90,8 @@ export default class RadarScene extends Phaser.Scene {
   }
 
   init() {
-    this.SIM_OPTIONS = getSimOptions();
-    this.SCENE_KEY = this.SIM_OPTIONS.radarScene;
+    // this.SIM_OPTIONS = getSimOptions();
+    // this.SCENE_KEY = this.SIM_OPTIONS.radarScene;
   }
 
   preload() {
@@ -137,7 +141,7 @@ export default class RadarScene extends Phaser.Scene {
     this.load.image(AssetKeys.PPS_SYMBOL, img_PpsSymbol);
     this.load.bitmapFont(
       AssetKeys.FONT_DEJAVU_MONO_BOLD,
-      fontTexture_DejaVuMonoBold,
+      [fontTexture_DejaVuMonoBold],
       fontXml_DejaVuMonoBold
     );
   }
@@ -199,9 +203,17 @@ export default class RadarScene extends Phaser.Scene {
     // Create: Developer components
     new PointerCoordinateLogger(this);
 
-    // TEMP Create: Test Plane
-    // const newPlane = new Plane(this, testPlaneProps, this.Options);
-    // this.PlaneList.addMultiple([newPlane]);
+    // TEMP Create: Runway FINAL line for intercepts
+    if (this.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL) {
+      this.Localizers = new RunwayLocalizers(this);
+      // const line = finalLine.geom as Phaser.Geom.Line;
+      // const point = new Phaser.Geom.Point(0, 0);
+      // point.setTo();
+      // Phaser.Geom.Intersects.PointToLine(point, line);
+    }
+
+    this.cameras.main.setZoom(1.4);
+    this.cameras.main.centerOn(400.2217190139294, 600.6260415366768);
 
     // On CustomPhaserEvent: PLANE_SELECTED
     this.events.on(PhaserCustomEvents.PLANE_SELECTED, (plane: Plane) => {
@@ -385,10 +397,10 @@ export default class RadarScene extends Phaser.Scene {
   }
 
   private toggleDebug() {
-    if (this.IS_DEBUG_MODE) {
-      this.RunwayOrigins.showDots();
-      return;
+    this.RunwayOrigins.showDots(this.IS_DEBUG_MODE);
+
+    if (this.Localizers) {
+      this.Localizers.showLines(this.IS_DEBUG_MODE);
     }
-    this.RunwayOrigins.hideDots();
   }
 }

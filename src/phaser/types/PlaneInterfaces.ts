@@ -3,7 +3,7 @@ import { ArrFDE } from '../../react/functions/arrival/genArrFDE';
 import { ArrBedpost } from '../../react/functions/arrival/genArrRoute';
 import { DepFDE } from '../../react/functions/departure/genDepFDE';
 import { AcModel, AcType, AcWTC } from './AircraftTypes';
-import { DepRunwayAll } from './AirportTypes';
+import { DepRunwayAll, DepRunwayYYZ } from './AirportTypes';
 import { AdjacentSectors, TerminalSectors } from './SectorTypes';
 import { SatelliteName, SidName } from './SidAndSatelliteTypes';
 import { TerminalPosition } from './SimTypes';
@@ -38,6 +38,7 @@ export interface PlaneProperties {
     assignedHeading: WaypointDataArrAll;
     arrBedpost: ArrBedpost;
     arrPosition: ArrivalPosition;
+    arrRunway: DepRunwayYYZ;
   };
   handoffData: {
     alt: number;

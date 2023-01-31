@@ -52,6 +52,11 @@ export default class Plane extends Phaser.GameObjects.Container {
   public DEP_HANDOFF_IN_PROGRESS: boolean;
   public ARR_HANDOFF_IN_PROGRESS: boolean;
   public IS_HANDED_OFF: boolean;
+  public ARR_INTERCEPT_LOC: boolean;
+  public ARR_INTERCEPT_LOC_READ_BACK: boolean;
+  public ARR_APPROACH_CLEARANCE: boolean;
+  public ARR_APPROACH_CLEARANCE_READ_BACK: boolean;
+  public ARR_HAS_INTERCEPTED_LOC: boolean;
 
   // Parent scene
   public Scene: RadarScene;
@@ -86,6 +91,12 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.DEP_HANDOFF_IN_PROGRESS = false;
     this.ARR_HANDOFF_IN_PROGRESS = false;
     this.IS_HANDED_OFF = false;
+
+    this.ARR_INTERCEPT_LOC = false;
+    this.ARR_APPROACH_CLEARANCE = false;
+    this.ARR_INTERCEPT_LOC_READ_BACK = false;
+    this.ARR_APPROACH_CLEARANCE_READ_BACK = false;
+    this.ARR_HAS_INTERCEPTED_LOC = false;
 
     // Init: Name
     this.name = props.acId.code;
@@ -154,6 +165,8 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.togglePTL();
     this.setPilotVoice();
     this.onDebug();
+
+    this.Scene.Localizers?.planeHasInterceptedLocalizer(this);
   }
 
   public checkIn() {
@@ -319,6 +332,33 @@ export default class Plane extends Phaser.GameObjects.Container {
       return;
     }
     this.talk(`Maintain speed ${desiredSpeed} knots`, this);
+    return;
+  }
+
+  public commandIntercept() {
+    this.ARR_INTERCEPT_LOC = true;
+    this.talk('Intercept', this);
+    return;
+  }
+
+  public commandApproach() {
+    // Convert runway to spoken
+    const arrRunwayNum = this.Properties.arrivalData.arrRunway.split(' ')[2];
+    const runwayChars = arrRunwayNum.split('');
+
+    switch (runwayChars[2]) {
+      case 'L':
+        runwayChars[2] = 'left';
+        break;
+      case 'R':
+        runwayChars[2] = 'right';
+        break;
+    }
+
+    const spokenRunwayNum = runwayChars.join(' ');
+
+    this.ARR_APPROACH_CLEARANCE = true;
+    this.talk(`Cleared ILS Runway ${spokenRunwayNum} approach`, this);
     return;
   }
 

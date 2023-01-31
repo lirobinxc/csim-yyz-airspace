@@ -54,6 +54,9 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
       this.flySidOrPropHeadingDuringClimb();
       this.ifAbove5000();
     }
+    if (isArrivalMode) {
+      this.interceptLocalizer();
+    }
 
     this.updateHeading(dt);
     this.updateAltitude(dt);
@@ -457,6 +460,20 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
           this.Plane.Commands.altitude.current =
             this.Plane.Properties.takeoffData.assignedAlt;
         }
+      }
+    }
+  }
+
+  private interceptLocalizer() {
+    if (this.Plane.ARR_INTERCEPT_LOC) {
+      if (this.Plane.ARR_HAS_INTERCEPTED_LOC) {
+        const runwayHeading = getRunwayHeading(
+          this.Plane.Properties.arrivalData.arrRunway
+        ).initial;
+
+        this.Plane.Commands.heading.assigned = runwayHeading;
+        this.Plane.Commands.heading.current = runwayHeading;
+        this.Plane.Commands.heading.directTo = null;
       }
     }
   }

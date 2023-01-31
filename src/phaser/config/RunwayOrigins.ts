@@ -153,16 +153,10 @@ export default class RunwayOrigins {
     throw new Error(`Failed getting runway origin coordinates for ${runway}`);
   }
 
-  public showDots() {
+  public showDots(isDebugMode: boolean) {
     if (!this.CoordinateDots) return;
 
-    this.CoordinateDots.setVisible(true);
-  }
-
-  public hideDots() {
-    if (!this.CoordinateDots) return;
-
-    this.CoordinateDots.setVisible(false);
+    this.CoordinateDots.setVisible(isDebugMode);
   }
 
   private drawCoordinates() {

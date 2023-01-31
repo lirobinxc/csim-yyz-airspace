@@ -7,7 +7,7 @@ export function getBedpostOrigin(arrBedpost: ArrBedpost) {
     [ArrBedpost.NUBER]: new Phaser.Math.Vector2(0.043, 0.605),
     [ArrBedpost.LINNG]: new Phaser.Math.Vector2(0.637, 0.967),
     [ArrBedpost.IMEBA]: new Phaser.Math.Vector2(0.828, 0.189),
-    [ArrBedpost.RAGID]: new Phaser.Math.Vector2(0.908, 0.346),
+    [ArrBedpost.RAGID]: new Phaser.Math.Vector2(0.162, 0.705),
   };
 
   return relativeBedpostOrigins[arrBedpost].scale(MasterGameConfig.height);

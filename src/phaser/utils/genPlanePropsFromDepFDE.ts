@@ -11,6 +11,7 @@ import {
   StarName,
 } from '../../react/functions/arrival/genArrRoute';
 import { TerminalPosition } from '../types/SimTypes';
+import { DepRunwayYYZ } from '../types/AirportTypes';
 
 export function genPlanePropsFromDepFDE(depFde: DepFDE): PlaneProperties {
   const props: PlaneProperties = {
@@ -42,6 +43,7 @@ export function genPlanePropsFromDepFDE(depFde: DepFDE): PlaneProperties {
       assignedHeading: WP_DICT_ARR_COMMON.BOXUM,
       arrBedpost: ArrBedpost.BOXUM,
       arrPosition: ArrivalPosition.NORTH,
+      arrRunway: DepRunwayYYZ.RWY_05,
     },
     handoffData: {
       alt: depFde.handoffAlt * 100,

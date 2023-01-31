@@ -46,7 +46,9 @@ export default class PointerCoordinateLogger {
   }
 
   logActual() {
-    console.log(`Click @ actual coord: ${[this.Actual.x, this.Actual.y]}`);
+    const formatFloatX = this.Actual.x.toFixed(2);
+    const formatFloatY = this.Actual.y.toFixed(2);
+    console.log(`Click @ actual coord: ${[formatFloatX, formatFloatY]}`);
   }
 
   logRelativeToHeight() {

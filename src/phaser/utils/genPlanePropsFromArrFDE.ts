@@ -41,6 +41,7 @@ export function genPlanePropsFromArrFDE(arrFde: ArrFDE): PlaneProperties {
       assignedHeading: arrFde.assignedHeading,
       arrBedpost: arrFde.arrBedpost,
       arrPosition: arrFde.arrPosition,
+      arrRunway: arrFde.arrRunway,
     },
     handoffData: {
       alt: 0 * 100,

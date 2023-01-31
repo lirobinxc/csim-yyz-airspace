@@ -14,6 +14,8 @@ export enum PlaneCommandMenuButtons {
   HEADING = 'HEADING  ',
   ALTITUDE = 'ALTITUDE ',
   SPEED = 'SPEED    ',
+  INTERCEPT_LOC = 'INTERCEPT',
+  APPROACH_CLEARANCE = 'APPR CLR ',
 }
 
 export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
@@ -33,6 +35,8 @@ export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
     heading: number | null;
     altitude: number | null;
     speed: number | null; // knots
+    interceptLoc: boolean;
+    approachClearance: boolean;
   };
 
   // Parent component
@@ -47,6 +51,8 @@ export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
   private Btn_Altitude_Submenu: PlaneCommandSubmenu;
   private Btn_Speed: Phaser.GameObjects.BitmapText;
   private Btn_Speed_Submenu: PlaneCommandSubmenu;
+  private Btn_InterceptLoc: Phaser.GameObjects.BitmapText | null;
+  private Btn_ApproachClearance: Phaser.GameObjects.BitmapText | null;
 
   constructor(plane: Plane) {
     super(plane.scene);
@@ -64,6 +70,8 @@ export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
       heading: null,
       altitude: null,
       speed: null,
+      interceptLoc: false,
+      approachClearance: false,
     };
 
     // Init: Buttons[]
@@ -108,6 +116,29 @@ export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
       this.Btn_Altitude,
       this.Btn_Speed
     );
+
+    this.Btn_InterceptLoc = null;
+    this.Btn_ApproachClearance = null;
+
+    if (
+      this.Plane.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL
+    ) {
+      this.Btn_InterceptLoc = new Phaser.GameObjects.BitmapText(
+        plane.scene,
+        0,
+        0,
+        AssetKeys.FONT_DEJAVU_MONO_BOLD,
+        PlaneCommandMenuButtons.INTERCEPT_LOC
+      );
+      this.Btn_ApproachClearance = new Phaser.GameObjects.BitmapText(
+        plane.scene,
+        0,
+        0,
+        AssetKeys.FONT_DEJAVU_MONO_BOLD,
+        PlaneCommandMenuButtons.APPROACH_CLEARANCE
+      );
+      this.Buttons.push(this.Btn_InterceptLoc, this.Btn_ApproachClearance);
+    }
 
     this.add(this.Buttons);
 
@@ -293,6 +324,13 @@ export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
     this.ifHeadingCommandIsSelected();
     this.ifAltitudeCommandIsSelected();
     this.ifSpeedCommandIsSelected();
+
+    if (
+      this.Plane.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL
+    ) {
+      this.ifInterceptLocIsSelected();
+      this.ifApproachClearanceIsSelected();
+    }
   }
 
   private sendCommandCue() {
@@ -322,6 +360,19 @@ export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
         this.COMMAND_CUE.speed = null;
         this.Btn_Speed.setText(PlaneCommandMenuButtons.SPEED);
       }
+
+      // Arrival only: Intercept
+      if (!this.Plane.ARR_INTERCEPT_LOC && this.COMMAND_CUE.interceptLoc) {
+        this.Plane.commandIntercept();
+        // this.COMMAND_CUE.interceptLoc = false;
+      }
+      if (
+        !this.Plane.ARR_APPROACH_CLEARANCE &&
+        this.COMMAND_CUE.approachClearance
+      ) {
+        this.Plane.commandApproach();
+        // this.COMMAND_CUE.approachClearance = false;
+      }
     }
   }
 
@@ -350,6 +401,16 @@ export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
       this.Btn_Heading.setText(
         `${PlaneCommandMenuButtons.HEADING} >${heading.text}`
       );
+
+      // Arrivals only: Cancel LOC intercept & Approach Clearances
+      if (this.Plane.ARR_INTERCEPT_LOC) {
+        this.Plane.ARR_INTERCEPT_LOC = false;
+        this.COMMAND_CUE.interceptLoc = false;
+      }
+      if (this.Plane.ARR_APPROACH_CLEARANCE) {
+        this.Plane.ARR_APPROACH_CLEARANCE = false;
+        this.COMMAND_CUE.approachClearance = false;
+      }
 
       this.COMMAND_CUE.directTo = null;
       this.COMMAND_CUE.heading = heading.value;
@@ -437,6 +498,67 @@ export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
     } else {
       this.setVisible(false);
       this.resetSelectedButton();
+    }
+  }
+
+  private ifInterceptLocIsSelected() {
+    if (this.Btn_InterceptLoc) {
+      if (
+        this.SELECTED_BUTTON?.name === PlaneCommandMenuButtons.INTERCEPT_LOC
+      ) {
+        if (this.COMMAND_CUE.interceptLoc === false) {
+          this.TIMER_START = this.scene.time.now;
+          this.COMMAND_CUE.interceptLoc = true;
+          this.resetSelectedButton();
+        } else {
+          this.COMMAND_CUE.interceptLoc = false;
+          this.Plane.ARR_INTERCEPT_LOC = false;
+          this.COMMAND_CUE.approachClearance = false;
+          this.Plane.ARR_APPROACH_CLEARANCE = false;
+          this.resetSelectedButton();
+        }
+      }
+
+      if (this.COMMAND_CUE.interceptLoc) {
+        this.Btn_InterceptLoc.setText(
+          `${PlaneCommandMenuButtons.INTERCEPT_LOC}: yes`
+        );
+        this.Btn_InterceptLoc.setTint(ColorKeys.LIGHT_BLUE);
+      } else {
+        this.Btn_InterceptLoc.setText(PlaneCommandMenuButtons.INTERCEPT_LOC);
+        this.Btn_InterceptLoc.setTint(ColorKeys.GREY);
+      }
+    }
+  }
+
+  private ifApproachClearanceIsSelected() {
+    if (
+      this.SELECTED_BUTTON?.name === PlaneCommandMenuButtons.APPROACH_CLEARANCE
+    ) {
+      if (this.COMMAND_CUE.approachClearance === false) {
+        this.TIMER_START = this.scene.time.now;
+        this.COMMAND_CUE.interceptLoc = true;
+        this.COMMAND_CUE.approachClearance = true;
+        this.resetSelectedButton();
+      } else {
+        this.COMMAND_CUE.approachClearance = false;
+        this.Plane.ARR_APPROACH_CLEARANCE = false;
+        this.resetSelectedButton();
+      }
+    }
+
+    if (this.Btn_ApproachClearance) {
+      if (this.COMMAND_CUE.approachClearance) {
+        this.Btn_ApproachClearance.setText(
+          `${PlaneCommandMenuButtons.APPROACH_CLEARANCE}: yes`
+        );
+        this.Btn_ApproachClearance.setTint(ColorKeys.LIGHT_BLUE);
+      } else {
+        this.Btn_ApproachClearance.setText(
+          PlaneCommandMenuButtons.APPROACH_CLEARANCE
+        );
+        this.Btn_ApproachClearance.setTint(ColorKeys.GREY);
+      }
     }
   }
 
