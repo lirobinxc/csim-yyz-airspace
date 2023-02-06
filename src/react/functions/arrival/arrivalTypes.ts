@@ -1,5 +1,6 @@
 export enum ArrivalPhase {
   PENDING = 'PENDING',
+  PRE_ACTIVE = 'PRE_ACTIVE',
   ACTIVE = 'ACTIVE',
 }
 

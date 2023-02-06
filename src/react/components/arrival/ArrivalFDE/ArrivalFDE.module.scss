@@ -38,7 +38,7 @@ $babyblue: #c1e9f9;
     @include flexCenterVertical();
 
     .acId {
-      justify-content: start;
+      justify-content: flex-start;
 
       padding: 0.25rem;
 
@@ -56,7 +56,7 @@ $babyblue: #c1e9f9;
     .acModelFull,
     .recat,
     .bottomBox {
-      justify-content: start;
+      justify-content: flex-start;
 
       padding: $spacingSm;
 
@@ -230,7 +230,7 @@ $babyblue: #c1e9f9;
 
     .transponderCode,
     .starName {
-      justify-content: start;
+      justify-content: flex-start;
 
       width: $fontSizeLg * 3.4;
       padding: $spacingSm;
@@ -266,6 +266,10 @@ $babyblue: #c1e9f9;
       background-color: darkgray;
     }
   }
+}
+
+.bgGreen {
+  background-color: $satelliteGreen;
 }
 
 .displayNone {

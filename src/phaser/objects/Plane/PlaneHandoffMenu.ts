@@ -137,7 +137,6 @@ export default class PlaneHandoffMenu extends Phaser.GameObjects.Container {
         );
 
         this.IS_VISIBLE = false;
-        this.Plane.ARR_HANDOFF_IN_PROGRESS = false;
       }
     );
 

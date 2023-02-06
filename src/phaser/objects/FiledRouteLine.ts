@@ -2,6 +2,8 @@ import Plane from './Plane/Plane';
 import { ColorKeys } from '../types/ColorKeys';
 import RadarScene from '../scenes/RadarScene';
 import { AssetKeys } from '../types/AssetKeys';
+import { TerminalPosition } from '../types/SimTypes';
+import { getBedpostOrigin } from '../config/BedpostOrigins';
 
 export default class FiledRouteLine extends Phaser.GameObjects.Polygon {
   private Scene: RadarScene;
@@ -12,9 +14,14 @@ export default class FiledRouteLine extends Phaser.GameObjects.Polygon {
     // Pre-super Setup
     const filedRoute = plane.getFiledRoute();
 
-    const startPoint = plane.Scene.RunwayOrigins.getOrigin(
+    let startPoint = plane.Scene.RunwayOrigins.getOrigin(
       plane.Properties.takeoffData.depRunway
     );
+
+    if (plane.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL) {
+      startPoint = getBedpostOrigin(plane.Properties.arrivalData.arrBedpost);
+    }
+
     const routePoints = filedRoute.map((wp) => wp.getDisplayCoord());
 
     const finalPoints = [startPoint, ...routePoints];

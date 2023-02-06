@@ -95,13 +95,14 @@ function ArrivalFDE(props: ArrFDE) {
   const arrRunwayFormatted = arrRunway.split(' ')[2];
 
   return (
-    <section
-      className={clsx(styles.ArrivalStrip, styles.flexRow, {
-        [styles.borderYellow]:
-          simOptions.selectedArrStrip?.uniqueKey === uniqueKey,
-      })}
-    >
-      <div className={clsx(styles.col1)} onClick={handleAcIdClick}>
+    <section className={clsx(styles.ArrivalStrip, styles.flexRow)}>
+      <div
+        className={clsx(styles.col1, {
+          [styles.bgGreen]:
+            simOptions.selectedArrStrip?.uniqueKey === uniqueKey,
+        })}
+        onClick={handleAcIdClick}
+      >
         <div className={clsx(styles.acId)}>{acId.code}</div>
       </div>
       <div className={clsx(styles.col2)}>

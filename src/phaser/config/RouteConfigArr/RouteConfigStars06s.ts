@@ -7,7 +7,7 @@ import { WP_DICT_ARR_06s } from '../WaypointConfigArr/WaypointConfigArr06s';
 import { ArrivalPosition } from '../../../react/functions/arrival/arrivalTypes';
 
 const boxumDuvos = [
-  WP_DICT_ARR_06s.BOXUM,
+  // WP_DICT_ARR_06s.BOXUM,
   WP_DICT_ARR_06s.DUVOS,
   WP_DICT_ARR_06s.ERBUS,
   WP_DICT_ARR_06s.MODOL,
@@ -45,7 +45,7 @@ const linngVerko = [
   WP_DICT_ARR_06s.LERAN,
 ];
 const imebaVibli05 = [
-  WP_DICT_ARR_06s.IMEBA,
+  // WP_DICT_ARR_06s.IMEBA,
   WP_DICT_ARR_06s.SEKOP,
   WP_DICT_ARR_06s.BISDA,
   WP_DICT_ARR_06s.PILPO,
@@ -57,7 +57,7 @@ const imebaVibli05 = [
   WP_DICT_ARR_06s.DERLI,
 ];
 const imebaVibli06L = [
-  WP_DICT_ARR_06s.IMEBA,
+  // WP_DICT_ARR_06s.IMEBA,
   WP_DICT_ARR_06s.SEKOP,
   WP_DICT_ARR_06s.BISDA,
   WP_DICT_ARR_06s.PEKMO,
@@ -68,7 +68,7 @@ const imebaVibli06L = [
   WP_DICT_ARR_06s.LERAN,
 ];
 const ragidUdnox05s = [
-  WP_DICT_ARR_06s.RAGID,
+  // WP_DICT_ARR_06s.RAGID,
   WP_DICT_ARR_06s.LERAT,
   WP_DICT_ARR_06s.SEMTI,
   WP_DICT_ARR_06s.KEVNO,
@@ -80,7 +80,7 @@ const ragidUdnox05s = [
   WP_DICT_ARR_06s.DERLI,
 ];
 const ragidUdnox06L = [
-  WP_DICT_ARR_06s.RAGID,
+  // WP_DICT_ARR_06s.RAGID,
   WP_DICT_ARR_06s.LERAT,
   WP_DICT_ARR_06s.SEMTI,
   WP_DICT_ARR_06s.PEKMO,

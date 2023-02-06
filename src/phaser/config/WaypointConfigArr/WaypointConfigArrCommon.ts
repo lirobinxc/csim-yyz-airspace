@@ -10,7 +10,7 @@ const gameHeight = MasterGameConfig.height;
 export const WP_LIST_ARR_COMMON: WaypointDataArrCommon[] = [
   {
     name: 'BOXUM',
-    relativeCoord: new Phaser.Math.Vector2(0.24, 0.0),
+    relativeCoord: new Phaser.Math.Vector2(0.24, 0),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,

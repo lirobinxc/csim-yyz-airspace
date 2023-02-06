@@ -11,6 +11,7 @@ import { WaypointDataArrAll } from './WaypointTypesArr';
 import { WaypointDataDepAll, WaypointDataDepCommon } from './WaypointTypesDep';
 
 export interface PlaneProperties {
+  fdeData: { dep: DepFDE | null; arr: ArrFDE | null };
   acId: { code: string; spoken: string };
   acType: AcType;
   acModel: AcModel;

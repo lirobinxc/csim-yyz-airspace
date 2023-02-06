@@ -44,6 +44,7 @@ import { ArrFDE } from '../../react/functions/arrival/genArrFDE';
 import { genPlanePropsFromArrFDE } from '../utils/genPlanePropsFromArrFDE';
 import { ColorKeys } from '../types/ColorKeys';
 import { RunwayLocalizers } from '../config/RunwayLocalizers';
+import CursorHalo from '../objects/CursorHalo';
 
 export default class RadarScene extends Phaser.Scene {
   public Waypoints: Waypoint[];
@@ -204,7 +205,10 @@ export default class RadarScene extends Phaser.Scene {
     new PointerCoordinateLogger(this);
 
     // TEMP Create: Runway FINAL line for intercepts
+    // TEMP: Cursor Halo
     if (this.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL) {
+      new CursorHalo(this);
+
       this.Localizers = new RunwayLocalizers(this);
       // const line = finalLine.geom as Phaser.Geom.Line;
       // const point = new Phaser.Geom.Point(0, 0);
@@ -212,8 +216,8 @@ export default class RadarScene extends Phaser.Scene {
       // Phaser.Geom.Intersects.PointToLine(point, line);
     }
 
-    this.cameras.main.setZoom(1.4);
-    this.cameras.main.centerOn(400.2217190139294, 600.6260415366768);
+    // this.cameras.main.setZoom(1.4);
+    // this.cameras.main.centerOn(400.2217190139294, 600.6260415366768);
 
     // On CustomPhaserEvent: PLANE_SELECTED
     this.events.on(PhaserCustomEvents.PLANE_SELECTED, (plane: Plane) => {
@@ -262,6 +266,17 @@ export default class RadarScene extends Phaser.Scene {
 
         if (this.FiledRouteLine) {
           this.FiledRouteLine.customDestroy();
+        }
+
+        if (
+          this.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL &&
+          plane.ARR_HANDOFF_IN_PROGRESS
+        ) {
+          this.events.emit(
+            PhaserCustomEvents.ACCEPT_HANDOFF_BUTTON_CLICKED,
+            plane
+          );
+          return;
         }
 
         this.FiledRouteLine = new FiledRouteLine(plane);

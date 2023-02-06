@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import useInterval from 'use-interval';
 import { AcType } from '../../../phaser/types/AircraftTypes';
 import { determineIfVdpAllowed } from '../../functions/departure/determineIfVdpAllowed';
@@ -18,6 +18,11 @@ import {
   DeparturePhase,
   DeparturePosition,
 } from '../../functions/departure/departureTypes';
+import PhaserGame from '../../../phaser/PhaserGameConfig';
+import { OtherSceneKeys } from '../../../phaser/types/SceneKeys';
+import RadarScene from '../../../phaser/scenes/RadarScene';
+import { PhaserCustomEvents } from '../../../phaser/types/CustomEvents';
+import Plane from '../../../phaser/objects/Plane/Plane';
 
 const DepFdeSection = () => {
   const dispatch = useAppDispatch();
@@ -34,6 +39,23 @@ const DepFdeSection = () => {
   });
   const [timeOfLastAirborneSatellite, setTimeOfLastAirborneSatellite] =
     useState(0);
+
+  useMemo(() => {
+    const RADAR_SCENE = PhaserGame.scene.keys[
+      OtherSceneKeys.RADAR_BASE
+    ] as RadarScene;
+
+    RADAR_SCENE.events.on(
+      PhaserCustomEvents.HIDE_PLANE_BUTTON_CLICKED,
+      (plane: Plane) => {
+        if (plane.Properties.fdeData.dep) {
+          dispatch(
+            departureListActions.deleteStrip(plane.Properties.fdeData.dep)
+          );
+        }
+      }
+    );
+  }, [dispatch]);
 
   const processStrips = useCallback(
     (stripList: DepFDE[]) => {

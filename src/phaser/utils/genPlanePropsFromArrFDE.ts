@@ -12,6 +12,7 @@ import { getStarRoute } from './getStarRoute';
 
 export function genPlanePropsFromArrFDE(arrFde: ArrFDE): PlaneProperties {
   const props: PlaneProperties = {
+    fdeData: { dep: null, arr: arrFde },
     acId: { code: arrFde.acId.code, spoken: arrFde.acId.spoken },
     acType: arrFde.acType,
     acModel: arrFde.acModel,

@@ -15,6 +15,7 @@ import { DepRunwayYYZ } from '../types/AirportTypes';
 
 export function genPlanePropsFromDepFDE(depFde: DepFDE): PlaneProperties {
   const props: PlaneProperties = {
+    fdeData: { dep: depFde, arr: null },
     acId: { code: depFde.acId.code, spoken: depFde.acId.spoken },
     acType: depFde.acType,
     acModel: depFde.acModel,

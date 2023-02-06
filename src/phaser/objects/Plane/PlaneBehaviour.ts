@@ -56,6 +56,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
     }
     if (isArrivalMode) {
       this.interceptLocalizer();
+      this.setNewArrivalHeadingToAssignedWp();
     }
 
     this.updateHeading(dt);
@@ -461,6 +462,13 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
             this.Plane.Properties.takeoffData.assignedAlt;
         }
       }
+    }
+  }
+
+  private setNewArrivalHeadingToAssignedWp() {
+    if (this.Plane.ARR_HANDOFF_IN_PROGRESS) {
+      this.Plane.Commands.heading.current =
+        this.Plane.Commands.heading.assigned;
     }
   }
 

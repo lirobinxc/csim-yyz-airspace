@@ -11,6 +11,7 @@ import { SidName } from '../../../phaser/types/SidAndSatelliteTypes';
 import { ArrivalPhase } from '../../functions/arrival/arrivalTypes';
 import { ArrFDE, genArrFDE } from '../../functions/arrival/genArrFDE';
 import { ArrBedpost } from '../../functions/arrival/genArrRoute';
+import { DepFDE } from '../../functions/departure/genDepFDE';
 import { genSatFDE } from '../../functions/departure/genSatFDE';
 import { insertIntoArray } from '../../functions/insertIntoArray';
 import { getSimOptions } from '../genSimOptions';
@@ -35,7 +36,7 @@ function genArrList(
   return defaultArrSequence;
 }
 
-function sendActiveToPhaser(fde: ArrFDE) {
+function sendAircraftToPhaser(fde: ArrFDE) {
   const RADAR_SCENE = PhaserGame.scene.keys[
     OtherSceneKeys.RADAR_BASE
   ] as RadarScene;
@@ -85,11 +86,28 @@ export const arrivalList = createSlice({
       );
     },
     // Use the PayloadAction type to declare the contents of `action.payload`
-    deleteStrip: (state, action: PayloadAction<ArrFDE>) => {
+    deleteStrip: (state, action: PayloadAction<ArrFDE | DepFDE>) => {
       console.log('Removed', action.payload);
       return state.filter(
         (item) => item.uniqueKey !== action.payload.uniqueKey
       );
+    },
+    setToPreActive: (state, action: PayloadAction<ArrFDE | undefined>) => {
+      if (!action.payload) return state;
+
+      const arrPhase = ArrivalPhase.PRE_ACTIVE;
+      const selectedFde = action.payload;
+
+      const newList = state.filter(
+        (strip) => strip.uniqueKey !== selectedFde.uniqueKey
+      );
+
+      sendAircraftToPhaser(selectedFde);
+
+      return [
+        ...newList,
+        { ...selectedFde, arrPhase, arrivalTime: Date.now() },
+      ];
     },
     setToActive: (state, action: PayloadAction<ArrFDE | undefined>) => {
       if (!action.payload) return state;
@@ -100,8 +118,6 @@ export const arrivalList = createSlice({
       const newList = state.filter(
         (strip) => strip.uniqueKey !== selectedFde.uniqueKey
       );
-
-      sendActiveToPhaser(selectedFde);
 
       return [
         ...newList,

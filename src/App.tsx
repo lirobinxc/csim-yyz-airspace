@@ -6,7 +6,7 @@ import DepFdeSection from './react/components/departure/DepFdeSection';
 import { useAppSelector } from './react/state/hooks';
 import { selectSimOptions } from './react/state/slices/simOptionsSlice';
 import { TerminalPosition } from './phaser/types/SimTypes';
-import FdeSectionArr from './react/components/arrival/ArrFdeSection';
+import ArrFdeSection from './react/components/arrival/ArrFdeSection';
 
 function App() {
   const simOptions = useAppSelector(selectSimOptions);
@@ -17,7 +17,7 @@ function App() {
       {simOptions.terminalPosition === TerminalPosition.DEPARTURE ? (
         <DepFdeSection />
       ) : (
-        <FdeSectionArr />
+        <ArrFdeSection />
       )}
     </div>
   );

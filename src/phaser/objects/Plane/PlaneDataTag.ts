@@ -5,6 +5,7 @@ import { PhaserCustomEvents } from '../../types/CustomEvents';
 import { DomEvents } from '../../types/DomEvents';
 import { TerminalPosition } from '../../types/SimTypes';
 import { convertAcWtcToSymbol } from '../../utils/convertAcWtcToSymbol';
+import { convertArrivalRunwayToSfi } from '../../utils/convertArrivalRunwayToSfi';
 import Plane from './Plane';
 
 export default class PlaneDataTag extends Phaser.GameObjects.Container {
@@ -147,6 +148,14 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
         plane.DataTag.Text2.setTint(ColorKeys.PPS_YELLOW);
 
         plane.IS_HANDED_OFF = true;
+        plane.ARR_HANDOFF_IN_PROGRESS = false;
+
+        if (
+          this.Plane.Scene.SIM_OPTIONS.terminalPosition ===
+          TerminalPosition.ARRIVAL
+        ) {
+          this.scene.events.emit(PhaserCustomEvents.ARR_ACCEPTED, plane);
+        }
       }
     );
 
@@ -214,8 +223,19 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
       .toString()
       .padStart(5, '0')}`;
 
+    let arrRunwaySfi = '';
+    if (
+      this.Plane.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL
+    ) {
+      arrRunwaySfi = convertArrivalRunwayToSfi(
+        this.Plane.Properties.arrivalData.arrRunway
+      );
+    }
+
     this.Text1.setText(
-      `${acid}${wtcSymbol}${this.Plane.Scene.IS_DEBUG_MODE ? currHeading : ''}`
+      `${acid}${wtcSymbol} ${arrRunwaySfi}${
+        this.Plane.Scene.IS_DEBUG_MODE ? currHeading : ''
+      }`
     );
   }
 

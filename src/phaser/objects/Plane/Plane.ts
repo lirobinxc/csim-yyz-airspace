@@ -89,7 +89,8 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.IS_TALKING = false;
     this.IS_PENDING_DIRECT_TO_COMMAND = false;
     this.DEP_HANDOFF_IN_PROGRESS = false;
-    this.ARR_HANDOFF_IN_PROGRESS = false;
+    this.ARR_HANDOFF_IN_PROGRESS = true;
+
     this.IS_HANDED_OFF = false;
 
     this.ARR_INTERCEPT_LOC = false;

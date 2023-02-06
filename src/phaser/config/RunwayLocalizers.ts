@@ -91,7 +91,7 @@ export class RunwayLocalizers {
     //   planePoint
     // );
 
-    if (hasIntercepted) console.log(hasIntercepted);
+    // if (hasIntercepted) console.log(hasIntercepted);
 
     plane.ARR_HAS_INTERCEPTED_LOC = hasIntercepted;
 
