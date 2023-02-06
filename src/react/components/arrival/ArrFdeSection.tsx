@@ -41,7 +41,7 @@ const ArrFdeSection = () => {
     activePanel: [] as ArrFDE[],
   });
 
-  useMemo(() => {
+  useEffect(() => {
     const RADAR_SCENE = PhaserGame.scene.keys[
       OtherSceneKeys.RADAR_BASE
     ] as RadarScene;
@@ -111,6 +111,9 @@ const ArrFdeSection = () => {
   useInterval(() => {
     if (simOptions.isPaused) return;
 
+    // Break if 10 a/c in the sequence
+    if (stripList.activePanel.length >= simOptions.maxActiveArrivals) return;
+
     const currTime = Date.now();
 
     const allAirborneStrips = [
@@ -118,12 +121,19 @@ const ArrFdeSection = () => {
       ...stripList.preActivePanel,
     ];
 
-    const latestAirborneStrip = allAirborneStrips[allAirborneStrips.length - 1];
+    const nextPendingStrip = stripList.pendingPanel[0];
 
-    let nextPendingFde = stripList.pendingPanel[0];
+    const lastAirborneStrip = allAirborneStrips[allAirborneStrips.length - 1];
+    if (lastAirborneStrip) {
+      if (lastAirborneStrip.arrBedpost === nextPendingStrip.arrBedpost) {
+        dispatch(arrivalListActions.deleteStrip(nextPendingStrip));
+      }
+    }
 
-    if (nextPendingFde) {
-      const nextBedpost = nextPendingFde.arrBedpost;
+    if (nextPendingStrip) {
+      console.log('Next bedpost:', nextPendingStrip.arrBedpost);
+
+      const nextBedpost = nextPendingStrip.arrBedpost;
       const prevStripWithSameBedpost = _.findLast(
         allAirborneStrips,
         (strip) => {
@@ -132,36 +142,32 @@ const ArrFdeSection = () => {
       );
 
       if (!prevStripWithSameBedpost) {
-        dispatch(arrivalListActions.setToPreActive(nextPendingFde));
-      }
-
-      if (nextPendingFde.arrBedpost === latestAirborneStrip.arrBedpost) {
-        //TODO: reset this entire PENDING -> PRE_ACTIVE loop with a new "nextPendingFde"
-        // if the latestAirborneStrip is the same bedpost
+        dispatch(arrivalListActions.setToPreActive(nextPendingStrip));
       }
 
       if (prevStripWithSameBedpost) {
-        if (nextPendingFde.isStraightIn) {
+        if (nextPendingStrip.isStraightIn) {
+          const randomStraightInTime = _.random(
+            simOptions.intervalBetweenNormalArrs,
+            simOptions.intervalBetweenStraightInArrs
+          );
+
           if (
             currTime >
-            prevStripWithSameBedpost.arrivalTime +
-              simOptions.intervalBetweenStraightInArrs
+            prevStripWithSameBedpost.arrivalTime + randomStraightInTime
           ) {
-            console.log(currTime);
-
             console.log('dispatching Straightin');
-            dispatch(arrivalListActions.setToPreActive(nextPendingFde));
+            dispatch(arrivalListActions.setToPreActive(nextPendingStrip));
           }
         }
-        if (!nextPendingFde.isStraightIn) {
+        if (!nextPendingStrip.isStraightIn) {
           if (
             currTime >
             prevStripWithSameBedpost.arrivalTime +
               simOptions.intervalBetweenNormalArrs
           ) {
             console.log('dispatching Normal');
-
-            dispatch(arrivalListActions.setToPreActive(nextPendingFde));
+            dispatch(arrivalListActions.setToPreActive(nextPendingStrip));
           }
         }
       }

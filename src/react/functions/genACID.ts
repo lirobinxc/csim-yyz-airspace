@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { AcModel, AcType, AcWTC } from '../../phaser/types/AircraftTypes';
 
 export interface AircraftCollection {
-  [AcWTC.L]: { [AcType.JET]: never[]; [AcType.PROP]: AcModel[] };
+  [AcWTC.L]: { [AcType.JET]: AcModel[]; [AcType.PROP]: AcModel[] };
   [AcWTC.M]: {
     [AcType.JET]: AcModel[];
     [AcType.PROP]: AcModel[];
@@ -11,7 +11,7 @@ export interface AircraftCollection {
 }
 
 const aircraftCollection: AircraftCollection = {
-  L: { JET: [], PROP: [AcModel.C208] },
+  L: { JET: [AcModel.C25A], PROP: [AcModel.C208] },
   M: {
     JET: [AcModel.CRJ9, AcModel.A21N, AcModel.B738, AcModel.CL60, AcModel.C56X],
     PROP: [AcModel.DH8A, AcModel.DH8D],
@@ -31,7 +31,7 @@ export function genACID({ allowC208 }: { allowC208: boolean }) {
   // Generate WTC
   if (num1to10 > 7) {
     wtc = AcWTC.H;
-  } else if (num1to10 > 1) {
+  } else if (num1to10 > 2) {
     wtc = AcWTC.M;
   } else {
     wtc = AcWTC.L;
@@ -47,7 +47,7 @@ export function genACID({ allowC208 }: { allowC208: boolean }) {
   if (wtc === AcWTC.H) acType = AcType.JET;
   if (wtc === AcWTC.M && num1to10 > 3) acType = AcType.JET;
   if (wtc === AcWTC.M && num1to10 <= 3) acType = AcType.PROP;
-  if (wtc === AcWTC.L) acType = AcType.PROP;
+  if (wtc === AcWTC.L) acType = AcType.JET;
 
   let model = _.sample(aircraftCollection[wtc][acType]);
 

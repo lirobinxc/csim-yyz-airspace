@@ -57,6 +57,7 @@ export default class RadarScene extends Phaser.Scene {
 
   public SIM_OPTIONS: SimOptions;
   public IS_DEBUG_MODE: boolean;
+  public SHOW_EXTENDED_TAGS: boolean;
 
   public SELECTED_PLANE: Plane | null;
   public CURRENTLY_SPEAKING_PLANE: Plane | null;
@@ -80,6 +81,7 @@ export default class RadarScene extends Phaser.Scene {
 
     this.IS_DEBUG_MODE = MasterGameConfig.isDebug;
     this.SIM_OPTIONS = getSimOptions();
+    this.SHOW_EXTENDED_TAGS = false;
 
     // Init: Template props
     this.SCENE_KEY = this.SIM_OPTIONS.radarScene;

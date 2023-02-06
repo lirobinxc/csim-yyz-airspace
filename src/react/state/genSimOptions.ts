@@ -18,7 +18,7 @@ export const defaultSimOptions: SimOptions = {
   intervalBetweenVisualDeps: 32_000,
   intervalBetweenSatelliteDeps: 250_000,
   intervalBetweenNormalArrs: 120_000,
-  intervalBetweenStraightInArrs: 240_000,
+  intervalBetweenStraightInArrs: 180_000,
   isModalOpen: false,
   selectedDepStrip: null,
   selectedArrStrip: null,
@@ -30,6 +30,7 @@ export const defaultSimOptions: SimOptions = {
     ArrBedpost.NUBER,
     ArrBedpost.RAGID,
   ],
+  maxActiveArrivals: 8,
 };
 
 const localStorage = window.localStorage;

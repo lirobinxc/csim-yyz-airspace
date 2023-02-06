@@ -56,6 +56,17 @@ const SimOptionsModal = ({
     setTempOptions({ ...tempOptions, startingCount: value });
   }
 
+  function setMaxActiveArrivals(e: React.FormEvent) {
+    const target = e.target as HTMLTextAreaElement;
+    let value = Number(target.value);
+
+    if (isNaN(value)) value = simOptions.maxActiveArrivals;
+    if (value > 99) value = 99;
+    if (value < 1) value = 1;
+
+    setTempOptions({ ...tempOptions, maxActiveArrivals: value });
+  }
+
   function setIntervalBetweenNormalDeps(e: React.FormEvent) {
     const target = e.target as HTMLTextAreaElement;
     let value = Number(target.value);
@@ -246,13 +257,13 @@ const SimOptionsModal = ({
                 />
               </label>
               <label>
-                Starting # of strips
+                Max # of Active Arrivals
                 <input
                   type="number"
-                  name="startingCount"
+                  name="maxActiveArrivals"
                   className={styles.number}
-                  value={tempOptions.startingCount}
-                  onChange={setStartingCount}
+                  value={tempOptions.maxActiveArrivals}
+                  onChange={setMaxActiveArrivals}
                 />
               </label>
               <h3>Active Bedposts</h3>

@@ -9,6 +9,7 @@ export enum AcModel {
   C56X = 'C56X',
   CL60 = 'CL60',
   CRJ9 = 'CRJ9',
+  C25A = 'C25A',
 }
 
 export enum AcType {

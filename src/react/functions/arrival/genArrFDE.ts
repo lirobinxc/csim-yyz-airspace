@@ -252,6 +252,5 @@ export function genArrFDE(
     transponderCode,
   };
 
-  console.log(arrFde);
   return arrFde;
 }

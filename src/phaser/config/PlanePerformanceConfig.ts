@@ -73,6 +73,19 @@ export const PlanePerformanceConfig: {
     },
     accel: BASE_ACCEL,
   },
+  C25A: {
+    speed: {
+      initialClimb: 145, // to 800 feet
+      normalClimb: 230, // 800 to FL240
+      maxCruise: 410,
+      maxBelow10k: 250,
+    },
+    climbRate: {
+      initialClimb: 800, // feet per minute
+      normalClimb: 600,
+    },
+    accel: BASE_ACCEL,
+  },
   C56X: {
     speed: {
       initialClimb: 145, // to 800 feet

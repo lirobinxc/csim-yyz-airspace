@@ -86,7 +86,7 @@ export const arrivalList = createSlice({
       );
     },
     // Use the PayloadAction type to declare the contents of `action.payload`
-    deleteStrip: (state, action: PayloadAction<ArrFDE | DepFDE>) => {
+    deleteStrip: (state, action: PayloadAction<ArrFDE>) => {
       console.log('Removed', action.payload);
       return state.filter(
         (item) => item.uniqueKey !== action.payload.uniqueKey

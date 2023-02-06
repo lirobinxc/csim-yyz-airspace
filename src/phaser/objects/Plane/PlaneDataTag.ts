@@ -93,7 +93,8 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
 
     // Input: On press F10 key, toggle EXT TAG
     this.scene.input.keyboard.on('keydown-F10', () => {
-      this.isExtendedTag = !this.isExtendedTag;
+      this.Plane.Scene.SHOW_EXTENDED_TAGS =
+        !this.Plane.Scene.SHOW_EXTENDED_TAGS;
     });
 
     // Input: On click Text 1
@@ -272,7 +273,7 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
   }
 
   private updateText3() {
-    if (this.isExtendedTag) {
+    if (this.Plane.Scene.SHOW_EXTENDED_TAGS) {
       const acModel = this.Plane.Properties.acModel.padEnd(4, ' ');
       const destination = this.Plane.Properties.filedData.destination;
       this.Text3.setText(`${acModel} ${destination}`); // max 9 chars length

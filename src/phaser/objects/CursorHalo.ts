@@ -3,7 +3,7 @@ import { ColorKeys } from '../types/ColorKeys';
 
 export default class CursorHalo extends Phaser.GameObjects.Arc {
   constructor(scene: RadarScene) {
-    super(scene, 0, 0, 57, 0, 360);
+    super(scene, 0, 0, 56, 0, 360);
 
     this.scene.add.existing(this);
 

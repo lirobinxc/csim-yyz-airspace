@@ -35,6 +35,7 @@ export interface SimOptions {
   selectedArrStrip: ArrFDE | null;
   isPaused: boolean;
   activeArrBedposts: ArrBedpost[];
+  maxActiveArrivals: number;
 }
 
 function pausePhaser() {
