@@ -72,7 +72,8 @@ export interface ArrFDE {
 export function genArrFDE(
   radarScene: RadarSceneKeys,
   isSingleOps: boolean,
-  activeBedposts: ArrBedpost[]
+  activeBedposts: ArrBedpost[],
+  innerOnly: boolean
 ) {
   // Set timestamp
   const minuteJitter = _.sample([1, 1, 1, 1, 2, 2, 3]) || 1;
@@ -240,9 +241,9 @@ export function genArrFDE(
     arrPhase,
     arrPosition,
     arrRunway,
-    assignedAlt,
+    assignedAlt: innerOnly && !isStraightIn ? 50 : assignedAlt,
     assignedHeading,
-    assignedSpeed,
+    assignedSpeed: innerOnly && !isStraightIn ? 210 : assignedSpeed,
     debugACID: aircraft,
     ETA: currentTime,
     handoffSector,

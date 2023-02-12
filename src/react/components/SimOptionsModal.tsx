@@ -56,6 +56,13 @@ const SimOptionsModal = ({
     setTempOptions({ ...tempOptions, startingCount: value });
   }
 
+  function setArrInnerPracticeMode(e: React.FormEvent) {
+    setTempOptions({
+      ...tempOptions,
+      arrInnerPracticeMode: !tempOptions.arrInnerPracticeMode,
+    });
+  }
+
   function setMaxActiveArrivals(e: React.FormEvent) {
     const target = e.target as HTMLTextAreaElement;
     let value = Number(target.value);
@@ -264,6 +271,16 @@ const SimOptionsModal = ({
                   className={styles.number}
                   value={tempOptions.maxActiveArrivals}
                   onChange={setMaxActiveArrivals}
+                />
+              </label>
+              <label>
+                Inner Practice Mode (sets entry speed & alt to 210kts / 5000
+                feet)
+                <input
+                  type="checkbox"
+                  className={styles.checkbox}
+                  checked={tempOptions.arrInnerPracticeMode}
+                  onChange={setArrInnerPracticeMode}
                 />
               </label>
               <h3>Active Bedposts</h3>

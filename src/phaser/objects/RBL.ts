@@ -68,7 +68,7 @@ export default class RBL extends Phaser.GameObjects.Layer {
     const lengthInPixels = Phaser.Geom.Line.Length(rblLineGeom);
     const lengthInMiles = convertPixelsToMiles(lengthInPixels);
 
-    this.Label.setText(`${lengthInMiles.toPrecision(3)}`);
+    this.Label.setText(`${lengthInMiles.toFixed(1)}`);
 
     const centerOfLine = Phaser.Geom.Line.GetMidPoint(rblLineGeom);
 

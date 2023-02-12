@@ -23,12 +23,18 @@ function genArrList(
   radarScene: RadarSceneKeys,
   count: number,
   isSingleOps: boolean,
-  activeBedposts: ArrBedpost[]
+  activeBedposts: ArrBedpost[],
+  innerOnly: boolean
 ) {
   const defaultArrSequence: ArrFDE[] = [];
 
   for (let i = 0; i < count; i++) {
-    const newArrFde = genArrFDE(radarScene, isSingleOps, activeBedposts);
+    const newArrFde = genArrFDE(
+      radarScene,
+      isSingleOps,
+      activeBedposts,
+      innerOnly
+    );
 
     defaultArrSequence.push(newArrFde);
   }
@@ -58,7 +64,8 @@ function genInitialState() {
     simOptions.radarScene,
     simOptions.startingCount,
     simOptions.isSingleOps,
-    simOptions.activeArrBedposts
+    simOptions.activeArrBedposts,
+    simOptions.arrInnerPracticeMode
   );
 }
 
@@ -75,13 +82,15 @@ export const arrivalList = createSlice({
         radarScene: RadarSceneKeys;
         isSingleOps: boolean;
         activeBedposts: ArrBedpost[];
+        innerOnly: boolean;
       }>
     ) => {
       state.push(
         genArrFDE(
           action.payload.radarScene,
           action.payload.isSingleOps,
-          action.payload.activeBedposts
+          action.payload.activeBedposts,
+          action.payload.innerOnly
         )
       );
     },

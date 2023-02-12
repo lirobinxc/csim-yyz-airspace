@@ -111,6 +111,7 @@ const ArrFdeSection = () => {
           radarScene: simOptions.radarScene,
           isSingleOps: simOptions.isSingleOps,
           activeBedposts: simOptions.activeArrBedposts,
+          innerOnly: simOptions.arrInnerPracticeMode,
         })
       );
     }

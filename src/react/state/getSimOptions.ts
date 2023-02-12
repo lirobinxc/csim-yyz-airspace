@@ -32,6 +32,7 @@ export const defaultSimOptions: SimOptions = {
     ArrBedpost.RAGID,
   ],
   maxActiveArrivals: 8,
+  arrInnerPracticeMode: false,
 };
 
 const localStorage = window.localStorage;

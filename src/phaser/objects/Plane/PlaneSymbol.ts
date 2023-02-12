@@ -3,6 +3,7 @@ import Phaser from 'phaser';
 import { AssetKeys } from '../../types/AssetKeys';
 import Plane from './Plane';
 import { ColorKeys } from '../../types/ColorKeys';
+import { TerminalPosition } from '../../types/SimTypes';
 
 export default class PlaneSymbol extends Phaser.GameObjects.Image {
   private Plane: Plane;
@@ -20,10 +21,11 @@ export default class PlaneSymbol extends Phaser.GameObjects.Image {
     this.setInteractive();
     this.input.cursor = 'pointer';
 
-    // Input: On click
-    // this.on(DomEvents.POINTER_DOWN, () => {
-    //   this.Plane.togglePTL();
-    // });
+    if (
+      this.Plane.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL
+    ) {
+      this.setScale(0.18);
+    }
 
     // Setup: Debug
     this.Plane.scene.input.enableDebug(this);

@@ -38,6 +38,7 @@ export interface SimOptions {
   isPaused: boolean;
   activeArrBedposts: ArrBedpost[];
   maxActiveArrivals: number;
+  arrInnerPracticeMode: boolean;
 }
 
 function pausePhaser() {

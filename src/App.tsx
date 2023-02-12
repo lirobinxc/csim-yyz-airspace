@@ -13,7 +13,7 @@ function App() {
 
   return (
     <div className={styles.App}>
-      <MenuSection appVersion="1.0" />
+      <MenuSection appVersion={'1.2'} />
       {simOptions.terminalPosition === TerminalPosition.DEPARTURE ? (
         <DepFdeSection />
       ) : (
