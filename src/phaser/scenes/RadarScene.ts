@@ -21,7 +21,7 @@ import img_Radar15sArr from '../assets/Radar15sArr.png';
 import img_PpsSymbol from '../assets/PpsSymbol.png';
 import fontTexture_DejaVuMonoBold from '../assets/font/FontDejaVuMonoBold.png';
 import fontXml_DejaVuMonoBold from '../assets/font/FontDejaVuMonoBold.xml';
-import DebugButton from '../objects/DebugButton';
+import OptionsSidebar from '../objects/OptionsSidebar';
 import { PhaserCustomEvents, ReactCustomEvents } from '../types/CustomEvents';
 import { DepFDE } from '../../react/functions/departure/genDepFDE';
 import { genPlanePropsFromDepFDE } from '../utils/genPlanePropsFromDepFDE';
@@ -39,7 +39,7 @@ import { WP_LIST_DEP_33s } from '../config/WaypointConfigDep/WaypointConfigDep33
 import { WP_LIST_DEP_15s } from '../config/WaypointConfigDep/WaypointConfigDep15s';
 import { TerminalPosition } from '../types/SimTypes';
 import { WP_LIST_ARR_06s } from '../config/WaypointConfigArr/WaypointConfigArr06s';
-import { MasterGameConfig } from '../config/GameConfig';
+import { MasterGameConfig } from '../config/MasterGameConfig';
 import { ArrFDE } from '../../react/functions/arrival/genArrFDE';
 import { genPlanePropsFromArrFDE } from '../utils/genPlanePropsFromArrFDE';
 import { ColorKeys } from '../types/ColorKeys';
@@ -59,6 +59,7 @@ export default class RadarScene extends Phaser.Scene {
 
   public SIM_OPTIONS: SimOptions;
   public IS_DEBUG_MODE: boolean;
+  public GAME_SPEED_MULTIPLIER: number;
   public SHOW_EXTENDED_TAGS: boolean;
 
   public SELECTED_PLANE: Plane | null;
@@ -85,8 +86,9 @@ export default class RadarScene extends Phaser.Scene {
     this.FiledRouteLine = null;
     this.RblCursorIcon = null;
 
-    this.IS_DEBUG_MODE = MasterGameConfig.isDebug;
     this.SIM_OPTIONS = getSimOptions();
+    this.IS_DEBUG_MODE = MasterGameConfig.isDebug;
+    this.GAME_SPEED_MULTIPLIER = 1;
     this.SHOW_EXTENDED_TAGS = false;
 
     // Init: Template props
@@ -210,7 +212,7 @@ export default class RadarScene extends Phaser.Scene {
     this.RunwayOrigins = new RunwayOrigins(this);
 
     // Create: Buttons
-    new DebugButton(this);
+    new OptionsSidebar(this);
 
     // Create: Developer components
     new PointerCoordinateLogger(this);

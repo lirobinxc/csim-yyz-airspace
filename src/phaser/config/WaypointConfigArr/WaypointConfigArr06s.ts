@@ -3,7 +3,7 @@ import {
   WaypointDataArr06s,
   WaypointDict06sArr,
 } from '../../types/WaypointTypesArr';
-import { MasterGameConfig } from '../GameConfig';
+import { MasterGameConfig } from '../MasterGameConfig';
 import { WP_LIST_ARR_COMMON } from './WaypointConfigArrCommon';
 
 const gameHeight = MasterGameConfig.height;

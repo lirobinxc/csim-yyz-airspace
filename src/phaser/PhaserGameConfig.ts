@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { MasterGameConfig, DebugGameConfig } from './config/GameConfig';
+import { MasterGameConfig, DebugGameConfig } from './config/MasterGameConfig';
 import RadarScene from './scenes/RadarScene';
 import { RadarSceneKeys } from './types/SceneKeys';
 

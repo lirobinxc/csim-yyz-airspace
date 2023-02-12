@@ -1,5 +1,5 @@
 import { AcType } from '../../types/AircraftTypes';
-import { MasterGameConfig } from '../GameConfig';
+import { MasterGameConfig } from '../MasterGameConfig';
 import { WP_LIST_DEP_COMMON } from './WaypointConfigDepCommon';
 import type {
   WaypointDataDep15s,

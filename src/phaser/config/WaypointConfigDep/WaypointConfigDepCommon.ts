@@ -1,5 +1,5 @@
 import { AcType } from '../../types/AircraftTypes';
-import { MasterGameConfig } from '../GameConfig';
+import { MasterGameConfig } from '../MasterGameConfig';
 import type {
   WaypointDataDepCommon,
   WaypointDictDepCommon,

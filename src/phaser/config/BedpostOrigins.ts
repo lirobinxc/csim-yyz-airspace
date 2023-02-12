@@ -1,5 +1,5 @@
 import { ArrBedpost } from '../../react/functions/arrival/genArrRoute';
-import { MasterGameConfig } from './GameConfig';
+import { MasterGameConfig } from './MasterGameConfig';
 
 export function getBedpostOrigin(arrBedpost: ArrBedpost) {
   const relativeBedpostOrigins = {

@@ -3,7 +3,7 @@ import {
   WaypointDataArrCommon,
   WaypointDictArrCommon,
 } from '../../types/WaypointTypesArr';
-import { MasterGameConfig } from '../GameConfig';
+import { MasterGameConfig } from '../MasterGameConfig';
 
 const gameHeight = MasterGameConfig.height;
 
