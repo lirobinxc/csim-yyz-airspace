@@ -50,6 +50,10 @@ const MenuSection = ({ appVersion }: MenuSectionProps) => {
     }
   }
 
+  function cycleGameSpeed() {
+    dispatch(simOptionsActions.cycleGameSpeed());
+  }
+
   function getRwyNorth() {
     switch (simOptions.radarScene) {
       case RadarSceneKeys.RADAR_06s:
@@ -83,7 +87,14 @@ const MenuSection = ({ appVersion }: MenuSectionProps) => {
   function displayDepMenu() {
     return (
       <div className={styles.depButtonBar}>
-        <button className={clsx(styles.spacing)}>UNDO</button>
+        <button
+          className={clsx(styles.spacing, {
+            [styles.blinkingYellowBg]: simOptions.gameSpeedMultiplier > 1,
+          })}
+          onClick={cycleGameSpeed}
+        >
+          Speed x{simOptions.gameSpeedMultiplier}
+        </button>
         <div className={clsx(styles.spacing, styles.roleSelected)}>
           ALL
           <br /> DEPARTURE
@@ -136,7 +147,14 @@ const MenuSection = ({ appVersion }: MenuSectionProps) => {
   function displayArrMenu() {
     return (
       <div className={styles.arrButtonBar}>
-        <button className={clsx(styles.spacing)}>UNDO</button>
+        <button
+          className={clsx(styles.spacing, {
+            [styles.blinkingYellowBg]: simOptions.gameSpeedMultiplier > 1,
+          })}
+          onClick={cycleGameSpeed}
+        >
+          Speed x{simOptions.gameSpeedMultiplier}
+        </button>
         <div>
           <div className={clsx(styles.spacing, styles.roleSelected)}>ARR 1</div>
           <div className={clsx(styles.spacing, styles.arrHalfBoxMd)}>

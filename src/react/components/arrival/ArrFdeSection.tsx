@@ -40,6 +40,15 @@ const ArrFdeSection = () => {
     preActivePanel: [] as ArrFDE[],
     activePanel: [] as ArrFDE[],
   });
+  const [updateInterval, setUpdateInterval] = useState(5000);
+
+  useEffect(() => {
+    if (simOptions.gameSpeedMultiplier > 1) {
+      setUpdateInterval(5000 / simOptions.gameSpeedMultiplier);
+    } else {
+      setUpdateInterval(5000);
+    }
+  }, [simOptions.gameSpeedMultiplier]);
 
   useEffect(() => {
     const RADAR_SCENE = PhaserGame.scene.keys[
@@ -105,21 +114,21 @@ const ArrFdeSection = () => {
         })
       );
     }
-  }, 5000);
+  }, updateInterval);
 
   // Interval: Move from panel PENDING -> PRE_ACTIVE
   useInterval(() => {
     if (simOptions.isPaused) return;
 
-    // Break if 10 a/c in the sequence
-    if (stripList.activePanel.length >= simOptions.maxActiveArrivals) return;
-
-    const currTime = Date.now();
-
     const allAirborneStrips = [
       ...stripList.activePanel,
       ...stripList.preActivePanel,
     ];
+
+    // Break if 10 a/c in the sequence
+    if (allAirborneStrips.length >= simOptions.maxActiveArrivals) return;
+
+    const currTime = Date.now();
 
     const nextPendingStrip = stripList.pendingPanel[0];
 
@@ -148,15 +157,16 @@ const ArrFdeSection = () => {
       if (prevStripWithSameBedpost) {
         if (nextPendingStrip.isStraightIn) {
           const randomStraightInTime = _.random(
-            simOptions.intervalBetweenNormalArrs,
-            simOptions.intervalBetweenStraightInArrs
+            simOptions.intervalBetweenNormalArrs /
+              simOptions.gameSpeedMultiplier,
+            simOptions.intervalBetweenStraightInArrs /
+              simOptions.gameSpeedMultiplier
           );
 
           if (
             currTime >
             prevStripWithSameBedpost.arrivalTime + randomStraightInTime
           ) {
-            console.log('dispatching Straightin');
             dispatch(arrivalListActions.setToPreActive(nextPendingStrip));
           }
         }
@@ -164,15 +174,15 @@ const ArrFdeSection = () => {
           if (
             currTime >
             prevStripWithSameBedpost.arrivalTime +
-              simOptions.intervalBetweenNormalArrs
+              simOptions.intervalBetweenNormalArrs /
+                simOptions.gameSpeedMultiplier
           ) {
-            console.log('dispatching Normal');
             dispatch(arrivalListActions.setToPreActive(nextPendingStrip));
           }
         }
       }
     }
-  }, 5000);
+  }, updateInterval);
 
   return (
     <main className={styles.ArrFdeSection}>

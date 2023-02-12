@@ -14,6 +14,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 210, // kts, 800 to FL240
       maxCruise: 340,
       maxBelow10k: 250,
+      landing: 140,
     },
     climbRate: {
       initialClimb: 2100, // feet per minute
@@ -27,6 +28,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 290, // 800 to FL240
       maxCruise: 470,
       maxBelow10k: 250,
+      landing: 150,
     },
     climbRate: {
       initialClimb: 2100, // feet per minute
@@ -40,6 +42,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 290, // 800 to FL240
       maxCruise: 440,
       maxBelow10k: 250,
+      landing: 140,
     },
     climbRate: {
       initialClimb: 3000, // feet per minute
@@ -53,6 +56,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 300, // 800 to FL240
       maxCruise: 490,
       maxBelow10k: 250,
+      landing: 150,
     },
     climbRate: {
       initialClimb: 2200, // feet per minute, actual = 1500
@@ -66,6 +70,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 130, // 800 to FL240
       maxCruise: 160,
       maxBelow10k: 160,
+      landing: 70,
     },
     climbRate: {
       initialClimb: 800, // feet per minute
@@ -79,6 +84,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 230, // 800 to FL240
       maxCruise: 410,
       maxBelow10k: 250,
+      landing: 110,
     },
     climbRate: {
       initialClimb: 800, // feet per minute
@@ -92,6 +98,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 270, // 800 to FL240
       maxCruise: 410,
       maxBelow10k: 250,
+      landing: 120,
     },
     climbRate: {
       initialClimb: 2500, // feet per minute
@@ -105,6 +112,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 260, // 800 to FL240
       maxCruise: 440,
       maxBelow10k: 250,
+      landing: 130,
     },
     climbRate: {
       initialClimb: 4000, // feet per minute
@@ -118,6 +126,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 290, // 800 to FL240
       maxCruise: 430,
       maxBelow10k: 250,
+      landing: 130,
     },
     climbRate: {
       initialClimb: 2500, // feet per minute
@@ -131,6 +140,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 200, // 800 to FL240
       maxCruise: 230,
       maxBelow10k: 230,
+      landing: 100,
     },
     climbRate: {
       initialClimb: 2500, // feet per minute
@@ -144,6 +154,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 210, // 800 to FL240
       maxCruise: 270,
       maxBelow10k: 250,
+      landing: 120,
     },
     climbRate: {
       initialClimb: 3000, // feet per minute

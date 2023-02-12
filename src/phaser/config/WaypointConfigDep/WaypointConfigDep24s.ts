@@ -1,12 +1,12 @@
 import { AcType } from '../../types/AircraftTypes';
-import { MasterGameConfig } from '../MasterGameConfig';
+import { MasterGameOptions } from '../../MasterGameOptions';
 import { WP_LIST_DEP_COMMON } from './WaypointConfigDepCommon';
 import type {
   WaypointDataDep24s,
   WaypointDictDep24s,
 } from '../../types/WaypointTypesDep';
 
-const gameHeight = MasterGameConfig.height;
+const gameHeight = MasterGameOptions.height;
 
 export const WP_LIST_DEP_24s: WaypointDataDep24s[] = [
   ...WP_LIST_DEP_COMMON,

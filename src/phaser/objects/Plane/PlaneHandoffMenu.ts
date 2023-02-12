@@ -159,10 +159,6 @@ export default class PlaneHandoffMenu extends Phaser.GameObjects.Container {
           PhaserCustomEvents.HIDE_PLANE_BUTTON_CLICKED,
           this.Plane
         );
-        this.Plane.HistoryTrail.DotList.forEach((dot) => dot.setVisible(false));
-        this.Plane.HistoryTrail.IS_VISIBLE = false;
-        this.Plane.HistoryTrail.setVisible(false);
-        this.Plane.setVisible(false);
       }
     );
 

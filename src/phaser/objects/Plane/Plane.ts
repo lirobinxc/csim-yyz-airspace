@@ -30,6 +30,8 @@ import PlaneCjs from './PlaneCjs';
 import { TerminalPosition } from '../../types/SimTypes';
 import { getStarRoute } from '../../utils/getStarRoute';
 import { getBedpostOrigin } from '../../config/BedpostOrigins';
+import RunwayOrigins from '../../config/RunwayOrigins';
+import { convertPixelsToMiles } from '../../utils/convertPixelsToMiles';
 
 export default class Plane extends Phaser.GameObjects.Container {
   // Plane Properties
@@ -53,6 +55,7 @@ export default class Plane extends Phaser.GameObjects.Container {
   public ARR_APPROACH_CLEARANCE: boolean;
   public ARR_APPROACH_CLEARANCE_READ_BACK: boolean;
   public ARR_HAS_INTERCEPTED_LOC: boolean;
+  public DISTANCE_FROM_RUNWAY_THRESHOLD: number; // in miles
 
   // Parent scene
   public Scene: RadarScene;
@@ -94,6 +97,7 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.ARR_INTERCEPT_LOC_READ_BACK = false;
     this.ARR_APPROACH_CLEARANCE_READ_BACK = false;
     this.ARR_HAS_INTERCEPTED_LOC = false;
+    this.DISTANCE_FROM_RUNWAY_THRESHOLD = 9999; // in miles
 
     // Init: Name
     this.name = props.acId.code;
@@ -138,6 +142,14 @@ export default class Plane extends Phaser.GameObjects.Container {
 
     // Input: On click Symbol
     this.Symbol.on(DomEvents.POINTER_DOWN, (pointer: Phaser.Input.Pointer) => {
+      if (pointer.rightButtonDown()) return;
+      if (pointer.middleButtonDown()) {
+        this.scene.events.emit(
+          PhaserCustomEvents.HIDE_PLANE_BUTTON_CLICKED,
+          this
+        );
+      }
+
       if (!this.Scene.RBL_ACTIVATED_0 && !this.Scene.RBL_ACTIVATED_1) {
         this.Scene.events.emit(PhaserCustomEvents.PLANE_SELECTED, this);
         return;
@@ -151,8 +163,6 @@ export default class Plane extends Phaser.GameObjects.Container {
         this.Scene.events.emit(PhaserCustomEvents.RBL_PLANE_1_CLICKED, this);
         return;
       }
-
-      if (pointer.rightButtonDown()) return;
     });
 
     // Input: On hover over Symbol
@@ -167,6 +177,11 @@ export default class Plane extends Phaser.GameObjects.Container {
 
     // Debug
     this.onDebug();
+
+    // Sync update with FPS
+    this.scene.physics.world.on('worldstep', (dt: number) => {
+      this.updateDistanceFromRunwayThreshold();
+    });
   }
 
   preUpdate() {
@@ -440,6 +455,25 @@ export default class Plane extends Phaser.GameObjects.Container {
         symbolRightCenter.x + this.DEFAULT_DATATAG_SPACING,
         symbolRightCenter.y
       );
+    }
+  }
+
+  private updateDistanceFromRunwayThreshold() {
+    if (this.ARR_APPROACH_CLEARANCE) {
+      const planePosition = this.getPosition();
+      const runwayThreshold = new RunwayOrigins(this.Scene).getOrigin(
+        this.Properties.arrivalData.arrRunway
+      );
+
+      const distanceInPixels = Phaser.Math.Distance.BetweenPoints(
+        planePosition,
+        runwayThreshold
+      );
+      const distanceInMiles = convertPixelsToMiles(distanceInPixels);
+
+      // console.log(distanceInMiles);
+
+      this.DISTANCE_FROM_RUNWAY_THRESHOLD = distanceInMiles;
     }
   }
 

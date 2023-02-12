@@ -1,11 +1,11 @@
-import { MasterGameConfig } from '../config/MasterGameConfig';
+import { MasterGameOptions } from '../MasterGameOptions';
 import RadarScene from '../scenes/RadarScene';
 import { AssetKeys } from '../types/AssetKeys';
 import { DomEvents } from '../types/DomEvents';
 
 export default class OptionsSidebar extends Phaser.GameObjects.Layer {
   private DebugButton: Phaser.GameObjects.BitmapText;
-  private SpeedUpButton: Phaser.GameObjects.BitmapText;
+  private GameSpeedButton: Phaser.GameObjects.BitmapText;
 
   // Parent
   private Scene: RadarScene;
@@ -23,7 +23,7 @@ export default class OptionsSidebar extends Phaser.GameObjects.Layer {
       'Debug',
       FONT_SIZE
     );
-    this.SpeedUpButton = new Phaser.GameObjects.BitmapText(
+    this.GameSpeedButton = new Phaser.GameObjects.BitmapText(
       scene,
       0,
       0,
@@ -34,7 +34,7 @@ export default class OptionsSidebar extends Phaser.GameObjects.Layer {
 
     // Common setup
     this.add(this.DebugButton);
-    this.add(this.SpeedUpButton);
+    this.add(this.GameSpeedButton);
     this.scene.add.existing(this);
 
     // Setup: Buttons
@@ -54,12 +54,10 @@ export default class OptionsSidebar extends Phaser.GameObjects.Layer {
 
     // Setup: SpeedUp Button
     this.updateGameSpeedButton();
-    this.SpeedUpButton.setInteractive();
+  }
 
-    this.SpeedUpButton.on(DomEvents.POINTER_DOWN, () => {
-      this.incrementGameSpeed();
-      this.updateGameSpeedButton();
-    });
+  preUpdate() {
+    this.updateGameSpeedButton();
   }
 
   private genButtonText() {
@@ -67,22 +65,8 @@ export default class OptionsSidebar extends Phaser.GameObjects.Layer {
   }
 
   private updateGameSpeedButton() {
-    this.SpeedUpButton.setText(
+    this.GameSpeedButton.setText(
       `Game Speed: x${this.Scene.GAME_SPEED_MULTIPLIER}`
     );
-  }
-
-  private incrementGameSpeed() {
-    const multipliers = MasterGameConfig.speedMultipliers;
-
-    const currIdx = multipliers.findIndex(
-      (item) => item === this.Scene.GAME_SPEED_MULTIPLIER
-    );
-
-    if (multipliers.length === currIdx + 1) {
-      this.Scene.GAME_SPEED_MULTIPLIER = multipliers[0];
-    } else {
-      this.Scene.GAME_SPEED_MULTIPLIER = multipliers[currIdx + 1];
-    }
   }
 }

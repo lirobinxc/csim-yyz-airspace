@@ -2,7 +2,7 @@ import _, { sample } from 'lodash';
 import { AcType } from '../../../phaser/types/AircraftTypes';
 import { RadarSceneKeys } from '../../../phaser/types/SceneKeys';
 import { sidsCollection } from '../../data/sidsCollection';
-import { getSimOptions } from '../../state/genSimOptions';
+import { getSimOptions } from '../../state/getSimOptions';
 
 export enum StarName {
   BOXUM = 'BOXUM',

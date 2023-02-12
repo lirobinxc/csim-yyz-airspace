@@ -16,7 +16,7 @@ import {
 import { DepFDE, genDepFDE } from '../../functions/departure/genDepFDE';
 import { genSatFDE } from '../../functions/departure/genSatFDE';
 import { insertIntoArray } from '../../functions/insertIntoArray';
-import { getSimOptions } from '../genSimOptions';
+import { getSimOptions } from '../getSimOptions';
 import type { RootState } from '../store';
 import { SimOptions } from './simOptionsSlice';
 

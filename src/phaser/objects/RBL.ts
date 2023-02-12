@@ -2,6 +2,7 @@ import RadarScene from '../scenes/RadarScene';
 import { AssetKeys } from '../types/AssetKeys';
 import { ColorKeys } from '../types/ColorKeys';
 import { DomEvents } from '../types/DomEvents';
+import { convertPixelsToMiles } from '../utils/convertPixelsToMiles';
 import Plane from './Plane/Plane';
 
 export default class RBL extends Phaser.GameObjects.Layer {
@@ -63,11 +64,9 @@ export default class RBL extends Phaser.GameObjects.Layer {
   }
 
   private updateLabel() {
-    const PIXELS_PER_MILE = 18.83333;
-
     const rblLineGeom = this.Line.geom as Phaser.Geom.Line;
     const lengthInPixels = Phaser.Geom.Line.Length(rblLineGeom);
-    const lengthInMiles = lengthInPixels / PIXELS_PER_MILE;
+    const lengthInMiles = convertPixelsToMiles(lengthInPixels);
 
     this.Label.setText(`${lengthInMiles.toPrecision(3)}`);
 

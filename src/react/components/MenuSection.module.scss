@@ -102,6 +102,12 @@
       animation: blinker 1s linear infinite;
     }
 
+    .blinkingYellowBg {
+      background-color: darkorchid;
+
+      animation: blinker 0.5s linear infinite;
+    }
+
     // Arrival specific styles
     .arrHalfBoxMd {
       font-weight: bold;

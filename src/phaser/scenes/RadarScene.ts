@@ -31,7 +31,7 @@ import {
   defaultSimOptions,
   getSimOptions,
   LocalStorageKeys,
-} from '../../react/state/genSimOptions';
+} from '../../react/state/getSimOptions';
 import { SimOptions } from '../../react/state/slices/simOptionsSlice';
 import { WP_LIST_DEP_06s } from '../config/WaypointConfigDep/WaypointConfigDep06s';
 import { WP_LIST_DEP_24s } from '../config/WaypointConfigDep/WaypointConfigDep24s';
@@ -39,7 +39,7 @@ import { WP_LIST_DEP_33s } from '../config/WaypointConfigDep/WaypointConfigDep33
 import { WP_LIST_DEP_15s } from '../config/WaypointConfigDep/WaypointConfigDep15s';
 import { TerminalPosition } from '../types/SimTypes';
 import { WP_LIST_ARR_06s } from '../config/WaypointConfigArr/WaypointConfigArr06s';
-import { MasterGameConfig } from '../config/MasterGameConfig';
+import { MasterGameOptions } from '../MasterGameOptions';
 import { ArrFDE } from '../../react/functions/arrival/genArrFDE';
 import { genPlanePropsFromArrFDE } from '../utils/genPlanePropsFromArrFDE';
 import { ColorKeys } from '../types/ColorKeys';
@@ -60,6 +60,7 @@ export default class RadarScene extends Phaser.Scene {
   public SIM_OPTIONS: SimOptions;
   public IS_DEBUG_MODE: boolean;
   public GAME_SPEED_MULTIPLIER: number;
+  public FPS_SPEED_MULTIPLIER: number;
   public SHOW_EXTENDED_TAGS: boolean;
 
   public SELECTED_PLANE: Plane | null;
@@ -87,8 +88,9 @@ export default class RadarScene extends Phaser.Scene {
     this.RblCursorIcon = null;
 
     this.SIM_OPTIONS = getSimOptions();
-    this.IS_DEBUG_MODE = MasterGameConfig.isDebug;
+    this.IS_DEBUG_MODE = MasterGameOptions.isDebug;
     this.GAME_SPEED_MULTIPLIER = 1;
+    this.FPS_SPEED_MULTIPLIER = 1;
     this.SHOW_EXTENDED_TAGS = false;
 
     // Init: Template props
@@ -368,6 +370,18 @@ export default class RadarScene extends Phaser.Scene {
       this.RBL_ACTIVATED_1 = false;
     });
 
+    // On CustomPhaserEvent: RBL_PLANE_0_CLICKED, RBL_PLANE_1_CLICKED
+    // On Phaser event:
+    this.events.on(
+      PhaserCustomEvents.HIDE_PLANE_BUTTON_CLICKED,
+      (plane: Plane) => {
+        plane.HistoryTrail.DotList.forEach((dot) => dot.setVisible(false));
+        plane.HistoryTrail.IS_VISIBLE = false;
+        plane.HistoryTrail.setVisible(false);
+        plane.setVisible(false);
+      }
+    );
+
     // On React Event: Departure Mode - AIRBORNE
     this.events.on(ReactCustomEvents.AIRBORNE_DEP, (fde: DepFDE) => {
       const planeProps = genPlanePropsFromDepFDE(fde);
@@ -397,6 +411,20 @@ export default class RadarScene extends Phaser.Scene {
       this.scene.resume();
     });
 
+    // On React Event: GAME_SPEED_MULTIPLER_CHANGE
+    this.events.on(
+      ReactCustomEvents.GAME_SPEED_MULTIPLER_CHANGE,
+      (newMultiplier: number) => {
+        this.FPS_SPEED_MULTIPLIER = newMultiplier;
+
+        // We need this to prevent a sudden jump in aircraft location
+        // when FPS changes
+        setTimeout(() => {
+          this.GAME_SPEED_MULTIPLIER = newMultiplier;
+        }, 50);
+      }
+    );
+
     // TEMP: on physics update
     this.physics.world.on('worldstep', (dt: number) => {
       // console.log(dt);
@@ -407,6 +435,7 @@ export default class RadarScene extends Phaser.Scene {
     this.handleSpeechQueue();
     this.updateRBLs();
     this.toggleDebug();
+    this.updateFPS();
   }
 
   private resetRadar(radarScene: RadarSceneKeys) {
@@ -497,6 +526,16 @@ export default class RadarScene extends Phaser.Scene {
       } else {
         this.RblCursorIcon.setVisible(false);
       }
+    }
+  }
+
+  private updateFPS() {
+    if (this.FPS_SPEED_MULTIPLIER > 1) {
+      this.physics.world.setFPS(
+        MasterGameOptions.fps * this.FPS_SPEED_MULTIPLIER
+      );
+    } else {
+      this.physics.world.setFPS(MasterGameOptions.fps);
     }
   }
 

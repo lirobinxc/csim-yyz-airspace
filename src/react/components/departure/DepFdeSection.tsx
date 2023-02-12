@@ -39,6 +39,15 @@ const DepFdeSection = () => {
   });
   const [timeOfLastAirborneSatellite, setTimeOfLastAirborneSatellite] =
     useState(0);
+  const [updateInterval, setUpdateInterval] = useState(5000);
+
+  useEffect(() => {
+    if (simOptions.gameSpeedMultiplier > 1) {
+      setUpdateInterval(5000 / simOptions.gameSpeedMultiplier);
+    } else {
+      setUpdateInterval(5000);
+    }
+  }, [simOptions.gameSpeedMultiplier]);
 
   useMemo(() => {
     const RADAR_SCENE = PhaserGame.scene.keys[
@@ -219,22 +228,26 @@ const DepFdeSection = () => {
   }, [strips, processStrips]);
 
   // Interval: Add new Dep strip
-  useRandomInterval(() => {
-    if (simOptions.isPaused) return;
+  useRandomInterval(
+    () => {
+      if (simOptions.isPaused) return;
 
-    if (
-      stripList.readyNorthPanel.length < 3 ||
-      stripList.readySouthPanel.length < 3
-    ) {
-      dispatch(
-        departureListActions.addDepStrip({
-          radarScene: simOptions.radarScene,
-          isSingleOps: simOptions.isSingleOps,
-          prevFdeSidName: strips[strips.length - 1].sidName,
-        })
-      );
-    }
-  }, ...simOptions.newStripInterval);
+      if (
+        stripList.readyNorthPanel.length < 3 ||
+        stripList.readySouthPanel.length < 3
+      ) {
+        dispatch(
+          departureListActions.addDepStrip({
+            radarScene: simOptions.radarScene,
+            isSingleOps: simOptions.isSingleOps,
+            prevFdeSidName: strips[strips.length - 1].sidName,
+          })
+        );
+      }
+    },
+    simOptions.newStripInterval[0] / simOptions.gameSpeedMultiplier,
+    simOptions.newStripInterval[1] / simOptions.gameSpeedMultiplier
+  );
 
   // Interval: Add new Satellite strip
   useRandomInterval(
@@ -245,8 +258,10 @@ const DepFdeSection = () => {
         dispatch(departureListActions.addSatStrip(simOptions.radarScene));
       }
     },
-    simOptions.intervalBetweenSatelliteDeps * 0.25,
-    simOptions.intervalBetweenSatelliteDeps * 0.5
+    (simOptions.intervalBetweenSatelliteDeps * 0.25) /
+      simOptions.gameSpeedMultiplier,
+    (simOptions.intervalBetweenSatelliteDeps * 0.5) /
+      simOptions.gameSpeedMultiplier
   );
 
   // Interval: Move from panels READY N/S -> IN POSITION N/S
@@ -265,8 +280,8 @@ const DepFdeSection = () => {
         );
       }
     },
-    5_000,
-    20_000
+    updateInterval,
+    updateInterval * 4
   );
   useRandomInterval(
     () => {
@@ -283,8 +298,8 @@ const DepFdeSection = () => {
         );
       }
     },
-    5_000,
-    20_000
+    updateInterval,
+    updateInterval * 4
   );
 
   // Interval: (NORMAL) Move from panel IN POSITION -> AIRBORNE
@@ -298,7 +313,8 @@ const DepFdeSection = () => {
     if (currInPositionNFde) {
       if (
         currTime >
-        currInPositionNFde.inPositionTime + simOptions.intervalBetweenNormalDeps
+        currInPositionNFde.inPositionTime +
+          simOptions.intervalBetweenNormalDeps / simOptions.gameSpeedMultiplier
       ) {
         dispatch(
           departureListActions.setToAirborne(stripList.inPositionNorthPanel[0])
@@ -308,14 +324,15 @@ const DepFdeSection = () => {
     if (currInPositionSFde) {
       if (
         currTime >
-        currInPositionSFde.inPositionTime + simOptions.intervalBetweenNormalDeps
+        currInPositionSFde.inPositionTime +
+          simOptions.intervalBetweenNormalDeps / simOptions.gameSpeedMultiplier
       ) {
         dispatch(
           departureListActions.setToAirborne(stripList.inPositionSouthPanel[0])
         );
       }
     }
-  }, 5000);
+  }, updateInterval);
 
   // Interval: (VISUAL DEPS) Move from panel IN POSITION -> AIRBORNE
   useInterval(() => {
@@ -328,7 +345,8 @@ const DepFdeSection = () => {
     if (currInPositionNFde && currInPositionNFde.isVDP) {
       if (
         currTime >
-        currInPositionNFde.inPositionTime + simOptions.intervalBetweenVisualDeps
+        currInPositionNFde.inPositionTime +
+          simOptions.intervalBetweenVisualDeps / simOptions.gameSpeedMultiplier
       ) {
         dispatch(
           departureListActions.setToAirborne(stripList.inPositionNorthPanel[0])
@@ -338,14 +356,15 @@ const DepFdeSection = () => {
     if (currInPositionSFde && currInPositionSFde.isVDP) {
       if (
         currTime >
-        currInPositionSFde.inPositionTime + simOptions.intervalBetweenVisualDeps
+        currInPositionSFde.inPositionTime +
+          simOptions.intervalBetweenVisualDeps / simOptions.gameSpeedMultiplier
       ) {
         dispatch(
           departureListActions.setToAirborne(stripList.inPositionSouthPanel[0])
         );
       }
     }
-  }, 5000);
+  }, updateInterval);
 
   // Interval: Move from panel SATELLITE PENDING -> AIRBORNE
   useInterval(() => {
@@ -357,13 +376,15 @@ const DepFdeSection = () => {
     if (currSatPendingFde) {
       if (
         currTime >
-        timeOfLastAirborneSatellite + simOptions.intervalBetweenSatelliteDeps
+        timeOfLastAirborneSatellite +
+          simOptions.intervalBetweenSatelliteDeps /
+            simOptions.gameSpeedMultiplier
       ) {
         dispatch(departureListActions.setToAirborne(currSatPendingFde));
         setTimeOfLastAirborneSatellite(Date.now());
       }
     }
-  }, 5000);
+  }, updateInterval);
 
   return (
     <main className={styles.DepFdeSection}>

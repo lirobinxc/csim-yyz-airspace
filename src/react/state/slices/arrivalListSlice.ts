@@ -14,7 +14,7 @@ import { ArrBedpost } from '../../functions/arrival/genArrRoute';
 import { DepFDE } from '../../functions/departure/genDepFDE';
 import { genSatFDE } from '../../functions/departure/genSatFDE';
 import { insertIntoArray } from '../../functions/insertIntoArray';
-import { getSimOptions } from '../genSimOptions';
+import { getSimOptions } from '../getSimOptions';
 import type { RootState } from '../store';
 import { SimOptions } from './simOptionsSlice';
 
@@ -87,7 +87,7 @@ export const arrivalList = createSlice({
     },
     // Use the PayloadAction type to declare the contents of `action.payload`
     deleteStrip: (state, action: PayloadAction<ArrFDE>) => {
-      console.log('Removed', action.payload);
+      console.log('Removed', action.payload.acId);
       return state.filter(
         (item) => item.uniqueKey !== action.payload.uniqueKey
       );

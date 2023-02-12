@@ -53,6 +53,7 @@ export interface PlanePerformance {
     normalClimb: number; // 5000 to FL240
     maxCruise: number;
     maxBelow10k: number;
+    landing: number;
   };
   climbRate: {
     initialClimb: number;

@@ -1,6 +1,7 @@
 import { getRunwayHeading } from '../../config/RunwayHeadingConfig';
 import RadarScene from '../../scenes/RadarScene';
 import { AcType } from '../../types/AircraftTypes';
+import { PhaserCustomEvents } from '../../types/CustomEvents';
 import { TerminalPosition } from '../../types/SimTypes';
 import { WaypointDataArrAll } from '../../types/WaypointTypesArr';
 import { WaypointDataDepAll } from '../../types/WaypointTypesDep';
@@ -55,8 +56,12 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
       this.ifAbove5000();
     }
     if (isArrivalMode) {
-      this.interceptLocalizer();
       this.setNewArrivalHeadingToAssignedWp();
+      this.interceptLocalizer();
+      this.descendOnGlidePath();
+      this.deletePlaneIfLanded();
+
+      console.log(dt);
     }
 
     this.updateHeading(dt);
@@ -156,7 +161,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
       }
     }
 
-    const TURN_RATE_PER_SEC = 3; // degrees per second (Standard Rate Turn)
+    const TURN_RATE_PER_SEC = 3 * this.Scene.GAME_SPEED_MULTIPLIER; // degrees per second (Standard Rate Turn)
     const TURN_RATE_PER_MS = TURN_RATE_PER_SEC / 1000;
     const TURN_RATE_PER_FRAME = TURN_RATE_PER_MS * dt;
 
@@ -211,7 +216,9 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
       }
     }
 
-    let CLIMB_RATE_PER_SEC = this.Plane.Commands.climbRate.current / 60;
+    const CLIMB_RATE_PER_SEC =
+      (this.Plane.Commands.climbRate.current / 60) *
+      this.Scene.GAME_SPEED_MULTIPLIER;
 
     const CLIMB_RATE_PER_MS = CLIMB_RATE_PER_SEC / 1000;
     const CLIMB_RATE_PER_FRAME = CLIMB_RATE_PER_MS * dt;
@@ -243,7 +250,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
     if (speed.current === speed.assigned) return;
 
     // Logic: Buffer zone
-    const ACCEL_PER_SEC = acPerf.accel; // kts per second
+    const ACCEL_PER_SEC = acPerf.accel * this.Scene.GAME_SPEED_MULTIPLIER; // kts per second
     const ACCEL_PER_MS = ACCEL_PER_SEC / 1000;
     const ACCEL_PER_FRAME = ACCEL_PER_MS * dt;
 
@@ -298,7 +305,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
       return;
     }
 
-    const CLIMB_RATE_ACCEL_PER_SEC = 120;
+    const CLIMB_RATE_ACCEL_PER_SEC = 120 * this.Scene.GAME_SPEED_MULTIPLIER;
     const CLIMB_RATE_ACCEL_PER_MS = CLIMB_RATE_ACCEL_PER_SEC / 1000;
     const CLIMB_RATE_ACCEL_PER_FRAME = CLIMB_RATE_ACCEL_PER_MS * dt;
 
@@ -333,7 +340,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
 
     this.scene.physics.velocityFromRotation(
       headingInRadians,
-      asKnots(speed.current),
+      asKnots(speed.current * this.Scene.GAME_SPEED_MULTIPLIER),
       body.velocity
     );
   };
@@ -483,6 +490,45 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
         this.Plane.Commands.heading.current = runwayHeading;
         this.Plane.Commands.heading.directTo = null;
       }
+    }
+  }
+
+  private descendOnGlidePath() {
+    const distance = this.Plane.DISTANCE_FROM_RUNWAY_THRESHOLD;
+    const landingSpeed = this.Plane.Performance.speed.landing;
+
+    if (this.Plane.ARR_APPROACH_CLEARANCE) {
+      if (distance < 2) {
+        this.Plane.Commands.altitude.assigned = 600;
+        this.Plane.Commands.speed.assigned = landingSpeed;
+      } else if (distance < 4) {
+        this.Plane.Commands.altitude.assigned = 1000;
+        this.Plane.Commands.speed.assigned = landingSpeed + 10;
+      } else if (distance < 6) {
+        this.Plane.Commands.altitude.assigned = 1500;
+        this.Plane.Commands.speed.assigned = landingSpeed + 20;
+      } else if (distance < 8) {
+        this.Plane.Commands.altitude.assigned = 2000;
+      } else if (distance < 11) {
+        this.Plane.Commands.altitude.assigned = 3000;
+      } else if (distance < 14) {
+        this.Plane.Commands.altitude.assigned = 4000;
+      } else if (distance < 18) {
+        this.Plane.Commands.altitude.assigned = 5000;
+      }
+    }
+  }
+
+  private deletePlaneIfLanded() {
+    if (
+      this.Plane.ARR_APPROACH_CLEARANCE &&
+      this.Plane.DISTANCE_FROM_RUNWAY_THRESHOLD < 0.2 &&
+      this.Plane.Commands.altitude.current <= 600
+    ) {
+      this.scene.events.emit(
+        PhaserCustomEvents.HIDE_PLANE_BUTTON_CLICKED,
+        this.Plane
+      );
     }
   }
 }

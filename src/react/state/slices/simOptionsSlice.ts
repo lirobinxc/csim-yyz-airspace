@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { MasterGameOptions } from '../../../phaser/MasterGameOptions';
 import PhaserGame from '../../../phaser/PhaserGameConfig';
 import RadarScene from '../../../phaser/scenes/RadarScene';
 import { ReactCustomEvents } from '../../../phaser/types/CustomEvents';
@@ -14,11 +15,12 @@ import {
   defaultSimOptions,
   getSimOptions,
   LocalStorageKeys,
-} from '../genSimOptions';
+} from '../getSimOptions';
 
 import type { RootState } from '../store';
 
 export interface SimOptions {
+  gameSpeedMultiplier: number;
   radarScene: RadarSceneKeys;
   terminalPosition: TerminalPosition;
   startingCount: number;
@@ -115,6 +117,35 @@ export const simOptions = createSlice({
     unpauseSim: (state) => {
       unpausePhaser();
       const newOptions: SimOptions = { ...state, isPaused: false };
+      return newOptions;
+    },
+    cycleGameSpeed: (state) => {
+      const multipliers = MasterGameOptions.speedMultipliers;
+
+      const currIdx = multipliers.findIndex(
+        (item) => item === state.gameSpeedMultiplier
+      );
+
+      let newMultiplier: number;
+
+      if (multipliers.length === currIdx + 1) {
+        newMultiplier = multipliers[0];
+      } else {
+        newMultiplier = multipliers[currIdx + 1];
+      }
+
+      const RADAR_SCENE = PhaserGame.scene.keys[
+        OtherSceneKeys.RADAR_BASE
+      ] as RadarScene;
+      RADAR_SCENE.events.emit(
+        ReactCustomEvents.GAME_SPEED_MULTIPLER_CHANGE,
+        newMultiplier
+      );
+
+      const newOptions: SimOptions = {
+        ...state,
+        gameSpeedMultiplier: newMultiplier,
+      };
       return newOptions;
     },
     resetLocalStorageToDefaults: () => {

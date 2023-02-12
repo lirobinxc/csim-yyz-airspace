@@ -8,6 +8,7 @@ export enum LocalStorageKeys {
 }
 
 export const defaultSimOptions: SimOptions = {
+  gameSpeedMultiplier: 1,
   radarScene: RadarSceneKeys.RADAR_06s,
   terminalPosition: TerminalPosition.ARRIVAL,
   startingCount: 4,

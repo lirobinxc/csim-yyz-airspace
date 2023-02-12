@@ -1,5 +1,5 @@
 import { ArrBedpost } from '../../react/functions/arrival/genArrRoute';
-import { MasterGameConfig } from './MasterGameConfig';
+import { MasterGameOptions } from '../MasterGameOptions';
 
 export function getBedpostOrigin(arrBedpost: ArrBedpost) {
   const relativeBedpostOrigins = {
@@ -10,5 +10,5 @@ export function getBedpostOrigin(arrBedpost: ArrBedpost) {
     [ArrBedpost.RAGID]: new Phaser.Math.Vector2(1, 0.314),
   };
 
-  return relativeBedpostOrigins[arrBedpost].scale(MasterGameConfig.height);
+  return relativeBedpostOrigins[arrBedpost].scale(MasterGameOptions.height);
 }
