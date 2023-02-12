@@ -29,10 +29,6 @@ import { getSatRoute } from '../../utils/getSatRoute';
 import PlaneCjs from './PlaneCjs';
 import { TerminalPosition } from '../../types/SimTypes';
 import { getStarRoute } from '../../utils/getStarRoute';
-import {
-  ArrBedpost,
-  StarName,
-} from '../../../react/functions/arrival/genArrRoute';
 import { getBedpostOrigin } from '../../config/BedpostOrigins';
 
 export default class Plane extends Phaser.GameObjects.Container {
@@ -62,7 +58,7 @@ export default class Plane extends Phaser.GameObjects.Container {
   public Scene: RadarScene;
 
   // Subcomponents
-  private Symbol: PlaneSymbol;
+  public Symbol: PlaneSymbol;
   public CJS: PlaneCjs;
   public DataTag: PlaneDataTag;
   private TagLine: PlaneDataTagLine;
@@ -142,7 +138,19 @@ export default class Plane extends Phaser.GameObjects.Container {
 
     // Input: On click Symbol
     this.Symbol.on(DomEvents.POINTER_DOWN, (pointer: Phaser.Input.Pointer) => {
-      this.Scene.events.emit(PhaserCustomEvents.PLANE_SELECTED, this);
+      if (!this.Scene.RBL_ACTIVATED_0 && !this.Scene.RBL_ACTIVATED_1) {
+        this.Scene.events.emit(PhaserCustomEvents.PLANE_SELECTED, this);
+        return;
+      }
+
+      if (this.Scene.RBL_ACTIVATED_0) {
+        this.Scene.events.emit(PhaserCustomEvents.RBL_PLANE_0_CLICKED, this);
+        return;
+      }
+      if (this.Scene.RBL_ACTIVATED_1) {
+        this.Scene.events.emit(PhaserCustomEvents.RBL_PLANE_1_CLICKED, this);
+        return;
+      }
 
       if (pointer.rightButtonDown()) return;
     });

@@ -45,6 +45,7 @@ import { genPlanePropsFromArrFDE } from '../utils/genPlanePropsFromArrFDE';
 import { ColorKeys } from '../types/ColorKeys';
 import { RunwayLocalizers } from '../config/RunwayLocalizers';
 import CursorHalo from '../objects/CursorHalo';
+import RBL from '../objects/RBL';
 
 export default class RadarScene extends Phaser.Scene {
   public Waypoints: Waypoint[];
@@ -54,6 +55,7 @@ export default class RadarScene extends Phaser.Scene {
   public Speech: SpeechSynth;
   private SpeechQueue: { text: string; plane: Plane; isCheckIn: boolean }[];
   private FiledRouteLine: FiledRouteLine | null;
+  private RblCursorIcon: Phaser.GameObjects.BitmapText | null;
 
   public SIM_OPTIONS: SimOptions;
   public IS_DEBUG_MODE: boolean;
@@ -61,6 +63,9 @@ export default class RadarScene extends Phaser.Scene {
 
   public SELECTED_PLANE: Plane | null;
   public CURRENTLY_SPEAKING_PLANE: Plane | null;
+  public NEW_RBL: [Plane | null, Plane | null];
+  public RBL_ACTIVATED_0: boolean;
+  public RBL_ACTIVATED_1: boolean;
 
   // Template props
   public SCENE_KEY: RadarSceneKeys;
@@ -78,6 +83,7 @@ export default class RadarScene extends Phaser.Scene {
     this.Speech = new SpeechSynth();
     this.SpeechQueue = [];
     this.FiledRouteLine = null;
+    this.RblCursorIcon = null;
 
     this.IS_DEBUG_MODE = MasterGameConfig.isDebug;
     this.SIM_OPTIONS = getSimOptions();
@@ -90,6 +96,9 @@ export default class RadarScene extends Phaser.Scene {
     // Init: Constants
     this.SELECTED_PLANE = null;
     this.CURRENTLY_SPEAKING_PLANE = null;
+    this.NEW_RBL = [null, null];
+    this.RBL_ACTIVATED_0 = false;
+    this.RBL_ACTIVATED_1 = false;
   }
 
   init() {
@@ -206,6 +215,25 @@ export default class RadarScene extends Phaser.Scene {
     // Create: Developer components
     new PointerCoordinateLogger(this);
 
+    // Create: RBL Cursor
+    this.RblCursorIcon = new Phaser.GameObjects.BitmapText(
+      this,
+      0,
+      0,
+      AssetKeys.FONT_DEJAVU_MONO_BOLD,
+      'RBL'
+    );
+    this.add.existing(this.RblCursorIcon);
+    this.RblCursorIcon.setOrigin(0.5, 1.2)
+      .setFontSize(14)
+      .setTint(ColorKeys.LIGHT_BLUE)
+      .setVisible(false);
+    this.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
+      if (this.RblCursorIcon) {
+        this.RblCursorIcon.setPosition(pointer.x, pointer.y);
+      }
+    });
+
     // TEMP Create: Runway FINAL line for intercepts
     // TEMP: Cursor Halo
     if (this.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL) {
@@ -310,6 +338,34 @@ export default class RadarScene extends Phaser.Scene {
       }
     });
 
+    // Input: On press ESC key, exit certain functions
+    this.input.keyboard.on('keydown-ESC', () => {
+      this.NEW_RBL = [null, null];
+      this.RBL_ACTIVATED_0 = false;
+      this.RBL_ACTIVATED_1 = false;
+    });
+
+    // Input: On press F2 key, activate RBL function
+    this.input.keyboard.on('keydown-F2', () => {
+      if (!this.RBL_ACTIVATED_0 && !this.RBL_ACTIVATED_1) {
+        this.NEW_RBL = [null, null];
+        this.RBL_ACTIVATED_0 = true;
+        this.RBL_ACTIVATED_1 = false;
+      }
+    });
+
+    // On CustomPhaserEvent: RBL_PLANE_0_CLICKED, RBL_PLANE_1_CLICKED
+    this.events.on(PhaserCustomEvents.RBL_PLANE_0_CLICKED, (plane: Plane) => {
+      this.NEW_RBL[0] = plane;
+      this.RBL_ACTIVATED_0 = false;
+      this.RBL_ACTIVATED_1 = true;
+    });
+    this.events.on(PhaserCustomEvents.RBL_PLANE_1_CLICKED, (plane: Plane) => {
+      this.NEW_RBL[1] = plane;
+      this.RBL_ACTIVATED_0 = false;
+      this.RBL_ACTIVATED_1 = false;
+    });
+
     // On React Event: Departure Mode - AIRBORNE
     this.events.on(ReactCustomEvents.AIRBORNE_DEP, (fde: DepFDE) => {
       const planeProps = genPlanePropsFromDepFDE(fde);
@@ -338,10 +394,16 @@ export default class RadarScene extends Phaser.Scene {
     this.events.on(ReactCustomEvents.UNPAUSE, () => {
       this.scene.resume();
     });
+
+    // TEMP: on physics update
+    this.physics.world.on('worldstep', (dt: number) => {
+      // console.log(dt);
+    });
   }
 
   update() {
     this.handleSpeechQueue();
+    this.updateRBLs();
     this.toggleDebug();
   }
 
@@ -398,7 +460,7 @@ export default class RadarScene extends Phaser.Scene {
     this.Speech.speak(finalSpokenSentence, currSpeechData.plane);
   }
 
-  elevateWaypointsIfDirectToCommandIsSelected() {
+  private elevateWaypointsIfDirectToCommandIsSelected() {
     if (this.SELECTED_PLANE) {
       if (this.SELECTED_PLANE.IS_PENDING_DIRECT_TO_COMMAND) {
         this.Waypoints.forEach((wp) => {
@@ -410,6 +472,29 @@ export default class RadarScene extends Phaser.Scene {
       this.Waypoints.forEach((wp) => {
         wp.setDepth(1);
       });
+    }
+  }
+
+  private updateRBLs() {
+    if (this.NEW_RBL[0] && this.NEW_RBL[1]) {
+      if (
+        this.NEW_RBL[0].Properties.acId.code !==
+        this.NEW_RBL[1].Properties.acId.code
+      ) {
+        new RBL(this, this.NEW_RBL[0], this.NEW_RBL[1]);
+        console.log('New RBL created');
+      }
+      this.NEW_RBL = [null, null];
+    }
+
+    if (this.RblCursorIcon) {
+      if (this.RBL_ACTIVATED_0) {
+        this.RblCursorIcon.setVisible(true).setText('RBL 1');
+      } else if (this.RBL_ACTIVATED_1) {
+        this.RblCursorIcon.setVisible(true).setText('RBL 2');
+      } else {
+        this.RblCursorIcon.setVisible(false);
+      }
     }
   }
 

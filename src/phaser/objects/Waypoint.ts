@@ -55,8 +55,7 @@ export default class Waypoint extends Phaser.GameObjects.Arc {
     this.Label.setOrigin(0.5, 1);
 
     // Setup: Debug
-    const colorPink = ColorKeys.DEBUG_PINK;
-    scene.input.enableDebug(this, colorPink);
+    scene.input.enableDebug(this, ColorKeys.DEBUG_PINK);
 
     // Input: Toggle display name
     this.on(DomEvents.POINTER_DOWN, () => {

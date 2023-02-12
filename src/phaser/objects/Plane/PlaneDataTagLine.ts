@@ -42,9 +42,6 @@ export default class PlaneDataTagLine extends Phaser.GameObjects.Container {
 
     // Setup: Default line style
     this.updateDefaultLinePosition();
-
-    // Setup: Custom line style
-    // TODO
   }
 
   preUpdate() {
