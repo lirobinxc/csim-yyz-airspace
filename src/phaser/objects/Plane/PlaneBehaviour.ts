@@ -60,8 +60,6 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
       this.interceptLocalizer();
       this.descendOnGlidePath();
       this.deletePlaneIfLanded();
-
-      console.log(dt);
     }
 
     this.updateHeading(dt);
@@ -499,13 +497,11 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
 
     if (this.Plane.ARR_APPROACH_CLEARANCE) {
       if (distance < 2) {
-        this.Plane.Commands.altitude.assigned = 600;
         this.Plane.Commands.speed.assigned = landingSpeed;
       } else if (distance < 4) {
-        this.Plane.Commands.altitude.assigned = 1000;
         this.Plane.Commands.speed.assigned = landingSpeed + 10;
       } else if (distance < 6) {
-        this.Plane.Commands.altitude.assigned = 1500;
+        this.Plane.Commands.altitude.assigned = 600;
         this.Plane.Commands.speed.assigned = landingSpeed + 20;
       } else if (distance < 8) {
         this.Plane.Commands.altitude.assigned = 2000;
@@ -523,7 +519,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
     if (
       this.Plane.ARR_APPROACH_CLEARANCE &&
       this.Plane.DISTANCE_FROM_RUNWAY_THRESHOLD < 0.2 &&
-      this.Plane.Commands.altitude.current <= 600
+      this.Plane.Commands.altitude.current <= 1000
     ) {
       this.scene.events.emit(
         PhaserCustomEvents.HIDE_PLANE_BUTTON_CLICKED,

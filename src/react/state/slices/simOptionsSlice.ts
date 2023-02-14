@@ -20,6 +20,7 @@ import {
 import type { RootState } from '../store';
 
 export interface SimOptions {
+  appVersion: string;
   gameSpeedMultiplier: number;
   radarScene: RadarSceneKeys;
   terminalPosition: TerminalPosition;

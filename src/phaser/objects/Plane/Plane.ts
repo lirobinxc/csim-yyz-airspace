@@ -32,6 +32,10 @@ import { getStarRoute } from '../../utils/getStarRoute';
 import { getBedpostOrigin } from '../../config/BedpostOrigins';
 import RunwayOrigins from '../../config/RunwayOrigins';
 import { convertPixelsToMiles } from '../../utils/convertPixelsToMiles';
+import {
+  ArrBoxDimensions,
+  isPlaneInsideArrBox,
+} from '../../utils/isPlaneInsideArrBox';
 
 export default class Plane extends Phaser.GameObjects.Container {
   // Plane Properties
@@ -178,9 +182,29 @@ export default class Plane extends Phaser.GameObjects.Container {
     // Debug
     this.onDebug();
 
+    // TEMP
+
+    const polygon = ArrBoxDimensions[this.Scene.SCENE_KEY];
+
+    const graphics = this.scene.add.graphics({ x: 0, y: 0 });
+
+    graphics.lineStyle(2, 0x00aa00);
+
+    graphics.beginPath();
+
+    graphics.moveTo(polygon.points[0].x, polygon.points[0].y);
+
+    for (var i = 1; i < polygon.points.length; i++) {
+      graphics.lineTo(polygon.points[i].x, polygon.points[i].y);
+    }
+
+    graphics.closePath();
+    graphics.strokePath();
+
     // Sync update with FPS
     this.scene.physics.world.on('worldstep', (dt: number) => {
       this.updateDistanceFromRunwayThreshold();
+      // console.log(isPlaneInsideArrBox(this)); // TEMP
     });
   }
 

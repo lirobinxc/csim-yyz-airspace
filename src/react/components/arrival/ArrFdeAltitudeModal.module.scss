@@ -1,0 +1,45 @@
+@import '../../../variables.scss';
+
+.ArrFdeAltitudeModal {
+  position: absolute;
+  // left: -200%;
+  bottom: 1rem;
+  z-index: 999;
+
+  .content {
+    display: flex;
+    flex-direction: column;
+
+    // height: 8rem;
+    padding: 0.5rem;
+
+    border: 1px solid grey;
+
+    background: lightgray;
+
+    button {
+      z-index: 20;
+
+      margin: 0.25rem;
+
+      font-weight: bold;
+      font-size: $fontSizeXl;
+
+      cursor: pointer;
+    }
+  }
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    background: rgba(255, 255, 255, 0);
+  }
+}
+
+.displayNone {
+  display: none;
+}

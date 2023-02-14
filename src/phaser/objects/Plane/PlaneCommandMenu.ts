@@ -18,6 +18,15 @@ export enum PlaneCommandMenuButtons {
   APPROACH_CLEARANCE = 'APPR CLR ',
 }
 
+export interface PlaneCommandCue {
+  directTo: WaypointDataDepAll | null;
+  heading: number | null;
+  altitude: number | null; // ie 80, 150, 230
+  speed: number | null; // knots
+  interceptLoc: boolean;
+  approachClearance: boolean;
+}
+
 export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
   public SELECTED_BUTTON: Phaser.GameObjects.BitmapText | null;
 
@@ -30,14 +39,7 @@ export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
   // Timer to allow chaining commands
   private COMMAND_CUE_TIME_LIMIT: number; // ms
   private TIMER_START: number;
-  public COMMAND_CUE: {
-    directTo: WaypointDataDepAll | null;
-    heading: number | null;
-    altitude: number | null;
-    speed: number | null; // knots
-    interceptLoc: boolean;
-    approachClearance: boolean;
-  };
+  public COMMAND_CUE: PlaneCommandCue;
 
   // Parent component
   private Plane: Plane;
@@ -317,7 +319,7 @@ export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
   }
 
   preUpdate() {
-    this.sendCommandCue();
+    this.sendCommandCue(false);
 
     this.ifPlaneIsSelected();
     this.ifDirectToCommandIsSelected();
@@ -333,13 +335,13 @@ export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
     }
   }
 
-  private sendCommandCue() {
+  private sendCommandCue(forceSend: boolean) {
     if (this.SELECTED_BUTTON) return; // pause sending commands if a button is active
 
     const currentTime = this.scene.time.now;
     const timeDiff = currentTime - this.TIMER_START;
 
-    if (timeDiff > this.COMMAND_CUE_TIME_LIMIT) {
+    if (forceSend || timeDiff > this.COMMAND_CUE_TIME_LIMIT) {
       if (this.COMMAND_CUE.directTo) {
         this.Plane.commandDirectTo(this.COMMAND_CUE.directTo);
         this.COMMAND_CUE.directTo = null;

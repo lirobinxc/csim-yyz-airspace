@@ -147,61 +147,7 @@ $babyblue: #c1e9f9;
     }
 
     .assignedAlt {
-      // width: 18%;
       font-size: $fontSizeXl;
-
-      cursor: pointer;
-    }
-
-    .altModalWrapper {
-      .altModalContent {
-        position: absolute;
-        left: -200%;
-        bottom: 0;
-        z-index: 999;
-
-        display: flex;
-        flex-direction: column;
-
-        height: 8rem;
-        padding: 0.5rem;
-
-        border: 1px solid grey;
-
-        background: lightgray;
-
-        .row1 {
-          margin-bottom: 1rem;
-          @include flexCenterHorizontal();
-          @include flexCenterVertical();
-        }
-
-        .row2 {
-          display: flex;
-          flex-direction: row;
-          @include flexCenterHorizontal();
-
-          button {
-            margin: 0.25rem;
-
-            font-weight: bold;
-            font-size: $fontSizeXl;
-
-            cursor: pointer;
-          }
-        }
-      }
-
-      .altModalOverlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        z-index: 9;
-
-        background: rgba(255, 255, 255, 0);
-      }
     }
   }
 
@@ -210,6 +156,10 @@ $babyblue: #c1e9f9;
     border-right: $borderThin;
     @include flexCenterHorizontal();
     @include flexCenterVertical();
+
+    &:hover {
+      background-color: darkgray;
+    }
 
     .assignedSpeed {
       padding: $spacingMd;
@@ -220,6 +170,10 @@ $babyblue: #c1e9f9;
 
   .col6 {
     width: 3rem;
+
+    .assignedHeading {
+      font-size: $fontSizeSm;
+    }
   }
 
   .col7 {

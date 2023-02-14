@@ -46,6 +46,7 @@ import { ColorKeys } from '../types/ColorKeys';
 import { RunwayLocalizers } from '../config/RunwayLocalizers';
 import CursorHalo from '../objects/CursorHalo';
 import RBL from '../objects/RBL';
+import { WP_LIST_ARR_24s } from '../config/WaypointConfigArr/WaypointConfigArr24s';
 
 export default class RadarScene extends Phaser.Scene {
   public Waypoints: Waypoint[];
@@ -203,6 +204,11 @@ export default class RadarScene extends Phaser.Scene {
             this.Waypoints.push(new Waypoint(this, waypointData));
           });
           break;
+        case RadarSceneKeys.RADAR_24s:
+          WP_LIST_ARR_24s.forEach((waypointData) => {
+            this.Waypoints.push(new Waypoint(this, waypointData));
+          });
+          break;
         default:
           throw new Error(
             `There is a problem with the SCENE_KEY provided for the RadarScene: ${this.SCENE_KEY}`
@@ -244,10 +250,6 @@ export default class RadarScene extends Phaser.Scene {
       new CursorHalo(this);
 
       this.Localizers = new RunwayLocalizers(this);
-      // const line = finalLine.geom as Phaser.Geom.Line;
-      // const point = new Phaser.Geom.Point(0, 0);
-      // point.setTo();
-      // Phaser.Geom.Intersects.PointToLine(point, line);
     }
 
     // this.cameras.main.setZoom(1.4);

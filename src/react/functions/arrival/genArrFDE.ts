@@ -64,7 +64,6 @@ export interface ArrFDE {
   assignedHeading: WaypointDataArrAll;
   assignedSpeed: number;
   debugACID: ACID;
-  downwind: ArrivalPosition;
   ETA: string;
   handoffSector: AdjacentSectors;
   isQ400: boolean;

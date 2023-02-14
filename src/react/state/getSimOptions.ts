@@ -1,3 +1,4 @@
+import { MasterGameOptions } from '../../phaser/MasterGameOptions';
 import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
 import { TerminalPosition } from '../../phaser/types/SimTypes';
 import { ArrBedpost } from '../functions/arrival/genArrRoute';
@@ -8,6 +9,7 @@ export enum LocalStorageKeys {
 }
 
 export const defaultSimOptions: SimOptions = {
+  appVersion: MasterGameOptions.appVersion,
   gameSpeedMultiplier: 1,
   radarScene: RadarSceneKeys.RADAR_06s,
   terminalPosition: TerminalPosition.ARRIVAL,
@@ -42,8 +44,10 @@ export function getSimOptions(): SimOptions {
   const storedSimOptions: SimOptions =
     storedOptionsStr && JSON.parse(storedOptionsStr);
 
-  // Checks if new property exists
-  if (storedSimOptions && typeof storedSimOptions.isModalOpen === 'boolean') {
+  if (
+    storedSimOptions &&
+    storedSimOptions.appVersion === MasterGameOptions.appVersion
+  ) {
     console.log('Retrieved localStorage SimOptions.');
 
     return storedSimOptions;

@@ -17,6 +17,12 @@ interface MenuSectionProps {
   appVersion: string;
 }
 
+const ATIS = _.sample(
+  'A B C D E F G H I J K L M N O P Q R S T U V W X Y Z'.split(' ')
+);
+
+const ALTIMETER = _.random(2985, 3006);
+
 const MenuSection = ({ appVersion }: MenuSectionProps) => {
   const dispatch = useAppDispatch();
   const simOptions = useAppSelector(selectSimOptions);
@@ -170,13 +176,9 @@ const MenuSection = ({ appVersion }: MenuSectionProps) => {
           </div>
         </div>
         <div className={clsx(styles.spacing, styles.arrAltimeter)}>
-          {_.random(2985, 3006)}
+          {ALTIMETER}
         </div>
-        <div className={clsx(styles.spacing, styles.arrAtis)}>
-          {_.sample(
-            'A B C D E F G H I J K L M N O P Q R S T U V W X Y Z'.split(' ')
-          )}
-        </div>
+        <div className={clsx(styles.spacing, styles.arrAtis)}>{ATIS}</div>
         <div>
           <div
             className={clsx(styles.spacing, styles.arrHalfBoxMd, styles.bgGrey)}

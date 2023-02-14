@@ -1,0 +1,76 @@
+@import '../../variables.scss';
+
+@mixin on-circle($item-count, $circle-size, $item-size) {
+  position: relative;
+  width: $circle-size;
+  height: $circle-size;
+  padding: 0;
+  // border-radius: 50%;
+
+  > * {
+    display: block;
+    position: absolute;
+    // top: 50%;
+    // left: 50%;
+    width: $item-size;
+    height: $item-size - 0.5rem;
+    margin: -($item-size / 2);
+
+    $angle: (360 / $item-count);
+    $rot: 0;
+
+    @for $i from 1 through $item-count {
+      &:nth-of-type(#{$i}) {
+        transform: rotate($rot * 1deg)
+          translate($circle-size / 2)
+          rotate($rot * -1deg);
+      }
+
+      $rot: $rot + $angle;
+    }
+  }
+}
+
+.FdeHeadingModal {
+  position: absolute;
+  bottom: 1rem;
+  z-index: 999;
+
+  .content {
+    @include on-circle($item-count: 36, $circle-size: 25em, $item-size: 3rem);
+
+    border: 2px solid red;
+
+    // display: flex;
+    // flex-direction: column;
+
+    // padding: 0.5rem;
+
+    // border: 1px solid grey;
+
+    // background: lightgray;
+
+    button {
+      z-index: 20;
+
+      font-weight: bold;
+      font-size: $fontSizeLg;
+
+      cursor: pointer;
+    }
+  }
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    background: rgba(255, 255, 255, 0);
+  }
+}
+
+.displayNone {
+  display: none;
+}

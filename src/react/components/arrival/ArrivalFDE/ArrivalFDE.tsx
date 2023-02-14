@@ -11,6 +11,10 @@ import {
 } from '../../../state/slices/simOptionsSlice';
 import { ArrFDE } from '../../../functions/arrival/genArrFDE';
 import { arrivalListActions } from '../../../state/slices/arrivalListSlice';
+import ArrFdeAltitudeModal from '../ArrFdeAltitudeModal';
+import { PlaneCommands } from '../../../../phaser/types/PlaneInterfaces';
+import { AtcInstruction } from '../../../../phaser/types/PlaneCommandTypes';
+import FdeHeadingModal from '../../FdeHeadingModal';
 
 function ArrivalFDE(props: ArrFDE) {
   const {
@@ -36,11 +40,10 @@ function ArrivalFDE(props: ArrFDE) {
   const dispatch = useAppDispatch();
   const simOptions = useAppSelector(selectSimOptions);
   const [currentAlt, setCurrentAlt] = useState(assignedAlt);
+  const [currentHeading, setCurrentHeading] = useState<number | null>(null);
   const [currentSpeed, setCurrentSpeed] = useState(assignedSpeed);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [onCourse, setOnCourse] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState<AtcInstruction | null>(null);
   const [stripIsSelected, setStripIsSelected] = useState(false);
-  const [isCommSwitched, setIsCommSwitched] = useState(false);
 
   function handleClickAlt() {
     if (currentAlt - 10 < 30) {
@@ -51,11 +54,12 @@ function ArrivalFDE(props: ArrFDE) {
     setCurrentAlt(currentAlt - 10);
   }
 
-  function openModal() {
-    setIsModalOpen(true);
+  function openModal(name: AtcInstruction) {
+    setModalIsOpen(name);
+    console.log('opening modal', name);
   }
   function closeModal() {
-    setIsModalOpen(false);
+    setModalIsOpen(null);
   }
 
   function deleteStrip() {
@@ -115,114 +119,19 @@ function ArrivalFDE(props: ArrFDE) {
       <div className={clsx(styles.col3)} onClick={handleClickAlt}>
         <img src={downArrow} className={styles.arrowPng} alt="downArrow" />
       </div>
-      <div className={clsx(styles.col4)}>
-        <aside
-          className={clsx(styles.altModalWrapper, {
-            [styles.displayNone]: !isModalOpen,
-          })}
-        >
-          <div className={clsx(styles.altModalContent)}>
-            <div className={styles.row1}>
-              <button
-                onClick={() => {
-                  setCurrentAlt(assignedAlt);
-                  closeModal();
-                }}
-              >
-                Reset
-              </button>
-            </div>
-            <div className={styles.row2}>
-              <button
-                onClick={() => {
-                  setCurrentAlt(110);
-                  closeModal();
-                }}
-              >
-                110
-              </button>
-              <button
-                onClick={() => {
-                  setCurrentAlt(100);
-                  closeModal();
-                }}
-              >
-                100
-              </button>
-              <button
-                onClick={() => {
-                  setCurrentAlt(90);
-                  closeModal();
-                }}
-              >
-                90
-              </button>
-              <button
-                onClick={() => {
-                  setCurrentAlt(80);
-                  closeModal();
-                }}
-              >
-                80
-              </button>
-              <button
-                onClick={() => {
-                  setCurrentAlt(70);
-                  closeModal();
-                }}
-              >
-                70
-              </button>
-            </div>
-            <div className={styles.row2}>
-              <button
-                onClick={() => {
-                  setCurrentAlt(60);
-                  closeModal();
-                }}
-              >
-                60
-              </button>
-              <button
-                onClick={() => {
-                  setCurrentAlt(50);
-                  closeModal();
-                }}
-              >
-                50
-              </button>
-              <button
-                onClick={() => {
-                  setCurrentAlt(40);
-                  closeModal();
-                }}
-              >
-                40
-              </button>
-              <button
-                onClick={() => {
-                  setCurrentAlt(30);
-                  closeModal();
-                }}
-              >
-                30
-              </button>
-              <button
-                onClick={() => {
-                  setCurrentAlt(0);
-                  closeModal();
-                }}
-              >
-                A
-              </button>
-            </div>
-          </div>
-          <div
-            className={clsx(styles.altModalOverlay)}
-            onClick={closeModal}
-          ></div>
-        </aside>
-        <div className={clsx(styles.assignedAlt)} onClick={openModal}>
+      <div
+        className={clsx(styles.col4)}
+        onClick={() =>
+          modalIsOpen ? closeModal() : openModal(AtcInstruction.ALTITUDE)
+        }
+      >
+        <ArrFdeAltitudeModal
+          altitudes={[120, 110, 100, 90, 80, 70, 60, 50, 40, 30, 0]}
+          isVisible={modalIsOpen === AtcInstruction.ALTITUDE}
+          onAltitudeClick={(alt) => setCurrentAlt(alt)}
+          onCloseModal={closeModal}
+        />
+        <div className={clsx(styles.assignedAlt)}>
           {currentAlt >= 30 ? currentAlt : 'A'}
         </div>
       </div>
@@ -231,7 +140,19 @@ function ArrivalFDE(props: ArrFDE) {
           {currentSpeed === assignedSpeed ? 'RNAV' : currentSpeed}
         </div>
       </div>
-      <div className={clsx(styles.col6)}></div>
+      <div
+        className={clsx(styles.col6)}
+        onClick={() =>
+          modalIsOpen ? closeModal() : openModal(AtcInstruction.HEADING)
+        }
+      >
+        <FdeHeadingModal
+          isVisible={modalIsOpen === AtcInstruction.HEADING}
+          onHeadingClick={(hdg) => setCurrentHeading(hdg)}
+          onCloseModal={closeModal}
+        />
+        <div className={clsx(styles.assignedHeading)}>{currentHeading}</div>
+      </div>
       <div className={clsx(styles.col7)}>
         <div className={clsx(styles.topBox)}>
           <div className={clsx(styles.transponderCode)}>{transponderCode}</div>
