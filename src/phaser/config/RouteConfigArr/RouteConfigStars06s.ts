@@ -4,7 +4,7 @@ import {
 } from '../../../react/functions/arrival/genArrRoute';
 import { WaypointDataArr06s } from '../../types/WaypointTypesArr';
 import { WP_DICT_ARR_06s } from '../WaypointConfigArr/WaypointConfigArr06s';
-import { ArrivalPosition } from '../../../react/functions/arrival/arrivalTypes';
+import { ArrivalPosition } from '../../types/ArrivalTypes';
 
 const boxumDuvos = [
   // WP_DICT_ARR_06s.BOXUM,

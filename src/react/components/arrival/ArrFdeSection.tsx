@@ -11,7 +11,7 @@ import {
 } from '../../state/slices/arrivalListSlice';
 
 import styles from './ArrFdeSection.module.scss';
-import { ArrivalPhase } from '../../functions/arrival/arrivalTypes';
+import { ArrivalPhase } from '../../../phaser/types/ArrivalTypes';
 import { ArrFDE } from '../../functions/arrival/genArrFDE';
 import { ArrBedpost, StarName } from '../../functions/arrival/genArrRoute';
 import _ from 'lodash';

@@ -18,9 +18,9 @@ export interface WaypointDataArrCommon extends WaypointDataArrAll {
 export interface WaypointDataArr06s extends WaypointDataArrAll {
   name: WaypointNamesArr06s;
 }
-// export interface WaypointDataArr24s extends WaypointDataArrAll {
-//   name: WaypointNamesArr24s;
-// }
+export interface WaypointDataArr24s extends WaypointDataArrAll {
+  name: WaypointNamesArr24s;
+}
 // export interface WaypointDataArr33s extends WaypointDataArrAll {
 //   name: WaypointNamesArr33s;
 // }
@@ -35,6 +35,10 @@ export type WaypointDictAllArr = Record<
 export type WaypointDict06sArr = Record<
   WaypointNamesArr06s,
   WaypointDataArr06s
+>;
+export type WaypointDict24sArr = Record<
+  WaypointNamesArr24s,
+  WaypointDataArr24s
 >;
 
 export type WaypointNamesArrAll = WaypointNamesArr06s | WaypointNamesArr24s;
@@ -82,4 +86,28 @@ type WaypointNamesArr06sUnique =
   | 'SEMTI'
   | 'VEPNA';
 
-type WaypointNamesArr24sUnique = 'TO DO!!!';
+type WaypointNamesArr24sUnique =
+  | 'ADSED'
+  | 'TASKU'
+  | 'DAVIK'
+  | 'LEVIG'
+  | 'MIPED'
+  | 'SATUR'
+  | 'ROKTO'
+  | 'PENGO'
+  | 'MANUP'
+  | 'BOTUM'
+  | 'YOUTH'
+  | 'BIMPO'
+  | 'MAROD'
+  | 'DEKNI'
+  | 'DAVNO'
+  | 'DUNOL'
+  | 'LEPUX'
+  | 'DUGDA'
+  | 'CALVY'
+  | 'OMTOK'
+  | 'DENKA'
+  | 'AMILU'
+  | 'EBDAL'
+  | 'NOAHA';

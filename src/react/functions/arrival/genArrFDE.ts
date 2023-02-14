@@ -19,7 +19,10 @@ import { getArrEntryAlt } from './getArrEntryAlt';
 import { getArrEntrySpeed } from './getArrEntrySpeed';
 import { WP_DICT_ARR_COMMON } from '../../../phaser/config/WaypointConfigArr/WaypointConfigArrCommon';
 import { STAR_ROUTES_06s } from '../../../phaser/config/RouteConfigArr/RouteConfigStars06s';
-import { ArrivalPhase, ArrivalPosition } from './arrivalTypes';
+import {
+  ArrivalPhase,
+  ArrivalPosition,
+} from '../../../phaser/types/ArrivalTypes';
 
 let currentHour = _.sample([12, 13, 14, 15, 16, 17, 18]) || 12;
 let currentMinute = 0;
@@ -61,6 +64,7 @@ export interface ArrFDE {
   assignedHeading: WaypointDataArrAll;
   assignedSpeed: number;
   debugACID: ACID;
+  downwind: ArrivalPosition;
   ETA: string;
   handoffSector: AdjacentSectors;
   isQ400: boolean;

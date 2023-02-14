@@ -1,4 +1,4 @@
-import { ArrivalPosition } from '../../react/functions/arrival/arrivalTypes';
+import { ArrivalPosition } from './ArrivalTypes';
 import { ArrFDE } from '../../react/functions/arrival/genArrFDE';
 import { ArrBedpost } from '../../react/functions/arrival/genArrRoute';
 import { DepFDE } from '../../react/functions/departure/genDepFDE';

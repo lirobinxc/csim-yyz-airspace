@@ -3,7 +3,7 @@ import {
   WaypointDataDepAll,
   WaypointNamesDepAll,
 } from '../types/WaypointTypesDep';
-import { genWaypointTextStyles } from '../config/TextStyleConfig';
+import { genWaypointTextStyles } from '../config/WaypointTextStyleConfig';
 import RadarScene from '../scenes/RadarScene';
 import { ColorKeys } from '../types/ColorKeys';
 import { DomEvents } from '../types/DomEvents';

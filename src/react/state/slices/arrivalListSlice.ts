@@ -8,7 +8,7 @@ import {
   RadarSceneKeys,
 } from '../../../phaser/types/SceneKeys';
 import { SidName } from '../../../phaser/types/SidAndSatelliteTypes';
-import { ArrivalPhase } from '../../functions/arrival/arrivalTypes';
+import { ArrivalPhase } from '../../../phaser/types/ArrivalTypes';
 import { ArrFDE, genArrFDE } from '../../functions/arrival/genArrFDE';
 import { ArrBedpost } from '../../functions/arrival/genArrRoute';
 import { DepFDE } from '../../functions/departure/genDepFDE';

@@ -6,7 +6,7 @@ import { convertRadiansToHeading } from './convertRadiansToHeading';
  * continuously adjusts Commands.heading.assigned until
  * a/c is flying directly towards the waypoint.
  */
-export function setAssignedHeadingDirectToWaypoint(
+export function getHeadingDirectToWaypoint(
   plane: Plane,
   wpCoord: Phaser.Math.Vector2
 ) {
@@ -19,5 +19,5 @@ export function setAssignedHeadingDirectToWaypoint(
   const newHeading = convertRadiansToHeading(radiansBetweenPoints);
   const newHeadingCeil = Math.ceil(newHeading);
 
-  plane.Commands.heading.assigned = newHeadingCeil;
+  return newHeadingCeil;
 }

@@ -1,4 +1,4 @@
-import { ArrivalPosition } from '../../react/functions/arrival/arrivalTypes';
+import { ArrivalPosition } from '../types/ArrivalTypes';
 import { ArrFDE } from '../../react/functions/arrival/genArrFDE';
 import { DepFDE } from '../../react/functions/departure/genDepFDE';
 import { PlanePerformanceConfig } from '../config/PlanePerformanceConfig';
