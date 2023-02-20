@@ -1,17 +1,17 @@
 import { AcType } from '../../types/AircraftTypes';
 import {
-  WaypointDataArr33s,
-  WaypointDict33sArr,
+  WaypointDataArr15s,
+  WaypointDict15sArr,
 } from '../../types/WaypointTypesArr';
 import { MasterGameOptions } from '../../MasterGameOptions';
 import { WP_LIST_ARR_COMMON } from './WaypointConfigArrCommon';
 
 const gameHeight = MasterGameOptions.height;
 
-export const WP_LIST_ARR_33s: WaypointDataArr33s[] = [
+export const WP_LIST_ARR_15s: WaypointDataArr15s[] = [
   ...WP_LIST_ARR_COMMON,
   {
-    name: 'AGBEK',
+    name: 'BLOOS',
     relativeCoord: new Phaser.Math.Vector2(),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
@@ -22,7 +22,7 @@ export const WP_LIST_ARR_33s: WaypointDataArr33s[] = [
     type: null,
   },
   {
-    name: 'ALMAX',
+    name: 'PILKI',
     relativeCoord: new Phaser.Math.Vector2(),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
@@ -33,7 +33,7 @@ export const WP_LIST_ARR_33s: WaypointDataArr33s[] = [
     type: null,
   },
   {
-    name: 'ALORU',
+    name: 'HOFFS',
     relativeCoord: new Phaser.Math.Vector2(),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
@@ -44,7 +44,7 @@ export const WP_LIST_ARR_33s: WaypointDataArr33s[] = [
     type: null,
   },
   {
-    name: 'APMAM',
+    name: 'ONGOX',
     relativeCoord: new Phaser.Math.Vector2(),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
@@ -55,7 +55,7 @@ export const WP_LIST_ARR_33s: WaypointDataArr33s[] = [
     type: null,
   },
   {
-    name: 'DANAV',
+    name: 'BEFNI',
     relativeCoord: new Phaser.Math.Vector2(),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
@@ -66,161 +66,7 @@ export const WP_LIST_ARR_33s: WaypointDataArr33s[] = [
     type: null,
   },
   {
-    name: 'ELVUT',
-    relativeCoord: new Phaser.Math.Vector2(),
-    getDisplayCoord: function () {
-      return new Phaser.Math.Vector2(
-        this.relativeCoord.x,
-        this.relativeCoord.y
-      ).scale(gameHeight);
-    },
-    type: null,
-  },
-  {
-    name: 'ERBAN',
-    relativeCoord: new Phaser.Math.Vector2(),
-    getDisplayCoord: function () {
-      return new Phaser.Math.Vector2(
-        this.relativeCoord.x,
-        this.relativeCoord.y
-      ).scale(gameHeight);
-    },
-    type: null,
-  },
-  {
-    name: 'GUBOV',
-    relativeCoord: new Phaser.Math.Vector2(),
-    getDisplayCoord: function () {
-      return new Phaser.Math.Vector2(
-        this.relativeCoord.x,
-        this.relativeCoord.y
-      ).scale(gameHeight);
-    },
-    type: null,
-  },
-  {
-    name: 'IKMEX',
-    relativeCoord: new Phaser.Math.Vector2(),
-    getDisplayCoord: function () {
-      return new Phaser.Math.Vector2(
-        this.relativeCoord.x,
-        this.relativeCoord.y
-      ).scale(gameHeight);
-    },
-    type: null,
-  },
-  {
-    name: 'KEDSU',
-    relativeCoord: new Phaser.Math.Vector2(),
-    getDisplayCoord: function () {
-      return new Phaser.Math.Vector2(
-        this.relativeCoord.x,
-        this.relativeCoord.y
-      ).scale(gameHeight);
-    },
-    type: null,
-  },
-  {
-    name: 'KENPU',
-    relativeCoord: new Phaser.Math.Vector2(),
-    getDisplayCoord: function () {
-      return new Phaser.Math.Vector2(
-        this.relativeCoord.x,
-        this.relativeCoord.y
-      ).scale(gameHeight);
-    },
-    type: null,
-  },
-  {
-    name: 'LETAG',
-    relativeCoord: new Phaser.Math.Vector2(),
-    getDisplayCoord: function () {
-      return new Phaser.Math.Vector2(
-        this.relativeCoord.x,
-        this.relativeCoord.y
-      ).scale(gameHeight);
-    },
-    type: null,
-  },
-  {
-    name: 'MAVID',
-    relativeCoord: new Phaser.Math.Vector2(),
-    getDisplayCoord: function () {
-      return new Phaser.Math.Vector2(
-        this.relativeCoord.x,
-        this.relativeCoord.y
-      ).scale(gameHeight);
-    },
-    type: null,
-  },
-  {
-    name: 'MERKI',
-    relativeCoord: new Phaser.Math.Vector2(),
-    getDisplayCoord: function () {
-      return new Phaser.Math.Vector2(
-        this.relativeCoord.x,
-        this.relativeCoord.y
-      ).scale(gameHeight);
-    },
-    type: null,
-  },
-  {
-    name: 'NOXER',
-    relativeCoord: new Phaser.Math.Vector2(),
-    getDisplayCoord: function () {
-      return new Phaser.Math.Vector2(
-        this.relativeCoord.x,
-        this.relativeCoord.y
-      ).scale(gameHeight);
-    },
-    type: null,
-  },
-  {
-    name: 'NUBAV',
-    relativeCoord: new Phaser.Math.Vector2(),
-    getDisplayCoord: function () {
-      return new Phaser.Math.Vector2(
-        this.relativeCoord.x,
-        this.relativeCoord.y
-      ).scale(gameHeight);
-    },
-    type: null,
-  },
-  {
-    name: 'OKOKU',
-    relativeCoord: new Phaser.Math.Vector2(),
-    getDisplayCoord: function () {
-      return new Phaser.Math.Vector2(
-        this.relativeCoord.x,
-        this.relativeCoord.y
-      ).scale(gameHeight);
-    },
-    type: null,
-  },
-  {
-    name: 'PENGO',
-    relativeCoord: new Phaser.Math.Vector2(),
-    getDisplayCoord: function () {
-      return new Phaser.Math.Vector2(
-        this.relativeCoord.x,
-        this.relativeCoord.y
-      ).scale(gameHeight);
-    },
-    type: null,
-  },
-  {
-    name: 'REVOV',
-    relativeCoord: new Phaser.Math.Vector2(),
-    getDisplayCoord: function () {
-      return new Phaser.Math.Vector2(
-        this.relativeCoord.x,
-        this.relativeCoord.y
-      ).scale(gameHeight);
-    },
-    type: null,
-  },
-  {
-    name: 'RIDOD',
+    name: 'WOHIL',
     relativeCoord: new Phaser.Math.Vector2(),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
@@ -242,7 +88,172 @@ export const WP_LIST_ARR_33s: WaypointDataArr33s[] = [
     type: null,
   },
   {
+    name: 'PENGO',
+    relativeCoord: new Phaser.Math.Vector2(),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: null,
+  },
+  {
+    name: 'PIGSO',
+    relativeCoord: new Phaser.Math.Vector2(),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: null,
+  },
+  {
+    name: 'PILNI',
+    relativeCoord: new Phaser.Math.Vector2(),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: null,
+  },
+  {
+    name: 'IGTUL',
+    relativeCoord: new Phaser.Math.Vector2(),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: null,
+  },
+  {
+    name: 'GADOG',
+    relativeCoord: new Phaser.Math.Vector2(),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: null,
+  },
+  {
+    name: 'TAGAT',
+    relativeCoord: new Phaser.Math.Vector2(),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: null,
+  },
+  {
+    name: 'LOBNU',
+    relativeCoord: new Phaser.Math.Vector2(),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: null,
+  },
+  {
+    name: 'YOUTH',
+    relativeCoord: new Phaser.Math.Vector2(),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: null,
+  },
+  {
     name: 'VIDRO',
+    relativeCoord: new Phaser.Math.Vector2(),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: null,
+  },
+  {
+    name: 'TOVOP',
+    relativeCoord: new Phaser.Math.Vector2(),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: null,
+  },
+  {
+    name: 'DENPI',
+    relativeCoord: new Phaser.Math.Vector2(),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: null,
+  },
+  {
+    name: 'MIRUG',
+    relativeCoord: new Phaser.Math.Vector2(),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: null,
+  },
+  {
+    name: 'MITUX',
+    relativeCoord: new Phaser.Math.Vector2(),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: null,
+  },
+  {
+    name: 'OMTIP',
+    relativeCoord: new Phaser.Math.Vector2(),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: null,
+  },
+  {
+    name: 'KASIT',
+    relativeCoord: new Phaser.Math.Vector2(),
+    getDisplayCoord: function () {
+      return new Phaser.Math.Vector2(
+        this.relativeCoord.x,
+        this.relativeCoord.y
+      ).scale(gameHeight);
+    },
+    type: null,
+  },
+  {
+    name: 'MEVPO',
     relativeCoord: new Phaser.Math.Vector2(),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
@@ -254,9 +265,9 @@ export const WP_LIST_ARR_33s: WaypointDataArr33s[] = [
   },
 ];
 
-export const WP_DICT_ARR_33s = genDictFromWaypointList(WP_LIST_ARR_33s);
+export const WP_DICT_ARR_15s = genDictFromWaypointList(WP_LIST_ARR_15s);
 
-function genDictFromWaypointList(wpArr: WaypointDataArr33s[]) {
+function genDictFromWaypointList(wpArr: WaypointDataArr15s[]) {
   const wpDict = wpArr.reduce((acc, item) => {
     acc[item.name] = {
       name: item.name,
@@ -265,7 +276,7 @@ function genDictFromWaypointList(wpArr: WaypointDataArr33s[]) {
       getDisplayCoord: item.getDisplayCoord,
     };
     return acc;
-  }, {} as WaypointDict33sArr);
+  }, {} as WaypointDict15sArr);
 
   return wpDict;
 }

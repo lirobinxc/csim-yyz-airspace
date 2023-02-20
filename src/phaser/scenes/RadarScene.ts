@@ -27,11 +27,7 @@ import { DepFDE } from '../../react/functions/departure/genDepFDE';
 import { genPlanePropsFromDepFDE } from '../utils/genPlanePropsFromDepFDE';
 import SpeechSynth from '../objects/SpeechSynth';
 import FiledRouteLine from '../objects/FiledRouteLine';
-import {
-  defaultSimOptions,
-  getSimOptions,
-  LocalStorageKeys,
-} from '../../react/state/getSimOptions';
+import { getSimOptions } from '../../react/state/getSimOptions';
 import { SimOptions } from '../../react/state/slices/simOptionsSlice';
 import { WP_LIST_DEP_06s } from '../config/WaypointConfigDep/WaypointConfigDep06s';
 import { WP_LIST_DEP_24s } from '../config/WaypointConfigDep/WaypointConfigDep24s';
@@ -47,12 +43,14 @@ import { RunwayLocalizers } from '../config/RunwayLocalizers';
 import CursorHalo from '../objects/CursorHalo';
 import RBL from '../objects/RBL';
 import { WP_LIST_ARR_24s } from '../config/WaypointConfigArr/WaypointConfigArr24s';
+import { ArrBoxDimensions } from '../utils/isPlaneInsideArrBox';
 
 export default class RadarScene extends Phaser.Scene {
   public Waypoints: Waypoint[];
   public PlaneList: Plane[];
   public Localizers: RunwayLocalizers | null;
   public RunwayOrigins!: RunwayOrigins;
+  public ArrBoxPolygon!: Phaser.Geom.Polygon;
   public Speech: SpeechSynth;
   private SpeechQueue: { text: string; plane: Plane; isCheckIn: boolean }[];
   private FiledRouteLine: FiledRouteLine | null;
@@ -244,6 +242,24 @@ export default class RadarScene extends Phaser.Scene {
       }
     });
 
+    // Create: Arrival box polygon
+    this.ArrBoxPolygon = ArrBoxDimensions[this.SCENE_KEY];
+    // const graphics = this.add.graphics({ x: 0, y: 0 });
+    // graphics.lineStyle(2, 0x00aa00);
+    // graphics.beginPath();
+    // graphics.moveTo(
+    //   this.ArrBoxPolygon.points[0].x,
+    //   this.ArrBoxPolygon.points[0].y
+    // );
+    // for (var i = 1; i < this.ArrBoxPolygon.points.length; i++) {
+    //   graphics.lineTo(
+    //     this.ArrBoxPolygon.points[i].x,
+    //     this.ArrBoxPolygon.points[i].y
+    //   );
+    // }
+    // graphics.closePath();
+    // graphics.strokePath();
+
     // TEMP Create: Runway FINAL line for intercepts
     // TEMP: Cursor Halo
     if (this.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL) {
@@ -252,6 +268,7 @@ export default class RadarScene extends Phaser.Scene {
       this.Localizers = new RunwayLocalizers(this);
     }
 
+    // TEMP: Zoom in on ArrBox
     // this.cameras.main.setZoom(1.4);
     // this.cameras.main.centerOn(400.2217190139294, 600.6260415366768);
 
