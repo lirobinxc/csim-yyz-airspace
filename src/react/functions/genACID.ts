@@ -16,7 +16,7 @@ const aircraftCollection: AircraftCollection = {
     JET: [AcModel.CRJ9, AcModel.A21N, AcModel.B738, AcModel.CL60, AcModel.C56X],
     PROP: [AcModel.DH8A, AcModel.DH8D],
   },
-  H: { JET: [AcModel.A343, AcModel.B744], PROP: [] },
+  H: { JET: [AcModel.A343, AcModel.B744, AcModel.B763], PROP: [] },
 };
 
 export type ACID = ReturnType<typeof genACID>;

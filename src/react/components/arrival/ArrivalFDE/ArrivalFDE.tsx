@@ -15,6 +15,12 @@ import ArrFdeAltitudeModal from '../ArrFdeAltitudeModal';
 import { PlaneCommands } from '../../../../phaser/types/PlaneInterfaces';
 import { AtcInstruction } from '../../../../phaser/types/PlaneCommandTypes';
 import FdeHeadingModal from '../../FdeHeadingModal';
+import ArrFdeSpeedModal from '../ArrFdeSpeedModal';
+import { PlaneCommandCue } from '../../../../phaser/objects/Plane/PlaneCommandMenu';
+import PhaserGame from '../../../../phaser/PhaserGameConfig';
+import { OtherSceneKeys } from '../../../../phaser/types/SceneKeys';
+import RadarScene from '../../../../phaser/scenes/RadarScene';
+import { ReactCustomEvents } from '../../../../phaser/types/CustomEvents';
 
 function ArrivalFDE(props: ArrFDE) {
   const {
@@ -39,19 +45,29 @@ function ArrivalFDE(props: ArrFDE) {
 
   const dispatch = useAppDispatch();
   const simOptions = useAppSelector(selectSimOptions);
-  const [currentAlt, setCurrentAlt] = useState(assignedAlt);
-  const [currentHeading, setCurrentHeading] = useState<number | null>(null);
-  const [currentSpeed, setCurrentSpeed] = useState(assignedSpeed);
+  const [fdeAltitude, setFdeAltitude] = useState(assignedAlt);
+  const [fdeHeading, setFdeHeading] = useState<number | null>(null);
+  const [fdeSpeed, setFdeSpeed] = useState<number | null>(null);
+  const [apprClr, setApprClr] = useState(false);
+  const [interceptLoc, setInterceptLoc] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState<AtcInstruction | null>(null);
   const [stripIsSelected, setStripIsSelected] = useState(false);
+  const [prevCommandCue, setPrevCommandCue] = useState<PlaneCommandCue>({
+    directTo: null,
+    heading: fdeHeading,
+    altitude: assignedAlt,
+    speed: assignedSpeed,
+    interceptLoc: false,
+    approachClearance: false,
+  });
 
   function handleClickAlt() {
-    if (currentAlt - 10 < 30) {
-      setCurrentAlt(0);
+    if (fdeAltitude - 10 < 30) {
+      setFdeAltitude(0);
       return;
     }
 
-    setCurrentAlt(currentAlt - 10);
+    setFdeAltitude(fdeAltitude - 10);
   }
 
   function openModal(name: AtcInstruction) {
@@ -66,7 +82,6 @@ function ArrivalFDE(props: ArrFDE) {
     dispatch(arrivalListActions.deleteStrip(props));
   }
 
-  // TEMP
   useEffect(() => {
     if (simOptions.selectedArrStrip?.uniqueKey === uniqueKey) {
       setStripIsSelected(true);
@@ -74,6 +89,18 @@ function ArrivalFDE(props: ArrFDE) {
       setStripIsSelected(false);
     }
   }, [simOptions, uniqueKey]);
+
+  useEffect(() => {
+    if (apprClr) {
+      setInterceptLoc(true);
+    }
+  }, [apprClr]);
+
+  useEffect(() => {
+    if (!interceptLoc) {
+      setApprClr(false);
+    }
+  }, [interceptLoc]);
 
   function handleAcIdClick(e: React.MouseEvent<HTMLElement, MouseEvent>) {
     e.stopPropagation();
@@ -96,10 +123,67 @@ function ArrivalFDE(props: ArrFDE) {
     }
   }
 
+  function sendCommandCue() {
+    const newCommandCue: PlaneCommandCue = {
+      directTo: null,
+      heading: fdeHeading,
+      altitude: fdeAltitude,
+      speed: fdeSpeed,
+      interceptLoc: interceptLoc,
+      approachClearance: apprClr,
+    };
+
+    const SENT_COMMAND_CUE: PlaneCommandCue = {
+      directTo: null,
+      heading: null,
+      altitude: null,
+      speed: null,
+      interceptLoc: interceptLoc,
+      approachClearance: apprClr,
+    };
+
+    if (prevCommandCue.heading !== fdeHeading) {
+      SENT_COMMAND_CUE.heading = fdeHeading;
+    }
+    if (prevCommandCue.altitude !== fdeAltitude) {
+      SENT_COMMAND_CUE.altitude = fdeAltitude * 100;
+    }
+    if (prevCommandCue.speed !== fdeSpeed && fdeSpeed !== 0) {
+      SENT_COMMAND_CUE.speed = fdeSpeed;
+    }
+
+    setPrevCommandCue(newCommandCue);
+
+    const RADAR_SCENE = PhaserGame.scene.keys[
+      OtherSceneKeys.RADAR_BASE
+    ] as RadarScene;
+    RADAR_SCENE.events.emit(
+      ReactCustomEvents.FDE_COMMAND_CUE,
+      uniqueKey,
+      SENT_COMMAND_CUE
+    );
+  }
+
+  function displaySpeed() {
+    switch (fdeSpeed) {
+      case 0:
+        return 'RNAV';
+      case null:
+        return 'RNAV';
+      case assignedSpeed:
+        return 'RNAV';
+      default:
+        return fdeSpeed;
+    }
+  }
+
   const arrRunwayFormatted = arrRunway.split(' ')[2];
 
   return (
-    <section className={clsx(styles.ArrivalStrip, styles.flexRow)}>
+    <section
+      className={clsx(styles.ArrivalStrip, styles.flexRow)}
+      onContextMenu={sendCommandCue}
+    >
       <div
         className={clsx(styles.col1, {
           [styles.bgGreen]:
@@ -128,30 +212,61 @@ function ArrivalFDE(props: ArrFDE) {
         <ArrFdeAltitudeModal
           altitudes={[120, 110, 100, 90, 80, 70, 60, 50, 40, 30, 0]}
           isVisible={modalIsOpen === AtcInstruction.ALTITUDE}
-          onAltitudeClick={(alt) => setCurrentAlt(alt)}
+          onAltitudeClick={(alt) => setFdeAltitude(alt)}
           onCloseModal={closeModal}
         />
         <div className={clsx(styles.assignedAlt)}>
-          {currentAlt >= 30 ? currentAlt : 'A'}
-        </div>
-      </div>
-      <div className={clsx(styles.col5)}>
-        <div className={clsx(styles.assignedSpeed)}>
-          {currentSpeed === assignedSpeed ? 'RNAV' : currentSpeed}
+          {fdeAltitude >= 30 ? fdeAltitude : 'A'}
         </div>
       </div>
       <div
-        className={clsx(styles.col6)}
+        className={clsx(styles.col5)}
         onClick={() =>
-          modalIsOpen ? closeModal() : openModal(AtcInstruction.HEADING)
+          modalIsOpen ? closeModal() : openModal(AtcInstruction.SPEED)
         }
       >
-        <FdeHeadingModal
-          isVisible={modalIsOpen === AtcInstruction.HEADING}
-          onHeadingClick={(hdg) => setCurrentHeading(hdg)}
+        <ArrFdeSpeedModal
+          speeds={[0, 160, 170, 180, 190, 200, 210, 220, 250]}
+          isVisible={modalIsOpen === AtcInstruction.SPEED}
+          onSpeedClick={(speed) => setFdeSpeed(speed)}
           onCloseModal={closeModal}
         />
-        <div className={clsx(styles.assignedHeading)}>{currentHeading}</div>
+        <div className={clsx(styles.assignedSpeed)}>{displaySpeed()}</div>
+      </div>
+      <div className={clsx(styles.col6)}>
+        <FdeHeadingModal
+          isVisible={modalIsOpen === AtcInstruction.HEADING}
+          onHeadingClick={(hdg) => setFdeHeading(hdg)}
+          onInterceptClick={() => setInterceptLoc(!interceptLoc)}
+          onApproachClearanceClick={() => setApprClr(!apprClr)}
+          onCloseModal={closeModal}
+        />
+        <div
+          className={clsx(styles.assignedHeading)}
+          onClick={() =>
+            modalIsOpen ? closeModal() : openModal(AtcInstruction.HEADING)
+          }
+        >
+          {fdeHeading}
+        </div>
+        <div className={clsx(styles.arrivalButtons)}>
+          <button
+            onClick={() => {
+              setInterceptLoc(!interceptLoc);
+            }}
+            className={clsx({ [styles.bgGreen]: interceptLoc })}
+          >
+            I
+          </button>
+          <button
+            onClick={() => {
+              setApprClr(!apprClr);
+            }}
+            className={clsx({ [styles.bgGreen]: apprClr })}
+          >
+            AC
+          </button>
+        </div>
       </div>
       <div className={clsx(styles.col7)}>
         <div className={clsx(styles.topBox)}>

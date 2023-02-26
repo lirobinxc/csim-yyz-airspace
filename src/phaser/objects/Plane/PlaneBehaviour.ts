@@ -12,6 +12,7 @@ import {
   determineLeftOrRightTurn,
   TurnDirection,
 } from '../../utils/determineLeftOrRightTurn';
+import { getHeadingDirectToWaypoint } from '../../utils/getHeadingDirectToWaypoint';
 import Plane from './Plane';
 import PlaneDataTag from './PlaneDataTag';
 
@@ -150,7 +151,11 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
     if (TURN_DIRECTION === TurnDirection.NO_TURN) return;
 
     // Base case: Noise abatement & MVA
-    if (this.Plane.Commands.onSidOrPropHeading) {
+    if (
+      this.Plane.Commands.onSidOrPropHeading &&
+      this.Plane.Scene.SIM_OPTIONS.terminalPosition ===
+        TerminalPosition.DEPARTURE
+    ) {
       if (acType === AcType.JET && altitude.current < 3600) {
         return;
       }
@@ -478,14 +483,21 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
   }
 
   private interceptLocalizer() {
-    if (this.Plane.ARR_INTERCEPT_LOC) {
-      if (this.Plane.ARR_HAS_INTERCEPTED_LOC) {
-        const runwayHeading = getRunwayHeading(
-          this.Plane.Properties.arrivalData.arrRunway
-        ).initial;
+    if (this.Plane.ARR_INTERCEPT_LOC === true) {
+      if (this.Plane.ARR_HAS_INTERCEPTED_LOC === true) {
+        // const runwayHeading = getRunwayHeading(
+        //   this.Plane.Properties.arrivalData.arrRunway
+        // ).initial;
 
-        this.Plane.Commands.heading.assigned = runwayHeading;
-        this.Plane.Commands.heading.current = runwayHeading;
+        const headingToRunway = getHeadingDirectToWaypoint(
+          this.Plane,
+          this.Scene.RunwayOrigins.getOrigin(
+            this.Plane.Properties.arrivalData.arrRunway
+          )
+        );
+
+        this.Plane.Commands.heading.assigned = headingToRunway;
+        this.Plane.Commands.heading.current = headingToRunway;
         this.Plane.Commands.heading.directTo = null;
       }
     }

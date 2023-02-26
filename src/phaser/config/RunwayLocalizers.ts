@@ -17,12 +17,13 @@ export class RunwayLocalizers {
       [key in DepRunwayYYZ]: [Phaser.Math.Vector2, Phaser.Math.Vector2];
     } = {
       'YYZ Rwy 05': [
-        new Phaser.Math.Vector2(479.66, 558.79),
-        new Phaser.Math.Vector2(153.2, 763.81),
+        radarScene.RunwayOrigins.getOrigin(DepRunwayYYZ.RWY_05),
+        new Phaser.Math.Vector2(142.0, 773.0),
       ],
       'YYZ Rwy 06L': [
-        new Phaser.Math.Vector2(510.24, 581.97),
-        new Phaser.Math.Vector2(182.57, 787.16),
+        radarScene.RunwayOrigins.getOrigin(DepRunwayYYZ.RWY_06L),
+
+        new Phaser.Math.Vector2(160.0, 802.0),
       ],
       'YYZ Rwy 15L': [new Phaser.Math.Vector2(), new Phaser.Math.Vector2()],
       'YYZ Rwy 15R': [new Phaser.Math.Vector2(), new Phaser.Math.Vector2()],
@@ -74,7 +75,7 @@ export class RunwayLocalizers {
     }
   }
 
-  public planeHasInterceptedLocalizer(plane: Plane): boolean {
+  public hasPlaneInterceptedLocalizer(plane: Plane): boolean {
     const arrRunway = plane.Properties.arrivalData.arrRunway;
 
     const planePoint = new Phaser.Geom.Point(plane.x, plane.y);
@@ -83,7 +84,7 @@ export class RunwayLocalizers {
     const hasIntercepted = Phaser.Geom.Intersects.PointToLine(
       planePoint,
       localizerLine,
-      2
+      3
     );
 
     // const distanceFromLine = Phaser.Geom.Line.GetShortestDistance(
@@ -94,6 +95,7 @@ export class RunwayLocalizers {
     // if (hasIntercepted) console.log(hasIntercepted);
 
     plane.ARR_HAS_INTERCEPTED_LOC = hasIntercepted;
+    console.log('has intercepted:', hasIntercepted);
 
     return hasIntercepted;
   }

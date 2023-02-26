@@ -21,6 +21,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 1600,
     },
     accel: BASE_ACCEL,
+    recat: 'D',
   },
   A343: {
     speed: {
@@ -35,6 +36,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 1600,
     },
     accel: BASE_ACCEL,
+    recat: 'B',
   },
   B738: {
     speed: {
@@ -49,6 +51,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 2000,
     },
     accel: BASE_ACCEL,
+    recat: 'D',
   },
   B744: {
     speed: {
@@ -63,6 +66,22 @@ export const PlanePerformanceConfig: {
       normalClimb: 1500,
     },
     accel: BASE_ACCEL,
+    recat: 'B',
+  },
+  B763: {
+    speed: {
+      initialClimb: 190, // to 800 feet
+      normalClimb: 290, // 800 to FL240
+      maxCruise: 460,
+      maxBelow10k: 250,
+      landing: 140,
+    },
+    climbRate: {
+      initialClimb: 3000, // feet per minute, actual = 1500
+      normalClimb: 2500,
+    },
+    accel: BASE_ACCEL,
+    recat: 'B',
   },
   C208: {
     speed: {
@@ -77,6 +96,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 600,
     },
     accel: BASE_ACCEL,
+    recat: 'G',
   },
   C25A: {
     speed: {
@@ -91,6 +111,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 600,
     },
     accel: BASE_ACCEL,
+    recat: 'G',
   },
   C56X: {
     speed: {
@@ -105,6 +126,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 2500,
     },
     accel: BASE_ACCEL,
+    recat: 'G',
   },
   CL60: {
     speed: {
@@ -119,6 +141,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 2500,
     },
     accel: BASE_ACCEL,
+    recat: 'F',
   },
   CRJ9: {
     speed: {
@@ -133,6 +156,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 2000,
     },
     accel: BASE_ACCEL,
+    recat: 'F',
   },
   DH8A: {
     speed: {
@@ -147,6 +171,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 1500,
     },
     accel: BASE_ACCEL,
+    recat: 'F',
   },
   DH8D: {
     speed: {
@@ -161,5 +186,6 @@ export const PlanePerformanceConfig: {
       normalClimb: 1500,
     },
     accel: BASE_ACCEL,
+    recat: 'E',
   },
 };

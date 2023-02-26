@@ -5,6 +5,7 @@ export enum AcModel {
   DH8D = 'DH8D',
   B738 = 'B738',
   B744 = 'B744',
+  B763 = 'B763',
   C208 = 'C208',
   C56X = 'C56X',
   CL60 = 'CL60',

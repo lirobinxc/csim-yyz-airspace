@@ -54,12 +54,15 @@ export default class Plane extends Phaser.GameObjects.Container {
   public DEP_HANDOFF_IN_PROGRESS: boolean;
   public ARR_HANDOFF_IN_PROGRESS: boolean;
   public IS_HANDED_OFF: boolean;
+  public IN_ARR_BOX: boolean;
   public ARR_INTERCEPT_LOC: boolean;
   public ARR_INTERCEPT_LOC_READ_BACK: boolean;
   public ARR_APPROACH_CLEARANCE: boolean;
   public ARR_APPROACH_CLEARANCE_READ_BACK: boolean;
   public ARR_HAS_INTERCEPTED_LOC: boolean;
   public DISTANCE_FROM_RUNWAY_THRESHOLD: number; // in miles
+
+  public DESTROYED: boolean;
 
   // Parent scene
   public Scene: RadarScene;
@@ -68,11 +71,11 @@ export default class Plane extends Phaser.GameObjects.Container {
   public Symbol: PlaneSymbol;
   public CJS: PlaneCjs;
   public DataTag: PlaneDataTag;
-  private TagLine: PlaneDataTagLine;
-  private PTL: PlanePTL;
+  public TagLine: PlaneDataTagLine;
+  public PTL: PlanePTL;
   public HistoryTrail: PlaneHistoryTrail;
   // private PlaneRouteLine: PlaneRouteLine;
-  private Behaviour: PlaneBehaviour;
+  public Behaviour: PlaneBehaviour;
   public CommandMenu: PlaneCommandMenu;
   public HandoffMenu: PlaneHandoffMenu;
 
@@ -96,12 +99,16 @@ export default class Plane extends Phaser.GameObjects.Container {
 
     this.IS_HANDED_OFF = false;
 
+    this.IN_ARR_BOX = false;
     this.ARR_INTERCEPT_LOC = false;
+
     this.ARR_APPROACH_CLEARANCE = false;
     this.ARR_INTERCEPT_LOC_READ_BACK = false;
     this.ARR_APPROACH_CLEARANCE_READ_BACK = false;
     this.ARR_HAS_INTERCEPTED_LOC = false;
     this.DISTANCE_FROM_RUNWAY_THRESHOLD = 9999; // in miles
+
+    this.DESTROYED = false;
 
     // Init: Name
     this.name = props.acId.code;
@@ -111,6 +118,7 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.Performance = this.initPlanePerformance(props);
     this.Commands = this.initPlaneCommands(props, this.Performance);
     this.PilotVoice = undefined;
+
     // Attach objs: Plane Subcomponents
     this.Symbol = new PlaneSymbol(this);
     this.CJS = new PlaneCjs(this);
@@ -133,6 +141,12 @@ export default class Plane extends Phaser.GameObjects.Container {
 
     // Attach: Behaviour logic
     this.Behaviour = new PlaneBehaviour(this, this.DataTag);
+
+    // Setup: StraightIns come in with Intercept clearance
+    if (props.fdeData.arr?.isStraightIn) {
+      this.ARR_INTERCEPT_LOC = true;
+      this.CommandMenu.COMMAND_CUE.interceptLoc = true;
+    }
 
     // Setup: Plane Container @ origin
     this.setX(this.getPlaneOrigin(props).x);
@@ -184,8 +198,22 @@ export default class Plane extends Phaser.GameObjects.Container {
 
     // Sync update with FPS
     this.scene.physics.world.on('worldstep', (dt: number) => {
-      this.updateDistanceFromRunwayThreshold();
-      // console.log(isPlaneInsideArrBox(this)); // TEMP
+      if (this.DESTROYED === false) {
+        if (
+          this.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL
+        ) {
+          console.log('in arr box', this.IN_ARR_BOX);
+
+          if (this.IN_ARR_BOX === false) {
+            this.IN_ARR_BOX = isPlaneInsideArrBox(this);
+          }
+          if (this.IN_ARR_BOX === true) {
+            this.Scene.Localizers?.hasPlaneInterceptedLocalizer(this);
+            this.updateDistanceFromRunwayThreshold();
+            console.log(this.DISTANCE_FROM_RUNWAY_THRESHOLD);
+          }
+        }
+      }
     });
   }
 
@@ -194,8 +222,6 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.togglePTL();
     this.setPilotVoice();
     this.onDebug();
-
-    this.Scene.Localizers?.planeHasInterceptedLocalizer(this);
   }
 
   public checkIn() {
@@ -295,11 +321,15 @@ export default class Plane extends Phaser.GameObjects.Container {
 
     let lowAltitudePrefix = '';
 
-    if (acType === AcType.JET && altitude.current < 3600) {
-      lowAltitudePrefix = 'After noise,';
-    }
-    if (acType === AcType.PROP && altitude.current < 3000) {
-      lowAltitudePrefix = 'After passing 3000,';
+    if (
+      this.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.DEPARTURE
+    ) {
+      if (acType === AcType.JET && altitude.current < 3600) {
+        lowAltitudePrefix = 'After noise,';
+      }
+      if (acType === AcType.PROP && altitude.current < 3000) {
+        lowAltitudePrefix = 'After passing 3000,';
+      }
     }
 
     if (turnDirection === TurnDirection.LEFT) {
@@ -391,6 +421,17 @@ export default class Plane extends Phaser.GameObjects.Container {
     return;
   }
 
+  public commandCancelIntercept() {
+    this.ARR_INTERCEPT_LOC = false;
+    return;
+  }
+
+  public commandCancelApproach() {
+    this.ARR_APPROACH_CLEARANCE = false;
+    this.talk('Approach clearance canceled', this);
+    return;
+  }
+
   public getFiledRoute() {
     const isDepartureMode =
       this.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.DEPARTURE;
@@ -464,22 +505,20 @@ export default class Plane extends Phaser.GameObjects.Container {
   }
 
   private updateDistanceFromRunwayThreshold() {
-    if (this.ARR_APPROACH_CLEARANCE) {
-      const planePosition = this.getPosition();
-      const runwayThreshold = new RunwayOrigins(this.Scene).getOrigin(
-        this.Properties.arrivalData.arrRunway
-      );
+    const planePosition = this.getPosition();
+    const runwayThreshold = new RunwayOrigins(this.Scene).getOrigin(
+      this.Properties.arrivalData.arrRunway
+    );
 
-      const distanceInPixels = Phaser.Math.Distance.BetweenPoints(
-        planePosition,
-        runwayThreshold
-      );
-      const distanceInMiles = convertPixelsToMiles(distanceInPixels);
+    const distanceInPixels = Phaser.Math.Distance.BetweenPoints(
+      planePosition,
+      runwayThreshold
+    );
+    const distanceInMiles = convertPixelsToMiles(distanceInPixels);
 
-      // console.log(distanceInMiles);
+    // console.log(distanceInMiles);
 
-      this.DISTANCE_FROM_RUNWAY_THRESHOLD = distanceInMiles;
-    }
+    this.DISTANCE_FROM_RUNWAY_THRESHOLD = distanceInMiles;
   }
 
   private setPilotVoice() {
@@ -604,5 +643,23 @@ export default class Plane extends Phaser.GameObjects.Container {
 
     const origin = rwyOrigins.getOrigin(acProps.takeoffData.depRunway);
     return origin;
+  }
+
+  public customDestroy() {
+    this.DESTROYED = true;
+
+    this.HistoryTrail.DotList.forEach((dot) => dot.setVisible(false));
+    this.HistoryTrail.IS_VISIBLE = false;
+    this.HistoryTrail.setVisible(false);
+    this.setVisible(false);
+
+    this.Behaviour.removeFromUpdateList()
+      .removeFromDisplayList()
+      .removeAllListeners();
+    this.getAll().forEach((obj) =>
+      obj.removeFromUpdateList().removeFromDisplayList().removeAllListeners()
+    );
+    this.removeFromUpdateList().removeFromDisplayList().removeAllListeners();
+    this.removeInteractive();
   }
 }

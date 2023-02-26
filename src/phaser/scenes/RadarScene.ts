@@ -44,6 +44,7 @@ import CursorHalo from '../objects/CursorHalo';
 import RBL from '../objects/RBL';
 import { WP_LIST_ARR_24s } from '../config/WaypointConfigArr/WaypointConfigArr24s';
 import { ArrBoxDimensions } from '../utils/isPlaneInsideArrBox';
+import { PlaneCommandCue } from '../objects/Plane/PlaneCommandMenu';
 
 export default class RadarScene extends Phaser.Scene {
   public Waypoints: Waypoint[];
@@ -390,14 +391,10 @@ export default class RadarScene extends Phaser.Scene {
     });
 
     // On CustomPhaserEvent: RBL_PLANE_0_CLICKED, RBL_PLANE_1_CLICKED
-    // On Phaser event:
     this.events.on(
       PhaserCustomEvents.HIDE_PLANE_BUTTON_CLICKED,
       (plane: Plane) => {
-        plane.HistoryTrail.DotList.forEach((dot) => dot.setVisible(false));
-        plane.HistoryTrail.IS_VISIBLE = false;
-        plane.HistoryTrail.setVisible(false);
-        plane.setVisible(false);
+        plane.customDestroy();
       }
     );
 
@@ -441,6 +438,37 @@ export default class RadarScene extends Phaser.Scene {
         setTimeout(() => {
           this.GAME_SPEED_MULTIPLIER = newMultiplier;
         }, 50);
+      }
+    );
+
+    // On ReactCustomEvent: Fde command cue
+    this.events.on(
+      ReactCustomEvents.FDE_COMMAND_CUE,
+      (planeUniqueKey: string, commandCue: PlaneCommandCue) => {
+        let plane = this.PlaneList.find(
+          (item) => item.Properties.fdeData.arr?.uniqueKey === planeUniqueKey
+        );
+
+        if (!plane) {
+          this.PlaneList.find(
+            (item) => item.Properties.fdeData.dep?.uniqueKey === planeUniqueKey
+          );
+        }
+
+        if (plane) {
+          if (commandCue.heading && plane.ARR_INTERCEPT_LOC) {
+            // Cancel LOC intercept & Approach Clearances
+            if (plane.ARR_INTERCEPT_LOC) {
+              commandCue.interceptLoc = false;
+            }
+            if (plane.ARR_APPROACH_CLEARANCE) {
+              commandCue.approachClearance = false;
+            }
+          }
+
+          plane.CommandMenu.COMMAND_CUE = { ...commandCue };
+          plane.CommandMenu.sendCommandCue(true);
+        }
       }
     );
 

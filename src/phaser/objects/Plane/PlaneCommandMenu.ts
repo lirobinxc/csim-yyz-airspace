@@ -1,6 +1,9 @@
 import { AssetKeys } from '../../types/AssetKeys';
 import { ColorKeys } from '../../types/ColorKeys';
-import { PhaserCustomEvents } from '../../types/CustomEvents';
+import {
+  PhaserCustomEvents,
+  ReactCustomEvents,
+} from '../../types/CustomEvents';
 import { DomEvents } from '../../types/DomEvents';
 import { TerminalPosition } from '../../types/SimTypes';
 import { WaypointDataDepAll } from '../../types/WaypointTypesDep';
@@ -335,13 +338,14 @@ export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
     }
   }
 
-  private sendCommandCue(forceSend: boolean) {
+  public sendCommandCue(forceSend: boolean) {
     if (this.SELECTED_BUTTON) return; // pause sending commands if a button is active
 
     const currentTime = this.scene.time.now;
     const timeDiff = currentTime - this.TIMER_START;
 
     if (forceSend || timeDiff > this.COMMAND_CUE_TIME_LIMIT) {
+      // Main commands
       if (this.COMMAND_CUE.directTo) {
         this.Plane.commandDirectTo(this.COMMAND_CUE.directTo);
         this.COMMAND_CUE.directTo = null;
@@ -363,17 +367,32 @@ export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
         this.Btn_Speed.setText(PlaneCommandMenuButtons.SPEED);
       }
 
-      // Arrival only: Intercept
-      if (!this.Plane.ARR_INTERCEPT_LOC && this.COMMAND_CUE.interceptLoc) {
+      // Arrival only: Intercept if necessary
+      if (
+        this.Plane.ARR_INTERCEPT_LOC === false &&
+        this.COMMAND_CUE.interceptLoc === true
+      ) {
         this.Plane.commandIntercept();
-        // this.COMMAND_CUE.interceptLoc = false;
       }
       if (
-        !this.Plane.ARR_APPROACH_CLEARANCE &&
-        this.COMMAND_CUE.approachClearance
+        this.Plane.ARR_APPROACH_CLEARANCE === false &&
+        this.COMMAND_CUE.approachClearance === true
       ) {
         this.Plane.commandApproach();
-        // this.COMMAND_CUE.approachClearance = false;
+      }
+
+      // Arrival only: Cancel intercept if necessary
+      if (
+        this.Plane.ARR_INTERCEPT_LOC === true &&
+        this.COMMAND_CUE.interceptLoc === false
+      ) {
+        this.Plane.commandCancelIntercept();
+      }
+      if (
+        this.Plane.ARR_APPROACH_CLEARANCE === true &&
+        this.COMMAND_CUE.approachClearance === false
+      ) {
+        this.Plane.commandCancelApproach();
       }
     }
   }
@@ -394,7 +413,7 @@ export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
     }
   }
 
-  private setHeading(heading: PlaneCommandSubmenuValue) {
+  public setHeading(heading: PlaneCommandSubmenuValue) {
     if (!heading) return;
 
     this.TIMER_START = this.scene.time.now;
@@ -406,11 +425,11 @@ export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
 
       // Arrivals only: Cancel LOC intercept & Approach Clearances
       if (this.Plane.ARR_INTERCEPT_LOC) {
-        this.Plane.ARR_INTERCEPT_LOC = false;
+        // this.Plane.ARR_INTERCEPT_LOC = false;
         this.COMMAND_CUE.interceptLoc = false;
       }
       if (this.Plane.ARR_APPROACH_CLEARANCE) {
-        this.Plane.ARR_APPROACH_CLEARANCE = false;
+        // this.Plane.ARR_APPROACH_CLEARANCE = false;
         this.COMMAND_CUE.approachClearance = false;
       }
 
@@ -420,7 +439,7 @@ export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
     }
   }
 
-  private setAltitude(altitude: PlaneCommandSubmenuValue) {
+  public setAltitude(altitude: PlaneCommandSubmenuValue) {
     if (!altitude) return;
 
     this.TIMER_START = this.scene.time.now;
@@ -434,7 +453,7 @@ export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
     }
   }
 
-  private setSpeed(speed: PlaneCommandSubmenuValue) {
+  public setSpeed(speed: PlaneCommandSubmenuValue) {
     if (!speed) return;
 
     this.TIMER_START = this.scene.time.now;
@@ -514,9 +533,8 @@ export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
           this.resetSelectedButton();
         } else {
           this.COMMAND_CUE.interceptLoc = false;
-          this.Plane.ARR_INTERCEPT_LOC = false;
+          // this.Plane.ARR_INTERCEPT_LOC = false;
           this.COMMAND_CUE.approachClearance = false;
-          this.Plane.ARR_APPROACH_CLEARANCE = false;
           this.resetSelectedButton();
         }
       }

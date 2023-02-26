@@ -60,6 +60,7 @@ export interface PlanePerformance {
     normalClimb: number;
   };
   accel: number;
+  recat: 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G';
 }
 
 export interface PlaneCommands {

@@ -122,7 +122,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'ILANI',
-    relativeCoord: new Phaser.Math.Vector2(0.24, 0.648),
+    relativeCoord: new Phaser.Math.Vector2(0.248, 0.649),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -133,7 +133,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'KEDRO',
-    relativeCoord: new Phaser.Math.Vector2(0.251, 0.678),
+    relativeCoord: new Phaser.Math.Vector2(0.256, 0.682),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,

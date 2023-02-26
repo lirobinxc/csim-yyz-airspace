@@ -11,7 +11,7 @@
     display: block;
     position: absolute;
     // top: 50%;
-    // left: 50%;
+    left: 50%;
     width: $item-size;
     height: $item-size - 0.5rem;
     margin: -($item-size / 2);
@@ -36,28 +36,40 @@
   bottom: 1rem;
   z-index: 999;
 
-  .content {
-    @include on-circle($item-count: 36, $circle-size: 25em, $item-size: 3rem);
+  .wrapper {
+    .headingButtons {
+      @include on-circle($item-count: 36, $circle-size: 25em, $item-size: 3rem);
 
-    border: 2px solid red;
+      // border: 2px solid red;
 
-    // display: flex;
-    // flex-direction: column;
+      // display: flex;
+      // flex-direction: column;
 
-    // padding: 0.5rem;
+      // padding: 0.5rem;
 
-    // border: 1px solid grey;
+      // border: 1px solid grey;
 
-    // background: lightgray;
+      // background: lightgray;
 
-    button {
-      z-index: 20;
+      button {
+        z-index: 20;
 
-      font-weight: bold;
-      font-size: $fontSizeLg;
+        font-weight: bold;
+        font-size: $fontSizeLg;
 
-      cursor: pointer;
+        cursor: pointer;
+      }
     }
+  }
+
+  .colorBlue {
+    color: blue;
+    background-color: lightblue;
+  }
+
+  .colorGreen {
+    color: green;
+    background-color: lightgreen;
   }
 
   .overlay {
