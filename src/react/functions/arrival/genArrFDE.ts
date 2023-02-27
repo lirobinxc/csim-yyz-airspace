@@ -25,6 +25,7 @@ import {
 } from '../../../phaser/types/ArrivalTypes';
 import { RecatGroup } from '../../../phaser/config/RecatSpacing';
 import { PlanePerformanceConfig } from '../../../phaser/config/PlanePerformanceConfig';
+import { STAR_ROUTES_24s } from '../../../phaser/config/RouteConfigArr/RouteConfigStars24s';
 
 let currentHour = _.sample([12, 13, 14, 15, 16, 17, 18]) || 12;
 let currentMinute = 0;
@@ -105,38 +106,6 @@ export function genArrFDE(
   // Init route
   const starName = genArrRoute(aircraft.type, activeBedposts);
 
-  // Arrival position
-  let arrPosition = ArrivalPosition.NORTH;
-
-  if (!isSingleOps) {
-    let randomArrPosition = _.sample([
-      ArrivalPosition.NORTH,
-      ArrivalPosition.SOUTH,
-    ]);
-    if (!randomArrPosition) randomArrPosition = ArrivalPosition.SOUTH;
-
-    switch (starName) {
-      case StarName.LINNG:
-        arrPosition = ArrivalPosition.SOUTH;
-        break;
-      case StarName.VERKO:
-        arrPosition = ArrivalPosition.SOUTH;
-        break;
-      case StarName.IMEBA:
-        arrPosition = randomArrPosition;
-        break;
-      case StarName.VIBLI:
-        arrPosition = randomArrPosition;
-        break;
-      case StarName.RAGID:
-        arrPosition = randomArrPosition;
-        break;
-      case StarName.UDNOX:
-        arrPosition = randomArrPosition;
-        break;
-    }
-  }
-
   // Arrival Bedpost & Sector
   let arrBedpost: ArrBedpost = ArrBedpost.BOXUM;
   let handoffSector = AdjacentSectors.ER;
@@ -184,6 +153,90 @@ export function genArrFDE(
       break;
   }
 
+  // Arrival position
+  let arrPosition = ArrivalPosition.NORTH;
+
+  if (!isSingleOps) {
+    let randomArrPosition = _.sample([
+      ArrivalPosition.NORTH,
+      ArrivalPosition.SOUTH,
+    ]);
+    if (!randomArrPosition) randomArrPosition = ArrivalPosition.SOUTH;
+
+    switch (arrBedpost) {
+      case ArrBedpost.BOXUM:
+        if (
+          radarScene === RadarSceneKeys.RADAR_06s ||
+          radarScene === RadarSceneKeys.RADAR_24s
+        ) {
+          arrPosition = ArrivalPosition.NORTH;
+        }
+        if (
+          radarScene === RadarSceneKeys.RADAR_15s ||
+          radarScene === RadarSceneKeys.RADAR_33s
+        ) {
+          arrPosition = randomArrPosition;
+        }
+        break;
+      case ArrBedpost.NUBER:
+        if (
+          radarScene === RadarSceneKeys.RADAR_06s ||
+          radarScene === RadarSceneKeys.RADAR_24s
+        ) {
+          arrPosition = randomArrPosition;
+        }
+        if (
+          radarScene === RadarSceneKeys.RADAR_15s ||
+          radarScene === RadarSceneKeys.RADAR_33s
+        ) {
+          arrPosition = ArrivalPosition.SOUTH;
+        }
+        break;
+      case ArrBedpost.LINNG:
+        if (
+          radarScene === RadarSceneKeys.RADAR_06s ||
+          radarScene === RadarSceneKeys.RADAR_24s
+        ) {
+          arrPosition = ArrivalPosition.SOUTH;
+        }
+        if (
+          radarScene === RadarSceneKeys.RADAR_15s ||
+          radarScene === RadarSceneKeys.RADAR_33s
+        ) {
+          arrPosition = randomArrPosition;
+        }
+        break;
+      case ArrBedpost.IMEBA:
+        if (
+          radarScene === RadarSceneKeys.RADAR_06s ||
+          radarScene === RadarSceneKeys.RADAR_24s
+        ) {
+          arrPosition = randomArrPosition;
+        }
+        if (
+          radarScene === RadarSceneKeys.RADAR_15s ||
+          radarScene === RadarSceneKeys.RADAR_33s
+        ) {
+          arrPosition = ArrivalPosition.NORTH;
+        }
+        break;
+      case ArrBedpost.RAGID:
+        if (
+          radarScene === RadarSceneKeys.RADAR_06s ||
+          radarScene === RadarSceneKeys.RADAR_24s
+        ) {
+          arrPosition = randomArrPosition;
+        }
+        if (
+          radarScene === RadarSceneKeys.RADAR_15s ||
+          radarScene === RadarSceneKeys.RADAR_33s
+        ) {
+          arrPosition = ArrivalPosition.NORTH;
+        }
+        break;
+    }
+  }
+
   // Is Straight in?
   let isStraightIn = false;
   switch (radarScene) {
@@ -218,6 +271,10 @@ export function genArrFDE(
   switch (radarScene) {
     case RadarSceneKeys.RADAR_06s:
       assignedHeading = STAR_ROUTES_06s[arrBedpost][arrPosition][0];
+      break;
+    case RadarSceneKeys.RADAR_24s:
+      assignedHeading = STAR_ROUTES_24s[arrBedpost][arrPosition][0];
+      break;
   }
 
   // Entry altitude
