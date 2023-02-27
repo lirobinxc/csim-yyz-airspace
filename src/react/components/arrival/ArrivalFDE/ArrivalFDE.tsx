@@ -21,6 +21,7 @@ import PhaserGame from '../../../../phaser/PhaserGameConfig';
 import { OtherSceneKeys } from '../../../../phaser/types/SceneKeys';
 import RadarScene from '../../../../phaser/scenes/RadarScene';
 import { ReactCustomEvents } from '../../../../phaser/types/CustomEvents';
+import { RecatGroup } from '../../../../phaser/config/RecatSpacing';
 
 function ArrivalFDE(props: ArrFDE) {
   const {
@@ -39,6 +40,7 @@ function ArrivalFDE(props: ArrFDE) {
     debugACID,
     ETA,
     isQ400,
+    recat,
     starName,
     transponderCode,
   } = props;
@@ -195,8 +197,18 @@ function ArrivalFDE(props: ArrFDE) {
       </div>
       <div className={clsx(styles.col2)}>
         <div className={clsx(styles.topBox)}>
-          <div className={clsx(styles.acModelFull)}>{acModelFull}</div>
-          <div className={clsx(styles.recat)}>D</div>
+          <div
+            className={clsx(styles.acModelFull, { [styles.bgWhite]: isQ400 })}
+          >
+            {acModelFull}
+          </div>
+          <div
+            className={clsx(styles.recat, {
+              [styles.bgWhite]: recat === RecatGroup.G,
+            })}
+          >
+            {recat}
+          </div>
         </div>
         <div className={clsx(styles.bottomBox)}>emptyBox</div>
       </div>

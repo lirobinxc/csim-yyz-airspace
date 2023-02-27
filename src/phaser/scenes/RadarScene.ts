@@ -284,7 +284,7 @@ export default class RadarScene extends Phaser.Scene {
     // TEMP Create: Runway FINAL line for intercepts
     // TEMP: Cursor Halo
     if (this.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL) {
-      new CursorHalo(this);
+      // new CursorHalo(this);
 
       this.Localizers = new RunwayLocalizers(this);
     }

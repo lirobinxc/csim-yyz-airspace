@@ -24,6 +24,7 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
   public Text1: Phaser.GameObjects.BitmapText;
   public Text2: Phaser.GameObjects.DynamicBitmapText;
   public Text3: Phaser.GameObjects.BitmapText;
+  public TextIaTool: Phaser.GameObjects.BitmapText;
 
   constructor(plane: Plane) {
     super(plane.scene);
@@ -59,9 +60,16 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
       AssetKeys.FONT_DEJAVU_MONO_BOLD,
       '123456789'
     );
+    this.TextIaTool = new Phaser.GameObjects.BitmapText(
+      plane.scene,
+      0,
+      0,
+      AssetKeys.FONT_DEJAVU_MONO_BOLD,
+      ''
+    );
 
     // Attach: All subcomponents to this container
-    this.add([this.Text1, this.Text2, this.Text3]);
+    this.add([this.Text1, this.Text2, this.Text3, this.TextIaTool]);
 
     // Setup: Text1
     let FONT_SIZE = 14;
@@ -94,8 +102,14 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
     this.Text3.scaleY = FONT_SCALE_Y;
     this.Text3.setOrigin(...LINE_ORIGIN);
 
+    // Setup: TextIaTool
+    this.TextIaTool.setFontSize(FONT_SIZE);
+    this.TextIaTool.setTint(ColorKeys.IA_GREEN);
+    this.TextIaTool.scaleY = FONT_SCALE_Y;
+    this.TextIaTool.setOrigin(...LINE_ORIGIN);
+
     // Setup: Text1 & Text3 positions relative to Line2 (CENTER LINE)
-    this.setText1Text3Position();
+    this.setText1Text3TextIaToolPosition();
 
     // Input: On press F10 key, toggle EXT TAG
     this.scene.input.keyboard.on('keydown-F10', () => {
@@ -177,7 +191,10 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
     this.updateText2();
 
     this.scene.physics.world.on('worldstep', () => {
+      if (this.Plane.DESTROYED) return;
+
       this.updateText2();
+      this.updateTextIaTool();
     });
   }
 
@@ -295,9 +312,22 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
     }
   }
 
-  private setText1Text3Position() {
+  private updateTextIaTool() {
+    if (this.Plane.IaIndicator.MAX_CONSTRAINT_TYPE) {
+      this.TextIaTool.setText(
+        `${this.Plane.IaIndicator.SPACING.toFixed(1)}${
+          this.Plane.IaIndicator.DELTA
+        }`
+      ); // max 9 chars length
+    } else {
+      this.TextIaTool.setText('');
+    }
+  }
+
+  private setText1Text3TextIaToolPosition() {
     const line2Height = this.Text2.getTextBounds().global.height;
 
+    this.TextIaTool.setY(-line2Height * 2 + this.LINE_SPACING);
     this.Text1.setY(-line2Height + this.LINE_SPACING);
     this.Text3.setY(line2Height - this.LINE_SPACING);
   }

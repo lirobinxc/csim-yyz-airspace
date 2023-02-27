@@ -30,6 +30,8 @@ export default class PlanePTL extends Phaser.GameObjects.Line {
     // Sync update with FPS (set in Phaser Config)
     this.updatePtlPosition();
     this.scene.physics.world.on('worldstep', () => {
+      if (this.Plane.DESTROYED) return;
+
       this.updatePtlPosition();
     });
   }

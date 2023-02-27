@@ -33,6 +33,8 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
 
     // Sync update with FPS (set in Phaser Config)
     this.scene.physics.world.on('worldstep', () => {
+      if (this.Plane.DESTROYED) return;
+
       switch (this.Plane.Scene.SIM_OPTIONS.terminalPosition) {
         case TerminalPosition.DEPARTURE:
           this.depCheckInAfterPassing1200();

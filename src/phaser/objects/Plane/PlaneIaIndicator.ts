@@ -17,10 +17,12 @@ export enum IaIndicatorType {
 }
 
 export default class PlaneIaIndicator extends Phaser.GameObjects.Image {
+  public IS_VISIBLE: boolean;
   public LEAD_PLANE: Plane | null;
   public DEPENDENT_LEAD_PLANE: Plane | null;
   public MAX_CONSTRAINT_TYPE: IaIndicatorType | null;
   public SPACING: number;
+  public DELTA: string;
 
   // Parent
   private Plane: Plane;
@@ -36,18 +38,17 @@ export default class PlaneIaIndicator extends Phaser.GameObjects.Image {
         this.Plane.Properties.arrivalData.arrRunway
       ].geom;
 
+    this.IS_VISIBLE = false;
     this.LEAD_PLANE = null;
     this.DEPENDENT_LEAD_PLANE = null;
     this.MAX_CONSTRAINT_TYPE = null;
-    this.SPACING =
-      plane.Scene.SIM_OPTIONS.wakeSpacingConfig[
-        plane.Properties.arrivalData.arrRunway
-      ];
+    this.SPACING = 0;
+    this.DELTA = '';
 
     plane.scene.add.existing(this);
 
     // Setup: THIS
-    this.setVisible(false);
+    this.setVisible(this.IS_VISIBLE);
     this.setDepth(99999);
     this.setScale(0.07);
     switch (plane.Scene.SCENE_KEY) {
@@ -69,18 +70,23 @@ export default class PlaneIaIndicator extends Phaser.GameObjects.Image {
 
     // Sync update with FPS
     this.scene.physics.world.on('worldstep', (dt: number) => {
+      if (this.Plane.DESTROYED) return;
+
+      this.setVisible(this.IS_VISIBLE);
+
       if (
         this.Plane.Scene.SIM_OPTIONS.terminalPosition ===
         TerminalPosition.ARRIVAL
       ) {
-        const maxConstraintData = this.determineMaxConstraintData();
+        const maxConstraintData = this.determineMaxConstraintSpacing();
         this.MAX_CONSTRAINT_TYPE = maxConstraintData.type;
         this.SPACING = maxConstraintData.spacing || 0;
-      }
 
-      if (this.MAX_CONSTRAINT_TYPE && this.SPACING > 0) {
-        this.updateIndicatorTexture();
-        this.updateIndicatorPosition();
+        if (this.MAX_CONSTRAINT_TYPE && this.SPACING > 0) {
+          this.updateIndicatorTexture();
+          this.updateIndicatorPosition();
+          this.updateDelta();
+        }
       }
     });
   }
@@ -88,38 +94,52 @@ export default class PlaneIaIndicator extends Phaser.GameObjects.Image {
   preUpdate() {}
 
   updateIndicatorPosition() {
-    if (
-      this.Plane.Scene.SCENE_KEY === RadarSceneKeys.RADAR_06s ||
-      this.Plane.Scene.SCENE_KEY === RadarSceneKeys.RADAR_24s
-    ) {
-      if (!this.LEAD_PLANE) {
-        this.setVisible(false);
-        return;
-      }
-
-      this.setVisible(true);
-      const indicatorPosition = Phaser.Geom.Line.GetPoint(
-        this.LocLineGeom,
-        this.calcPercentOfLineToMatchIndicatorDistanceFromThreshold()
-      );
-
-      this.setPosition(indicatorPosition.x, indicatorPosition.y);
+    if (!this.MAX_CONSTRAINT_TYPE) {
+      this.IS_VISIBLE = false;
+      return;
     }
+
+    this.IS_VISIBLE = true;
+    const indicatorPosition = Phaser.Geom.Line.GetPoint(
+      this.LocLineGeom,
+      this.calcPercentOfLineToMatchIndicatorDistanceFromThreshold()
+    );
+
+    this.setPosition(indicatorPosition.x, indicatorPosition.y);
+  }
+  updateDelta() {
+    if (!this.MAX_CONSTRAINT_TYPE) {
+      return;
+    }
+
+    const indicatorDistanceInMiles =
+      this.calcIndicatorDistanceFromThresholdInMiles();
+    const planeDistanceInMiles =
+      this.Plane.DISTANCE_FROM_RUNWAY_THRESHOLD_MILES;
+
+    const ERROR_MARGIN = 0.57;
+    const delta =
+      planeDistanceInMiles - indicatorDistanceInMiles - ERROR_MARGIN;
+    const deltaIsPlus = delta >= 0;
+
+    const formattedDelta = `${deltaIsPlus ? '+' : ''}${delta.toFixed(1)}`;
+
+    this.DELTA = formattedDelta;
   }
 
   updateIndicatorTexture() {
     switch (this.MAX_CONSTRAINT_TYPE) {
       case IaIndicatorType.WAKE:
         this.setTexture(AssetKeys.IA_INDICATOR_LINE);
-        this.setTint(ColorKeys.IA_ORANGE);
+        this.setTintFill(ColorKeys.IA_ORANGE);
         break;
       case IaIndicatorType.SPACING:
         this.setTexture(AssetKeys.IA_INDICATOR_DASHED);
-        this.setTint(ColorKeys.IA_GREEN);
+        this.setTintFill(ColorKeys.IA_GREEN);
         break;
       case IaIndicatorType.DEPENDENT:
         this.setTexture(AssetKeys.IA_INDICATOR_CHEVRON);
-        this.setTint(ColorKeys.IA_GREEN);
+        this.setTintFill(ColorKeys.IA_GREEN);
         break;
     }
   }
@@ -131,23 +151,34 @@ export default class PlaneIaIndicator extends Phaser.GameObjects.Image {
     const locLengthInPixels = Phaser.Geom.Line.Length(this.LocLineGeom);
     const locLengthInMiles = convertPixelsToMiles(locLengthInPixels);
 
-    const totalIndicatorDistanceFromThreshold =
-      this.calcIndicatorDistanceFromThresholdInMiles(this.LEAD_PLANE);
+    const totalIndicatorDistanceFromThresholdInMiles =
+      this.calcIndicatorDistanceFromThresholdInMiles();
+
+    const ERROR_MARGIN = 0.5;
 
     const spacingLocRatio =
-      totalIndicatorDistanceFromThreshold / locLengthInMiles;
+      totalIndicatorDistanceFromThresholdInMiles / locLengthInMiles;
     return spacingLocRatio;
   }
 
-  calcIndicatorDistanceFromThresholdInMiles(leadPlane: Plane) {
-    const leadDistanceFromThresholdInMiles =
-      leadPlane.DISTANCE_FROM_RUNWAY_THRESHOLD_MILES;
+  calcIndicatorDistanceFromThresholdInMiles() {
+    let leadDistanceFromThresholdInMiles =
+      this.LEAD_PLANE?.DISTANCE_FROM_RUNWAY_THRESHOLD_MILES;
+
+    if (this.MAX_CONSTRAINT_TYPE === IaIndicatorType.DEPENDENT) {
+      leadDistanceFromThresholdInMiles =
+        this.DEPENDENT_LEAD_PLANE?.DISTANCE_FROM_RUNWAY_THRESHOLD_MILES;
+    }
+
+    if (!leadDistanceFromThresholdInMiles) return 0;
 
     const totalDistance = leadDistanceFromThresholdInMiles + this.SPACING;
     return totalDistance;
   }
 
-  determineMaxConstraintData() {
+  determineMaxConstraintSpacing() {
+    console.log('maxConstaintType', this.MAX_CONSTRAINT_TYPE);
+
     if (!this.LEAD_PLANE && !this.DEPENDENT_LEAD_PLANE) {
       return {
         type: null,

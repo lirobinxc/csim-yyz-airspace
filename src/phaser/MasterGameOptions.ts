@@ -3,7 +3,7 @@ export const MasterGameOptions = {
   height: 1080,
   fps: 0.25, // should be 0.25
   isDebug: false, // should be false
-  speedMultipliers: [1, 40],
+  speedMultipliers: [1, 120],
 };
 
 export const DebugGameOptions: typeof MasterGameOptions = {

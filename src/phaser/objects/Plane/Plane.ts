@@ -207,19 +207,19 @@ export default class Plane extends Phaser.GameObjects.Container {
 
     // Sync update with FPS
     this.scene.physics.world.on('worldstep', (dt: number) => {
-      if (this.DESTROYED === false) {
-        if (
-          this.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL
-        ) {
-          if (this.IN_ARR_BOX === false) {
-            this.IN_ARR_BOX = isPlaneInsideArrBox(this);
-          }
-          if (this.IN_ARR_BOX === true) {
-            this.Scene.Localizers?.hasPlaneInterceptedLocalizer(this);
-            this.updateDistanceFromRunwayThreshold();
-            this.updateOnBaseTurn();
-            // console.log(this.DISTANCE_FROM_RUNWAY_THRESHOLD);
-          }
+      if (this.DESTROYED) return;
+
+      if (
+        this.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL
+      ) {
+        if (this.IN_ARR_BOX === false) {
+          this.IN_ARR_BOX = isPlaneInsideArrBox(this);
+        }
+        if (this.IN_ARR_BOX === true) {
+          this.Scene.Localizers?.hasPlaneInterceptedLocalizer(this);
+          this.updateDistanceFromRunwayThreshold();
+          this.updateOnBaseTurn();
+          // console.log(this.DISTANCE_FROM_RUNWAY_THRESHOLD);
         }
       }
     });
@@ -705,13 +705,13 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.HistoryTrail.setVisible(false);
     this.setVisible(false);
 
-    this.Behaviour.removeFromUpdateList()
-      .removeFromDisplayList()
-      .removeAllListeners();
+    this.IaIndicator.removeFromUpdateList().removeFromDisplayList().destroy();
+    this.Behaviour.removeFromUpdateList().removeFromDisplayList();
+
     this.getAll().forEach((obj) =>
-      obj.removeFromUpdateList().removeFromDisplayList().removeAllListeners()
+      obj.removeFromUpdateList().removeFromDisplayList()
     );
-    this.removeFromUpdateList().removeFromDisplayList().removeAllListeners();
+    this.removeFromUpdateList().removeFromDisplayList();
     this.removeInteractive();
   }
 }

@@ -23,6 +23,8 @@ import {
   ArrivalPhase,
   ArrivalPosition,
 } from '../../../phaser/types/ArrivalTypes';
+import { RecatGroup } from '../../../phaser/config/RecatSpacing';
+import { PlanePerformanceConfig } from '../../../phaser/config/PlanePerformanceConfig';
 
 let currentHour = _.sample([12, 13, 14, 15, 16, 17, 18]) || 12;
 let currentMinute = 0;
@@ -68,6 +70,7 @@ export interface ArrFDE {
   handoffSector: AdjacentSectors;
   isQ400: boolean;
   isStraightIn: boolean;
+  recat: RecatGroup;
   starName: StarName;
   transponderCode: string;
 }
@@ -232,6 +235,8 @@ export function genArrFDE(
 
   const arrPhase = ArrivalPhase.PENDING;
 
+  const recat = PlanePerformanceConfig[aircraft.model].recat;
+
   const arrFde: ArrFDE = {
     uniqueKey: `${callsign.fullCallsign}${Math.random().toFixed(5)}`,
     acId: { code: callsign.fullCallsign, spoken: callsign.spokenCallsign },
@@ -252,6 +257,7 @@ export function genArrFDE(
     handoffSector,
     isQ400: aircraft.isQ400,
     isStraightIn,
+    recat,
     starName,
     transponderCode,
   };

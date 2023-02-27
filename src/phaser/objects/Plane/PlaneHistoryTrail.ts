@@ -31,6 +31,8 @@ export default class PlaneHistoryTrail extends Phaser.GameObjects.Container {
 
     // Sync update with FPS (set in Phaser Config)
     this.scene.physics.world.on('worldstep', () => {
+      if (this.Plane.DESTROYED) return;
+
       if (this.IS_VISIBLE) {
         this.addNewDot();
         this.removeOldDots();
