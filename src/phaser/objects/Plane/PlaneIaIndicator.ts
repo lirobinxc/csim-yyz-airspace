@@ -23,6 +23,7 @@ export default class PlaneIaIndicator extends Phaser.GameObjects.Image {
   public MAX_CONSTRAINT_TYPE: IaIndicatorType | null;
   public SPACING: number;
   public DELTA: string;
+  public COMPRESSION_BUFFER: number; // miles
 
   // Parent
   private Plane: Plane;
@@ -44,6 +45,7 @@ export default class PlaneIaIndicator extends Phaser.GameObjects.Image {
     this.MAX_CONSTRAINT_TYPE = null;
     this.SPACING = 0;
     this.DELTA = '';
+    this.COMPRESSION_BUFFER = 0.9;
 
     plane.scene.add.existing(this);
 
@@ -80,7 +82,7 @@ export default class PlaneIaIndicator extends Phaser.GameObjects.Image {
       ) {
         const maxConstraintData = this.determineMaxConstraintSpacing();
         this.MAX_CONSTRAINT_TYPE = maxConstraintData.type;
-        this.SPACING = maxConstraintData.spacing || 0;
+        this.SPACING = maxConstraintData.spacing + this.COMPRESSION_BUFFER || 0;
 
         if (this.MAX_CONSTRAINT_TYPE && this.SPACING > 0) {
           this.updateIndicatorTexture();
@@ -114,6 +116,7 @@ export default class PlaneIaIndicator extends Phaser.GameObjects.Image {
 
     const indicatorDistanceInMiles =
       this.calcIndicatorDistanceFromThresholdInMiles();
+
     const planeDistanceInMiles =
       this.Plane.DISTANCE_FROM_RUNWAY_THRESHOLD_MILES;
 
@@ -153,8 +156,6 @@ export default class PlaneIaIndicator extends Phaser.GameObjects.Image {
 
     const totalIndicatorDistanceFromThresholdInMiles =
       this.calcIndicatorDistanceFromThresholdInMiles();
-
-    const ERROR_MARGIN = 0.5;
 
     const spacingLocRatio =
       totalIndicatorDistanceFromThresholdInMiles / locLengthInMiles;

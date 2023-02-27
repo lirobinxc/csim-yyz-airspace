@@ -216,6 +216,17 @@ export default class Plane extends Phaser.GameObjects.Container {
           this.IN_ARR_BOX = isPlaneInsideArrBox(this);
         }
         if (this.IN_ARR_BOX === true) {
+          if (
+            this.Scene.SIM_OPTIONS.arrInnerPracticeMode &&
+            this.IS_HANDED_OFF === false &&
+            this.ARR_HANDOFF_IN_PROGRESS === true
+          ) {
+            this.Scene.events.emit(
+              PhaserCustomEvents.ACCEPT_HANDOFF_BUTTON_CLICKED,
+              this
+            );
+          }
+
           this.Scene.Localizers?.hasPlaneInterceptedLocalizer(this);
           this.updateDistanceFromRunwayThreshold();
           this.updateOnBaseTurn();

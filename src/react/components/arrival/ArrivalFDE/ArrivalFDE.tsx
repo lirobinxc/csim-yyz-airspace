@@ -40,6 +40,7 @@ function ArrivalFDE(props: ArrFDE) {
     debugACID,
     ETA,
     isQ400,
+    isStraightIn,
     recat,
     starName,
     transponderCode,
@@ -51,7 +52,7 @@ function ArrivalFDE(props: ArrFDE) {
   const [fdeHeading, setFdeHeading] = useState<number | null>(null);
   const [fdeSpeed, setFdeSpeed] = useState<number | null>(null);
   const [apprClr, setApprClr] = useState(false);
-  const [interceptLoc, setInterceptLoc] = useState(false);
+  const [interceptLoc, setInterceptLoc] = useState(isStraightIn ? true : false);
   const [modalIsOpen, setModalIsOpen] = useState<AtcInstruction | null>(null);
   const [stripIsSelected, setStripIsSelected] = useState(false);
   const [prevCommandCue, setPrevCommandCue] = useState<PlaneCommandCue>({
@@ -59,7 +60,7 @@ function ArrivalFDE(props: ArrFDE) {
     heading: fdeHeading,
     altitude: assignedAlt,
     speed: assignedSpeed,
-    interceptLoc: false,
+    interceptLoc: isStraightIn ? true : false,
     approachClearance: false,
   });
 
@@ -149,6 +150,13 @@ function ArrivalFDE(props: ArrFDE) {
     }
     if (prevCommandCue.altitude !== fdeAltitude) {
       SENT_COMMAND_CUE.altitude = fdeAltitude * 100;
+
+      if (fdeAltitude === 0) {
+        SENT_COMMAND_CUE.interceptLoc = true;
+        SENT_COMMAND_CUE.approachClearance = true;
+        setInterceptLoc(true);
+        setApprClr(true);
+      }
     }
     if (prevCommandCue.speed !== fdeSpeed && fdeSpeed !== 0) {
       SENT_COMMAND_CUE.speed = fdeSpeed;
