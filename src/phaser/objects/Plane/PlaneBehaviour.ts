@@ -504,7 +504,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
   }
 
   private descendOnGlidePath() {
-    const distance = this.Plane.DISTANCE_FROM_RUNWAY_THRESHOLD;
+    const distance = this.Plane.DISTANCE_FROM_RUNWAY_THRESHOLD_MILES;
     const landingSpeed = this.Plane.Performance.speed.landing;
 
     if (this.Plane.ARR_APPROACH_CLEARANCE) {
@@ -530,11 +530,11 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
   private deletePlaneIfLanded() {
     if (
       this.Plane.ARR_APPROACH_CLEARANCE &&
-      this.Plane.DISTANCE_FROM_RUNWAY_THRESHOLD < 0.2 &&
+      this.Plane.DISTANCE_FROM_RUNWAY_THRESHOLD_MILES < 0.2 &&
       this.Plane.Commands.altitude.current <= 1000
     ) {
       this.scene.events.emit(
-        PhaserCustomEvents.HIDE_PLANE_BUTTON_CLICKED,
+        PhaserCustomEvents.DESTROY_PLANE_BUTTON_CLICKED,
         this.Plane
       );
     }

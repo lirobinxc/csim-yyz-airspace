@@ -114,7 +114,7 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
       }
       if (pointer.middleButtonDown()) {
         this.scene.events.emit(
-          PhaserCustomEvents.HIDE_PLANE_BUTTON_CLICKED,
+          PhaserCustomEvents.DESTROY_PLANE_BUTTON_CLICKED,
           this.Plane
         );
         return;

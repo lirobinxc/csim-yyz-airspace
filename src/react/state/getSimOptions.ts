@@ -14,7 +14,7 @@ export const defaultSimOptions: SimOptions = {
   radarScene: RadarSceneKeys.RADAR_06s,
   terminalPosition: TerminalPosition.ARRIVAL,
   startingCount: 4,
-  isSingleOps: true,
+  isSingleOps: false,
   allowVdp: true,
   newStripInterval: [10_000, 20_000],
   intervalBetweenNormalDeps: 65_000, // should be 65_000
@@ -35,6 +35,16 @@ export const defaultSimOptions: SimOptions = {
   ],
   maxActiveArrivals: 8,
   arrInnerPracticeMode: false,
+  wakeSpacingConfig: {
+    'YYZ Rwy 05': 5,
+    'YYZ Rwy 06L': 5,
+    'YYZ Rwy 15L': 15,
+    'YYZ Rwy 15R': 3,
+    'YYZ Rwy 23': 5,
+    'YYZ Rwy 24R': 5,
+    'YYZ Rwy 33L': 5,
+    'YYZ Rwy 33R': 5,
+  },
 };
 
 const localStorage = window.localStorage;

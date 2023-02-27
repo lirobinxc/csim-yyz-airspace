@@ -9,6 +9,7 @@ import { SatelliteName, SidName } from './SidAndSatelliteTypes';
 import { TerminalPosition } from './SimTypes';
 import { WaypointDataArrAll } from './WaypointTypesArr';
 import { WaypointDataDepAll, WaypointDataDepCommon } from './WaypointTypesDep';
+import { RecatGroup } from '../config/RecatSpacing';
 
 export interface PlaneProperties {
   fdeData: { dep: DepFDE | null; arr: ArrFDE | null };
@@ -60,7 +61,7 @@ export interface PlanePerformance {
     normalClimb: number;
   };
   accel: number;
-  recat: 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G';
+  recat: RecatGroup;
 }
 
 export interface PlaneCommands {

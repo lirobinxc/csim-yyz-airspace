@@ -56,7 +56,7 @@ const ArrFdeSection = () => {
     ] as RadarScene;
 
     RADAR_SCENE.events.on(
-      PhaserCustomEvents.HIDE_PLANE_BUTTON_CLICKED,
+      PhaserCustomEvents.DESTROY_PLANE_BUTTON_CLICKED,
       (plane: Plane) => {
         if (plane.Properties.fdeData.arr) {
           dispatch(

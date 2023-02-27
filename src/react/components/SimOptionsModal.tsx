@@ -11,6 +11,7 @@ import React, { useState } from 'react';
 import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
 import { TerminalPosition } from '../../phaser/types/SimTypes';
 import { ArrBedpost, StarName } from '../functions/arrival/genArrRoute';
+import { DepRunwayYYZ } from '../../phaser/types/AirportTypes';
 
 interface SimOptionsModalProps {
   isOpen: boolean;
@@ -162,6 +163,61 @@ const SimOptionsModal = ({
     dispatch(simOptionsActions.resetLocalStorageToDefaults());
   }
 
+  function handleWakeConfig(e: React.FormEvent, rwy: DepRunwayYYZ) {
+    const target = e.target as HTMLTextAreaElement;
+    let value = Number(target.value);
+
+    if (isNaN(value)) value = simOptions.wakeSpacingConfig[rwy];
+
+    const newWakeConfig = { ...tempOptions.wakeSpacingConfig, [rwy]: value };
+
+    setTempOptions({
+      ...tempOptions,
+      wakeSpacingConfig: newWakeConfig,
+    });
+  }
+
+  function displayWakeConfig() {
+    let northRunway: DepRunwayYYZ = DepRunwayYYZ.RWY_05;
+    let southRunway: DepRunwayYYZ = DepRunwayYYZ.RWY_06L;
+
+    switch (tempOptions.radarScene) {
+      case RadarSceneKeys.RADAR_24s:
+        northRunway = DepRunwayYYZ.RWY_23;
+        southRunway = DepRunwayYYZ.RWY_24R;
+        break;
+      case RadarSceneKeys.RADAR_15s:
+        northRunway = DepRunwayYYZ.RWY_15L;
+        southRunway = DepRunwayYYZ.RWY_15R;
+        break;
+      case RadarSceneKeys.RADAR_33s:
+        northRunway = DepRunwayYYZ.RWY_33L;
+        southRunway = DepRunwayYYZ.RWY_33R;
+        break;
+    }
+
+    return (
+      <>
+        <label>
+          {northRunway}
+          <input
+            type="number"
+            value={tempOptions.wakeSpacingConfig[northRunway]}
+            onChange={(e: React.FormEvent) => handleWakeConfig(e, northRunway)}
+          ></input>
+        </label>
+        <label>
+          {southRunway}
+          <input
+            type="number"
+            value={tempOptions.wakeSpacingConfig[southRunway]}
+            onChange={(e: React.FormEvent) => handleWakeConfig(e, southRunway)}
+          ></input>
+        </label>
+      </>
+    );
+  }
+
   return (
     <Modal
       isOpen={isOpen}
@@ -283,6 +339,8 @@ const SimOptionsModal = ({
                   onChange={setArrInnerPracticeMode}
                 />
               </label>
+              <h3>Wake Config</h3>
+              {displayWakeConfig()}
               <h3>Active Bedposts</h3>
               <label>
                 <input

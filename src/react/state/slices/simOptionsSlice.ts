@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { MasterGameOptions } from '../../../phaser/MasterGameOptions';
 import PhaserGame from '../../../phaser/PhaserGameConfig';
 import RadarScene from '../../../phaser/scenes/RadarScene';
+import { DepRunwayYYZ } from '../../../phaser/types/AirportTypes';
 import { ReactCustomEvents } from '../../../phaser/types/CustomEvents';
 import {
   OtherSceneKeys,
@@ -40,6 +41,7 @@ export interface SimOptions {
   activeArrBedposts: ArrBedpost[];
   maxActiveArrivals: number;
   arrInnerPracticeMode: boolean;
+  wakeSpacingConfig: { [key in DepRunwayYYZ]: number };
 }
 
 function pausePhaser() {

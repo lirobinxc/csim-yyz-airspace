@@ -9,7 +9,7 @@ type LocalizerDict = {
 };
 
 export class RunwayLocalizers {
-  public Localizers: LocalizerDict;
+  public LocLineGeoms: LocalizerDict;
   public ArrRunwayList: DepRunwayYYZ[];
 
   constructor(radarScene: RadarScene) {
@@ -22,7 +22,6 @@ export class RunwayLocalizers {
       ],
       'YYZ Rwy 06L': [
         radarScene.RunwayOrigins.getOrigin(DepRunwayYYZ.RWY_06L),
-
         new Phaser.Math.Vector2(160.0, 802.0),
       ],
       'YYZ Rwy 15L': [new Phaser.Math.Vector2(), new Phaser.Math.Vector2()],
@@ -36,11 +35,11 @@ export class RunwayLocalizers {
     this.ArrRunwayList = Object.keys(LocalizerConfig) as DepRunwayYYZ[];
 
     // Init: Localizers
-    this.Localizers = {} as LocalizerDict;
+    this.LocLineGeoms = {} as LocalizerDict;
 
     // Create: Localizers
     this.ArrRunwayList.forEach((rwy) => {
-      this.Localizers[rwy] = new Phaser.GameObjects.Line(
+      this.LocLineGeoms[rwy] = new Phaser.GameObjects.Line(
         radarScene,
         0,
         0,
@@ -51,26 +50,26 @@ export class RunwayLocalizers {
         ColorKeys.DEBUG_PINK
       );
 
-      this.Localizers[rwy].setOrigin(0, 0);
-      this.Localizers[rwy].setLineWidth(0.6);
+      this.LocLineGeoms[rwy].setOrigin(0, 0);
+      this.LocLineGeoms[rwy].setLineWidth(0.6);
     });
 
     switch (radarScene.SCENE_KEY) {
       case RadarSceneKeys.RADAR_06s:
-        radarScene.add.existing(this.Localizers['YYZ Rwy 05']);
-        radarScene.add.existing(this.Localizers['YYZ Rwy 06L']);
+        radarScene.add.existing(this.LocLineGeoms['YYZ Rwy 05']);
+        radarScene.add.existing(this.LocLineGeoms['YYZ Rwy 06L']);
         break;
       case RadarSceneKeys.RADAR_15s:
-        radarScene.add.existing(this.Localizers['YYZ Rwy 15L']);
-        radarScene.add.existing(this.Localizers['YYZ Rwy 15R']);
+        radarScene.add.existing(this.LocLineGeoms['YYZ Rwy 15L']);
+        radarScene.add.existing(this.LocLineGeoms['YYZ Rwy 15R']);
         break;
       case RadarSceneKeys.RADAR_24s:
-        radarScene.add.existing(this.Localizers['YYZ Rwy 23']);
-        radarScene.add.existing(this.Localizers['YYZ Rwy 24R']);
+        radarScene.add.existing(this.LocLineGeoms['YYZ Rwy 23']);
+        radarScene.add.existing(this.LocLineGeoms['YYZ Rwy 24R']);
         break;
       case RadarSceneKeys.RADAR_33s:
-        radarScene.add.existing(this.Localizers['YYZ Rwy 33L']);
-        radarScene.add.existing(this.Localizers['YYZ Rwy 33R']);
+        radarScene.add.existing(this.LocLineGeoms['YYZ Rwy 33L']);
+        radarScene.add.existing(this.LocLineGeoms['YYZ Rwy 33R']);
         break;
     }
   }
@@ -79,7 +78,7 @@ export class RunwayLocalizers {
     const arrRunway = plane.Properties.arrivalData.arrRunway;
 
     const planePoint = new Phaser.Geom.Point(plane.x, plane.y);
-    const localizerLine = this.Localizers[arrRunway].geom as Phaser.Geom.Line;
+    const localizerLine = this.LocLineGeoms[arrRunway].geom as Phaser.Geom.Line;
 
     const hasIntercepted = Phaser.Geom.Intersects.PointToLine(
       planePoint,
@@ -95,14 +94,14 @@ export class RunwayLocalizers {
     // if (hasIntercepted) console.log(hasIntercepted);
 
     plane.ARR_HAS_INTERCEPTED_LOC = hasIntercepted;
-    console.log('has intercepted:', hasIntercepted);
+    // console.log('has intercepted:', hasIntercepted);
 
     return hasIntercepted;
   }
 
   public showLines(isDebugMode: boolean) {
     this.ArrRunwayList.forEach((rwy) => {
-      this.Localizers[rwy].setVisible(isDebugMode);
+      this.LocLineGeoms[rwy].setVisible(isDebugMode);
     });
   }
 }

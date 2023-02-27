@@ -36,6 +36,11 @@ import {
   ArrBoxDimensions,
   isPlaneInsideArrBox,
 } from '../../utils/isPlaneInsideArrBox';
+import { IaToolHeadings } from '../../config/IaToolHeadings';
+import { DepRunwayYYZ } from '../../types/AirportTypes';
+import { RadarSceneKeys } from '../../types/SceneKeys';
+import { ArrivalPosition } from '../../types/ArrivalTypes';
+import PlaneIaIndicator from './PlaneIaIndicator';
 
 export default class Plane extends Phaser.GameObjects.Container {
   // Plane Properties
@@ -60,7 +65,8 @@ export default class Plane extends Phaser.GameObjects.Container {
   public ARR_APPROACH_CLEARANCE: boolean;
   public ARR_APPROACH_CLEARANCE_READ_BACK: boolean;
   public ARR_HAS_INTERCEPTED_LOC: boolean;
-  public DISTANCE_FROM_RUNWAY_THRESHOLD: number; // in miles
+  public ARR_ON_BASE_TURN: boolean;
+  public DISTANCE_FROM_RUNWAY_THRESHOLD_MILES: number; // in miles
 
   public DESTROYED: boolean;
 
@@ -74,6 +80,7 @@ export default class Plane extends Phaser.GameObjects.Container {
   public TagLine: PlaneDataTagLine;
   public PTL: PlanePTL;
   public HistoryTrail: PlaneHistoryTrail;
+  public IaIndicator: PlaneIaIndicator;
   // private PlaneRouteLine: PlaneRouteLine;
   public Behaviour: PlaneBehaviour;
   public CommandMenu: PlaneCommandMenu;
@@ -106,7 +113,8 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.ARR_INTERCEPT_LOC_READ_BACK = false;
     this.ARR_APPROACH_CLEARANCE_READ_BACK = false;
     this.ARR_HAS_INTERCEPTED_LOC = false;
-    this.DISTANCE_FROM_RUNWAY_THRESHOLD = 9999; // in miles
+    this.ARR_ON_BASE_TURN = false;
+    this.DISTANCE_FROM_RUNWAY_THRESHOLD_MILES = 9999; // in miles
 
     this.DESTROYED = false;
 
@@ -126,6 +134,7 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.TagLine = new PlaneDataTagLine(this, this.Symbol, this.DataTag);
     this.PTL = new PlanePTL(this, this.Symbol, 120);
     this.HistoryTrail = new PlaneHistoryTrail(this, this.Symbol);
+    this.IaIndicator = new PlaneIaIndicator(this);
     this.CommandMenu = new PlaneCommandMenu(this);
     this.HandoffMenu = new PlaneHandoffMenu(this);
     this.add([
@@ -163,7 +172,7 @@ export default class Plane extends Phaser.GameObjects.Container {
       if (pointer.rightButtonDown()) return;
       if (pointer.middleButtonDown()) {
         this.scene.events.emit(
-          PhaserCustomEvents.HIDE_PLANE_BUTTON_CLICKED,
+          PhaserCustomEvents.DESTROY_PLANE_BUTTON_CLICKED,
           this
         );
       }
@@ -202,15 +211,14 @@ export default class Plane extends Phaser.GameObjects.Container {
         if (
           this.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL
         ) {
-          console.log('in arr box', this.IN_ARR_BOX);
-
           if (this.IN_ARR_BOX === false) {
             this.IN_ARR_BOX = isPlaneInsideArrBox(this);
           }
           if (this.IN_ARR_BOX === true) {
             this.Scene.Localizers?.hasPlaneInterceptedLocalizer(this);
             this.updateDistanceFromRunwayThreshold();
-            console.log(this.DISTANCE_FROM_RUNWAY_THRESHOLD);
+            this.updateOnBaseTurn();
+            // console.log(this.DISTANCE_FROM_RUNWAY_THRESHOLD);
           }
         }
       }
@@ -494,6 +502,50 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.PTL.setVisible(this.SHOW_PTL);
   }
 
+  private updateOnBaseTurn() {
+    // console.log('on base:', this.ARR_ON_BASE_TURN);
+    if (this.ARR_ON_BASE_TURN) return;
+
+    const arrRunway = this.Properties.arrivalData.arrRunway;
+    const arrPosition = this.Properties.arrivalData.arrPosition;
+    const baseTurnHeading = IaToolHeadings[arrRunway][arrPosition].base;
+    const downwindHeading = IaToolHeadings[arrRunway][arrPosition].downwind;
+
+    if (this.ARR_HAS_INTERCEPTED_LOC) {
+      this.ARR_ON_BASE_TURN = true;
+    } else if (
+      (this.Scene.SCENE_KEY === RadarSceneKeys.RADAR_24s ||
+        this.Scene.SCENE_KEY === RadarSceneKeys.RADAR_15s) &&
+      arrPosition === ArrivalPosition.SOUTH
+    ) {
+      if (
+        this.IN_ARR_BOX &&
+        this.Commands.heading.current <= 60 - 20 &&
+        this.Commands.heading.current >= 1
+      ) {
+        this.ARR_ON_BASE_TURN = true;
+      } else if (
+        this.IN_ARR_BOX &&
+        this.Commands.heading.current <= 360 &&
+        this.Commands.heading.current >= 330
+      ) {
+        this.ARR_ON_BASE_TURN = true;
+      }
+    } else if (
+      this.IN_ARR_BOX &&
+      this.Commands.heading.current <=
+        Math.max(downwindHeading - 20, baseTurnHeading) &&
+      this.Commands.heading.current >=
+        Math.min(downwindHeading + 20, baseTurnHeading)
+    ) {
+      this.ARR_ON_BASE_TURN = true;
+    }
+
+    if (this.ARR_ON_BASE_TURN) {
+      this.scene.events.emit(PhaserCustomEvents.PLANE_ON_BASE_TURN, this);
+    }
+  }
+
   private updateDataTagPosition() {
     if (this.DataTag.isDefaultPosition) {
       const symbolRightCenter = this.Symbol.getRightCenter();
@@ -518,7 +570,7 @@ export default class Plane extends Phaser.GameObjects.Container {
 
     // console.log(distanceInMiles);
 
-    this.DISTANCE_FROM_RUNWAY_THRESHOLD = distanceInMiles;
+    this.DISTANCE_FROM_RUNWAY_THRESHOLD_MILES = distanceInMiles;
   }
 
   private setPilotVoice() {

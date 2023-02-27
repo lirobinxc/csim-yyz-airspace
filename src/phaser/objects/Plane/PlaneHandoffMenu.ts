@@ -156,7 +156,7 @@ export default class PlaneHandoffMenu extends Phaser.GameObjects.Container {
       DomEvents.POINTER_DOWN,
       (pointer: Phaser.Input.Pointer) => {
         this.scene.events.emit(
-          PhaserCustomEvents.HIDE_PLANE_BUTTON_CLICKED,
+          PhaserCustomEvents.DESTROY_PLANE_BUTTON_CLICKED,
           this.Plane
         );
       }

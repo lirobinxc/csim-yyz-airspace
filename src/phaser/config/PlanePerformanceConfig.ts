@@ -1,5 +1,6 @@
 import { AcModel } from '../types/AircraftTypes';
 import { PlanePerformance } from '../types/PlaneInterfaces';
+import { RecatGroup } from './RecatSpacing';
 
 const BASE_ACCEL = 3; // kts per second
 
@@ -21,7 +22,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 1600,
     },
     accel: BASE_ACCEL,
-    recat: 'D',
+    recat: RecatGroup.D,
   },
   A343: {
     speed: {
@@ -36,7 +37,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 1600,
     },
     accel: BASE_ACCEL,
-    recat: 'B',
+    recat: RecatGroup.B,
   },
   B738: {
     speed: {
@@ -51,7 +52,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 2000,
     },
     accel: BASE_ACCEL,
-    recat: 'D',
+    recat: RecatGroup.D,
   },
   B744: {
     speed: {
@@ -66,7 +67,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 1500,
     },
     accel: BASE_ACCEL,
-    recat: 'B',
+    recat: RecatGroup.B,
   },
   B763: {
     speed: {
@@ -81,7 +82,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 2500,
     },
     accel: BASE_ACCEL,
-    recat: 'B',
+    recat: RecatGroup.B,
   },
   C208: {
     speed: {
@@ -96,7 +97,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 600,
     },
     accel: BASE_ACCEL,
-    recat: 'G',
+    recat: RecatGroup.G,
   },
   C25A: {
     speed: {
@@ -111,7 +112,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 600,
     },
     accel: BASE_ACCEL,
-    recat: 'G',
+    recat: RecatGroup.G,
   },
   C56X: {
     speed: {
@@ -126,7 +127,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 2500,
     },
     accel: BASE_ACCEL,
-    recat: 'G',
+    recat: RecatGroup.G,
   },
   CL60: {
     speed: {
@@ -141,7 +142,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 2500,
     },
     accel: BASE_ACCEL,
-    recat: 'F',
+    recat: RecatGroup.F,
   },
   CRJ9: {
     speed: {
@@ -156,7 +157,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 2000,
     },
     accel: BASE_ACCEL,
-    recat: 'F',
+    recat: RecatGroup.F,
   },
   DH8A: {
     speed: {
@@ -171,7 +172,7 @@ export const PlanePerformanceConfig: {
       normalClimb: 1500,
     },
     accel: BASE_ACCEL,
-    recat: 'F',
+    recat: RecatGroup.F,
   },
   DH8D: {
     speed: {
@@ -186,6 +187,6 @@ export const PlanePerformanceConfig: {
       normalClimb: 1500,
     },
     accel: BASE_ACCEL,
-    recat: 'E',
+    recat: RecatGroup.E,
   },
 };

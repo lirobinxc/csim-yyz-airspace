@@ -19,6 +19,9 @@ import img_Radar33sArr from '../assets/Radar33sArr.png';
 import img_Radar15sArr from '../assets/Radar15sArr.png';
 
 import img_PpsSymbol from '../assets/PpsSymbol.png';
+import img_IaIndicator_Line from '../assets/IaIndicator_Line.png';
+import img_IaIndicator_Dashed from '../assets/IaIndicator_Dashed.png';
+import img_IaIndicator_Chevron from '../assets/IaIndicator_Chevron.png';
 import fontTexture_DejaVuMonoBold from '../assets/font/FontDejaVuMonoBold.png';
 import fontXml_DejaVuMonoBold from '../assets/font/FontDejaVuMonoBold.xml';
 import OptionsSidebar from '../objects/OptionsSidebar';
@@ -45,10 +48,13 @@ import RBL from '../objects/RBL';
 import { WP_LIST_ARR_24s } from '../config/WaypointConfigArr/WaypointConfigArr24s';
 import { ArrBoxDimensions } from '../utils/isPlaneInsideArrBox';
 import { PlaneCommandCue } from '../objects/Plane/PlaneCommandMenu';
+import { DepRunwayYYZ } from '../types/AirportTypes';
+import { IaIndicatorType } from '../objects/Plane/PlaneIaIndicator';
 
 export default class RadarScene extends Phaser.Scene {
   public Waypoints: Waypoint[];
   public PlaneList: Plane[];
+  public FinalSequence: { [key in DepRunwayYYZ]: Plane[] };
   public Localizers: RunwayLocalizers | null;
   public RunwayOrigins!: RunwayOrigins;
   public ArrBoxPolygon!: Phaser.Geom.Polygon;
@@ -81,7 +87,18 @@ export default class RadarScene extends Phaser.Scene {
 
     this.Waypoints = [];
     this.PlaneList = [];
+    this.FinalSequence = {
+      'YYZ Rwy 05': [],
+      'YYZ Rwy 06L': [],
+      'YYZ Rwy 15L': [],
+      'YYZ Rwy 15R': [],
+      'YYZ Rwy 23': [],
+      'YYZ Rwy 24R': [],
+      'YYZ Rwy 33L': [],
+      'YYZ Rwy 33R': [],
+    };
     this.Localizers = null;
+
     this.Speech = new SpeechSynth();
     this.SpeechQueue = [];
     this.FiledRouteLine = null;
@@ -155,6 +172,9 @@ export default class RadarScene extends Phaser.Scene {
         );
     }
     this.load.image(AssetKeys.PPS_SYMBOL, img_PpsSymbol);
+    this.load.image(AssetKeys.IA_INDICATOR_LINE, img_IaIndicator_Line);
+    this.load.image(AssetKeys.IA_INDICATOR_DASHED, img_IaIndicator_Dashed);
+    this.load.image(AssetKeys.IA_INDICATOR_CHEVRON, img_IaIndicator_Chevron);
     this.load.bitmapFont(
       AssetKeys.FONT_DEJAVU_MONO_BOLD,
       [fontTexture_DejaVuMonoBold],
@@ -378,7 +398,7 @@ export default class RadarScene extends Phaser.Scene {
       }
     });
 
-    // On CustomPhaserEvent: RBL_PLANE_0_CLICKED, RBL_PLANE_1_CLICKED
+    // On CustomPhaserEvent:
     this.events.on(PhaserCustomEvents.RBL_PLANE_0_CLICKED, (plane: Plane) => {
       this.NEW_RBL[0] = plane;
       this.RBL_ACTIVATED_0 = false;
@@ -390,11 +410,82 @@ export default class RadarScene extends Phaser.Scene {
       this.RBL_ACTIVATED_1 = false;
     });
 
-    // On CustomPhaserEvent: RBL_PLANE_0_CLICKED, RBL_PLANE_1_CLICKED
+    // On CustomPhaserEvent:
     this.events.on(
-      PhaserCustomEvents.HIDE_PLANE_BUTTON_CLICKED,
+      PhaserCustomEvents.DESTROY_PLANE_BUTTON_CLICKED,
       (plane: Plane) => {
         plane.customDestroy();
+
+        const arrRunway = plane.Properties.arrivalData.arrRunway;
+        this.FinalSequence[arrRunway] = this.FinalSequence[arrRunway].filter(
+          (pln) => pln.DESTROYED === false
+        );
+      }
+    );
+
+    // On CustomPhaserEvent: On Base Turn, update Final Sequence
+    this.events.on(
+      PhaserCustomEvents.PLANE_ON_BASE_TURN,
+      (baseTurnPlane: Plane) => {
+        const arrRunway = baseTurnPlane.Properties.arrivalData.arrRunway;
+        this.FinalSequence[arrRunway].push(baseTurnPlane);
+        this.FinalSequence[arrRunway].sort(
+          (a, b) =>
+            a.DISTANCE_FROM_RUNWAY_THRESHOLD_MILES -
+            b.DISTANCE_FROM_RUNWAY_THRESHOLD_MILES
+        );
+
+        this.FinalSequence[arrRunway].forEach((plane, idx) => {
+          // Set LEAD_PLANE for each aircraft
+          if (idx > 0) {
+            plane.IaIndicator.LEAD_PLANE =
+              this.FinalSequence[arrRunway][idx - 1];
+          } else {
+            plane.IaIndicator.LEAD_PLANE = null;
+          }
+
+          // Set DEPENDENT_LEAD_PLANE for each aircaft
+          if (
+            plane.Scene.SCENE_KEY === RadarSceneKeys.RADAR_33s ||
+            plane.Scene.SCENE_KEY === RadarSceneKeys.RADAR_15s
+          ) {
+            let leftRunwaySequence = plane.Scene.FinalSequence['YYZ Rwy 33L'];
+            let rightRunwaySequence = plane.Scene.FinalSequence['YYZ Rwy 33R'];
+
+            if (plane.Scene.SCENE_KEY === RadarSceneKeys.RADAR_15s) {
+              leftRunwaySequence = plane.Scene.FinalSequence['YYZ Rwy 15L'];
+              rightRunwaySequence = plane.Scene.FinalSequence['YYZ Rwy 15R'];
+            }
+
+            const combinedSequence = [
+              ...leftRunwaySequence,
+              ...rightRunwaySequence,
+            ].sort(
+              (a, b) =>
+                a.DISTANCE_FROM_RUNWAY_THRESHOLD_MILES -
+                b.DISTANCE_FROM_RUNWAY_THRESHOLD_MILES
+            );
+
+            const LEAD_PLANE = plane.IaIndicator.LEAD_PLANE;
+
+            if (LEAD_PLANE) {
+              const idxThisPlane = combinedSequence.findIndex(
+                (item) =>
+                  item.Properties.acId.code === LEAD_PLANE.Properties.acId.code
+              );
+              if (idxThisPlane <= 0) return;
+
+              const combinedLeadPlane = combinedSequence[idxThisPlane - 1];
+              if (
+                combinedLeadPlane &&
+                combinedLeadPlane.Properties.arrivalData.arrRunway !==
+                  plane.Properties.arrivalData.arrRunway
+              ) {
+                plane.IaIndicator.DEPENDENT_LEAD_PLANE = combinedLeadPlane;
+              }
+            }
+          }
+        });
       }
     );
 
@@ -474,7 +565,17 @@ export default class RadarScene extends Phaser.Scene {
 
     // TEMP: on physics update
     this.physics.world.on('worldstep', (dt: number) => {
-      // console.log(dt);
+      if (this.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL) {
+        // console.log(
+        //   'finalSeq:',
+        //   this.FinalSequence['YYZ Rwy 05'].map(
+        //     (plane) => plane.Properties.acId.code
+        //   ),
+        //   this.FinalSequence['YYZ Rwy 06L'].map(
+        //     (plane) => plane.Properties.acId.code
+        //   )
+        // );
+      }
     });
   }
 
