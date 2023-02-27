@@ -12,7 +12,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   ...WP_LIST_ARR_COMMON,
   {
     name: 'BISDA',
-    relativeCoord: new Phaser.Math.Vector2(0.67, 0.339),
+    relativeCoord: new Phaser.Math.Vector2(0.681, 0.329),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -23,7 +23,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'DANIP',
-    relativeCoord: new Phaser.Math.Vector2(0.349, 0.722),
+    relativeCoord: new Phaser.Math.Vector2(0.339, 0.737),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -34,7 +34,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'DARPU',
-    relativeCoord: new Phaser.Math.Vector2(0.393, 0.695),
+    relativeCoord: new Phaser.Math.Vector2(0.386, 0.706),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -45,7 +45,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'DEBGO',
-    relativeCoord: new Phaser.Math.Vector2(0.389, 0.29),
+    relativeCoord: new Phaser.Math.Vector2(0.381, 0.277),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -56,7 +56,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'DEGRO',
-    relativeCoord: new Phaser.Math.Vector2(0.604, 0.682),
+    relativeCoord: new Phaser.Math.Vector2(0.611, 0.694),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -67,7 +67,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'DERLI',
-    relativeCoord: new Phaser.Math.Vector2(0.15, 0.603),
+    relativeCoord: new Phaser.Math.Vector2(0.127, 0.61),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -78,7 +78,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'DULPA',
-    relativeCoord: new Phaser.Math.Vector2(0.339, 0.583),
+    relativeCoord: new Phaser.Math.Vector2(0.325, 0.592),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -89,7 +89,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'DUNOP',
-    relativeCoord: new Phaser.Math.Vector2(0.239, 0.547),
+    relativeCoord: new Phaser.Math.Vector2(0.221, 0.55),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -100,7 +100,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'FAYOL',
-    relativeCoord: new Phaser.Math.Vector2(0.365, 0.607),
+    relativeCoord: new Phaser.Math.Vector2(0.356, 0.614),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -111,7 +111,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'IKBAT',
-    relativeCoord: new Phaser.Math.Vector2(0.061, 0.606),
+    relativeCoord: new Phaser.Math.Vector2(0.031, 0.614),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -122,7 +122,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'ILANI',
-    relativeCoord: new Phaser.Math.Vector2(0.248, 0.649),
+    relativeCoord: new Phaser.Math.Vector2(0.227, 0.662),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -133,7 +133,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'KEDRO',
-    relativeCoord: new Phaser.Math.Vector2(0.256, 0.682),
+    relativeCoord: new Phaser.Math.Vector2(0.239, 0.694),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -144,7 +144,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'KERPU',
-    relativeCoord: new Phaser.Math.Vector2(0.412, 0.537),
+    relativeCoord: new Phaser.Math.Vector2(0.409, 0.54),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -155,7 +155,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'KEVNO',
-    relativeCoord: new Phaser.Math.Vector2(0.516, 0.417),
+    relativeCoord: new Phaser.Math.Vector2(0.518, 0.412),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -166,7 +166,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'LERAN',
-    relativeCoord: new Phaser.Math.Vector2(0.26, 0.778),
+    relativeCoord: new Phaser.Math.Vector2(0.244, 0.797),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -177,7 +177,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'LERAT',
-    relativeCoord: new Phaser.Math.Vector2(0.986, 0.322),
+    relativeCoord: new Phaser.Math.Vector2(1, 0.319),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -188,7 +188,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'LITRO',
-    relativeCoord: new Phaser.Math.Vector2(0.196, 0.574),
+    relativeCoord: new Phaser.Math.Vector2(0.175, 0.581),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -199,7 +199,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'MASAR',
-    relativeCoord: new Phaser.Math.Vector2(0.305, 0.75),
+    relativeCoord: new Phaser.Math.Vector2(0.293, 0.768),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -210,7 +210,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'MODOL',
-    relativeCoord: new Phaser.Math.Vector2(0.401, 0.442),
+    relativeCoord: new Phaser.Math.Vector2(0.395, 0.439),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -221,7 +221,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'PEKMO',
-    relativeCoord: new Phaser.Math.Vector2(0.585, 0.518),
+    relativeCoord: new Phaser.Math.Vector2(0.591, 0.519),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -232,7 +232,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'PILPO',
-    relativeCoord: new Phaser.Math.Vector2(0.561, 0.374),
+    relativeCoord: new Phaser.Math.Vector2(0.565, 0.367),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -243,7 +243,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'RESES',
-    relativeCoord: new Phaser.Math.Vector2(0.598, 0.546),
+    relativeCoord: new Phaser.Math.Vector2(0.606, 0.55),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -254,7 +254,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'SEDAB',
-    relativeCoord: new Phaser.Math.Vector2(0.624, 0.852),
+    relativeCoord: new Phaser.Math.Vector2(0.633, 0.878),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -265,7 +265,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'SEGOD',
-    relativeCoord: new Phaser.Math.Vector2(0.581, 0.647),
+    relativeCoord: new Phaser.Math.Vector2(0.587, 0.657),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -276,7 +276,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'SEKOP',
-    relativeCoord: new Phaser.Math.Vector2(0.876, 0.146),
+    relativeCoord: new Phaser.Math.Vector2(0.903, 0.123),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -287,7 +287,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'SELAP',
-    relativeCoord: new Phaser.Math.Vector2(0.283, 0.519),
+    relativeCoord: new Phaser.Math.Vector2(0.269, 0.52),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -298,7 +298,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'SEMTI',
-    relativeCoord: new Phaser.Math.Vector2(0.721, 0.428),
+    relativeCoord: new Phaser.Math.Vector2(0.736, 0.424),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -309,7 +309,7 @@ export const WP_LIST_ARR_06s: WaypointDataArr06s[] = [
   },
   {
     name: 'VEPNA',
-    relativeCoord: new Phaser.Math.Vector2(0.437, 0.56),
+    relativeCoord: new Phaser.Math.Vector2(0.433, 0.564),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,

@@ -47,6 +47,8 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
   }
 
   preUpdate(t: number, dt: number) {
+    if (this.Plane.DESTROYED) return;
+
     const isDepartureMode =
       this.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.DEPARTURE;
     const isArrivalMode =

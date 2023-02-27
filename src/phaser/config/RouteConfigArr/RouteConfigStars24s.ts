@@ -19,8 +19,9 @@ const boxumDuvos = [
 ];
 
 const nuberNakbo23 = [
-  WP_DICT_ARR_24s.NUBER,
+  // WP_DICT_ARR_24s.NUBER,
   WP_DICT_ARR_24s.ROKTO,
+  WP_DICT_ARR_24s.PENGO,
   WP_DICT_ARR_24s.MANUP,
   WP_DICT_ARR_24s.ERBUS,
   WP_DICT_ARR_24s.TASKU,
@@ -31,7 +32,7 @@ const nuberNakbo23 = [
 ];
 
 const nuberNakbo24R = [
-  WP_DICT_ARR_24s.NUBER,
+  // WP_DICT_ARR_24s.NUBER,
   WP_DICT_ARR_24s.ROKTO,
   WP_DICT_ARR_24s.PENGO,
   WP_DICT_ARR_24s.BOTUM,
@@ -55,28 +56,28 @@ const linngVerko = [
 const imebaVibli23 = [
   // WP_DICT_ARR_24s.IMEBA,
   WP_DICT_ARR_24s.LEPUX,
-  WP_DICT_ARR_24s.DUGDA,
+  WP_DICT_ARR_24s.DUGDA_SouthOfLoc,
   WP_DICT_ARR_24s.CALVY,
   WP_DICT_ARR_24s.OMTOK,
 ];
 const imebaVibli24R = [
   // WP_DICT_ARR_24s.IMEBA,
   WP_DICT_ARR_24s.LEPUX,
-  WP_DICT_ARR_24s.AMILU,
+  WP_DICT_ARR_24s.AMILU_SouthOfLoc,
   WP_DICT_ARR_24s.EBDAL,
   WP_DICT_ARR_24s.NOAHA,
 ];
 const ragidUdnox23 = [
   // WP_DICT_ARR_24s.RAGID,
   WP_DICT_ARR_24s.DENKA,
-  WP_DICT_ARR_24s.DUGDA,
+  WP_DICT_ARR_24s.DUGDA_NorthOfLoc,
   WP_DICT_ARR_24s.CALVY,
   WP_DICT_ARR_24s.OMTOK,
 ];
 const ragidUdnox24R = [
   // WP_DICT_ARR_24s.RAGID,
   WP_DICT_ARR_24s.DENKA,
-  WP_DICT_ARR_24s.AMILU,
+  WP_DICT_ARR_24s.AMILU_NorthOfLoc,
   WP_DICT_ARR_24s.EBDAL,
   WP_DICT_ARR_24s.NOAHA,
 ];

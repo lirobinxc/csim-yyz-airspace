@@ -683,7 +683,10 @@ export default class Plane extends Phaser.GameObjects.Container {
         );
       }
 
-      const origin = getBedpostOrigin(acProps.arrivalData.arrBedpost);
+      const origin = getBedpostOrigin(
+        acProps.arrivalData.arrBedpost,
+        this.Scene
+      );
       return origin;
     }
 

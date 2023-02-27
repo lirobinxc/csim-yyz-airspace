@@ -19,7 +19,10 @@ export default class FiledRouteLine extends Phaser.GameObjects.Polygon {
     );
 
     if (plane.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL) {
-      startPoint = getBedpostOrigin(plane.Properties.arrivalData.arrBedpost);
+      startPoint = getBedpostOrigin(
+        plane.Properties.arrivalData.arrBedpost,
+        plane.Scene
+      );
     }
 
     const routePoints = filedRoute.map((wp) => wp.getDisplayCoord());

@@ -10,7 +10,7 @@ const gameHeight = MasterGameOptions.height;
 export const WP_LIST_ARR_COMMON: WaypointDataArrCommon[] = [
   {
     name: 'BOXUM',
-    relativeCoord: new Phaser.Math.Vector2(0.24, 0),
+    relativeCoord: new Phaser.Math.Vector2(0.243, 0),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -21,7 +21,7 @@ export const WP_LIST_ARR_COMMON: WaypointDataArrCommon[] = [
   },
   {
     name: 'DUVOS',
-    relativeCoord: new Phaser.Math.Vector2(0.296, 0.097),
+    relativeCoord: new Phaser.Math.Vector2(0.283, 0.07),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -32,7 +32,7 @@ export const WP_LIST_ARR_COMMON: WaypointDataArrCommon[] = [
   },
   {
     name: 'ERBUS',
-    relativeCoord: new Phaser.Math.Vector2(0.446, 0.413),
+    relativeCoord: new Phaser.Math.Vector2(0.443, 0.408),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -43,7 +43,7 @@ export const WP_LIST_ARR_COMMON: WaypointDataArrCommon[] = [
   },
   {
     name: 'IMEBA',
-    relativeCoord: new Phaser.Math.Vector2(1, 0.032),
+    relativeCoord: new Phaser.Math.Vector2(1, 0.034),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -54,7 +54,7 @@ export const WP_LIST_ARR_COMMON: WaypointDataArrCommon[] = [
   },
   {
     name: 'LINNG',
-    relativeCoord: new Phaser.Math.Vector2(0.632, 0.921),
+    relativeCoord: new Phaser.Math.Vector2(0.641, 0.952),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -65,7 +65,7 @@ export const WP_LIST_ARR_COMMON: WaypointDataArrCommon[] = [
   },
   {
     name: 'NUBER',
-    relativeCoord: new Phaser.Math.Vector2(0.0, 0.606),
+    relativeCoord: new Phaser.Math.Vector2(0.0, 0.61),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,
@@ -87,7 +87,7 @@ export const WP_LIST_ARR_COMMON: WaypointDataArrCommon[] = [
   },
   {
     name: 'VERKO',
-    relativeCoord: new Phaser.Math.Vector2(0.548, 0.595),
+    relativeCoord: new Phaser.Math.Vector2(0.552, 0.601),
     getDisplayCoord: function () {
       return new Phaser.Math.Vector2(
         this.relativeCoord.x,

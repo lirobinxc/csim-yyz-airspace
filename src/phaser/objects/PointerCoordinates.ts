@@ -49,7 +49,7 @@ export default class PointerCoordinateLogger {
     const formatFloatX = this.Actual.x.toFixed(2);
     const formatFloatY = this.Actual.y.toFixed(2);
     console.log(`Click @ actual coord: ${[formatFloatX, formatFloatY]}`);
-    navigator.clipboard.writeText(`${formatFloatX}, ${formatFloatY}`);
+    // navigator.clipboard.writeText(`${formatFloatX}, ${formatFloatY}`);
   }
 
   logRelativeToHeight() {
@@ -57,6 +57,6 @@ export default class PointerCoordinateLogger {
     const formatFloatY = this.Relative.y.toFixed(3);
 
     console.log(`Click @ relative coord: ${[formatFloatX, formatFloatY]}`);
-    // navigator.clipboard.writeText(`${formatFloatX}, ${formatFloatY}`);
+    navigator.clipboard.writeText(`${formatFloatX}, ${formatFloatY}`);
   }
 }

@@ -118,11 +118,13 @@ type WaypointNamesArr24sUnique =
   | 'DAVNO'
   | 'DUNOL'
   | 'LEPUX'
-  | 'DUGDA'
+  | 'DUGDA_NorthOfLoc'
+  | 'DUGDA_SouthOfLoc'
   | 'CALVY'
   | 'OMTOK'
   | 'DENKA'
-  | 'AMILU'
+  | 'AMILU_NorthOfLoc'
+  | 'AMILU_SouthOfLoc'
   | 'EBDAL'
   | 'NOAHA';
 

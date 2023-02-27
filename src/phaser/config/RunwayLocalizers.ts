@@ -18,16 +18,22 @@ export class RunwayLocalizers {
     } = {
       'YYZ Rwy 05': [
         radarScene.RunwayOrigins.getOrigin(DepRunwayYYZ.RWY_05),
-        new Phaser.Math.Vector2(142.0, 773.0),
+        new Phaser.Math.Vector2(142, 771),
       ],
       'YYZ Rwy 06L': [
         radarScene.RunwayOrigins.getOrigin(DepRunwayYYZ.RWY_06L),
-        new Phaser.Math.Vector2(160.0, 802.0),
+        new Phaser.Math.Vector2(160, 803),
       ],
       'YYZ Rwy 15L': [new Phaser.Math.Vector2(), new Phaser.Math.Vector2()],
       'YYZ Rwy 15R': [new Phaser.Math.Vector2(), new Phaser.Math.Vector2()],
-      'YYZ Rwy 23': [new Phaser.Math.Vector2(), new Phaser.Math.Vector2()],
-      'YYZ Rwy 24R': [new Phaser.Math.Vector2(), new Phaser.Math.Vector2()],
+      'YYZ Rwy 23': [
+        radarScene.RunwayOrigins.getOrigin(DepRunwayYYZ.RWY_23),
+        new Phaser.Math.Vector2(963.0, 250.0),
+      ],
+      'YYZ Rwy 24R': [
+        radarScene.RunwayOrigins.getOrigin(DepRunwayYYZ.RWY_24R),
+        new Phaser.Math.Vector2(983.0, 282.0),
+      ],
       'YYZ Rwy 33L': [new Phaser.Math.Vector2(), new Phaser.Math.Vector2()],
       'YYZ Rwy 33R': [new Phaser.Math.Vector2(), new Phaser.Math.Vector2()],
     };

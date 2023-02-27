@@ -10,6 +10,7 @@ import {
   DepRunwayYYZ,
   DepRunwayYZD,
 } from '../types/AirportTypes';
+import { TerminalPosition } from '../types/SimTypes';
 
 /**
  * Returns Vector2 properties for each
@@ -54,8 +55,8 @@ export default class RunwayOrigins {
 
     const cameraHeight = scene.cameras.main.height;
 
-    // Property Setup: YYZ runway origins
-    const RELATIVE_ORIGINS = {
+    // Property Setup: YYZ runway origins (DEP)
+    let RELATIVE_ORIGINS = {
       YYZ: {
         Rwy05_23: new Phaser.Math.Vector2(0.487, 0.489),
         Rwy06L_24R: new Phaser.Math.Vector2(0.513, 0.51),
@@ -82,6 +83,37 @@ export default class RunwayOrigins {
         YKZ_YOO_YPQ: new Phaser.Math.Vector2(-0.3, 0.6),
       },
     };
+
+    // Property Setup: YYZ runway origins (ARR)
+    if (scene.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL) {
+      RELATIVE_ORIGINS = {
+        YYZ: {
+          Rwy05_23: new Phaser.Math.Vector2(0.486, 0.49),
+          Rwy06L_24R: new Phaser.Math.Vector2(0.512, 0.512),
+          Rwy15L_33R: new Phaser.Math.Vector2(0.503, 0.497),
+          Rwy33L_15R: new Phaser.Math.Vector2(0.492, 0.5),
+        },
+        YTZ: {
+          Rwy08_26: new Phaser.Math.Vector2(0.673, 0.588),
+        },
+        YZD: {
+          Rwy15_33: new Phaser.Math.Vector2(0.643, 0.453),
+        },
+        YKZ: {
+          Rwy15_33: new Phaser.Math.Vector2(0.743, 0.339),
+        },
+        YHM: {
+          Rwy12_30: new Phaser.Math.Vector2(0.151, 0.996),
+        },
+        YKF: {
+          Rwy08_26: new Phaser.Math.Vector2(-0.2, 0.612),
+        },
+        ArrivalOrigins: {
+          YHM: new Phaser.Math.Vector2(1.4, 0),
+          YKZ_YOO_YPQ: new Phaser.Math.Vector2(-0.2, 0.54),
+        },
+      };
+    }
 
     this.YYZ = {
       Rwy05_23: RELATIVE_ORIGINS.YYZ.Rwy05_23.scale(cameraHeight),
