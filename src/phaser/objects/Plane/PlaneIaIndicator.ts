@@ -74,6 +74,7 @@ export default class PlaneIaIndicator extends Phaser.GameObjects.Image {
     this.scene.physics.world.on('worldstep', (dt: number) => {
       if (this.Plane.DESTROYED) return;
 
+      this.setLeadPlanesAsNullIfTheyAreDestroyed();
       this.setVisible(this.IS_VISIBLE);
 
       if (
@@ -93,14 +94,11 @@ export default class PlaneIaIndicator extends Phaser.GameObjects.Image {
     });
   }
 
-  preUpdate() {}
+  preUpdate() {
+    this.removeIndicatorIfNoMaxConstraint();
+  }
 
   updateIndicatorPosition() {
-    if (!this.MAX_CONSTRAINT_TYPE) {
-      this.IS_VISIBLE = false;
-      return;
-    }
-
     this.IS_VISIBLE = true;
     const indicatorPosition = Phaser.Geom.Line.GetPoint(
       this.LocLineGeom,
@@ -128,6 +126,26 @@ export default class PlaneIaIndicator extends Phaser.GameObjects.Image {
     const formattedDelta = `${deltaIsPlus ? '+' : ''}${delta.toFixed(1)}`;
 
     this.DELTA = formattedDelta;
+  }
+
+  setLeadPlanesAsNullIfTheyAreDestroyed() {
+    if (this.LEAD_PLANE?.DESTROYED) {
+      this.LEAD_PLANE = null;
+    }
+    if (this.DEPENDENT_LEAD_PLANE?.DESTROYED) {
+      this.DEPENDENT_LEAD_PLANE = null;
+    }
+  }
+
+  removeIndicatorIfNoMaxConstraint() {
+    if (
+      this.MAX_CONSTRAINT_TYPE === null ||
+      (this.LEAD_PLANE === null && this.DEPENDENT_LEAD_PLANE === null)
+    ) {
+      this.IS_VISIBLE = false;
+      // this.setVisible(false);
+      return;
+    }
   }
 
   updateIndicatorTexture() {
