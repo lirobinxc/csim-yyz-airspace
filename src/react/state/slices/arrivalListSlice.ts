@@ -64,7 +64,7 @@ function genInitialState() {
 
   return genArrList(
     simOptions.radarScene,
-    simOptions.maxActiveArrivals,
+    1,
     simOptions.isSingleOps,
     simOptions.activeArrBedposts,
     simOptions.arrInnerPracticeMode,

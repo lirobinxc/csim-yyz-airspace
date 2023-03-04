@@ -115,7 +115,7 @@ const ArrFdeSection = () => {
   useInterval(() => {
     if (simOptions.isPaused) return;
 
-    if (stripList.pendingPanel.length < 8) {
+    if (stripList.pendingPanel.length < 1) {
       dispatch(
         arrivalListActions.addArrStrip({
           radarScene: simOptions.radarScene,
@@ -138,7 +138,17 @@ const ArrFdeSection = () => {
     ];
 
     // Break if max # of a/c in airspace
-    if (allAirborneStrips.length >= simOptions.maxActiveArrivals) return;
+    const maxActiveArrivalsIfNoStraightIns = Math.ceil(
+      simOptions.maxActiveArrivals * 0.5
+    );
+
+    if (
+      allAirborneStrips.length >=
+      (allowStraightIns
+        ? simOptions.maxActiveArrivals
+        : maxActiveArrivalsIfNoStraightIns)
+    )
+      return;
 
     const currTime = Date.now();
 
