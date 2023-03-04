@@ -26,6 +26,10 @@ import {
 import { RecatGroup } from '../../../phaser/config/RecatSpacing';
 import { PlanePerformanceConfig } from '../../../phaser/config/PlanePerformanceConfig';
 import { STAR_ROUTES_24s } from '../../../phaser/config/RouteConfigArr/RouteConfigStars24s';
+import RadarScene from '../../../phaser/scenes/RadarScene';
+import { determineIfStraightInBedpost } from './determineIfStraightInBedpost';
+import { determineArrBedpost } from './determineArrBedpost';
+import { determineBedpostSector } from './determineBedpostSector';
 
 let currentHour = _.sample([12, 13, 14, 15, 16, 17, 18]) || 12;
 let currentMinute = 0;
@@ -80,244 +84,192 @@ export function genArrFDE(
   radarScene: RadarSceneKeys,
   isSingleOps: boolean,
   activeBedposts: ArrBedpost[],
-  innerOnly: boolean
+  innerOnly: boolean,
+  allowStraightIn: boolean
 ) {
-  // Set timestamp
-  const minuteJitter = _.sample([1, 1, 1, 1, 2, 2, 3]) || 1;
-  currentMinute = currentMinute + minuteJitter;
-  if (currentMinute > 59) {
-    currentHour = currentHour + 1;
-    currentMinute = currentMinute - 60;
-  }
+  let newArrFde: ArrFDE = generate();
 
-  if (currentHour > 23) currentHour = 0;
-
-  const currentTime = `${String(currentHour).padStart(2, '0')}${String(
-    currentMinute
-  ).padStart(2, '0')}`;
-
-  // Gen aircraft
-  const aircraft = genACID({ allowC208: false });
-
-  // Gen Callsign
-  const isC208 = aircraft.model === AcModel.C208;
-  let callsign = genCallsign({ isC208 });
-
-  // Init route
-  const starName = genArrRoute(aircraft.type, activeBedposts);
-
-  // Arrival Bedpost & Sector
-  let arrBedpost: ArrBedpost = ArrBedpost.BOXUM;
-  let handoffSector = AdjacentSectors.ER;
-
-  switch (starName) {
-    case StarName.BOXUM:
-      arrBedpost = ArrBedpost.BOXUM;
-      handoffSector = AdjacentSectors.VV;
-      break;
-    case StarName.DUVOS:
-      arrBedpost = ArrBedpost.BOXUM;
-      handoffSector = AdjacentSectors.VV;
-      break;
-    case StarName.NUBER:
-      arrBedpost = ArrBedpost.NUBER;
-      handoffSector = AdjacentSectors.KF;
-      break;
-    case StarName.NAKBO:
-      arrBedpost = ArrBedpost.NUBER;
-      handoffSector = AdjacentSectors.KF;
-      break;
-    case StarName.LINNG:
-      arrBedpost = ArrBedpost.LINNG;
-      handoffSector = AdjacentSectors.GR;
-      break;
-    case StarName.VERKO:
-      arrBedpost = ArrBedpost.LINNG;
-      handoffSector = AdjacentSectors.GR;
-      break;
-    case StarName.IMEBA:
-      arrBedpost = ArrBedpost.IMEBA;
-      handoffSector = AdjacentSectors.SI;
-      break;
-    case StarName.VIBLI:
-      arrBedpost = ArrBedpost.IMEBA;
-      handoffSector = AdjacentSectors.SI;
-      break;
-    case StarName.RAGID:
-      arrBedpost = ArrBedpost.RAGID;
-      handoffSector = AdjacentSectors.SI;
-      break;
-    case StarName.UDNOX:
-      arrBedpost = ArrBedpost.RAGID;
-      handoffSector = AdjacentSectors.SI;
-      break;
-  }
-
-  // Arrival position
-  let arrPosition = ArrivalPosition.NORTH;
-
-  if (!isSingleOps) {
-    let randomArrPosition = _.sample([
-      ArrivalPosition.NORTH,
-      ArrivalPosition.SOUTH,
-    ]);
-    if (!randomArrPosition) randomArrPosition = ArrivalPosition.SOUTH;
-
-    switch (arrBedpost) {
-      case ArrBedpost.BOXUM:
-        if (
-          radarScene === RadarSceneKeys.RADAR_06s ||
-          radarScene === RadarSceneKeys.RADAR_24s
-        ) {
-          arrPosition = ArrivalPosition.NORTH;
-        }
-        if (
-          radarScene === RadarSceneKeys.RADAR_15s ||
-          radarScene === RadarSceneKeys.RADAR_33s
-        ) {
-          arrPosition = randomArrPosition;
-        }
-        break;
-      case ArrBedpost.NUBER:
-        if (
-          radarScene === RadarSceneKeys.RADAR_06s ||
-          radarScene === RadarSceneKeys.RADAR_24s
-        ) {
-          arrPosition = randomArrPosition;
-        }
-        if (
-          radarScene === RadarSceneKeys.RADAR_15s ||
-          radarScene === RadarSceneKeys.RADAR_33s
-        ) {
-          arrPosition = ArrivalPosition.SOUTH;
-        }
-        break;
-      case ArrBedpost.LINNG:
-        if (
-          radarScene === RadarSceneKeys.RADAR_06s ||
-          radarScene === RadarSceneKeys.RADAR_24s
-        ) {
-          arrPosition = ArrivalPosition.SOUTH;
-        }
-        if (
-          radarScene === RadarSceneKeys.RADAR_15s ||
-          radarScene === RadarSceneKeys.RADAR_33s
-        ) {
-          arrPosition = randomArrPosition;
-        }
-        break;
-      case ArrBedpost.IMEBA:
-        if (
-          radarScene === RadarSceneKeys.RADAR_06s ||
-          radarScene === RadarSceneKeys.RADAR_24s
-        ) {
-          arrPosition = randomArrPosition;
-        }
-        if (
-          radarScene === RadarSceneKeys.RADAR_15s ||
-          radarScene === RadarSceneKeys.RADAR_33s
-        ) {
-          arrPosition = ArrivalPosition.NORTH;
-        }
-        break;
-      case ArrBedpost.RAGID:
-        if (
-          radarScene === RadarSceneKeys.RADAR_06s ||
-          radarScene === RadarSceneKeys.RADAR_24s
-        ) {
-          arrPosition = randomArrPosition;
-        }
-        if (
-          radarScene === RadarSceneKeys.RADAR_15s ||
-          radarScene === RadarSceneKeys.RADAR_33s
-        ) {
-          arrPosition = ArrivalPosition.NORTH;
-        }
-        break;
+  if (allowStraightIn === false) {
+    while (newArrFde.isStraightIn) {
+      newArrFde = generate();
     }
   }
 
-  // Is Straight in?
-  let isStraightIn = false;
-  switch (radarScene) {
-    case RadarSceneKeys.RADAR_06s:
-      if (arrBedpost === ArrBedpost.NUBER) {
-        isStraightIn = true;
+  return newArrFde;
+
+  function generate() {
+    // Set timestamp
+    const minuteJitter = _.sample([1, 1, 1, 1, 2, 2, 3]) || 1;
+    currentMinute = currentMinute + minuteJitter;
+    if (currentMinute > 59) {
+      currentHour = currentHour + 1;
+      currentMinute = currentMinute - 60;
+    }
+
+    if (currentHour > 23) currentHour = 0;
+
+    const currentTime = `${String(currentHour).padStart(2, '0')}${String(
+      currentMinute
+    ).padStart(2, '0')}`;
+
+    // Gen aircraft
+    const aircraft = genACID({ allowC208: false });
+
+    // Gen Callsign
+    const isC208 = aircraft.model === AcModel.C208;
+    let callsign = genCallsign({ isC208 });
+
+    // Init route
+    const starName = genArrRoute(aircraft.type, activeBedposts);
+
+    // Arrival Bedpost & Sector
+    const arrBedpost: ArrBedpost = determineArrBedpost(starName);
+    const handoffSector = determineBedpostSector(arrBedpost);
+
+    // Arrival position
+    let arrPosition = ArrivalPosition.SOUTH;
+
+    if (!isSingleOps) {
+      let randomArrPosition = _.sample([
+        ArrivalPosition.NORTH,
+        ArrivalPosition.SOUTH,
+      ]);
+      if (!randomArrPosition) randomArrPosition = ArrivalPosition.SOUTH;
+
+      switch (arrBedpost) {
+        case ArrBedpost.BOXUM:
+          if (
+            radarScene === RadarSceneKeys.RADAR_06s ||
+            radarScene === RadarSceneKeys.RADAR_24s
+          ) {
+            arrPosition = ArrivalPosition.NORTH;
+          }
+          if (
+            radarScene === RadarSceneKeys.RADAR_15s ||
+            radarScene === RadarSceneKeys.RADAR_33s
+          ) {
+            arrPosition = randomArrPosition;
+          }
+          break;
+        case ArrBedpost.NUBER:
+          if (
+            radarScene === RadarSceneKeys.RADAR_06s ||
+            radarScene === RadarSceneKeys.RADAR_24s
+          ) {
+            arrPosition = randomArrPosition;
+          }
+          if (
+            radarScene === RadarSceneKeys.RADAR_15s ||
+            radarScene === RadarSceneKeys.RADAR_33s
+          ) {
+            arrPosition = ArrivalPosition.SOUTH;
+          }
+          break;
+        case ArrBedpost.LINNG:
+          if (
+            radarScene === RadarSceneKeys.RADAR_06s ||
+            radarScene === RadarSceneKeys.RADAR_24s
+          ) {
+            arrPosition = ArrivalPosition.SOUTH;
+          }
+          if (
+            radarScene === RadarSceneKeys.RADAR_15s ||
+            radarScene === RadarSceneKeys.RADAR_33s
+          ) {
+            arrPosition = randomArrPosition;
+          }
+          break;
+        case ArrBedpost.IMEBA:
+          if (
+            radarScene === RadarSceneKeys.RADAR_06s ||
+            radarScene === RadarSceneKeys.RADAR_24s
+          ) {
+            arrPosition = randomArrPosition;
+          }
+          if (
+            radarScene === RadarSceneKeys.RADAR_15s ||
+            radarScene === RadarSceneKeys.RADAR_33s
+          ) {
+            arrPosition = ArrivalPosition.NORTH;
+          }
+          break;
+        case ArrBedpost.RAGID:
+          if (
+            radarScene === RadarSceneKeys.RADAR_06s ||
+            radarScene === RadarSceneKeys.RADAR_24s
+          ) {
+            arrPosition = randomArrPosition;
+          }
+          if (
+            radarScene === RadarSceneKeys.RADAR_15s ||
+            radarScene === RadarSceneKeys.RADAR_33s
+          ) {
+            arrPosition = ArrivalPosition.NORTH;
+          }
+          break;
       }
-      break;
-    case RadarSceneKeys.RADAR_15s:
-      if (arrBedpost === ArrBedpost.BOXUM) {
-        isStraightIn = true;
-      }
-      break;
-    case RadarSceneKeys.RADAR_24s:
-      if (arrBedpost === ArrBedpost.IMEBA || arrBedpost === ArrBedpost.RAGID) {
-        isStraightIn = true;
-      }
-      break;
-    case RadarSceneKeys.RADAR_33s:
-      if (arrBedpost === ArrBedpost.LINNG) {
-        isStraightIn = true;
-      }
-      break;
+    }
+
+    // Is Straight in?
+    const isStraightIn = determineIfStraightInBedpost(radarScene, arrBedpost);
+
+    // Arrival Runway
+    const arrRunway = ARR_RUNWAYS[radarScene][arrPosition];
+
+    // Assigned first waypoint
+    let assignedHeading: WaypointDataArrAll = WP_DICT_ARR_COMMON.ERBUS; // WIP
+
+    switch (radarScene) {
+      case RadarSceneKeys.RADAR_06s:
+        assignedHeading = STAR_ROUTES_06s[arrBedpost][arrPosition][0];
+        break;
+      case RadarSceneKeys.RADAR_24s:
+        assignedHeading = STAR_ROUTES_24s[arrBedpost][arrPosition][0];
+        break;
+    }
+
+    // Entry altitude
+    const assignedAlt = getArrEntryAlt(radarScene, starName);
+    // Assigned entry speed
+    const assignedSpeed = getArrEntrySpeed(radarScene, starName);
+
+    // Transponder
+    const transponderCode = `${_.random(0, 7)}${_.random(0, 7)}${_.random(
+      0,
+      7
+    )}${_.random(0, 7)}`;
+
+    const acModelFull = `${aircraft.wtc}/${aircraft.model}/${aircraft.equipment}`;
+
+    const arrPhase = ArrivalPhase.PENDING;
+
+    const recat = PlanePerformanceConfig[aircraft.model].recat;
+
+    const arrFde: ArrFDE = {
+      uniqueKey: `${callsign.fullCallsign}${Math.random().toFixed(5)}`,
+      acId: { code: callsign.fullCallsign, spoken: callsign.spokenCallsign },
+      acModel: aircraft.model,
+      acModelFull,
+      acType: aircraft.type,
+      acWtc: aircraft.wtc,
+      arrBedpost,
+      arrivalTime: 0,
+      arrPhase,
+      arrPosition,
+      arrRunway,
+      assignedAlt: innerOnly && !isStraightIn ? 50 : assignedAlt,
+      assignedHeading,
+      assignedSpeed: innerOnly && !isStraightIn ? 210 : assignedSpeed,
+      debugACID: aircraft,
+      ETA: currentTime,
+      handoffSector,
+      isQ400: aircraft.isQ400,
+      isStraightIn,
+      recat,
+      starName,
+      transponderCode,
+    };
+
+    return arrFde;
   }
-
-  // Arrival Runway
-  const arrRunway = ARR_RUNWAYS[radarScene][arrPosition];
-
-  // Assigned first waypoint
-  let assignedHeading: WaypointDataArrAll = WP_DICT_ARR_COMMON.ERBUS; // WIP
-
-  switch (radarScene) {
-    case RadarSceneKeys.RADAR_06s:
-      assignedHeading = STAR_ROUTES_06s[arrBedpost][arrPosition][0];
-      break;
-    case RadarSceneKeys.RADAR_24s:
-      assignedHeading = STAR_ROUTES_24s[arrBedpost][arrPosition][0];
-      break;
-  }
-
-  // Entry altitude
-  const assignedAlt = getArrEntryAlt(radarScene, starName);
-  // Assigned entry speed
-  const assignedSpeed = getArrEntrySpeed(radarScene, starName);
-
-  // Transponder
-  const transponderCode = `${_.random(0, 7)}${_.random(0, 7)}${_.random(
-    0,
-    7
-  )}${_.random(0, 7)}`;
-
-  const acModelFull = `${aircraft.wtc}/${aircraft.model}/${aircraft.equipment}`;
-
-  const arrPhase = ArrivalPhase.PENDING;
-
-  const recat = PlanePerformanceConfig[aircraft.model].recat;
-
-  const arrFde: ArrFDE = {
-    uniqueKey: `${callsign.fullCallsign}${Math.random().toFixed(5)}`,
-    acId: { code: callsign.fullCallsign, spoken: callsign.spokenCallsign },
-    acModel: aircraft.model,
-    acModelFull,
-    acType: aircraft.type,
-    acWtc: aircraft.wtc,
-    arrBedpost,
-    arrivalTime: 0,
-    arrPhase,
-    arrPosition,
-    arrRunway,
-    assignedAlt: innerOnly && !isStraightIn ? 50 : assignedAlt,
-    assignedHeading,
-    assignedSpeed: innerOnly && !isStraightIn ? 210 : assignedSpeed,
-    debugACID: aircraft,
-    ETA: currentTime,
-    handoffSector,
-    isQ400: aircraft.isQ400,
-    isStraightIn,
-    recat,
-    starName,
-    transponderCode,
-  };
-
-  return arrFde;
 }

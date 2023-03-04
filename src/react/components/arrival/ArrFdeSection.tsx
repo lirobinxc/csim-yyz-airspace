@@ -41,6 +41,7 @@ const ArrFdeSection = () => {
     activePanel: [] as ArrFDE[],
   });
   const [updateInterval, setUpdateInterval] = useState(5000);
+  const [allowStraightIns, setAllowStraightIns] = useState(false);
 
   useEffect(() => {
     if (simOptions.gameSpeedMultiplier > 1) {
@@ -101,6 +102,15 @@ const ArrFdeSection = () => {
     processStrips(strips);
   }, [strips, processStrips]);
 
+  // Block straight-ins until enough bedpost aircraft active
+  useEffect(() => {
+    if (stripList.activePanel.length > 0) {
+      setAllowStraightIns(true);
+    } else {
+      setAllowStraightIns(false);
+    }
+  }, [stripList.activePanel]);
+
   // Interval: Add new pending Arrival strip
   useInterval(() => {
     if (simOptions.isPaused) return;
@@ -112,6 +122,7 @@ const ArrFdeSection = () => {
           isSingleOps: simOptions.isSingleOps,
           activeBedposts: simOptions.activeArrBedposts,
           innerOnly: simOptions.arrInnerPracticeMode,
+          allowStraightIn: allowStraightIns,
         })
       );
     }
@@ -126,7 +137,7 @@ const ArrFdeSection = () => {
       ...stripList.preActivePanel,
     ];
 
-    // Break if 10 a/c in the sequence
+    // Break if max # of a/c in airspace
     if (allAirborneStrips.length >= simOptions.maxActiveArrivals) return;
 
     const currTime = Date.now();
@@ -137,11 +148,12 @@ const ArrFdeSection = () => {
     if (lastAirborneStrip) {
       if (lastAirborneStrip.arrBedpost === nextPendingStrip.arrBedpost) {
         dispatch(arrivalListActions.deleteStrip(nextPendingStrip));
+        return;
       }
     }
 
     if (nextPendingStrip) {
-      console.log('Next bedpost:', nextPendingStrip.arrBedpost);
+      // console.log('Next bedpost:', nextPendingStrip.arrBedpost);
 
       const nextBedpost = nextPendingStrip.arrBedpost;
       const prevStripWithSameBedpost = _.findLast(

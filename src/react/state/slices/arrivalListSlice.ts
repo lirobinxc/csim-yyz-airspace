@@ -21,19 +21,21 @@ import { SimOptions } from './simOptionsSlice';
 // Define the initial state using that type
 function genArrList(
   radarScene: RadarSceneKeys,
-  count: number,
+  maxActiveArrivals: number,
   isSingleOps: boolean,
   activeBedposts: ArrBedpost[],
-  innerOnly: boolean
+  innerPracticeMode: boolean,
+  allowStraightIn: boolean
 ) {
   const defaultArrSequence: ArrFDE[] = [];
 
-  for (let i = 0; i < count; i++) {
-    const newArrFde = genArrFDE(
+  for (let i = 0; i < maxActiveArrivals; i++) {
+    let newArrFde = genArrFDE(
       radarScene,
       isSingleOps,
       activeBedposts,
-      innerOnly
+      innerPracticeMode,
+      allowStraightIn
     );
 
     defaultArrSequence.push(newArrFde);
@@ -62,10 +64,11 @@ function genInitialState() {
 
   return genArrList(
     simOptions.radarScene,
-    simOptions.startingCount,
+    simOptions.maxActiveArrivals,
     simOptions.isSingleOps,
     simOptions.activeArrBedposts,
-    simOptions.arrInnerPracticeMode
+    simOptions.arrInnerPracticeMode,
+    false
   );
 }
 
@@ -83,6 +86,7 @@ export const arrivalList = createSlice({
         isSingleOps: boolean;
         activeBedposts: ArrBedpost[];
         innerOnly: boolean;
+        allowStraightIn: boolean;
       }>
     ) => {
       state.push(
@@ -90,7 +94,8 @@ export const arrivalList = createSlice({
           action.payload.radarScene,
           action.payload.isSingleOps,
           action.payload.activeBedposts,
-          action.payload.innerOnly
+          action.payload.innerOnly,
+          action.payload.allowStraightIn
         )
       );
     },
