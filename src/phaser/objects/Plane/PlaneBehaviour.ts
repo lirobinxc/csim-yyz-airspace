@@ -101,9 +101,9 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
 
     // Logic Step 2: Check if there is a next waypoint on the route
     let NEXT_WAYPOINT: WaypointDataDepAll | WaypointDataArrAll | null = null;
-    const idxOfCurrentWaypoint = filedRoute.findIndex(
-      (waypoint) => waypoint.name === heading.directTo?.name
-    );
+    const idxOfCurrentWaypoint = filedRoute.findIndex((waypoint) => {
+      return waypoint.name === heading.directTo?.name;
+    });
     if (idxOfCurrentWaypoint > -1 && filedRoute[idxOfCurrentWaypoint + 1]) {
       NEXT_WAYPOINT = filedRoute[idxOfCurrentWaypoint + 1];
     }

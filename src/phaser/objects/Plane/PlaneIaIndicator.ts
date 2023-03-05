@@ -61,10 +61,10 @@ export default class PlaneIaIndicator extends Phaser.GameObjects.Image {
         this.setAngle(152);
         break;
       case RadarSceneKeys.RADAR_15s:
-        this.setAngle(60);
+        this.setAngle(240);
         break;
       case RadarSceneKeys.RADAR_33s:
-        this.setAngle(240);
+        this.setAngle(60);
         break;
     }
 
@@ -166,7 +166,7 @@ export default class PlaneIaIndicator extends Phaser.GameObjects.Image {
   }
 
   calcPercentOfLineToMatchIndicatorDistanceFromThreshold() {
-    if (!this.LEAD_PLANE) return 0;
+    if (!this.LEAD_PLANE && !this.DEPENDENT_LEAD_PLANE) return 0;
     if (!this.Plane.Scene.Localizers) return 0;
 
     const locLengthInPixels = Phaser.Geom.Line.Length(this.LocLineGeom);
@@ -177,6 +177,9 @@ export default class PlaneIaIndicator extends Phaser.GameObjects.Image {
 
     const spacingLocRatio =
       totalIndicatorDistanceFromThresholdInMiles / locLengthInMiles;
+
+    console.log('spacingLocRatio', spacingLocRatio);
+
     return spacingLocRatio;
   }
 

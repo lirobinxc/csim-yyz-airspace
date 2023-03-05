@@ -153,6 +153,7 @@ const ArrFdeSection = () => {
     const currTime = Date.now();
 
     const nextPendingStrip = stripList.pendingPanel[0];
+    if (!nextPendingStrip) return;
 
     const lastAirborneStrip = allAirborneStrips[allAirborneStrips.length - 1];
     if (lastAirborneStrip) {

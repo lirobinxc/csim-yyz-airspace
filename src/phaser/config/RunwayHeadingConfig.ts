@@ -13,9 +13,9 @@ export function getRunwayHeading(runway: DepRunwayAll) {
   switch (runway) {
     // YYZ
     case DepRunwayYYZ.RWY_05:
-      return { initial: 57.3, sid: 47 };
+      return { initial: 57, sid: 47 };
     case DepRunwayYYZ.RWY_06L:
-      return { initial: 57.3, sid: 57 };
+      return { initial: 57, sid: 57 };
     case DepRunwayYYZ.RWY_15L:
       return { initial: 147, sid: 147 };
     case DepRunwayYYZ.RWY_15R:

@@ -29,17 +29,19 @@ export function genCallsign({
   const REGEN_ATTEMPT_LIMIT = 20;
   let attempts = 0;
   while (
-    !carrierCode ||
-    carrierCode === CarrierCode.MAL ||
-    carrierCode === CarrierCode.POE ||
-    carrierCode === CarrierCode.PUL ||
-    carrierCode === CarrierCode.CJT ||
-    carrierCode === CarrierCode.BBA ||
+    (!carrierCode ||
+      carrierCode === CarrierCode.MAL ||
+      carrierCode === CarrierCode.POE ||
+      carrierCode === CarrierCode.PUL ||
+      carrierCode === CarrierCode.CJT ||
+      carrierCode === CarrierCode.BBA) &&
     attempts < REGEN_ATTEMPT_LIMIT
   ) {
     carrierCode = _.sample(allCarriers);
     attempts++;
   }
+
+  if (!carrierCode) carrierCode = CarrierCode.ACA;
 
   if (isC208) carrierCode = CarrierCode.MAL;
   if (isSatYtzDep) carrierCode = CarrierCode.POE;

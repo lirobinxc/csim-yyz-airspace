@@ -5,10 +5,10 @@ export const ArrBoxDimensions: {
   [key in RadarSceneKeys]: Phaser.Geom.Polygon; // start @ TopLeft, move CLOCKWISE
 } = {
   Radar06sScene: new Phaser.Geom.Polygon([
-    new Phaser.Math.Vector2(66.68, 653.63),
-    new Phaser.Math.Vector2(439.84, 419.55),
-    new Phaser.Math.Vector2(600.28, 686.96),
-    new Phaser.Math.Vector2(236.06, 920.25),
+    new Phaser.Math.Vector2(36.0, 663.0),
+    new Phaser.Math.Vector2(428.0, 415.0),
+    new Phaser.Math.Vector2(594.0, 706.0),
+    new Phaser.Math.Vector2(217.0, 945.0),
   ]),
   Radar15sScene: new Phaser.Geom.Polygon([
     new Phaser.Math.Vector2(),
@@ -17,16 +17,16 @@ export const ArrBoxDimensions: {
     new Phaser.Math.Vector2(),
   ]),
   Radar24sScene: new Phaser.Geom.Polygon([
-    new Phaser.Math.Vector2(505.25, 375.65),
-    new Phaser.Math.Vector2(866.77, 152.15),
-    new Phaser.Math.Vector2(1030.9, 414.94),
-    new Phaser.Math.Vector2(641.43, 662.09),
+    new Phaser.Math.Vector2(519.0, 356.0),
+    new Phaser.Math.Vector2(890.0, 132.0),
+    new Phaser.Math.Vector2(1066.0, 407.0),
+    new Phaser.Math.Vector2(656.0, 664.0),
   ]),
   Radar33sScene: new Phaser.Geom.Polygon([
-    new Phaser.Math.Vector2(),
-    new Phaser.Math.Vector2(),
-    new Phaser.Math.Vector2(),
-    new Phaser.Math.Vector2(),
+    new Phaser.Math.Vector2(452.0, 669.0),
+    new Phaser.Math.Vector2(713.0, 561.0),
+    new Phaser.Math.Vector2(922.0, 887.0),
+    new Phaser.Math.Vector2(694.0, 1036.0),
   ]),
 };
 
@@ -34,17 +34,6 @@ export function isPlaneInsideArrBox(plane: Plane) {
   const radarScene = plane.Scene.SCENE_KEY;
   const planePosition = plane.getPosition();
 
-  switch (radarScene) {
-    case RadarSceneKeys.RADAR_06s:
-      return ArrBoxDimensions[radarScene].contains(
-        planePosition.x,
-        planePosition.y
-      );
-
-    //WIP TODO
-  }
-
-  //DELETE ME
   return ArrBoxDimensions[radarScene].contains(
     planePosition.x,
     planePosition.y

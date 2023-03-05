@@ -22,6 +22,13 @@ export function getBedpostOrigin(
       [ArrBedpost.RAGID]: new Phaser.Math.Vector2(1, 0.368),
     };
   }
+  if (radarScene.SCENE_KEY === RadarSceneKeys.RADAR_33s) {
+    relativeBedpostOrigins = {
+      ...relativeBedpostOrigins,
+      [ArrBedpost.IMEBA]: new Phaser.Math.Vector2(1, 0.091),
+      [ArrBedpost.RAGID]: new Phaser.Math.Vector2(1, 0.23),
+    };
+  }
 
   return relativeBedpostOrigins[arrBedpost].scale(MasterGameOptions.height);
 }

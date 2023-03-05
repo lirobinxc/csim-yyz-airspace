@@ -30,6 +30,7 @@ import RadarScene from '../../../phaser/scenes/RadarScene';
 import { determineIfStraightInBedpost } from './determineIfStraightInBedpost';
 import { determineArrBedpost } from './determineArrBedpost';
 import { determineBedpostSector } from './determineBedpostSector';
+import { STAR_ROUTES_33s } from '../../../phaser/config/RouteConfigArr/RouteConfigStars33s';
 
 let currentHour = _.sample([12, 13, 14, 15, 16, 17, 18]) || 12;
 let currentMinute = 0;
@@ -90,8 +91,11 @@ export function genArrFDE(
   let newArrFde: ArrFDE = generate();
 
   if (allowStraightIn === false) {
-    while (newArrFde.isStraightIn) {
+    const REGEN_ATTEMPT_LIMIT = 20;
+    let attempts = 0;
+    while (newArrFde.isStraightIn && attempts < REGEN_ATTEMPT_LIMIT) {
       newArrFde = generate();
+      attempts++;
     }
   }
 
@@ -217,7 +221,7 @@ export function genArrFDE(
     const arrRunway = ARR_RUNWAYS[radarScene][arrPosition];
 
     // Assigned first waypoint
-    let assignedHeading: WaypointDataArrAll = WP_DICT_ARR_COMMON.ERBUS; // WIP
+    let assignedHeading: WaypointDataArrAll; // WIP
 
     switch (radarScene) {
       case RadarSceneKeys.RADAR_06s:
@@ -226,6 +230,14 @@ export function genArrFDE(
       case RadarSceneKeys.RADAR_24s:
         assignedHeading = STAR_ROUTES_24s[arrBedpost][arrPosition][0];
         break;
+      case RadarSceneKeys.RADAR_33s:
+        assignedHeading = STAR_ROUTES_33s[arrBedpost][arrPosition][0];
+        break;
+      // case RadarSceneKeys.RADAR_15s:
+      //   assignedHeading = STAR_ROUTES_15s[arrBedpost][arrPosition][0];
+      //   break;
+      default:
+        throw new Error('Could not get 1st arrival waypoint');
     }
 
     // Entry altitude
