@@ -405,17 +405,6 @@ const SimOptionsModal = ({
                 RAGID / UDNOX
               </label>
               <label>
-                <input
-                  type="checkbox"
-                  checked={tempOptions.activeArrBedposts.includes(
-                    ArrBedpost.BOXUM
-                  )}
-                  value={ArrBedpost.BOXUM}
-                  onChange={handleActiveBedposts}
-                ></input>
-                BOXUM / DUVOS
-              </label>
-              <label>
                 Prioritize{' '}
                 <select
                   onChange={setPriorityBedpost}
