@@ -86,7 +86,8 @@ export function genArrFDE(
   isSingleOps: boolean,
   activeBedposts: ArrBedpost[],
   innerOnly: boolean,
-  allowStraightIn: boolean
+  allowStraightIn: boolean,
+  priorityBedpost: ArrBedpost | undefined
 ) {
   let newArrFde: ArrFDE = generate();
 
@@ -124,7 +125,11 @@ export function genArrFDE(
     let callsign = genCallsign({ isC208 });
 
     // Init route
-    const starName = genArrRoute(aircraft.type, activeBedposts);
+    const starName = genArrRoute(
+      aircraft.type,
+      activeBedposts,
+      priorityBedpost
+    );
 
     // Arrival Bedpost & Sector
     const arrBedpost: ArrBedpost = determineArrBedpost(starName);

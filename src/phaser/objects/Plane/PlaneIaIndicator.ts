@@ -199,7 +199,7 @@ export default class PlaneIaIndicator extends Phaser.GameObjects.Image {
   }
 
   determineMaxConstraintSpacing() {
-    console.log('maxConstaintType', this.MAX_CONSTRAINT_TYPE);
+    // console.log('maxConstaintType', this.MAX_CONSTRAINT_TYPE);
 
     if (!this.LEAD_PLANE && !this.DEPENDENT_LEAD_PLANE) {
       return {

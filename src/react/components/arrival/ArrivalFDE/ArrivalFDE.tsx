@@ -53,6 +53,8 @@ function ArrivalFDE(props: ArrFDE) {
   const [fdeSpeed, setFdeSpeed] = useState<number | null>(null);
   const [apprClr, setApprClr] = useState(false);
   const [interceptLoc, setInterceptLoc] = useState(isStraightIn ? true : false);
+  const [isBlackBg, setIsBlackBg] = useState(false);
+  const [isColorBlue, setIsColorBlue] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState<AtcInstruction | null>(null);
   const [stripIsSelected, setStripIsSelected] = useState(false);
   const [prevCommandCue, setPrevCommandCue] = useState<PlaneCommandCue>({
@@ -96,6 +98,7 @@ function ArrivalFDE(props: ArrFDE) {
   useEffect(() => {
     if (apprClr) {
       setInterceptLoc(true);
+      setFdeAltitude(0);
     }
   }, [apprClr]);
 
@@ -180,8 +183,8 @@ function ArrivalFDE(props: ArrFDE) {
         return 'RNAV';
       case null:
         return 'RNAV';
-      case assignedSpeed:
-        return 'RNAV';
+      // case assignedSpeed:
+      //   return 'RNAV';
       default:
         return fdeSpeed;
     }
@@ -206,7 +209,11 @@ function ArrivalFDE(props: ArrFDE) {
       <div className={clsx(styles.col2)}>
         <div className={clsx(styles.topBox)}>
           <div
-            className={clsx(styles.acModelFull, { [styles.bgWhite]: isQ400 })}
+            className={clsx(styles.acModelFull, {
+              [styles.bgWhite]: isQ400,
+              [styles.colorBlue]: isColorBlue,
+            })}
+            onClick={() => setIsColorBlue(!isColorBlue)}
           >
             {acModelFull}
           </div>
@@ -257,8 +264,6 @@ function ArrivalFDE(props: ArrFDE) {
         <FdeHeadingModal
           isVisible={modalIsOpen === AtcInstruction.HEADING}
           onHeadingClick={(hdg) => setFdeHeading(hdg)}
-          onInterceptClick={() => setInterceptLoc(!interceptLoc)}
-          onApproachClearanceClick={() => setApprClr(!apprClr)}
           onCloseModal={closeModal}
         />
         <div
@@ -292,7 +297,10 @@ function ArrivalFDE(props: ArrFDE) {
         <div className={clsx(styles.topBox)}>
           <div className={clsx(styles.transponderCode)}>{transponderCode}</div>
         </div>
-        <div className={clsx(styles.bottomBox)}>
+        <div
+          className={clsx(styles.bottomBox, { [styles.bgBlack]: isBlackBg })}
+          onClick={() => setIsBlackBg(!isBlackBg)}
+        >
           <div className={clsx(styles.starName)}>{starName}</div>
         </div>
       </div>

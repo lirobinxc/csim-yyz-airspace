@@ -42,6 +42,7 @@ export interface SimOptions {
   maxActiveArrivals: number;
   arrInnerPracticeMode: boolean;
   wakeSpacingConfig: { [key in DepRunwayYYZ]: number };
+  priorityBedpost: ArrBedpost | undefined;
 }
 
 function pausePhaser() {

@@ -142,7 +142,7 @@ export default class RunwayOrigins {
         RELATIVE_ORIGINS.ArrivalOrigins.YKZ_YOO_YPQ.scale(cameraHeight),
     };
 
-    this.drawCoordinates();
+    // this.drawCoordinates();
   }
 
   public getOrigin(runway: DepRunwayAll) {

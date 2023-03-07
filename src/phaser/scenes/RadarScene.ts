@@ -271,21 +271,21 @@ export default class RadarScene extends Phaser.Scene {
 
     // Create: Arrival box polygon
     this.ArrBoxPolygon = ArrBoxDimensions[this.SCENE_KEY];
-    const graphics = this.add.graphics({ x: 0, y: 0 });
-    graphics.lineStyle(2, 0x00aa00);
-    graphics.beginPath();
-    graphics.moveTo(
-      this.ArrBoxPolygon.points[0].x,
-      this.ArrBoxPolygon.points[0].y
-    );
-    for (var i = 1; i < this.ArrBoxPolygon.points.length; i++) {
-      graphics.lineTo(
-        this.ArrBoxPolygon.points[i].x,
-        this.ArrBoxPolygon.points[i].y
-      );
-    }
-    graphics.closePath();
-    graphics.strokePath();
+    // const graphics = this.add.graphics({ x: 0, y: 0 });
+    // graphics.lineStyle(2, 0x00aa00);
+    // graphics.beginPath();
+    // graphics.moveTo(
+    //   this.ArrBoxPolygon.points[0].x,
+    //   this.ArrBoxPolygon.points[0].y
+    // );
+    // for (var i = 1; i < this.ArrBoxPolygon.points.length; i++) {
+    //   graphics.lineTo(
+    //     this.ArrBoxPolygon.points[i].x,
+    //     this.ArrBoxPolygon.points[i].y
+    //   );
+    // }
+    // graphics.closePath();
+    // graphics.strokePath();
 
     // TEMP Create: Runway FINAL line for intercepts
     // TEMP: Cursor Halo
@@ -523,6 +523,14 @@ export default class RadarScene extends Phaser.Scene {
         //     (plane) => plane.Properties.acId.code
         //   )
         // );
+
+        // Log Arr sequence
+        if (this.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL) {
+          this.sortAllFinalSequencesByDistance();
+
+          // const sequence = this.FinalSequence['YYZ Rwy 24R'];
+          // console.log(sequence.map((p) => p.Properties.acId.code));
+        }
       }
     });
   }
@@ -588,8 +596,11 @@ export default class RadarScene extends Phaser.Scene {
   }
 
   public processPlaneSequence(baseTurnPlane: Plane) {
+    // console.log(baseTurnPlane.Properties.acId.code, 'is on BASE.');
+
     const arrRunway = baseTurnPlane.Properties.arrivalData.arrRunway;
     this.FinalSequence[arrRunway].push(baseTurnPlane);
+
     this.FinalSequence[arrRunway].sort(
       (a, b) =>
         a.DISTANCE_FROM_RUNWAY_THRESHOLD_MILES -
@@ -647,6 +658,79 @@ export default class RadarScene extends Phaser.Scene {
         }
       }
     });
+  }
+
+  private sortAllFinalSequencesByDistance() {
+    const sortRunways = (rwys: DepRunwayYYZ[]) => {
+      rwys.forEach((rwy) => {
+        this.FinalSequence[rwy].sort(
+          (a, b) =>
+            a.DISTANCE_FROM_RUNWAY_THRESHOLD_MILES -
+            b.DISTANCE_FROM_RUNWAY_THRESHOLD_MILES
+        );
+
+        this.FinalSequence[rwy].forEach((plane, idx) => {
+          // Set LEAD_PLANE for each aircraft
+          if (idx > 0) {
+            plane.IaIndicator.LEAD_PLANE = this.FinalSequence[rwy][idx - 1];
+          } else {
+            plane.IaIndicator.LEAD_PLANE = null;
+          }
+
+          // Set DEPENDENT_LEAD_PLANE for each aircaft
+          if (
+            plane.Scene.SCENE_KEY === RadarSceneKeys.RADAR_33s ||
+            plane.Scene.SCENE_KEY === RadarSceneKeys.RADAR_15s
+          ) {
+            let leftRunwaySequence = plane.Scene.FinalSequence['YYZ Rwy 33L'];
+            let rightRunwaySequence = plane.Scene.FinalSequence['YYZ Rwy 33R'];
+
+            if (plane.Scene.SCENE_KEY === RadarSceneKeys.RADAR_15s) {
+              leftRunwaySequence = plane.Scene.FinalSequence['YYZ Rwy 15L'];
+              rightRunwaySequence = plane.Scene.FinalSequence['YYZ Rwy 15R'];
+            }
+
+            const combinedSequence = [
+              ...leftRunwaySequence,
+              ...rightRunwaySequence,
+            ].sort(
+              (a, b) =>
+                a.DISTANCE_FROM_RUNWAY_THRESHOLD_MILES -
+                b.DISTANCE_FROM_RUNWAY_THRESHOLD_MILES
+            );
+
+            const idxThisPlane = combinedSequence.findIndex(
+              (item) => item.Properties.acId.code === plane.Properties.acId.code
+            );
+            if (idxThisPlane <= 0) return;
+
+            const combinedLeadPlane = combinedSequence[idxThisPlane - 1];
+            if (
+              combinedLeadPlane &&
+              combinedLeadPlane.Properties.arrivalData.arrRunway !==
+                plane.Properties.arrivalData.arrRunway
+            ) {
+              plane.IaIndicator.DEPENDENT_LEAD_PLANE = combinedLeadPlane;
+            }
+          }
+        });
+      });
+    };
+
+    switch (this.SCENE_KEY) {
+      case RadarSceneKeys.RADAR_06s:
+        sortRunways([DepRunwayYYZ.RWY_05, DepRunwayYYZ.RWY_06L]);
+        break;
+      case RadarSceneKeys.RADAR_24s:
+        sortRunways([DepRunwayYYZ.RWY_23, DepRunwayYYZ.RWY_24R]);
+        break;
+      case RadarSceneKeys.RADAR_33s:
+        sortRunways([DepRunwayYYZ.RWY_33L, DepRunwayYYZ.RWY_33R]);
+        break;
+      case RadarSceneKeys.RADAR_15s:
+        sortRunways([DepRunwayYYZ.RWY_15L, DepRunwayYYZ.RWY_15R]);
+        break;
+    }
   }
 
   private elevateWaypointsIfDirectToCommandIsSelected() {

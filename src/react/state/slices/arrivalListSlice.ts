@@ -17,6 +17,7 @@ import { insertIntoArray } from '../../functions/insertIntoArray';
 import { getSimOptions } from '../getSimOptions';
 import type { RootState } from '../store';
 import { SimOptions } from './simOptionsSlice';
+import { act } from 'react-dom/test-utils';
 
 // Define the initial state using that type
 function genArrList(
@@ -25,7 +26,8 @@ function genArrList(
   isSingleOps: boolean,
   activeBedposts: ArrBedpost[],
   innerPracticeMode: boolean,
-  allowStraightIn: boolean
+  allowStraightIn: boolean,
+  priorityBedpost: ArrBedpost | undefined
 ) {
   const defaultArrSequence: ArrFDE[] = [];
 
@@ -35,7 +37,8 @@ function genArrList(
       isSingleOps,
       activeBedposts,
       innerPracticeMode,
-      allowStraightIn
+      allowStraightIn,
+      priorityBedpost
     );
 
     defaultArrSequence.push(newArrFde);
@@ -68,7 +71,8 @@ function genInitialState() {
     simOptions.isSingleOps,
     simOptions.activeArrBedposts,
     simOptions.arrInnerPracticeMode,
-    false
+    false,
+    undefined
   );
 }
 
@@ -87,6 +91,7 @@ export const arrivalList = createSlice({
         activeBedposts: ArrBedpost[];
         innerOnly: boolean;
         allowStraightIn: boolean;
+        priorityBedpost: ArrBedpost | undefined;
       }>
     ) => {
       state.push(
@@ -95,7 +100,8 @@ export const arrivalList = createSlice({
           action.payload.isSingleOps,
           action.payload.activeBedposts,
           action.payload.innerOnly,
-          action.payload.allowStraightIn
+          action.payload.allowStraightIn,
+          action.payload.priorityBedpost
         )
       );
     },

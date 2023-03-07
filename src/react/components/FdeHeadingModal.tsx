@@ -3,11 +3,9 @@ import { useState } from 'react';
 import styles from './FdeHeadingModal.module.scss';
 
 interface FdeHeadingModalProps {
-  onHeadingClick: (hdg: number | null) => void;
-  onInterceptClick: () => void;
-  onApproachClearanceClick: () => void;
-  onCloseModal: () => void;
   isVisible: boolean;
+  onHeadingClick: (hdg: number | null) => void;
+  onCloseModal: () => void;
 }
 
 const HEADINGS = (function () {
@@ -25,8 +23,6 @@ const HEADINGS = (function () {
 const FdeHeadingModal = ({
   onHeadingClick,
   onCloseModal,
-  onInterceptClick: onInterceptLocClick,
-  onApproachClearanceClick,
   isVisible,
 }: FdeHeadingModalProps) => {
   const [apprClr, setApprClr] = useState(false);

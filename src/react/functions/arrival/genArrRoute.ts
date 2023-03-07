@@ -40,8 +40,12 @@ const propStars: { [key in ArrBedpost]: StarName } = {
   RAGID: StarName.UDNOX,
 };
 
-export function genArrRoute(acType: AcType, activeBedposts: ArrBedpost[]) {
-  let route: StarName | undefined;
+export function genArrRoute(
+  acType: AcType,
+  activeBedposts: ArrBedpost[],
+  priorityBedpost: ArrBedpost | undefined
+) {
+  let starName: StarName | undefined;
 
   const selectedBedpost = _.sample(activeBedposts);
 
@@ -51,16 +55,40 @@ export function genArrRoute(acType: AcType, activeBedposts: ArrBedpost[]) {
 
   switch (acType) {
     case AcType.JET:
-      route = jetStars[selectedBedpost];
+      starName = jetStars[selectedBedpost];
       break;
     case AcType.PROP:
-      route = propStars[selectedBedpost];
+      starName = propStars[selectedBedpost];
       break;
   }
 
-  if (!route) {
+  if (priorityBedpost && activeBedposts.includes(priorityBedpost)) {
+    const randomNum = _.random(10);
+
+    if (randomNum > 4) {
+      switch (priorityBedpost) {
+        case ArrBedpost.BOXUM:
+          starName = StarName.BOXUM;
+          break;
+        case ArrBedpost.NUBER:
+          starName = StarName.NUBER;
+          break;
+        case ArrBedpost.LINNG:
+          starName = StarName.LINNG;
+          break;
+        case ArrBedpost.RAGID:
+          starName = StarName.RAGID;
+          break;
+        case ArrBedpost.IMEBA:
+          starName = StarName.IMEBA;
+          break;
+      }
+    }
+  }
+
+  if (!starName) {
     throw new Error('Could not generate Arrival Route.');
   }
 
-  return route;
+  return starName;
 }

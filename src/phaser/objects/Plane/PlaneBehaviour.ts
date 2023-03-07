@@ -519,28 +519,28 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
       } else if (distance < 6) {
         this.Plane.Commands.altitude.assigned = Math.min(
           600,
-          this.Plane.Commands.altitude.current
+          this.Plane.Commands.altitude.assigned
         );
         this.Plane.Commands.speed.assigned = landingSpeed + 20;
       } else if (distance < 8) {
         this.Plane.Commands.altitude.assigned = Math.min(
           2000,
-          this.Plane.Commands.altitude.current
+          this.Plane.Commands.altitude.assigned
         );
       } else if (distance < 11) {
         this.Plane.Commands.altitude.assigned = Math.min(
           3000,
-          this.Plane.Commands.altitude.current
+          this.Plane.Commands.altitude.assigned
         );
       } else if (distance < 14) {
         this.Plane.Commands.altitude.assigned = Math.min(
           4000,
-          this.Plane.Commands.altitude.current
+          this.Plane.Commands.altitude.assigned
         );
       } else if (distance < 18) {
         this.Plane.Commands.altitude.assigned = Math.min(
           5000,
-          this.Plane.Commands.altitude.current
+          this.Plane.Commands.altitude.assigned
         );
       }
     }

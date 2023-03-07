@@ -45,6 +45,7 @@ export const defaultSimOptions: SimOptions = {
     'YYZ Rwy 33L': 5,
     'YYZ Rwy 33R': 5,
   },
+  priorityBedpost: undefined,
 };
 
 const localStorage = window.localStorage;

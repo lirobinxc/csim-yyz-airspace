@@ -35,6 +35,13 @@ const SimOptionsModal = ({
     setTempOptions({ ...tempOptions, radarScene: value });
   }
 
+  function setPriorityBedpost(e: React.FormEvent) {
+    const target = e.target as HTMLOptionElement;
+    const value = target.value as ArrBedpost | undefined;
+
+    setTempOptions({ ...tempOptions, priorityBedpost: value });
+  }
+
   function setTerminalPosition(e: React.FormEvent) {
     const target = e.target as HTMLOptionElement;
     const value = target.value as TerminalPosition;
@@ -396,6 +403,31 @@ const SimOptionsModal = ({
                   onChange={handleActiveBedposts}
                 ></input>
                 RAGID / UDNOX
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={tempOptions.activeArrBedposts.includes(
+                    ArrBedpost.BOXUM
+                  )}
+                  value={ArrBedpost.BOXUM}
+                  onChange={handleActiveBedposts}
+                ></input>
+                BOXUM / DUVOS
+              </label>
+              <label>
+                Prioritize{' '}
+                <select
+                  onChange={setPriorityBedpost}
+                  defaultValue={simOptions.priorityBedpost}
+                >
+                  <option value={undefined}>--none--</option>
+                  <option value={ArrBedpost.BOXUM}>BOXUM</option>
+                  <option value={ArrBedpost.NUBER}>NUBER</option>
+                  <option value={ArrBedpost.LINNG}>LINNG</option>
+                  <option value={ArrBedpost.IMEBA}>IMEBA</option>
+                  <option value={ArrBedpost.RAGID}>RAGID</option>
+                </select>
               </label>
               <h3>Interval between Normal Arrivals (per Bedpost)</h3>
               <label className={styles.intervalBox}>

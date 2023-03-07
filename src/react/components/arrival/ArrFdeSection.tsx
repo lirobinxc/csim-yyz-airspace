@@ -123,6 +123,7 @@ const ArrFdeSection = () => {
           activeBedposts: simOptions.activeArrBedposts,
           innerOnly: simOptions.arrInnerPracticeMode,
           allowStraightIn: allowStraightIns,
+          priorityBedpost: simOptions.priorityBedpost,
         })
       );
     }

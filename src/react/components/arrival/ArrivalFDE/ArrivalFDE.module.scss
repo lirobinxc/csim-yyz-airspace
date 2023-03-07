@@ -250,8 +250,18 @@ $babyblue: #c1e9f9;
   }
 }
 
+.bgBlack {
+  color: white;
+
+  background-color: black;
+}
+
 .bgGreen {
   background-color: $satelliteGreen;
+}
+
+.colorBlue {
+  color: blue;
 }
 
 .displayNone {
