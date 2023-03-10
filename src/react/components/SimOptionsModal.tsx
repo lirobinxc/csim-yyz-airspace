@@ -64,6 +64,33 @@ const SimOptionsModal = ({
     setTempOptions({ ...tempOptions, startingCount: value });
   }
 
+  function setWindSpeed(e: React.FormEvent) {
+    const target = e.target as HTMLTextAreaElement;
+    let value = Number(target.value);
+
+    if (isNaN(value)) value = simOptions.startingCount;
+    if (value > 100) value = 100;
+    if (value < 0) value = 0;
+
+    setTempOptions({
+      ...tempOptions,
+      windData: { ...tempOptions.windData, speed: value },
+    });
+  }
+  function setWindDirection(e: React.FormEvent) {
+    const target = e.target as HTMLTextAreaElement;
+    let value = Number(target.value);
+
+    if (isNaN(value)) value = simOptions.startingCount;
+    if (value > 360) value = 360;
+    if (value < 1) value = 1;
+
+    setTempOptions({
+      ...tempOptions,
+      windData: { ...tempOptions.windData, direction: value },
+    });
+  }
+
   function setArrInnerPracticeMode(e: React.FormEvent) {
     setTempOptions({
       ...tempOptions,
@@ -256,6 +283,26 @@ const SimOptionsModal = ({
               <option value={RadarSceneKeys.RADAR_33s}>Rwy 33LR</option>
               <option value={RadarSceneKeys.RADAR_15s}>Rwy 15LR</option>
             </select>
+          </label>
+          <label>
+            Wind Direction
+            <input
+              type="number"
+              name="windDirection"
+              className={styles.number}
+              value={tempOptions.windData.direction}
+              onChange={setWindDirection}
+            />
+          </label>
+          <label>
+            Wind Speed
+            <input
+              type="number"
+              name="windSpeed"
+              className={styles.number}
+              value={tempOptions.windData.speed}
+              onChange={setWindSpeed}
+            />
           </label>
           {tempOptions.terminalPosition === TerminalPosition.DEPARTURE && (
             <>

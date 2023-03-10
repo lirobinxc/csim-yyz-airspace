@@ -178,7 +178,7 @@ export default class PlaneIaIndicator extends Phaser.GameObjects.Image {
     const spacingLocRatio =
       totalIndicatorDistanceFromThresholdInMiles / locLengthInMiles;
 
-    console.log('spacingLocRatio', spacingLocRatio);
+    // console.log('spacingLocRatio', spacingLocRatio);
 
     return spacingLocRatio;
   }

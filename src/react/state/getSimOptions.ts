@@ -46,6 +46,10 @@ export const defaultSimOptions: SimOptions = {
     'YYZ Rwy 33R': 5,
   },
   priorityBedpost: undefined,
+  windData: {
+    direction: 250,
+    speed: 20,
+  },
 };
 
 const localStorage = window.localStorage;

@@ -5,6 +5,7 @@ import { PhaserCustomEvents } from '../../types/CustomEvents';
 import { TerminalPosition } from '../../types/SimTypes';
 import { WaypointDataArrAll } from '../../types/WaypointTypesArr';
 import { WaypointDataDepAll } from '../../types/WaypointTypesDep';
+import { addDegreesToCompassHeading } from '../../utils/addDegreesToCompassHeading';
 import { asKnots } from '../../utils/asKnots';
 import { convertHeadingToRadians } from '../../utils/convertHeadingToRadians';
 import { convertRadiansToHeading } from '../../utils/convertRadiansToHeading';
@@ -71,7 +72,8 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
     this.updateAltitude(dt);
     this.updateSpeed(dt);
     this.updateClimbRate(dt);
-    this.updateVelocity();
+    // this.updateVelocity();
+    this.updateVelocityWithWind(); // DOESN'T WORK
 
     this.updateOnCourse();
   }
@@ -348,6 +350,51 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
     this.scene.physics.velocityFromRotation(
       headingInRadians,
       asKnots(speed.current * this.Scene.GAME_SPEED_MULTIPLIER),
+      body.velocity
+    );
+  };
+
+  // Apply WIND to Velocity
+  private updateVelocityWithWind = () => {
+    const planeSpeed = this.Plane.Commands.speed;
+    const planeHeading = this.Plane.Commands.heading;
+
+    const windSpeedInKnots = this.Scene.SIM_OPTIONS.windData.speed;
+    const windHeading = addDegreesToCompassHeading(
+      this.Scene.SIM_OPTIONS.windData.direction,
+      180
+    );
+
+    const planeHeadingInRadians = convertHeadingToRadians(planeHeading.current);
+    const windHeadingInRadians = convertHeadingToRadians(windHeading);
+
+    const planeVector = new Phaser.Math.Vector2(
+      planeSpeed.current * Math.cos(planeHeadingInRadians),
+      planeSpeed.current * Math.sin(planeHeadingInRadians)
+    );
+    const windVector = new Phaser.Math.Vector2(
+      windSpeedInKnots * Math.cos(windHeadingInRadians),
+      windSpeedInKnots * Math.sin(windHeadingInRadians)
+    );
+
+    const trueVector = planeVector.add(windVector);
+
+    // const trueHeadingInRadians = Math.atan2(trueVector.x, trueVector.y);
+    // const trueHeadingInCompass = Phaser.Math.RadToDeg(trueHeadingInRadians);
+    // if (this.Plane.IS_SELECTED) {
+    //   console.log('trueHeading', trueHeadingInCompass);
+    // }
+
+    const trueSpeedInKnots = Math.sqrt(
+      Math.pow(trueVector.x, 2) + Math.pow(trueVector.y, 2)
+    );
+
+    this.Plane.DataTag.GROUND_SPEED_OVERRIDE = trueSpeedInKnots;
+
+    const body = this.Plane.body as Phaser.Physics.Arcade.Body;
+    this.scene.physics.velocityFromRotation(
+      planeHeadingInRadians,
+      asKnots(trueSpeedInKnots * this.Scene.GAME_SPEED_MULTIPLIER),
       body.velocity
     );
   };

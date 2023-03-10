@@ -43,6 +43,10 @@ export interface SimOptions {
   arrInnerPracticeMode: boolean;
   wakeSpacingConfig: { [key in DepRunwayYYZ]: number };
   priorityBedpost: ArrBedpost | undefined;
+  windData: {
+    speed: number; // knots
+    direction: number; // compass
+  };
 }
 
 function pausePhaser() {

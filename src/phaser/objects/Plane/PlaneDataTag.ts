@@ -16,6 +16,7 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
   // CONSTANTS
   public FLASHING_TEXT_INTERVAL!: ReturnType<typeof setInterval>;
   public LINE_SPACING: number; // px; space between the Text lines
+  public GROUND_SPEED_OVERRIDE: number | undefined;
 
   // Parent component
   private Plane: Plane;
@@ -290,7 +291,13 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
           .padStart(2, '0')
       : '  ';
 
-    const groundSpeed = Math.ceil(currCommands.speed.current / 10)
+    let groundSpeed = currCommands.speed.current;
+
+    if (this.GROUND_SPEED_OVERRIDE) {
+      groundSpeed = this.GROUND_SPEED_OVERRIDE;
+    }
+
+    const groundSpeedText = Math.ceil(groundSpeed / 10)
       .toString()
       .padStart(2, '0');
 
@@ -299,7 +306,9 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
       handoffText = ` >${this.Plane.Properties.handoffData.sector}`;
     }
 
-    this.Text2.setText(`${altitude}${vmi}${vmr} ${groundSpeed}${handoffText}`); // max 9 chars length
+    this.Text2.setText(
+      `${altitude}${vmi}${vmr} ${groundSpeedText}${handoffText}`
+    ); // max 9 chars length
   }
 
   private updateText3() {
