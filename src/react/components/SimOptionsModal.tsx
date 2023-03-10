@@ -74,7 +74,13 @@ const SimOptionsModal = ({
 
     setTempOptions({
       ...tempOptions,
-      windData: { ...tempOptions.windData, speed: value },
+      windData: {
+        ...tempOptions.windData,
+        [tempOptions.radarScene]: {
+          ...tempOptions.windData[tempOptions.radarScene],
+          speed: value,
+        },
+      },
     });
   }
   function setWindDirection(e: React.FormEvent) {
@@ -87,7 +93,13 @@ const SimOptionsModal = ({
 
     setTempOptions({
       ...tempOptions,
-      windData: { ...tempOptions.windData, direction: value },
+      windData: {
+        ...tempOptions.windData,
+        [tempOptions.radarScene]: {
+          ...tempOptions.windData[tempOptions.radarScene],
+          direction: value,
+        },
+      },
     });
   }
 
@@ -290,7 +302,7 @@ const SimOptionsModal = ({
               type="number"
               name="windDirection"
               className={styles.number}
-              value={tempOptions.windData.direction}
+              value={tempOptions.windData[tempOptions.radarScene].direction}
               onChange={setWindDirection}
             />
           </label>
@@ -300,7 +312,7 @@ const SimOptionsModal = ({
               type="number"
               name="windSpeed"
               className={styles.number}
-              value={tempOptions.windData.speed}
+              value={tempOptions.windData[tempOptions.radarScene].speed}
               onChange={setWindSpeed}
             />
           </label>

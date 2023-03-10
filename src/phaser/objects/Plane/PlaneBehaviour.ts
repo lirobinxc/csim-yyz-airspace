@@ -359,9 +359,10 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
     const planeSpeed = this.Plane.Commands.speed;
     const planeHeading = this.Plane.Commands.heading;
 
-    const windSpeedInKnots = this.Scene.SIM_OPTIONS.windData.speed;
+    const windSpeedInKnots =
+      this.Scene.SIM_OPTIONS.windData[this.Scene.SCENE_KEY].speed;
     const windHeading = addDegreesToCompassHeading(
-      this.Scene.SIM_OPTIONS.windData.direction,
+      this.Scene.SIM_OPTIONS.windData[this.Scene.SCENE_KEY].direction,
       180
     );
 

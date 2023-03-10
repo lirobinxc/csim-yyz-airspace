@@ -44,8 +44,10 @@ export interface SimOptions {
   wakeSpacingConfig: { [key in DepRunwayYYZ]: number };
   priorityBedpost: ArrBedpost | undefined;
   windData: {
-    speed: number; // knots
-    direction: number; // compass
+    [key in RadarSceneKeys]: {
+      speed: number; // knots
+      direction: number; // compass
+    };
   };
 }
 

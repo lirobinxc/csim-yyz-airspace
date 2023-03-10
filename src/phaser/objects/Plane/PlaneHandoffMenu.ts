@@ -11,6 +11,7 @@ export enum PlaneHandoffMenuButtons {
   ACCEPT_HANDOFF = 'ACCEPT H/O',
   SHOW_PTL = 'Show PTL',
   HIDE_PLANE = 'Hide Plane',
+  ON_BASE = 'Set ON BASE',
 }
 
 export default class PlaneHandoffMenu extends Phaser.GameObjects.Container {
@@ -31,6 +32,7 @@ export default class PlaneHandoffMenu extends Phaser.GameObjects.Container {
   private Btn_AcceptHandoff: Phaser.GameObjects.BitmapText;
   private Btn_ShowPtl: Phaser.GameObjects.BitmapText;
   private Btn_HidePlane: Phaser.GameObjects.BitmapText;
+  private Btn_OnBase: Phaser.GameObjects.BitmapText;
 
   constructor(plane: Plane) {
     super(plane.scene);
@@ -77,8 +79,16 @@ export default class PlaneHandoffMenu extends Phaser.GameObjects.Container {
       AssetKeys.FONT_DEJAVU_MONO_BOLD,
       PlaneHandoffMenuButtons.HIDE_PLANE
     );
+    this.Btn_OnBase = new Phaser.GameObjects.BitmapText(
+      plane.scene,
+      0,
+      0,
+      AssetKeys.FONT_DEJAVU_MONO_BOLD,
+      PlaneHandoffMenuButtons.ON_BASE
+    );
+
     if (this.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL) {
-      this.Buttons.push(this.Btn_AcceptHandoff);
+      this.Buttons.push(this.Btn_AcceptHandoff, this.Btn_OnBase);
     }
     if (
       this.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.DEPARTURE
@@ -162,6 +172,17 @@ export default class PlaneHandoffMenu extends Phaser.GameObjects.Container {
       }
     );
 
+    this.Btn_OnBase.on(
+      DomEvents.POINTER_DOWN,
+      (pointer: Phaser.Input.Pointer) => {
+        this.Plane.ARR_ON_BASE_TURN = true;
+        this.scene.events.emit(
+          PhaserCustomEvents.PLANE_ON_BASE_TURN,
+          this.Plane
+        );
+      }
+    );
+
     // On Event: Radar BG rightclicked
     this.scene.events.on(PhaserCustomEvents.RIGHT_CLICKED_RADAR_BG, () => {
       this.IS_VISIBLE = false;
@@ -184,5 +205,15 @@ export default class PlaneHandoffMenu extends Phaser.GameObjects.Container {
 
   preUpdate() {
     this.setVisible(this.IS_VISIBLE);
+    this.updateOnBaseText();
+  }
+
+  private updateOnBaseText() {
+    if (this.Plane.ARR_ON_BASE_TURN) {
+      if (this.Btn_OnBase) {
+        this.Btn_OnBase.setTint(ColorKeys.IA_GREEN);
+        this.Btn_OnBase.setText(`${PlaneHandoffMenuButtons.ON_BASE}: Yes`);
+      }
+    }
   }
 }

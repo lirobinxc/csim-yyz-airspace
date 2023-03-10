@@ -47,8 +47,22 @@ export const defaultSimOptions: SimOptions = {
   },
   priorityBedpost: undefined,
   windData: {
-    direction: 250,
-    speed: 20,
+    Radar06sScene: {
+      direction: 70,
+      speed: 20,
+    },
+    Radar15sScene: {
+      direction: 170,
+      speed: 20,
+    },
+    Radar24sScene: {
+      direction: 250,
+      speed: 20,
+    },
+    Radar33sScene: {
+      direction: 350,
+      speed: 20,
+    },
   },
 };
 
