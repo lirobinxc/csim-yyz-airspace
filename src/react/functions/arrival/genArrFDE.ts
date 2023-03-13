@@ -31,6 +31,7 @@ import { determineIfStraightInBedpost } from './determineIfStraightInBedpost';
 import { determineArrBedpost } from './determineArrBedpost';
 import { determineBedpostSector } from './determineBedpostSector';
 import { STAR_ROUTES_33s } from '../../../phaser/config/RouteConfigArr/RouteConfigStars33s';
+import { STAR_ROUTES_15s } from '../../../phaser/config/RouteConfigArr/RouteConfigStars15s';
 
 let currentHour = _.sample([12, 13, 14, 15, 16, 17, 18]) || 12;
 let currentMinute = 0;
@@ -238,9 +239,9 @@ export function genArrFDE(
       case RadarSceneKeys.RADAR_33s:
         assignedHeading = STAR_ROUTES_33s[arrBedpost][arrPosition][0];
         break;
-      // case RadarSceneKeys.RADAR_15s:
-      //   assignedHeading = STAR_ROUTES_15s[arrBedpost][arrPosition][0];
-      //   break;
+      case RadarSceneKeys.RADAR_15s:
+        assignedHeading = STAR_ROUTES_15s[arrBedpost][arrPosition][0];
+        break;
       default:
         throw new Error('Could not get 1st arrival waypoint');
     }

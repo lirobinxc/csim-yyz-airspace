@@ -22,7 +22,10 @@ export function getBedpostOrigin(
       [ArrBedpost.RAGID]: new Phaser.Math.Vector2(1, 0.368),
     };
   }
-  if (radarScene.SCENE_KEY === RadarSceneKeys.RADAR_33s) {
+  if (
+    radarScene.SCENE_KEY === RadarSceneKeys.RADAR_33s ||
+    radarScene.SCENE_KEY === RadarSceneKeys.RADAR_15s
+  ) {
     relativeBedpostOrigins = {
       ...relativeBedpostOrigins,
       [ArrBedpost.IMEBA]: new Phaser.Math.Vector2(1, 0.091),

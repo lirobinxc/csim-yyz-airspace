@@ -51,6 +51,7 @@ import { PlaneCommandCue } from '../objects/Plane/PlaneCommandMenu';
 import { DepRunwayYYZ } from '../types/AirportTypes';
 import { IaIndicatorType } from '../objects/Plane/PlaneIaIndicator';
 import { WP_LIST_ARR_33s } from '../config/WaypointConfigArr/WaypointConfigArr33s';
+import { WP_LIST_ARR_15s } from '../config/WaypointConfigArr/WaypointConfigArr15s';
 
 export default class RadarScene extends Phaser.Scene {
   public Waypoints: Waypoint[];
@@ -231,6 +232,11 @@ export default class RadarScene extends Phaser.Scene {
           break;
         case RadarSceneKeys.RADAR_33s:
           WP_LIST_ARR_33s.forEach((waypointData) => {
+            this.Waypoints.push(new Waypoint(this, waypointData));
+          });
+          break;
+        case RadarSceneKeys.RADAR_15s:
+          WP_LIST_ARR_15s.forEach((waypointData) => {
             this.Waypoints.push(new Waypoint(this, waypointData));
           });
           break;

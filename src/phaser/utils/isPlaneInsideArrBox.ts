@@ -11,10 +11,10 @@ export const ArrBoxDimensions: {
     new Phaser.Math.Vector2(217.0, 945.0),
   ]),
   Radar15sScene: new Phaser.Geom.Polygon([
-    new Phaser.Math.Vector2(),
-    new Phaser.Math.Vector2(),
-    new Phaser.Math.Vector2(),
-    new Phaser.Math.Vector2(),
+    new Phaser.Math.Vector2(427.0, 31.0),
+    new Phaser.Math.Vector2(629.0, 373.0),
+    new Phaser.Math.Vector2(339.0, 508.0),
+    new Phaser.Math.Vector2(148.0, 196.0),
   ]),
   Radar24sScene: new Phaser.Geom.Polygon([
     new Phaser.Math.Vector2(519.0, 356.0),

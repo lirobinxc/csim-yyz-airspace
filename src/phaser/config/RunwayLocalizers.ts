@@ -26,11 +26,11 @@ export class RunwayLocalizers {
       ],
       'YYZ Rwy 15L': [
         radarScene.RunwayOrigins.getOrigin(DepRunwayYYZ.RWY_15L),
-        new Phaser.Math.Vector2(),
+        new Phaser.Math.Vector2(267, 90.0),
       ],
       'YYZ Rwy 15R': [
         radarScene.RunwayOrigins.getOrigin(DepRunwayYYZ.RWY_15R),
-        new Phaser.Math.Vector2(),
+        new Phaser.Math.Vector2(255.0, 103.0),
       ],
       'YYZ Rwy 23': [
         radarScene.RunwayOrigins.getOrigin(DepRunwayYYZ.RWY_23),
