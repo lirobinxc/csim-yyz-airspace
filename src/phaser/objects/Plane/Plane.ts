@@ -525,8 +525,7 @@ export default class Plane extends Phaser.GameObjects.Container {
     if (this.ARR_HAS_INTERCEPTED_LOC) {
       this.ARR_ON_BASE_TURN = true;
     } else if (
-      (this.Scene.SCENE_KEY === RadarSceneKeys.RADAR_24s ||
-        this.Scene.SCENE_KEY === RadarSceneKeys.RADAR_15s) &&
+      this.Scene.SCENE_KEY === RadarSceneKeys.RADAR_24s &&
       arrPosition === ArrivalPosition.SOUTH
     ) {
       if (
@@ -539,6 +538,19 @@ export default class Plane extends Phaser.GameObjects.Container {
         this.IN_ARR_BOX &&
         this.Commands.heading.current <= 360 &&
         this.Commands.heading.current >= 330
+      ) {
+        this.ARR_ON_BASE_TURN = true;
+      }
+    } else if (
+      this.Scene.SCENE_KEY === RadarSceneKeys.RADAR_15s &&
+      arrPosition === ArrivalPosition.SOUTH
+    ) {
+      if (this.IN_ARR_BOX && this.Commands.heading.current >= 330 + 20) {
+        this.ARR_ON_BASE_TURN = true;
+      } else if (
+        this.IN_ARR_BOX &&
+        this.Commands.heading.current > 0 &&
+        this.Commands.heading.current <= baseTurnHeading
       ) {
         this.ARR_ON_BASE_TURN = true;
       }

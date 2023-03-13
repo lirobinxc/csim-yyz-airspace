@@ -534,8 +534,8 @@ export default class RadarScene extends Phaser.Scene {
         if (this.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL) {
           this.sortAllFinalSequencesByDistance();
 
-          // const sequence = this.FinalSequence['YYZ Rwy 24R'];
-          // console.log(sequence.map((p) => p.Properties.acId.code));
+          const sequence = this.FinalSequence['YYZ Rwy 15R'];
+          console.log(sequence.map((p) => p.Properties.acId.code));
         }
       }
     });

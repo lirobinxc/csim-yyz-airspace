@@ -23,8 +23,8 @@ export const IaToolHeadings: {
     SOUTH: { downwind: 330, base: 60, intercept: 120 },
   },
   'YYZ Rwy 15R': {
-    NORTH: { downwind: 330, base: 60, intercept: 120 },
-    SOUTH: { downwind: 330, base: 240, intercept: 180 },
+    NORTH: { downwind: 330, base: 240, intercept: 180 },
+    SOUTH: { downwind: 330, base: 60, intercept: 120 },
   },
   'YYZ Rwy 23': {
     NORTH: { downwind: 60, base: 150, intercept: 210 },

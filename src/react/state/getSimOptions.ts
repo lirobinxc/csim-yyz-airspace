@@ -33,7 +33,7 @@ export const defaultSimOptions: SimOptions = {
     ArrBedpost.NUBER,
     ArrBedpost.RAGID,
   ],
-  maxActiveArrivals: 8,
+  maxActiveArrivals: 15,
   arrInnerPracticeMode: false,
   wakeSpacingConfig: {
     'YYZ Rwy 05': 5,
@@ -42,8 +42,8 @@ export const defaultSimOptions: SimOptions = {
     'YYZ Rwy 15R': 3,
     'YYZ Rwy 23': 5,
     'YYZ Rwy 24R': 5,
-    'YYZ Rwy 33L': 5,
-    'YYZ Rwy 33R': 5,
+    'YYZ Rwy 33L': 2.5,
+    'YYZ Rwy 33R': 10,
   },
   priorityBedpost: undefined,
   windData: {
