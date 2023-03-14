@@ -17,7 +17,9 @@ export default class PlaneCjs extends Phaser.GameObjects.BitmapText {
     this.setFontSize(FONT_SIZE);
     this.setTint(ColorKeys.PPS_YELLOW);
     this.setOrigin(0.5, 0);
-    this.setPosition(0, FONT_SIZE / 2);
+    // this.setPosition(0, FONT_SIZE / 2);
+    this.setPosition(0, -FONT_SIZE * 1.5);
+    this.scaleY = 0.9;
 
     if (
       this.Plane.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL

@@ -170,7 +170,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
       }
     }
 
-    const TURN_RATE_PER_SEC = 3 * this.Scene.GAME_SPEED_MULTIPLIER; // degrees per second (Standard Rate Turn)
+    const TURN_RATE_PER_SEC = 2 * this.Scene.GAME_SPEED_MULTIPLIER; // degrees per second (Standard Rate Turn)
     const TURN_RATE_PER_MS = TURN_RATE_PER_SEC / 1000;
     const TURN_RATE_PER_FRAME = TURN_RATE_PER_MS * dt;
 

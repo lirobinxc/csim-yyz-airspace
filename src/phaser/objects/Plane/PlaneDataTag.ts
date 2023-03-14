@@ -81,7 +81,7 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
     if (
       this.Plane.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL
     ) {
-      FONT_SIZE = 14;
+      FONT_SIZE = 13.5;
     }
 
     this.Text1.setFontSize(FONT_SIZE);

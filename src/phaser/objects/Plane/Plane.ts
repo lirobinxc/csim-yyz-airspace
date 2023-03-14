@@ -585,15 +585,40 @@ export default class Plane extends Phaser.GameObjects.Container {
       this.Properties.arrivalData.arrRunway
     );
 
-    const distanceInPixels = Phaser.Math.Distance.BetweenPoints(
-      planePosition,
-      runwayThreshold
+    const localizerLineGeom: Phaser.Geom.Line =
+      this.Scene.Localizers?.LocLineGeoms[this.Properties.arrivalData.arrRunway]
+        .geom;
+
+    if (!localizerLineGeom) return;
+
+    const pointAbeamToLocalizer = Phaser.Geom.Line.GetNearestPoint(
+      localizerLineGeom,
+      planePosition
     );
-    const distanceInMiles = convertPixelsToMiles(distanceInPixels);
 
-    // console.log(distanceInMiles);
+    const distanceToLocalizerInPixels = Phaser.Math.Distance.BetweenPoints(
+      pointAbeamToLocalizer,
+      planePosition
+    );
 
-    this.DISTANCE_FROM_RUNWAY_THRESHOLD_MILES = distanceInMiles;
+    const distanceToLocalizerInMiles = convertPixelsToMiles(
+      distanceToLocalizerInPixels
+    );
+
+    const distanceFromLocInterceptToThresholdInPixels =
+      Phaser.Math.Distance.BetweenPoints(
+        pointAbeamToLocalizer,
+        runwayThreshold
+      );
+
+    const distanceFromLocInterceptToThresholdInMiles = convertPixelsToMiles(
+      distanceFromLocInterceptToThresholdInPixels
+    );
+
+    // console.log(distanceToLocalizerInMiles);
+
+    this.DISTANCE_FROM_RUNWAY_THRESHOLD_MILES =
+      distanceFromLocInterceptToThresholdInMiles + distanceToLocalizerInMiles;
   }
 
   private setPilotVoice() {

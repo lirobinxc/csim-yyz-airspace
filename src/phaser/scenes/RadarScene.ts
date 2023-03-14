@@ -520,15 +520,15 @@ export default class RadarScene extends Phaser.Scene {
     // TEMP: on physics update
     this.physics.world.on('worldstep', (dt: number) => {
       if (this.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL) {
-        // console.log(
-        //   'finalSeq:',
-        //   this.FinalSequence['YYZ Rwy 33L'].map(
-        //     (plane) => plane.Properties.acId.code
-        //   ),
-        //   this.FinalSequence['YYZ Rwy 33R'].map(
-        //     (plane) => plane.Properties.acId.code
-        //   )
-        // );
+        console.log(
+          'finalSeq:',
+          this.FinalSequence['YYZ Rwy 33L'].map(
+            (plane) => plane.Properties.acId.code
+          )
+          // this.FinalSequence['YYZ Rwy 33R'].map(
+          //   (plane) => plane.Properties.acId.code
+          // )
+        );
 
         // Log Arr sequence
         if (this.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL) {

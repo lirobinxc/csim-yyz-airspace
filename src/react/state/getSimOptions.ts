@@ -1,7 +1,9 @@
+import _ from 'lodash';
 import { MasterGameOptions } from '../../phaser/MasterGameOptions';
 import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
 import { TerminalPosition } from '../../phaser/types/SimTypes';
 import { ArrBedpost } from '../functions/arrival/genArrRoute';
+import { genRandomWindData } from '../functions/genRandomWindData';
 import { SimOptions } from './slices/simOptionsSlice';
 
 export enum LocalStorageKeys {
@@ -46,24 +48,7 @@ export const defaultSimOptions: SimOptions = {
     'YYZ Rwy 33R': 10,
   },
   priorityBedpost: undefined,
-  windData: {
-    Radar06sScene: {
-      direction: 70,
-      speed: 20,
-    },
-    Radar15sScene: {
-      direction: 170,
-      speed: 20,
-    },
-    Radar24sScene: {
-      direction: 250,
-      speed: 20,
-    },
-    Radar33sScene: {
-      direction: 350,
-      speed: 20,
-    },
-  },
+  windData: genRandomWindData(),
 };
 
 const localStorage = window.localStorage;
@@ -79,7 +64,7 @@ export function getSimOptions(): SimOptions {
   ) {
     console.log('Retrieved localStorage SimOptions.');
 
-    return storedSimOptions;
+    return { ...storedSimOptions, windData: genRandomWindData() };
   }
 
   localStorage.setItem(

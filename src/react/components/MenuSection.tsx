@@ -169,11 +169,14 @@ const MenuSection = ({ appVersion }: MenuSectionProps) => {
         </div>
         <div>
           <div className={clsx(styles.spacing, styles.arrHalfBoxLg)}>
-            {`${simOptions.windData[simOptions.radarScene].direction
+            {/* {`${simOptions.windData[simOptions.radarScene].direction
               .toString()
               .padStart(3, '0')}/${Math.round(
               simOptions.windData[simOptions.radarScene].speed
-            )}`}
+            )}`} */}
+            {`${simOptions.windData[simOptions.radarScene].direction
+              .toString()
+              .padStart(3, '0')}/??`}
           </div>
           <div className={clsx(styles.spacing, styles.arrHalfBoxLg)}>-</div>
         </div>

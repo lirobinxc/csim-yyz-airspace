@@ -1,4 +1,5 @@
 import { ColorKeys } from '../../types/ColorKeys';
+import { TerminalPosition } from '../../types/SimTypes';
 import Plane from './Plane';
 import PlaneSymbol from './PlaneSymbol';
 
@@ -43,7 +44,14 @@ export default class PlaneHistoryTrail extends Phaser.GameObjects.Container {
   private addNewDot() {
     const planePos = this.Plane.getPosition();
 
-    const DOT_RADIUS = 1.5;
+    let DOT_RADIUS = 1.5;
+
+    if (
+      this.Plane.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL
+    ) {
+      DOT_RADIUS = 1;
+    }
+
     const DOT_COLOR = ColorKeys.PPS_YELLOW;
 
     // Setup: Dot

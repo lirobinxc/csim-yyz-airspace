@@ -24,7 +24,7 @@ export default class PlaneSymbol extends Phaser.GameObjects.Image {
     if (
       this.Plane.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL
     ) {
-      this.setScale(0.18);
+      this.setScale(0.15);
     }
 
     // Setup: Debug
