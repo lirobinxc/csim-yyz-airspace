@@ -717,6 +717,8 @@ export default class RadarScene extends Phaser.Scene {
                 plane.Properties.arrivalData.arrRunway
             ) {
               plane.IaIndicator.DEPENDENT_LEAD_PLANE = combinedLeadPlane;
+            } else {
+              plane.IaIndicator.DEPENDENT_LEAD_PLANE = null;
             }
           }
         });

@@ -112,6 +112,10 @@ export default class PlaneIaIndicator extends Phaser.GameObjects.Image {
       return;
     }
 
+    if (!this.Plane.ARR_HAS_INTERCEPTED_LOC) {
+      return;
+    }
+
     const indicatorDistanceInMiles =
       this.calcIndicatorDistanceFromThresholdInMiles();
 

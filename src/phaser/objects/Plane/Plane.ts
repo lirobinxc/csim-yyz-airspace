@@ -67,6 +67,7 @@ export default class Plane extends Phaser.GameObjects.Container {
   public ARR_HAS_INTERCEPTED_LOC: boolean;
   public ARR_ON_BASE_TURN: boolean;
   public DISTANCE_FROM_RUNWAY_THRESHOLD_MILES: number; // in miles
+  public COMMAND_EXECUTION_DELAY_IN_MS: number;
 
   public DESTROYED: boolean;
 
@@ -115,6 +116,7 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.ARR_HAS_INTERCEPTED_LOC = false;
     this.ARR_ON_BASE_TURN = false;
     this.DISTANCE_FROM_RUNWAY_THRESHOLD_MILES = 9999; // in miles
+    this.COMMAND_EXECUTION_DELAY_IN_MS = 5000;
 
     this.DESTROYED = false;
 
@@ -313,7 +315,9 @@ export default class Plane extends Phaser.GameObjects.Container {
         `${lowAltitudePrefix} Proceed direct ${waypointData.name}`,
         this
       );
-      this.Commands.heading.directTo = waypointData;
+      setTimeout(() => {
+        this.Commands.heading.directTo = waypointData;
+      }, this.COMMAND_EXECUTION_DELAY_IN_MS);
       return;
     }
 
@@ -367,9 +371,11 @@ export default class Plane extends Phaser.GameObjects.Container {
     } else {
       this.talk(`Maintain heading ${spokenHeading}`, this);
     }
+    setTimeout(() => {
+      this.Commands.heading.directTo = null;
+      this.Commands.heading.assigned = desiredHeading;
+    }, this.COMMAND_EXECUTION_DELAY_IN_MS);
 
-    this.Commands.heading.directTo = null;
-    this.Commands.heading.assigned = desiredHeading;
     return;
   }
 
@@ -386,12 +392,16 @@ export default class Plane extends Phaser.GameObjects.Container {
 
     if (this.Commands.altitude.current < desiredAlt) {
       this.talk(`Climb ${spokenAlt}`, this);
-      this.Commands.altitude.assigned = desiredAlt;
+      setTimeout(() => {
+        this.Commands.altitude.assigned = desiredAlt;
+      }, this.COMMAND_EXECUTION_DELAY_IN_MS);
       return;
     }
     if (this.Commands.altitude.current > desiredAlt) {
       this.talk(`Descend ${spokenAlt}`, this);
-      this.Commands.altitude.assigned = desiredAlt;
+      setTimeout(() => {
+        this.Commands.altitude.assigned = desiredAlt;
+      }, this.COMMAND_EXECUTION_DELAY_IN_MS);
       return;
     }
     this.talk(`Maintain ${spokenAlt}`, this);
@@ -406,7 +416,9 @@ export default class Plane extends Phaser.GameObjects.Container {
       this.Commands.speed.current > desiredSpeed
     ) {
       this.talk(`Speed ${desiredSpeed} knots`, this);
-      this.Commands.speed.assigned = desiredSpeed;
+      setTimeout(() => {
+        this.Commands.speed.assigned = desiredSpeed;
+      }, this.COMMAND_EXECUTION_DELAY_IN_MS);
       return;
     }
     this.talk(`Maintain speed ${desiredSpeed} knots`, this);

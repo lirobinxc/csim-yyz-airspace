@@ -12,6 +12,7 @@ import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
 import { TerminalPosition } from '../../phaser/types/SimTypes';
 import { ArrBedpost, StarName } from '../functions/arrival/genArrRoute';
 import { DepRunwayYYZ } from '../../phaser/types/AirportTypes';
+import clsx from 'clsx';
 
 interface SimOptionsModalProps {
   isOpen: boolean;
@@ -477,6 +478,39 @@ const SimOptionsModal = ({
                   <option value={ArrBedpost.RAGID}>RAGID</option>
                 </select>
               </label>
+              <h3>Interval Shortcuts</h3>
+              <button
+                className={clsx({
+                  [styles.buttonGreen]:
+                    tempOptions.intervalBetweenNormalArrs === 180_000,
+                })}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setTempOptions({
+                    ...tempOptions,
+                    intervalBetweenNormalArrs: 180_000,
+                    intervalBetweenStraightInArrs: 240_000,
+                  });
+                }}
+              >
+                Dual Intervals
+              </button>
+              <button
+                className={clsx({
+                  [styles.buttonGreen]:
+                    tempOptions.intervalBetweenNormalArrs === 120_000,
+                })}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setTempOptions({
+                    ...tempOptions,
+                    intervalBetweenNormalArrs: 120_000,
+                    intervalBetweenStraightInArrs: 180_000,
+                  });
+                }}
+              >
+                Land & Offload Intervals
+              </button>
               <h3>Interval between Normal Arrivals (per Bedpost)</h3>
               <label className={styles.intervalBox}>
                 <input

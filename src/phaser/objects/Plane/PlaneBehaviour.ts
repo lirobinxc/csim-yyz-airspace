@@ -597,8 +597,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
   private deletePlaneIfLanded() {
     if (
       this.Plane.ARR_APPROACH_CLEARANCE &&
-      this.Plane.DISTANCE_FROM_RUNWAY_THRESHOLD_MILES < 0.2 &&
-      this.Plane.Commands.altitude.current <= 1000
+      this.Plane.DISTANCE_FROM_RUNWAY_THRESHOLD_MILES < 3
     ) {
       this.scene.events.emit(
         PhaserCustomEvents.DESTROY_PLANE_BUTTON_CLICKED,
