@@ -189,4 +189,19 @@ export const PlanePerformanceConfig: {
     accel: BASE_ACCEL,
     recat: RecatGroup.E,
   },
+  LJ60: {
+    speed: {
+      initialClimb: 170, // to 800 feet
+      normalClimb: 290, // 800 to FL240
+      maxCruise: 460,
+      maxBelow10k: 250,
+      landing: 140,
+    },
+    climbRate: {
+      initialClimb: 3000, // feet per minute, actual = 1500
+      normalClimb: 2500,
+    },
+    accel: BASE_ACCEL,
+    recat: RecatGroup.G,
+  },
 };

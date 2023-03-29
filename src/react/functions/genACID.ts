@@ -13,7 +13,14 @@ export interface AircraftCollection {
 const aircraftCollection: AircraftCollection = {
   L: { JET: [AcModel.C25A], PROP: [AcModel.C208] },
   M: {
-    JET: [AcModel.CRJ9, AcModel.A21N, AcModel.B738, AcModel.CL60, AcModel.C56X],
+    JET: [
+      AcModel.CRJ9,
+      AcModel.A21N,
+      AcModel.B738,
+      AcModel.CL60,
+      AcModel.C56X,
+      AcModel.LJ60,
+    ],
     PROP: [AcModel.DH8A, AcModel.DH8D],
   },
   H: { JET: [AcModel.A343, AcModel.B744, AcModel.B763], PROP: [] },
