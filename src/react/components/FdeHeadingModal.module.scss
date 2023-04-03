@@ -36,6 +36,11 @@
   bottom: 1rem;
   z-index: 999;
 
+  @media only screen and (min-width: 1930px) {
+    left: auto;
+    right: 10rem;
+  }
+
   .wrapper {
     .headingButtons {
       @include on-circle($item-count: 36, $circle-size: 25em, $item-size: 3rem);
