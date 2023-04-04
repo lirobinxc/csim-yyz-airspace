@@ -482,14 +482,14 @@ const SimOptionsModal = ({
               <button
                 className={clsx({
                   [styles.buttonGreen]:
-                    tempOptions.intervalBetweenNormalArrs === 180_000,
+                    tempOptions.intervalBetweenNormalArrs === 140_000,
                 })}
                 onClick={(e) => {
                   e.preventDefault();
                   setTempOptions({
                     ...tempOptions,
-                    intervalBetweenNormalArrs: 180_000,
-                    intervalBetweenStraightInArrs: 240_000,
+                    intervalBetweenNormalArrs: 140_000,
+                    intervalBetweenStraightInArrs: 200_000,
                   });
                 }}
               >
