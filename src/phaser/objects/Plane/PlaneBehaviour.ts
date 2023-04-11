@@ -434,10 +434,10 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
       this.Plane.Properties.acType === AcType.PROP ||
       this.Plane.Properties.isSatellite
     ) {
-      if (altitude.current > 2900) {
-        this.Plane.Commands.onSidOrPropHeading = true;
-        return;
-      }
+      // if (altitude.current > 2900) {
+      //   this.Plane.Commands.onSidOrPropHeading = true;
+      //   return;
+      // }
       if (altitude.current > 100) {
         if (!PROP_HEADING) return;
         if (typeof PROP_HEADING === 'number') {
