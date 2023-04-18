@@ -74,7 +74,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
     this.updateSpeed(dt);
     this.updateClimbRate(dt);
     // this.updateVelocity();
-    this.updateVelocityWithWind(); // DOESN'T WORK
+    this.updateVelocityWithWindAndAltitude(); // DOESN'T WORK
 
     this.updateOnCourse();
   }
@@ -355,8 +355,8 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
     );
   };
 
-  // Apply WIND to Velocity
-  private updateVelocityWithWind = () => {
+  // Apply WIND & ALTITUDE to Velocity
+  private updateVelocityWithWindAndAltitude = () => {
     const planeSpeed = this.Plane.Commands.speed;
     const planeHeading = this.Plane.Commands.heading;
 
@@ -391,12 +391,18 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
       Math.pow(trueVector.x, 2) + Math.pow(trueVector.y, 2)
     );
 
-    this.Plane.DataTag.GROUND_SPEED_OVERRIDE = trueSpeedInKnots;
+    const altitudeMultiplier =
+      (this.Plane.Commands.altitude.current - 4000) / 10_000 / 3.3;
+
+    const trueSpeedInKnotsWithAltitude =
+      trueSpeedInKnots + trueSpeedInKnots * altitudeMultiplier;
+
+    this.Plane.DataTag.GROUND_SPEED_OVERRIDE = trueSpeedInKnotsWithAltitude;
 
     const body = this.Plane.body as Phaser.Physics.Arcade.Body;
     this.scene.physics.velocityFromRotation(
       planeHeadingInRadians,
-      asKnots(trueSpeedInKnots * this.Scene.GAME_SPEED_MULTIPLIER),
+      asKnots(trueSpeedInKnotsWithAltitude * this.Scene.GAME_SPEED_MULTIPLIER),
       body.velocity
     );
   };
