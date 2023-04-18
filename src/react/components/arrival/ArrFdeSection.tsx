@@ -103,13 +103,38 @@ const ArrFdeSection = () => {
   }, [strips, processStrips]);
 
   // Block straight-ins until enough bedpost aircraft active
+  const BLOCK_STRAIGHT_IN_UNTIL_THIS_MANY_ARRIVALS = Math.ceil(
+    simOptions.maxActiveArrivals * 0.8
+  );
+
   useEffect(() => {
-    if (stripList.activePanel.length > 0) {
-      setAllowStraightIns(true);
-    } else {
-      setAllowStraightIns(false);
+    if (!simOptions.arrInnerPracticeMode) {
+      if (
+        stripList.activePanel.length <
+        BLOCK_STRAIGHT_IN_UNTIL_THIS_MANY_ARRIVALS
+      ) {
+        setAllowStraightIns(false);
+      } else {
+        setAllowStraightIns(true);
+      }
     }
-  }, [stripList.activePanel]);
+
+    if (simOptions.arrInnerPracticeMode) {
+      if (
+        stripList.activePanel.length <
+        Math.ceil(simOptions.maxActiveArrivals * 0.5)
+      ) {
+        setAllowStraightIns(false);
+      } else {
+        setAllowStraightIns(true);
+      }
+    }
+  }, [
+    stripList.activePanel,
+    simOptions.arrInnerPracticeMode,
+    simOptions.maxActiveArrivals,
+    BLOCK_STRAIGHT_IN_UNTIL_THIS_MANY_ARRIVALS,
+  ]);
 
   // Interval: Add new pending Arrival strip
   useInterval(() => {
@@ -139,15 +164,11 @@ const ArrFdeSection = () => {
     ];
 
     // Break if max # of a/c in airspace
-    const maxActiveArrivalsIfNoStraightIns = Math.ceil(
-      simOptions.maxActiveArrivals * 0.5
-    );
-
     if (
       allAirborneStrips.length >=
       (allowStraightIns
         ? simOptions.maxActiveArrivals
-        : maxActiveArrivalsIfNoStraightIns)
+        : BLOCK_STRAIGHT_IN_UNTIL_THIS_MANY_ARRIVALS)
     )
       return;
 

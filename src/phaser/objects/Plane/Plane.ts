@@ -67,6 +67,8 @@ export default class Plane extends Phaser.GameObjects.Container {
   public ARR_HAS_INTERCEPTED_LOC: boolean;
   public ARR_ON_BASE_TURN: boolean;
   public DISTANCE_FROM_RUNWAY_THRESHOLD_MILES: number; // in miles
+  public DISTANCE_FROM_AIRPORT_MILES: number; // in miles
+  public ARR_HAS_REDUCED_TO_210_KTS_ON_STAR: boolean;
   public COMMAND_EXECUTION_DELAY_IN_MS: number;
 
   public DESTROYED: boolean;
@@ -109,6 +111,7 @@ export default class Plane extends Phaser.GameObjects.Container {
 
     this.IN_ARR_BOX = false;
     this.ARR_INTERCEPT_LOC = false;
+    this.ARR_HAS_REDUCED_TO_210_KTS_ON_STAR = false;
 
     this.ARR_APPROACH_CLEARANCE = false;
     this.ARR_INTERCEPT_LOC_READ_BACK = false;
@@ -116,6 +119,7 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.ARR_HAS_INTERCEPTED_LOC = false;
     this.ARR_ON_BASE_TURN = false;
     this.DISTANCE_FROM_RUNWAY_THRESHOLD_MILES = 9999; // in miles
+    this.DISTANCE_FROM_AIRPORT_MILES = 9999; // in miles
     this.COMMAND_EXECUTION_DELAY_IN_MS = 5000;
 
     this.DESTROYED = false;
@@ -215,6 +219,7 @@ export default class Plane extends Phaser.GameObjects.Container {
         this.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL
       ) {
         if (this.IN_ARR_BOX === false) {
+          this.updateDistanceFromAirport();
           this.IN_ARR_BOX = isPlaneInsideArrBox(this);
         }
         if (this.IN_ARR_BOX === true) {
@@ -631,6 +636,26 @@ export default class Plane extends Phaser.GameObjects.Container {
 
     this.DISTANCE_FROM_RUNWAY_THRESHOLD_MILES =
       distanceFromLocInterceptToThresholdInMiles + distanceToLocalizerInMiles;
+  }
+
+  private updateDistanceFromAirport() {
+    if (this.IN_ARR_BOX) return;
+
+    const planePosition = this.getPosition();
+    const centerOfAirport = new Phaser.Math.Vector2(538.83, 540.0);
+
+    const distanceFromAirportInPixels = Phaser.Math.Distance.BetweenPoints(
+      centerOfAirport,
+      planePosition
+    );
+
+    const distanceFromAirportInMiles = convertPixelsToMiles(
+      distanceFromAirportInPixels
+    );
+
+    // console.log(distanceFromAirportInMiles);
+
+    this.DISTANCE_FROM_AIRPORT_MILES = distanceFromAirportInMiles;
   }
 
   private setPilotVoice() {

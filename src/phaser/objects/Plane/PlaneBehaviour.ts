@@ -42,6 +42,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
           break;
         case TerminalPosition.ARRIVAL:
           this.arrCheckInAfterHandoffAccepted();
+          this.arrReduceSpeedTo210KtsOnStar();
           break;
       }
     });
@@ -591,6 +592,24 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
           this.Plane.Commands.altitude.assigned
         );
       }
+    }
+  }
+
+  private arrReduceSpeedTo210KtsOnStar() {
+    if (this.Plane.ARR_HAS_REDUCED_TO_210_KTS_ON_STAR === true) return;
+    if (this.Plane.Commands.speed.current <= 210) {
+      this.Plane.ARR_HAS_REDUCED_TO_210_KTS_ON_STAR = true;
+      return;
+    }
+
+    if (
+      this.Plane.DISTANCE_FROM_AIRPORT_MILES < 8 &&
+      this.Plane.Commands.speed.current > 210
+    ) {
+      console.log(this.Plane.Properties.acId.code, 'reducing to 210 knots');
+
+      this.Plane.Commands.speed.assigned = 210;
+      this.Plane.ARR_HAS_REDUCED_TO_210_KTS_ON_STAR = true;
     }
   }
 
