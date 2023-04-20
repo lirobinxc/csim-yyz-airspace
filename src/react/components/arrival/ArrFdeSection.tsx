@@ -120,10 +120,7 @@ const ArrFdeSection = () => {
     }
 
     if (simOptions.arrInnerPracticeMode) {
-      if (
-        stripList.activePanel.length <
-        Math.ceil(simOptions.maxActiveArrivals * 0.25)
-      ) {
+      if (stripList.activePanel.length < 3) {
         setAllowStraightIns(false);
       } else {
         setAllowStraightIns(true);
