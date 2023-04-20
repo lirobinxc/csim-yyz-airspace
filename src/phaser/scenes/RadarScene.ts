@@ -495,7 +495,7 @@ export default class RadarScene extends Phaser.Scene {
         );
 
         if (!plane) {
-          this.PlaneList.find(
+          plane = this.PlaneList.find(
             (item) => item.Properties.fdeData.dep?.uniqueKey === planeUniqueKey
           );
         }

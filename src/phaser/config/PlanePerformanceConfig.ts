@@ -108,8 +108,8 @@ export const PlanePerformanceConfig: {
       landing: 110,
     },
     climbRate: {
-      initialClimb: 800, // feet per minute
-      normalClimb: 600,
+      initialClimb: 2000, // feet per minute (actual is 800)
+      normalClimb: 1500, // actual is 600
     },
     accel: BASE_ACCEL,
     recat: RecatGroup.G,

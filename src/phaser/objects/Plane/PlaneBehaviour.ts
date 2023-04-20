@@ -104,6 +104,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
 
     // Logic Step 2: Check if there is a next waypoint on the route
     let NEXT_WAYPOINT: WaypointDataDepAll | WaypointDataArrAll | null = null;
+
     const idxOfCurrentWaypoint = filedRoute.findIndex((waypoint) => {
       return waypoint.name === heading.directTo?.name;
     });
@@ -412,8 +413,8 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
     const heading = this.Plane.Commands.heading;
 
     const completedSidOrPropHeading = this.Plane.Commands.onSidOrPropHeading;
-
     if (completedSidOrPropHeading === true) return;
+
     const sidOrPropTurnHeading =
       this.Plane.Properties.takeoffData.sidOrPropTurnHeading;
 
@@ -441,16 +442,16 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
       this.Plane.Properties.acType === AcType.PROP ||
       this.Plane.Properties.isSatellite
     ) {
-      // if (altitude.current > 2900) {
-      //   this.Plane.Commands.onSidOrPropHeading = true;
-      //   return;
-      // }
       if (altitude.current > 100) {
         if (!PROP_HEADING) return;
         if (typeof PROP_HEADING === 'number') {
           heading.assigned = PROP_HEADING;
+          return;
         } else {
+          // We need this to ensure satellite a/c don't keep getting assigned the same initial WP
           heading.directTo = PROP_HEADING;
+          this.Plane.Commands.onSidOrPropHeading = true;
+          return;
         }
       }
     }
@@ -612,8 +613,6 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
       this.Plane.DISTANCE_FROM_AIRPORT_MILES < 8 &&
       this.Plane.Commands.speed.current > 210
     ) {
-      console.log(this.Plane.Properties.acId.code, 'reducing to 210 knots');
-
       this.Plane.Commands.speed.assigned = 210;
       this.Plane.ARR_HAS_REDUCED_TO_210_KTS_ON_STAR = true;
     }

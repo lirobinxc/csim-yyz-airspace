@@ -14,6 +14,11 @@ import {
   selectSimOptions,
   simOptionsActions,
 } from '../../../state/slices/simOptionsSlice';
+import { PlaneCommandCue } from '../../../../phaser/objects/Plane/PlaneCommandMenu';
+import { OtherSceneKeys } from '../../../../phaser/types/SceneKeys';
+import RadarScene from '../../../../phaser/scenes/RadarScene';
+import { ReactCustomEvents } from '../../../../phaser/types/CustomEvents';
+import PhaserGame from '../../../../phaser/PhaserGameConfig';
 
 function DepartureFDE(props: DepFDE) {
   const {
@@ -40,23 +45,36 @@ function DepartureFDE(props: DepFDE) {
 
   const dispatch = useAppDispatch();
   const simOptions = useAppSelector(selectSimOptions);
-  const [currentAlt, setCurrentAlt] = useState(assignedAlt);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [onCourse, setOnCourse] = useState(false);
   const [stripIsSelected, setStripIsSelected] = useState(false);
   const [isCommSwitched, setIsCommSwitched] = useState(false);
 
+  const [fdeAltitude, setFdeAltitude] = useState(assignedAlt);
+  const [fdeHeading, setFdeHeading] = useState<number | null>(null);
+  const [fdeSpeed, setFdeSpeed] = useState<number | null>(null);
+  const [apprClr, setApprClr] = useState(false);
+  const [interceptLoc, setInterceptLoc] = useState(false);
+  const [prevCommandCue, setPrevCommandCue] = useState<PlaneCommandCue>({
+    directTo: null,
+    heading: fdeHeading,
+    altitude: assignedAlt,
+    speed: null,
+    interceptLoc: false,
+    approachClearance: false,
+  });
+
   const isJetFpBelow230 = acType === AcType.JET && filedAlt < 230;
 
   function isCorrectHandoffAlt() {
     if (filedAlt < Number(handoffAlt)) {
-      return currentAlt === filedAlt;
+      return fdeAltitude === filedAlt;
     }
-    return currentAlt === Number(handoffAlt);
+    return fdeAltitude === Number(handoffAlt);
   }
 
   function handleClickAlt() {
-    setCurrentAlt(currentAlt + 10);
+    setFdeAltitude(fdeAltitude + 10);
   }
 
   function openModal() {
@@ -118,12 +136,61 @@ function DepartureFDE(props: DepFDE) {
 
   const departureRunwayFormatted = depRunway?.split(' ')[2];
 
+  function sendCommandCue() {
+    const newCommandCue: PlaneCommandCue = {
+      directTo: null,
+      heading: fdeHeading,
+      altitude: fdeAltitude,
+      speed: fdeSpeed,
+      interceptLoc: interceptLoc,
+      approachClearance: apprClr,
+    };
+
+    const SENT_COMMAND_CUE: PlaneCommandCue = {
+      directTo: null,
+      heading: null,
+      altitude: null,
+      speed: null,
+      interceptLoc: interceptLoc,
+      approachClearance: apprClr,
+    };
+
+    if (prevCommandCue.heading !== fdeHeading) {
+      SENT_COMMAND_CUE.heading = fdeHeading;
+    }
+    if (prevCommandCue.altitude !== fdeAltitude) {
+      SENT_COMMAND_CUE.altitude = fdeAltitude * 100;
+
+      if (fdeAltitude === 0) {
+        SENT_COMMAND_CUE.interceptLoc = true;
+        SENT_COMMAND_CUE.approachClearance = true;
+        setInterceptLoc(true);
+        setApprClr(true);
+      }
+    }
+    if (prevCommandCue.speed !== fdeSpeed && fdeSpeed !== 0) {
+      SENT_COMMAND_CUE.speed = fdeSpeed;
+    }
+
+    setPrevCommandCue(newCommandCue);
+
+    const RADAR_SCENE = PhaserGame.scene.keys[
+      OtherSceneKeys.RADAR_BASE
+    ] as RadarScene;
+    RADAR_SCENE.events.emit(
+      ReactCustomEvents.FDE_COMMAND_CUE,
+      uniqueKey,
+      SENT_COMMAND_CUE
+    );
+  }
+
   return (
     <section
       className={clsx(styles.FlightStrip, styles.flexCol, {
         [styles.borderYellow]:
           simOptions.selectedDepStrip?.uniqueKey === uniqueKey,
       })}
+      onContextMenu={sendCommandCue}
     >
       <div className={clsx(styles.topRow, styles.flexRow)}>
         <div
@@ -149,7 +216,7 @@ function DepartureFDE(props: DepFDE) {
               <div className={styles.row1}>
                 <button
                   onClick={() => {
-                    setCurrentAlt(assignedAlt);
+                    setFdeAltitude(assignedAlt);
                     closeModal();
                   }}
                 >
@@ -159,7 +226,7 @@ function DepartureFDE(props: DepFDE) {
               <div className={styles.row2}>
                 <button
                   onClick={() => {
-                    setCurrentAlt(50);
+                    setFdeAltitude(50);
                     closeModal();
                   }}
                 >
@@ -167,7 +234,7 @@ function DepartureFDE(props: DepFDE) {
                 </button>
                 <button
                   onClick={() => {
-                    setCurrentAlt(60);
+                    setFdeAltitude(60);
                     closeModal();
                   }}
                 >
@@ -175,7 +242,7 @@ function DepartureFDE(props: DepFDE) {
                 </button>
                 <button
                   onClick={() => {
-                    setCurrentAlt(70);
+                    setFdeAltitude(70);
                     closeModal();
                   }}
                 >
@@ -183,7 +250,7 @@ function DepartureFDE(props: DepFDE) {
                 </button>
                 <button
                   onClick={() => {
-                    setCurrentAlt(200);
+                    setFdeAltitude(200);
                     closeModal();
                   }}
                 >
@@ -193,7 +260,7 @@ function DepartureFDE(props: DepFDE) {
               <div className={styles.row2}>
                 <button
                   onClick={() => {
-                    setCurrentAlt(80);
+                    setFdeAltitude(80);
                     closeModal();
                   }}
                 >
@@ -201,7 +268,7 @@ function DepartureFDE(props: DepFDE) {
                 </button>
                 <button
                   onClick={() => {
-                    setCurrentAlt(90);
+                    setFdeAltitude(90);
                     closeModal();
                   }}
                 >
@@ -209,7 +276,7 @@ function DepartureFDE(props: DepFDE) {
                 </button>
                 <button
                   onClick={() => {
-                    setCurrentAlt(150);
+                    setFdeAltitude(150);
                     closeModal();
                   }}
                 >
@@ -217,7 +284,7 @@ function DepartureFDE(props: DepFDE) {
                 </button>
                 <button
                   onClick={() => {
-                    setCurrentAlt(230);
+                    setFdeAltitude(230);
                     closeModal();
                   }}
                 >
@@ -231,7 +298,7 @@ function DepartureFDE(props: DepFDE) {
             ></div>
           </aside>
           <div className={clsx(styles.assignedAlt)} onClick={openModal}>
-            {currentAlt}
+            {fdeAltitude}
           </div>
         </div>
         <div className={clsx(styles.col5)}>

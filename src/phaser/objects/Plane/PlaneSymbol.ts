@@ -17,15 +17,9 @@ export default class PlaneSymbol extends Phaser.GameObjects.Image {
 
     // Setup: THIS
     this.setDepth(10);
-    this.setScale(0.2);
+    this.setScale(0.15);
     this.setInteractive();
     this.input.cursor = 'pointer';
-
-    if (
-      this.Plane.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL
-    ) {
-      this.setScale(0.15);
-    }
 
     // Setup: Debug
     this.Plane.scene.input.enableDebug(this);

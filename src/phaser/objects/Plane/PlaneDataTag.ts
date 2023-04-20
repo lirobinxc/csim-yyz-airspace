@@ -73,16 +73,10 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
     this.add([this.Text1, this.Text2, this.Text3, this.TextIaTool]);
 
     // Setup: Text1
-    let FONT_SIZE = 14;
+    let FONT_SIZE = 13.5;
     const FONT_TINT_COLOR = ColorKeys.PPS_YELLOW; // light yellow
     const FONT_SCALE_Y = 0.9; // vertically squishes font
     const LINE_ORIGIN = [0, 0.5];
-
-    if (
-      this.Plane.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL
-    ) {
-      FONT_SIZE = 13.5;
-    }
 
     this.Text1.setFontSize(FONT_SIZE);
     this.Text1.setTint(FONT_TINT_COLOR);

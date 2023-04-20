@@ -68,7 +68,7 @@ export default class PlaneCommandMenu extends Phaser.GameObjects.Container {
     this.SELECTED_BUTTON = null;
 
     // Init: Command Cue & cue timer
-    this.COMMAND_CUE_TIME_LIMIT = 3000;
+    this.COMMAND_CUE_TIME_LIMIT = 1200;
     this.TIMER_START = 0;
     this.COMMAND_CUE = {
       directTo: null,

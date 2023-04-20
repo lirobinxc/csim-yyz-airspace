@@ -14,6 +14,11 @@ import {
   selectSimOptions,
   simOptionsActions,
 } from '../../../state/slices/simOptionsSlice';
+import { PlaneCommandCue } from '../../../../phaser/objects/Plane/PlaneCommandMenu';
+import PhaserGame from '../../../../phaser/PhaserGameConfig';
+import { OtherSceneKeys } from '../../../../phaser/types/SceneKeys';
+import RadarScene from '../../../../phaser/scenes/RadarScene';
+import { ReactCustomEvents } from '../../../../phaser/types/CustomEvents';
 
 function SatelliteFDE(props: DepFDE) {
   const {
@@ -45,10 +50,23 @@ function SatelliteFDE(props: DepFDE) {
   const dispatch = useAppDispatch();
   const simOptions = useAppSelector(selectSimOptions);
 
-  const [currentAlt, setCurrentAlt] = useState(assignedAlt);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [onCourse, setOnCourse] = useState(false);
   const [stripIsSelected, setStripIsSelected] = useState(false);
+
+  const [fdeAltitude, setFdeAltitude] = useState(assignedAlt);
+  const [fdeHeading, setFdeHeading] = useState<number | null>(null);
+  const [fdeSpeed, setFdeSpeed] = useState<number | null>(null);
+  const [apprClr, setApprClr] = useState(false);
+  const [interceptLoc, setInterceptLoc] = useState(false);
+  const [prevCommandCue, setPrevCommandCue] = useState<PlaneCommandCue>({
+    directTo: null,
+    heading: fdeHeading,
+    altitude: assignedAlt,
+    speed: null,
+    interceptLoc: false,
+    approachClearance: false,
+  });
 
   const satName = satFdeData.name;
   const satType = satFdeData.name.split('_')[1];
@@ -63,22 +81,22 @@ function SatelliteFDE(props: DepFDE) {
   const isYzdDep = satFdeData.depPoint === 'CYZD';
 
   function increaseAlt() {
-    if (currentAlt % 10 === 5) {
-      setCurrentAlt(currentAlt + 5);
+    if (fdeAltitude % 10 === 5) {
+      setFdeAltitude(fdeAltitude + 5);
       return;
     }
 
-    setCurrentAlt(currentAlt + 10);
+    setFdeAltitude(fdeAltitude + 10);
   }
 
   function decreaseAlt() {
-    if (currentAlt <= 0) return;
+    if (fdeAltitude <= 0) return;
 
-    if (currentAlt % 10 === 5) {
-      setCurrentAlt(currentAlt - 5);
+    if (fdeAltitude % 10 === 5) {
+      setFdeAltitude(fdeAltitude - 5);
     }
 
-    setCurrentAlt(currentAlt - 10);
+    setFdeAltitude(fdeAltitude - 10);
   }
 
   function openModal() {
@@ -124,6 +142,54 @@ function SatelliteFDE(props: DepFDE) {
     } else {
       dispatch(simOptionsActions.setSelectedDepStrip(props));
     }
+  }
+
+  function sendCommandCue() {
+    const newCommandCue: PlaneCommandCue = {
+      directTo: null,
+      heading: fdeHeading,
+      altitude: fdeAltitude,
+      speed: fdeSpeed,
+      interceptLoc: interceptLoc,
+      approachClearance: apprClr,
+    };
+
+    const SENT_COMMAND_CUE: PlaneCommandCue = {
+      directTo: null,
+      heading: null,
+      altitude: null,
+      speed: null,
+      interceptLoc: interceptLoc,
+      approachClearance: apprClr,
+    };
+
+    if (prevCommandCue.heading !== fdeHeading) {
+      SENT_COMMAND_CUE.heading = fdeHeading;
+    }
+    if (prevCommandCue.altitude !== fdeAltitude) {
+      SENT_COMMAND_CUE.altitude = fdeAltitude * 100;
+
+      if (fdeAltitude === 0) {
+        SENT_COMMAND_CUE.interceptLoc = true;
+        SENT_COMMAND_CUE.approachClearance = true;
+        setInterceptLoc(true);
+        setApprClr(true);
+      }
+    }
+    if (prevCommandCue.speed !== fdeSpeed && fdeSpeed !== 0) {
+      SENT_COMMAND_CUE.speed = fdeSpeed;
+    }
+
+    setPrevCommandCue(newCommandCue);
+
+    const RADAR_SCENE = PhaserGame.scene.keys[
+      OtherSceneKeys.RADAR_BASE
+    ] as RadarScene;
+    RADAR_SCENE.events.emit(
+      ReactCustomEvents.FDE_COMMAND_CUE,
+      uniqueKey,
+      SENT_COMMAND_CUE
+    );
   }
 
   function displayAssignedHeading() {
@@ -188,6 +254,7 @@ function SatelliteFDE(props: DepFDE) {
         [styles.borderYellow]:
           simOptions.selectedDepStrip?.uniqueKey === uniqueKey,
       })}
+      onContextMenu={sendCommandCue}
     >
       <div className={clsx(styles.topRow, styles.flexRow)}>
         {isYpqOrYooArrival && isYzdDep ? displayRunwayBox() : displayAcidBox()}
@@ -206,7 +273,7 @@ function SatelliteFDE(props: DepFDE) {
               <div className={styles.row1}>
                 <button
                   onClick={() => {
-                    setCurrentAlt(assignedAlt);
+                    setFdeAltitude(assignedAlt);
                     closeModal();
                   }}
                 >
@@ -216,7 +283,7 @@ function SatelliteFDE(props: DepFDE) {
               <div className={styles.row2}>
                 <button
                   onClick={() => {
-                    setCurrentAlt(50);
+                    setFdeAltitude(50);
                     closeModal();
                   }}
                 >
@@ -224,7 +291,7 @@ function SatelliteFDE(props: DepFDE) {
                 </button>
                 <button
                   onClick={() => {
-                    setCurrentAlt(60);
+                    setFdeAltitude(60);
                     closeModal();
                   }}
                 >
@@ -232,7 +299,7 @@ function SatelliteFDE(props: DepFDE) {
                 </button>
                 <button
                   onClick={() => {
-                    setCurrentAlt(70);
+                    setFdeAltitude(70);
                     closeModal();
                   }}
                 >
@@ -240,7 +307,7 @@ function SatelliteFDE(props: DepFDE) {
                 </button>
                 <button
                   onClick={() => {
-                    setCurrentAlt(130);
+                    setFdeAltitude(130);
                     closeModal();
                   }}
                 >
@@ -250,7 +317,7 @@ function SatelliteFDE(props: DepFDE) {
               <div className={styles.row2}>
                 <button
                   onClick={() => {
-                    setCurrentAlt(80);
+                    setFdeAltitude(80);
                     closeModal();
                   }}
                 >
@@ -258,7 +325,7 @@ function SatelliteFDE(props: DepFDE) {
                 </button>
                 <button
                   onClick={() => {
-                    setCurrentAlt(90);
+                    setFdeAltitude(90);
                     closeModal();
                   }}
                 >
@@ -266,7 +333,7 @@ function SatelliteFDE(props: DepFDE) {
                 </button>
                 <button
                   onClick={() => {
-                    setCurrentAlt(150);
+                    setFdeAltitude(150);
                     closeModal();
                   }}
                 >
@@ -274,7 +341,7 @@ function SatelliteFDE(props: DepFDE) {
                 </button>
                 <button
                   onClick={() => {
-                    setCurrentAlt(230);
+                    setFdeAltitude(230);
                     closeModal();
                   }}
                 >
@@ -289,11 +356,11 @@ function SatelliteFDE(props: DepFDE) {
           </aside>
           <div
             className={clsx(styles.assignedAlt, {
-              [styles.colorRed]: isYhmArrival && currentAlt === 160,
+              [styles.colorRed]: isYhmArrival && fdeAltitude === 160,
             })}
             onClick={openModal}
           >
-            {currentAlt === 0 ? '' : currentAlt}
+            {fdeAltitude === 0 ? '' : fdeAltitude}
           </div>
         </div>
         <div className={clsx(styles.col5)}>
