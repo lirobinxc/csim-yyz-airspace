@@ -112,7 +112,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
       NEXT_WAYPOINT = filedRoute[idxOfCurrentWaypoint + 1];
     }
 
-    const PREEMPTIVE_TURN_TIME_IN_SEC = 8;
+    const PREEMPTIVE_TURN_TIME_IN_SEC = 14;
 
     // Logic Step 3a: If there IS a next waypoint
     if (DISTANCE_IN_SECONDS < PREEMPTIVE_TURN_TIME_IN_SEC) {
