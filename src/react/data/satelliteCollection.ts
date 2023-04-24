@@ -30,39 +30,6 @@ type AcTypeSatRoutes = Record<AcType, SatelliteData[]>;
 type SatelliteCollection = Record<RadarSceneKeys, AcTypeSatRoutes>;
 
 const CommonSatelliteData: SatelliteData[] = [
-  {
-    name: SatelliteName.YHM_ARR_MUXIG,
-    arrRunway: DepRunwayYHM.RWY_30,
-    depRunway: DepRunwaySatArrivals.YHM,
-    depRoute: 'MUXIG BIMTI ...',
-    depPoint: '',
-    destination: 'CYHM',
-    entryAltitude: 160,
-    entryHeading: WP_DICT_DEP_COMMON.YYZ,
-    handoffSector: AdjacentSectors.WS,
-  },
-  {
-    name: SatelliteName.YHM_ARR_UDMIK,
-    arrRunway: DepRunwayYHM.RWY_30,
-    depRunway: DepRunwaySatArrivals.YHM,
-    depRoute: 'UDMIK BIMTI ...',
-    depPoint: '',
-    destination: 'CYHM',
-    entryAltitude: 160,
-    entryHeading: WP_DICT_DEP_COMMON.YYZ,
-    handoffSector: AdjacentSectors.WS,
-  },
-  {
-    name: SatelliteName.YKZ_DEP_ANCOL,
-    arrRunway: null,
-    depRunway: DepRunwayYKZ.RWY_15,
-    depRoute: 'PERLO ... ...',
-    depPoint: 'CYKZ',
-    destination: 'CYOW',
-    entryAltitude: 30,
-    entryHeading: 210,
-    handoffSector: AdjacentSectors.HM,
-  },
   // {
   //   name: SatelliteName.YKZ_DEP_BETES,
   //   arrRunway: null,
@@ -96,28 +63,28 @@ const CommonSatelliteData: SatelliteData[] = [
     entryHeading: WP_DICT_DEP_COMMON.RIKEM,
     handoffSector: AdjacentSectors.GR,
   },
-  {
-    name: SatelliteName.YKZ_DEP_RIGUS,
-    arrRunway: null,
-    depRunway: DepRunwayYKZ.RWY_15,
-    depRoute: 'DUSOM ... ...',
-    depPoint: 'CYKZ',
-    destination: 'CYOW',
-    entryAltitude: 30,
-    entryHeading: 180,
-    handoffSector: AdjacentSectors.HM,
-  },
-  {
-    name: SatelliteName.YKZ_DEP_SEDOG,
-    arrRunway: null,
-    depRunway: DepRunwayYKZ.RWY_15,
-    depRoute: 'LAKES ... ...',
-    depPoint: 'CYKZ',
-    destination: 'CYFB',
-    entryAltitude: 30,
-    entryHeading: 30,
-    handoffSector: AdjacentSectors.SI,
-  },
+  // {
+  //   name: SatelliteName.YKZ_DEP_RIGUS,
+  //   arrRunway: null,
+  //   depRunway: DepRunwayYKZ.RWY_15,
+  //   depRoute: 'DUSOM ... ...',
+  //   depPoint: 'CYKZ',
+  //   destination: 'CYOW',
+  //   entryAltitude: 30,
+  //   entryHeading: 180,
+  //   handoffSector: AdjacentSectors.HM,
+  // },
+  // {
+  //   name: SatelliteName.YKZ_DEP_SEDOG,
+  //   arrRunway: null,
+  //   depRunway: DepRunwayYKZ.RWY_15,
+  //   depRoute: 'LAKES ... ...',
+  //   depPoint: 'CYKZ',
+  //   destination: 'CYFB',
+  //   entryAltitude: 30,
+  //   entryHeading: 30,
+  //   handoffSector: AdjacentSectors.SI,
+  // },
   {
     name: SatelliteName.YKZ_DEP_TONNY,
     arrRunway: null,
@@ -247,7 +214,7 @@ const PropOnlySatelliteData = [
   },
 ];
 
-const Rwy06OnlySatData = [
+const Rwy06sOnlySatData = [
   {
     name: SatelliteName.YKZ_ARR,
     arrRunway: null,
@@ -259,29 +226,132 @@ const Rwy06OnlySatData = [
     entryHeading: 70,
     handoffSector: AdjacentSectors.ES,
   },
+  {
+    name: SatelliteName.YKZ_DEP_ANCOL,
+    arrRunway: null,
+    depRunway: DepRunwayYKZ.RWY_15,
+    depRoute: 'PERLO ... ...',
+    depPoint: 'CYKZ',
+    destination: 'CYOW',
+    entryAltitude: 30,
+    entryHeading: 150,
+    handoffSector: AdjacentSectors.HM,
+  },
+  {
+    name: SatelliteName.YHM_ARR_MUXIG,
+    arrRunway: DepRunwayYHM.RWY_30,
+    depRunway: DepRunwaySatArrivals.YHM,
+    depRoute: 'MUXIG BIMTI ...',
+    depPoint: '',
+    destination: 'CYHM',
+    entryAltitude: 160,
+    entryHeading: WP_DICT_DEP_COMMON.YYZ,
+    handoffSector: AdjacentSectors.WS,
+  },
+  {
+    name: SatelliteName.YHM_ARR_UDMIK,
+    arrRunway: DepRunwayYHM.RWY_30,
+    depRunway: DepRunwaySatArrivals.YHM,
+    depRoute: 'UDMIK BIMTI ...',
+    depPoint: '',
+    destination: 'CYHM',
+    entryAltitude: 160,
+    entryHeading: WP_DICT_DEP_COMMON.YYZ,
+    handoffSector: AdjacentSectors.WS,
+  },
+];
+
+const Rwy24sOnlySatData = [
+  {
+    name: SatelliteName.YKZ_DEP_ANCOL,
+    arrRunway: null,
+    depRunway: DepRunwayYKZ.RWY_15,
+    depRoute: 'PERLO ... ...',
+    depPoint: 'CYKZ',
+    destination: 'CYOW',
+    entryAltitude: 15,
+    entryHeading: 330,
+    handoffSector: AdjacentSectors.HM,
+  },
+  {
+    name: SatelliteName.YHM_ARR_MUXIG,
+    arrRunway: DepRunwayYHM.RWY_30,
+    depRunway: DepRunwaySatArrivals.YHM,
+    depRoute: 'MUXIG BIMTI ...',
+    depPoint: '',
+    destination: 'CYHM',
+    entryAltitude: 160,
+    entryHeading: WP_DICT_DEP_COMMON.YYZ,
+    handoffSector: AdjacentSectors.WS,
+  },
+];
+
+const Rwy33sOnlySatData = [
+  {
+    name: SatelliteName.YHM_ARR_MUXIG,
+    arrRunway: DepRunwayYHM.RWY_30,
+    depRunway: DepRunwaySatArrivals.YHM,
+    depRoute: 'MUXIG BIMTI ...',
+    depPoint: '',
+    destination: 'CYHM',
+    entryAltitude: 160,
+    entryHeading: WP_DICT_DEP_COMMON.YYZ,
+    handoffSector: AdjacentSectors.WS,
+  },
+];
+
+const Rwy15sOnlySatData = [
+  {
+    name: SatelliteName.YHM_ARR_UDMIK,
+    arrRunway: DepRunwayYHM.RWY_30,
+    depRunway: DepRunwaySatArrivals.YHM,
+    depRoute: 'UDMIK BIMTI ...',
+    depPoint: '',
+    destination: 'CYHM',
+    entryAltitude: 160,
+    entryHeading: WP_DICT_DEP_COMMON.YYZ,
+    handoffSector: AdjacentSectors.WS,
+  },
 ];
 
 export const SATELLITE_COLLECTION: SatelliteCollection = {
   Radar06sScene: {
-    JET: [...CommonSatelliteData, ...Rwy06OnlySatData],
+    JET: [...CommonSatelliteData, ...Rwy06sOnlySatData],
     PROP: [
       ...CommonSatelliteData,
       ...PropOnlySatelliteData,
-      ...Rwy06OnlySatData,
+      ...Rwy06sOnlySatData,
     ],
   },
   Radar15sScene: {
-    JET: [...CommonSatelliteData, ...JetOnlySatelliteData],
-    PROP: [...CommonSatelliteData, ...PropOnlySatelliteData],
+    JET: [
+      ...CommonSatelliteData,
+      ...JetOnlySatelliteData,
+      ...Rwy15sOnlySatData,
+    ],
+    PROP: [
+      ...CommonSatelliteData,
+      ...PropOnlySatelliteData,
+      ...Rwy15sOnlySatData,
+    ],
   },
   Radar24sScene: {
-    JET: [...CommonSatelliteData, ...JetOnlySatelliteData],
-    PROP: [...CommonSatelliteData, ...PropOnlySatelliteData],
+    JET: [
+      ...CommonSatelliteData,
+      ...JetOnlySatelliteData,
+      ...Rwy24sOnlySatData,
+    ],
+    PROP: [
+      ...CommonSatelliteData,
+      ...PropOnlySatelliteData,
+      ...Rwy24sOnlySatData,
+    ],
   },
   Radar33sScene: {
     JET: [
       ...CommonSatelliteData,
       ...JetOnlySatelliteData,
+      ...Rwy33sOnlySatData,
       {
         name: SatelliteName.YHM_DEP_UKPAG,
         arrRunway: null,
@@ -294,6 +364,10 @@ export const SATELLITE_COLLECTION: SatelliteCollection = {
         handoffSector: AdjacentSectors.ER,
       },
     ],
-    PROP: [...CommonSatelliteData, ...PropOnlySatelliteData],
+    PROP: [
+      ...CommonSatelliteData,
+      ...PropOnlySatelliteData,
+      ...Rwy33sOnlySatData,
+    ],
   },
 };
