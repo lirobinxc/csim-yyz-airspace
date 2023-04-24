@@ -141,7 +141,7 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
         TerminalPosition.ARRIVAL ||
       this.Plane.Properties.isSatellite
     ) {
-      this.flashDataTag();
+      this.Plane.DataTag.flashDataTag();
     }
 
     // On DEP Handoff Event: Flash text
@@ -151,7 +151,7 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
       PhaserCustomEvents.HANDOFF_BUTTON_CLICKED,
       (plane: Plane) => {
         setTimeout(() => {
-          this.flashDataTag();
+          plane.DataTag.flashDataTag();
 
           plane.DEP_HANDOFF_IN_PROGRESS = false;
           plane.IS_HANDED_OFF = true;
