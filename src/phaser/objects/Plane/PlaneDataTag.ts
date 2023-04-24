@@ -141,7 +141,7 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
         TerminalPosition.ARRIVAL ||
       this.Plane.Properties.isSatellite
     ) {
-      this.Plane.DataTag.flashDataTag();
+      this.flashDataTag();
     }
 
     // On DEP Handoff Event: Flash text
