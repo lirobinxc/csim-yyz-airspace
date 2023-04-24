@@ -158,7 +158,9 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
         }, DELAY_BEFORE_HANDOFF_ACCEPTED);
 
         setTimeout(() => {
-          clearInterval(this.FLASHING_TEXT_INTERVAL);
+          console.log(plane.Properties.acId.code, 'clearing interval');
+
+          clearInterval(plane.DataTag.FLASHING_TEXT_INTERVAL);
           plane.DataTag.Text1.setTint(ColorKeys.PPS_YELLOW);
           plane.DataTag.Text2.setTint(ColorKeys.PPS_YELLOW);
         }, DELAY_BEFORE_HANDOFF_ACCEPTED + ACCEPTED_HANDOFF_FLASH_DURATION);
@@ -187,7 +189,10 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
     this.scene.events.on(
       PhaserCustomEvents.ACCEPT_SATELLITE_HANDOFF,
       (plane: Plane) => {
+        console.log('clearing interval');
+
         clearInterval(plane.DataTag.FLASHING_TEXT_INTERVAL);
+
         plane.DataTag.Text1.setTint(ColorKeys.PPS_YELLOW);
         plane.DataTag.Text2.setTint(ColorKeys.PPS_YELLOW);
 

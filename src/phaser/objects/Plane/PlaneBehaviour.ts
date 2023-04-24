@@ -161,6 +161,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
 
     // Base case: Noise abatement & MVA
     if (
+      this.Plane.Properties.isSatellite === false &&
       this.Plane.Commands.onSidOrPropHeading &&
       this.Plane.Scene.SIM_OPTIONS.terminalPosition ===
         TerminalPosition.DEPARTURE
