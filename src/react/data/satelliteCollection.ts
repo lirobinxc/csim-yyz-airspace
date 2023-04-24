@@ -263,7 +263,7 @@ const Rwy06OnlySatData = [
 
 export const SATELLITE_COLLECTION: SatelliteCollection = {
   Radar06sScene: {
-    JET: [...CommonSatelliteData, ...JetOnlySatelliteData, ...Rwy06OnlySatData],
+    JET: [...CommonSatelliteData, ...Rwy06OnlySatData],
     PROP: [
       ...CommonSatelliteData,
       ...PropOnlySatelliteData,

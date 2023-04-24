@@ -365,6 +365,15 @@ export default class RadarScene extends Phaser.Scene {
           return;
         }
 
+        if (
+          this.SIM_OPTIONS.terminalPosition === TerminalPosition.DEPARTURE &&
+          plane.Properties.isSatellite &&
+          plane.DEP_SAT_TRAFFIC_ACCEPTED === false
+        ) {
+          this.events.emit(PhaserCustomEvents.ACCEPT_SATELLITE_HANDOFF, plane);
+          return;
+        }
+
         this.FiledRouteLine = new FiledRouteLine(plane);
       }
     );

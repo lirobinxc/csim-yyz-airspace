@@ -39,6 +39,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
       switch (this.Plane.Scene.SIM_OPTIONS.terminalPosition) {
         case TerminalPosition.DEPARTURE:
           this.depCheckInAfterPassing1200();
+          this.depSatelliteTrafficCheckInAfterHandoffAccepted();
           break;
         case TerminalPosition.ARRIVAL:
           this.arrCheckInAfterHandoffAccepted();
@@ -342,7 +343,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
   }
 
   // V = speed * heading
-  private updateVelocity = () => {
+  private updateVelocityBasic = () => {
     const speed = this.Plane.Commands.speed;
     const heading = this.Plane.Commands.heading;
 
@@ -498,6 +499,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
 
   private depCheckInAfterPassing1200() {
     if (this.Plane.Commands.hasCheckedIn) return;
+    if (this.Plane.Properties.isSatellite) return;
 
     const altitude = this.Plane.Commands.altitude; // feet
 
@@ -507,6 +509,20 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
       this.Plane.checkIn();
     }
   }
+
+  private depSatelliteTrafficCheckInAfterHandoffAccepted() {
+    if (this.Plane.Properties.isSatellite === false) return;
+    if (this.Plane.Commands.hasCheckedIn) return;
+
+    if (this.Plane.DEP_SAT_TRAFFIC_ACCEPTED) {
+      this.Plane.Commands.hasCheckedIn = true;
+
+      setTimeout(() => {
+        this.Plane.checkIn();
+      }, 5000);
+    }
+  }
+
   private arrCheckInAfterHandoffAccepted() {
     if (this.Plane.Commands.hasCheckedIn) return;
 
@@ -515,7 +531,7 @@ export default class PlaneBehaviour extends Phaser.GameObjects.GameObject {
 
       setTimeout(() => {
         this.Plane.checkIn();
-      }, 6000);
+      }, 5000);
     }
   }
 

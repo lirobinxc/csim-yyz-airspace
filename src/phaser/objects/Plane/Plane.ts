@@ -57,6 +57,7 @@ export default class Plane extends Phaser.GameObjects.Container {
   public SHOW_COMMAND_OPTIONS: boolean;
   public IS_TALKING: boolean;
   public DEP_HANDOFF_IN_PROGRESS: boolean;
+  public DEP_SAT_TRAFFIC_ACCEPTED: boolean;
   public ARR_HANDOFF_IN_PROGRESS: boolean;
   public IS_HANDED_OFF: boolean;
   public IN_ARR_BOX: boolean;
@@ -105,6 +106,7 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.IS_TALKING = false;
     this.IS_PENDING_DIRECT_TO_COMMAND = false;
     this.DEP_HANDOFF_IN_PROGRESS = false;
+    this.DEP_SAT_TRAFFIC_ACCEPTED = false;
     this.ARR_HANDOFF_IN_PROGRESS = true;
 
     this.IS_HANDED_OFF = false;

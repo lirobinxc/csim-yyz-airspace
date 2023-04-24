@@ -135,9 +135,11 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
       });
     });
 
-    // Flash arrivals:
+    // Flash arrivals & departure satellite traffic:
     if (
-      this.Plane.Scene.SIM_OPTIONS.terminalPosition === TerminalPosition.ARRIVAL
+      this.Plane.Scene.SIM_OPTIONS.terminalPosition ===
+        TerminalPosition.ARRIVAL ||
+      this.Plane.Properties.isSatellite
     ) {
       this.flashDataTag();
     }
@@ -179,6 +181,17 @@ export default class PlaneDataTag extends Phaser.GameObjects.Container {
         ) {
           this.scene.events.emit(PhaserCustomEvents.ARR_ACCEPTED, plane);
         }
+      }
+    );
+
+    this.scene.events.on(
+      PhaserCustomEvents.ACCEPT_SATELLITE_HANDOFF,
+      (plane: Plane) => {
+        clearInterval(plane.DataTag.FLASHING_TEXT_INTERVAL);
+        plane.DataTag.Text1.setTint(ColorKeys.PPS_YELLOW);
+        plane.DataTag.Text2.setTint(ColorKeys.PPS_YELLOW);
+
+        plane.DEP_SAT_TRAFFIC_ACCEPTED = true;
       }
     );
 
