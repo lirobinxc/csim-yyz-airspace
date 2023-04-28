@@ -154,10 +154,15 @@ export function genArrFDE(
           ) {
             arrPosition = ArrivalPosition.NORTH;
           }
-          if (
-            radarScene === RadarSceneKeys.RADAR_15s ||
-            radarScene === RadarSceneKeys.RADAR_33s
-          ) {
+          if (radarScene === RadarSceneKeys.RADAR_15s) {
+            const randomNum = _.random(1, 10);
+            if (randomNum > 7) {
+              arrPosition = ArrivalPosition.NORTH;
+            } else {
+              arrPosition = ArrivalPosition.SOUTH;
+            }
+          }
+          if (radarScene === RadarSceneKeys.RADAR_33s) {
             arrPosition = randomArrPosition;
           }
           break;
@@ -182,19 +187,24 @@ export function genArrFDE(
           ) {
             arrPosition = ArrivalPosition.SOUTH;
           }
-          if (
-            radarScene === RadarSceneKeys.RADAR_15s ||
-            radarScene === RadarSceneKeys.RADAR_33s
-          ) {
+          if (radarScene === RadarSceneKeys.RADAR_15s) {
             arrPosition = randomArrPosition;
+          }
+          if (radarScene === RadarSceneKeys.RADAR_33s) {
+            const randomNum = _.random(1, 10);
+            if (randomNum > 7) {
+              arrPosition = ArrivalPosition.NORTH;
+            } else {
+              arrPosition = ArrivalPosition.SOUTH;
+            }
           }
           break;
         case ArrBedpost.IMEBA:
-          if (
-            radarScene === RadarSceneKeys.RADAR_06s ||
-            radarScene === RadarSceneKeys.RADAR_24s
-          ) {
+          if (radarScene === RadarSceneKeys.RADAR_06s) {
             arrPosition = randomArrPosition;
+          }
+          if (radarScene === RadarSceneKeys.RADAR_24s) {
+            arrPosition = ArrivalPosition.NORTH;
           }
           if (
             radarScene === RadarSceneKeys.RADAR_15s ||
@@ -204,11 +214,11 @@ export function genArrFDE(
           }
           break;
         case ArrBedpost.RAGID:
-          if (
-            radarScene === RadarSceneKeys.RADAR_06s ||
-            radarScene === RadarSceneKeys.RADAR_24s
-          ) {
+          if (radarScene === RadarSceneKeys.RADAR_06s) {
             arrPosition = randomArrPosition;
+          }
+          if (radarScene === RadarSceneKeys.RADAR_24s) {
+            arrPosition = ArrivalPosition.SOUTH;
           }
           if (
             radarScene === RadarSceneKeys.RADAR_15s ||
