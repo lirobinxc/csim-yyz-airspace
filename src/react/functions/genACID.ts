@@ -33,27 +33,27 @@ export function genACID({ allowC208 }: { allowC208: boolean }) {
   let acType: AcType = AcType.JET;
   let equipment = 'X';
 
-  const num1to10 = _.random(1, 10);
+  const num1to100 = _.random(1, 100);
 
   // Generate WTC
-  if (num1to10 > 7) {
+  if (num1to100 > 85) {
     wtc = AcWTC.H;
-  } else if (num1to10 > 2) {
+  } else if (num1to100 > 15) {
     wtc = AcWTC.M;
   } else {
     wtc = AcWTC.L;
   }
 
   // Generate equipment type
-  if (num1to10 > 1) {
+  if (num1to100 > 10) {
     equipment = _.sample(['X', 'R', 'G']) || 'X';
   } else {
     equipment = 'S';
   }
 
   if (wtc === AcWTC.H) acType = AcType.JET;
-  if (wtc === AcWTC.M && num1to10 > 3) acType = AcType.JET;
-  if (wtc === AcWTC.M && num1to10 <= 3) acType = AcType.PROP;
+  if (wtc === AcWTC.M && num1to100 > 35) acType = AcType.JET;
+  if (wtc === AcWTC.M && num1to100 <= 35) acType = AcType.PROP;
   if (wtc === AcWTC.L) acType = AcType.JET;
 
   let model = _.sample(aircraftCollection[wtc][acType]);
