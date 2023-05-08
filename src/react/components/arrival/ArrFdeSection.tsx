@@ -103,15 +103,17 @@ const ArrFdeSection = () => {
   }, [strips, processStrips]);
 
   // Block straight-ins until enough bedpost aircraft active
-  const BLOCK_STRAIGHT_IN_UNTIL_THIS_MANY_ARRIVALS = Math.ceil(
-    simOptions.maxActiveArrivals * 0.8
-  );
+  // const BLOCK_STRAIGHT_IN_UNTIL_THIS_MANY_ARRIVALS = Math.ceil(
+  //   simOptions.maxActiveArrivals * 0.8
+  // );
+  const BLOCK_STRAIGHT_IN_UNTIL_THIS_MANY_ARRIVALS_NORMAL = 6;
+  const BLOCK_STRAIGHT_IN_UNTIL_THIS_MANY_ARRIVALS_INNER_PRACTICE_MODE = 3;
 
   useEffect(() => {
     if (!simOptions.arrInnerPracticeMode) {
       if (
         stripList.activePanel.length <
-        BLOCK_STRAIGHT_IN_UNTIL_THIS_MANY_ARRIVALS
+        BLOCK_STRAIGHT_IN_UNTIL_THIS_MANY_ARRIVALS_NORMAL
       ) {
         setAllowStraightIns(false);
       } else {
@@ -120,7 +122,10 @@ const ArrFdeSection = () => {
     }
 
     if (simOptions.arrInnerPracticeMode) {
-      if (stripList.activePanel.length < 3) {
+      if (
+        stripList.activePanel.length <
+        BLOCK_STRAIGHT_IN_UNTIL_THIS_MANY_ARRIVALS_INNER_PRACTICE_MODE
+      ) {
         setAllowStraightIns(false);
       } else {
         setAllowStraightIns(true);
@@ -130,7 +135,7 @@ const ArrFdeSection = () => {
     stripList.activePanel,
     simOptions.arrInnerPracticeMode,
     simOptions.maxActiveArrivals,
-    BLOCK_STRAIGHT_IN_UNTIL_THIS_MANY_ARRIVALS,
+    BLOCK_STRAIGHT_IN_UNTIL_THIS_MANY_ARRIVALS_NORMAL,
   ]);
 
   // Interval: Add new pending Arrival strip
@@ -162,10 +167,11 @@ const ArrFdeSection = () => {
 
     // Break if max # of a/c in airspace
     if (
-      allAirborneStrips.length >=
-      (allowStraightIns
-        ? simOptions.maxActiveArrivals
-        : BLOCK_STRAIGHT_IN_UNTIL_THIS_MANY_ARRIVALS)
+      // allAirborneStrips.length >=
+      // (allowStraightIns
+      //   ? simOptions.maxActiveArrivals
+      //   : BLOCK_STRAIGHT_IN_UNTIL_THIS_MANY_ARRIVALS_NORMAL)
+      allAirborneStrips.length >= simOptions.maxActiveArrivals
     )
       return;
 
@@ -232,6 +238,11 @@ const ArrFdeSection = () => {
       <ArrStripPanel
         panelName={ArrStripPanelName.PENDING}
         strips={[...stripList.pendingPanel, ...stripList.preActivePanel]}
+        comments={
+          allowStraightIns
+            ? 'Allow straight ins? TRUE'
+            : 'Allow straight ins? FALSE'
+        }
       />
       <ArrStripPanel
         panelName={ArrStripPanelName.ACTIVE}

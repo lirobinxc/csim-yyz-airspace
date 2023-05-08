@@ -24,9 +24,10 @@ export enum ArrStripPanelName {
 interface ArrStripPanelProps {
   panelName: ArrStripPanelName;
   strips: ArrFDE[];
+  comments?: string;
 }
 
-const ArrStripPanel = ({ panelName, strips }: ArrStripPanelProps) => {
+const ArrStripPanel = ({ panelName, strips, comments }: ArrStripPanelProps) => {
   const dispatch = useAppDispatch();
   const simOptions = useAppSelector(selectSimOptions);
 
@@ -60,6 +61,7 @@ const ArrStripPanel = ({ panelName, strips }: ArrStripPanelProps) => {
       <header className={clsx(styles.Header)}>
         <div className={clsx(styles.panelName)}>{panelName}</div>
         <div className={clsx(styles.stripCount)}>{strips?.length || 0}</div>
+        <div>{comments}</div>
       </header>
       <section
         className={clsx({

@@ -1,5 +1,5 @@
 export const MasterGameOptions = {
-  appVersion: '2.9',
+  appVersion: '3.0',
   height: 1080,
   fps: 0.21, // should be 0.25
   isDebug: false, // should be false

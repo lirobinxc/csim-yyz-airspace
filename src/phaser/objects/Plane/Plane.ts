@@ -122,7 +122,7 @@ export default class Plane extends Phaser.GameObjects.Container {
     this.ARR_ON_BASE_TURN = false;
     this.DISTANCE_FROM_RUNWAY_THRESHOLD_MILES = 9999; // in miles
     this.DISTANCE_FROM_AIRPORT_MILES = 9999; // in miles
-    this.COMMAND_EXECUTION_DELAY_IN_MS = 5000;
+    this.COMMAND_EXECUTION_DELAY_IN_MS = 3000;
 
     this.DESTROYED = false;
 
