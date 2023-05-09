@@ -156,14 +156,19 @@ export function genArrFDE(
           }
           if (radarScene === RadarSceneKeys.RADAR_15s) {
             const randomNum = _.random(1, 10);
-            if (randomNum > 7) {
+            if (randomNum > 8) {
               arrPosition = ArrivalPosition.NORTH;
             } else {
               arrPosition = ArrivalPosition.SOUTH;
             }
           }
           if (radarScene === RadarSceneKeys.RADAR_33s) {
-            arrPosition = randomArrPosition;
+            const randomNum = _.random(1, 10);
+            if (randomNum > 8) {
+              arrPosition = ArrivalPosition.NORTH;
+            } else {
+              arrPosition = ArrivalPosition.SOUTH;
+            }
           }
           break;
         case ArrBedpost.NUBER:
@@ -192,7 +197,7 @@ export function genArrFDE(
           }
           if (radarScene === RadarSceneKeys.RADAR_33s) {
             const randomNum = _.random(1, 10);
-            if (randomNum > 7) {
+            if (randomNum > 8) {
               arrPosition = ArrivalPosition.NORTH;
             } else {
               arrPosition = ArrivalPosition.SOUTH;

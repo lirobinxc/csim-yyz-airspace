@@ -36,7 +36,7 @@ export function genACID({ allowC208 }: { allowC208: boolean }) {
   const num1to100 = _.random(1, 100);
 
   // Generate WTC
-  if (num1to100 > 85) {
+  if (num1to100 > 90) {
     wtc = AcWTC.H;
   } else if (num1to100 > 15) {
     wtc = AcWTC.M;
