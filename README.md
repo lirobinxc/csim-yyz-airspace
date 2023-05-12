@@ -1,21 +1,6 @@
-# CSiM YYZ Departure 2023
+# CSiM YYZ Airspace Simulation
 
-Full simulation of YYZ Departures.
+Full simulation of YYZ Terminal airspace including wind models, aircraft performance, etc. Used for control training purposes.
+This project is completed written by @lirobinxc and is published for public use under the MIT License.
 
-## Getting started
-
-Clone the project and in the project directory, you can run:
-
-### `yarn install` or `npm install`
-
-Install all the packages in `create react app` + Phaser 3
-
-### `yarn start` or `npm run start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-### `yarn build` or `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+To use the simulation, visit: https://lirobinxc.github.io/csim-yyz-terminal/ 
