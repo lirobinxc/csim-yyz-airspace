@@ -32,6 +32,7 @@ import { determineArrBedpost } from './determineArrBedpost';
 import { determineBedpostSector } from './determineBedpostSector';
 import { STAR_ROUTES_33s } from '../../../phaser/config/RouteConfigArr/RouteConfigStars33s';
 import { STAR_ROUTES_15s } from '../../../phaser/config/RouteConfigArr/RouteConfigStars15s';
+import { getSimOptions } from '../../state/getSimOptions';
 
 let currentHour = _.sample([12, 13, 14, 15, 16, 17, 18]) || 12;
 let currentMinute = 0;
@@ -139,110 +140,130 @@ export function genArrFDE(
     // Arrival position
     let arrPosition = ArrivalPosition.SOUTH;
 
-    if (!isSingleOps) {
-      let randomArrPosition = _.sample([
-        ArrivalPosition.NORTH,
-        ArrivalPosition.SOUTH,
-      ]);
-      if (!randomArrPosition) randomArrPosition = ArrivalPosition.SOUTH;
+    let randomArrPosition =
+      _.sample([ArrivalPosition.NORTH, ArrivalPosition.SOUTH]) ||
+      ArrivalPosition.SOUTH;
 
-      switch (arrBedpost) {
-        case ArrBedpost.BOXUM:
-          if (
-            radarScene === RadarSceneKeys.RADAR_06s ||
-            radarScene === RadarSceneKeys.RADAR_24s
-          ) {
+    switch (arrBedpost) {
+      case ArrBedpost.BOXUM:
+        if (
+          radarScene === RadarSceneKeys.RADAR_06s ||
+          radarScene === RadarSceneKeys.RADAR_24s
+        ) {
+          arrPosition = ArrivalPosition.NORTH;
+        }
+        if (radarScene === RadarSceneKeys.RADAR_15s) {
+          const randomNum = _.random(1, 100);
+          if (randomNum > 90) {
             arrPosition = ArrivalPosition.NORTH;
+          } else {
+            arrPosition = ArrivalPosition.SOUTH;
           }
-          if (radarScene === RadarSceneKeys.RADAR_15s) {
+        }
+        if (radarScene === RadarSceneKeys.RADAR_33s) {
+          const randomNum = _.random(1, 10);
+          if (randomNum > 8) {
+            arrPosition = ArrivalPosition.NORTH;
+          } else {
+            arrPosition = ArrivalPosition.SOUTH;
+          }
+        }
+        break;
+      case ArrBedpost.NUBER:
+        if (
+          radarScene === RadarSceneKeys.RADAR_06s ||
+          radarScene === RadarSceneKeys.RADAR_24s
+        ) {
+          if (getSimOptions().wakeSpacingConfig['YYZ Rwy 05'] >= 10) {
             const randomNum = _.random(1, 10);
             if (randomNum > 8) {
               arrPosition = ArrivalPosition.NORTH;
             } else {
               arrPosition = ArrivalPosition.SOUTH;
             }
-          }
-          if (radarScene === RadarSceneKeys.RADAR_33s) {
-            const randomNum = _.random(1, 10);
-            if (randomNum > 8) {
-              arrPosition = ArrivalPosition.NORTH;
-            } else {
-              arrPosition = ArrivalPosition.SOUTH;
-            }
-          }
-          break;
-        case ArrBedpost.NUBER:
-          if (
-            radarScene === RadarSceneKeys.RADAR_06s ||
-            radarScene === RadarSceneKeys.RADAR_24s
-          ) {
+          } else {
             arrPosition = randomArrPosition;
           }
-          if (
-            radarScene === RadarSceneKeys.RADAR_15s ||
-            radarScene === RadarSceneKeys.RADAR_33s
-          ) {
+        }
+        if (
+          radarScene === RadarSceneKeys.RADAR_15s ||
+          radarScene === RadarSceneKeys.RADAR_33s
+        ) {
+          arrPosition = ArrivalPosition.SOUTH;
+        }
+        break;
+      case ArrBedpost.LINNG:
+        if (
+          radarScene === RadarSceneKeys.RADAR_06s ||
+          radarScene === RadarSceneKeys.RADAR_24s
+        ) {
+          arrPosition = ArrivalPosition.SOUTH;
+        }
+        if (radarScene === RadarSceneKeys.RADAR_15s) {
+          const randomNum = _.random(1, 10);
+          if (randomNum > 8) {
+            arrPosition = ArrivalPosition.NORTH;
+          } else {
             arrPosition = ArrivalPosition.SOUTH;
           }
-          break;
-        case ArrBedpost.LINNG:
-          if (
-            radarScene === RadarSceneKeys.RADAR_06s ||
-            radarScene === RadarSceneKeys.RADAR_24s
-          ) {
+        }
+        if (radarScene === RadarSceneKeys.RADAR_33s) {
+          const randomNum = _.random(1, 10);
+          if (randomNum > 8) {
+            arrPosition = ArrivalPosition.NORTH;
+          } else {
             arrPosition = ArrivalPosition.SOUTH;
           }
-          if (radarScene === RadarSceneKeys.RADAR_15s) {
-            arrPosition = randomArrPosition;
-          }
-          if (radarScene === RadarSceneKeys.RADAR_33s) {
-            const randomNum = _.random(1, 10);
-            if (randomNum > 8) {
-              arrPosition = ArrivalPosition.NORTH;
-            } else {
-              arrPosition = ArrivalPosition.SOUTH;
-            }
-          }
-          break;
-        case ArrBedpost.IMEBA:
-          if (radarScene === RadarSceneKeys.RADAR_06s) {
-            const randomNum = _.random(1, 10);
-            if (randomNum > 8) {
-              arrPosition = ArrivalPosition.SOUTH;
-            } else {
-              arrPosition = ArrivalPosition.NORTH;
-            }
-          }
-          if (radarScene === RadarSceneKeys.RADAR_24s) {
+        }
+        break;
+      case ArrBedpost.IMEBA:
+        if (radarScene === RadarSceneKeys.RADAR_06s) {
+          const randomNum = _.random(1, 10);
+          if (randomNum > 8) {
+            arrPosition = ArrivalPosition.SOUTH;
+          } else {
             arrPosition = ArrivalPosition.NORTH;
           }
-          if (
-            radarScene === RadarSceneKeys.RADAR_15s ||
-            radarScene === RadarSceneKeys.RADAR_33s
-          ) {
+        }
+        if (radarScene === RadarSceneKeys.RADAR_24s) {
+          arrPosition = ArrivalPosition.NORTH;
+        }
+        if (
+          radarScene === RadarSceneKeys.RADAR_15s ||
+          radarScene === RadarSceneKeys.RADAR_33s
+        ) {
+          const randomNum = _.random(1, 10);
+          if (randomNum > 9) {
+            arrPosition = ArrivalPosition.SOUTH;
+          } else {
             arrPosition = ArrivalPosition.NORTH;
           }
-          break;
-        case ArrBedpost.RAGID:
-          if (radarScene === RadarSceneKeys.RADAR_06s) {
-            const randomNum = _.random(1, 10);
-            if (randomNum > 8) {
-              arrPosition = ArrivalPosition.NORTH;
-            } else {
-              arrPosition = ArrivalPosition.SOUTH;
-            }
-          }
-          if (radarScene === RadarSceneKeys.RADAR_24s) {
+        }
+        break;
+      case ArrBedpost.RAGID:
+        if (radarScene === RadarSceneKeys.RADAR_06s) {
+          const randomNum = _.random(1, 10);
+          if (randomNum > 8) {
+            arrPosition = ArrivalPosition.NORTH;
+          } else {
             arrPosition = ArrivalPosition.SOUTH;
           }
-          if (
-            radarScene === RadarSceneKeys.RADAR_15s ||
-            radarScene === RadarSceneKeys.RADAR_33s
-          ) {
+        }
+        if (radarScene === RadarSceneKeys.RADAR_24s) {
+          arrPosition = ArrivalPosition.SOUTH;
+        }
+        if (
+          radarScene === RadarSceneKeys.RADAR_15s ||
+          radarScene === RadarSceneKeys.RADAR_33s
+        ) {
+          const randomNum = _.random(1, 10);
+          if (randomNum > 9) {
+            arrPosition = ArrivalPosition.SOUTH;
+          } else {
             arrPosition = ArrivalPosition.NORTH;
           }
-          break;
-      }
+        }
+        break;
     }
 
     // Is Straight in?
