@@ -1,0 +1,29 @@
+{
+  "files": {
+    "main.css": "/csim-yyz-airspace/static/css/main.76bf1d8f.css",
+    "main.js": "/csim-yyz-airspace/static/js/main.91cb889c.js",
+    "static/media/Radar06sArr.png": "/csim-yyz-airspace/static/media/Radar06sArr.04a38d0b7dd5c783cca5.png",
+    "static/media/Radar24sArr.png": "/csim-yyz-airspace/static/media/Radar24sArr.cfda49fd950e45c5eeba.png",
+    "static/media/Radar15sDep.png": "/csim-yyz-airspace/static/media/Radar15sDep.997bae7709ed6e8943bb.png",
+    "static/media/Radar15sArr.png": "/csim-yyz-airspace/static/media/Radar15sArr.17992f661e13e3ca7cd3.png",
+    "static/media/Radar06sDep.png": "/csim-yyz-airspace/static/media/Radar06sDep.a71470039310c1e4c451.png",
+    "static/media/Radar33sArr.png": "/csim-yyz-airspace/static/media/Radar33sArr.7620049175f90b47e964.png",
+    "static/media/Radar24sDep.png": "/csim-yyz-airspace/static/media/Radar24sDep.543844d2a9ce9cc78d28.png",
+    "static/media/Radar33sDep.png": "/csim-yyz-airspace/static/media/Radar33sDep.58af8340a93f8030e388.png",
+    "static/media/FontDejaVuMonoBold.xml": "/csim-yyz-airspace/static/media/FontDejaVuMonoBold.15cef52716c912102ebe.xml",
+    "static/media/FontDejaVuMonoBold.png": "/csim-yyz-airspace/static/media/FontDejaVuMonoBold.fae30992a9a2088db0ff.png",
+    "static/media/IaIndicator_Chevron.png": "/csim-yyz-airspace/static/media/IaIndicator_Chevron.5dfa9d7d840135ff4baa.png",
+    "static/media/down-arrow.png": "/csim-yyz-airspace/static/media/down-arrow.2bef07ade1aad40caddb.png",
+    "static/media/up-arrow.png": "/csim-yyz-airspace/static/media/up-arrow.85e93d529d089bceede4.png",
+    "static/media/PpsSymbol.png": "/csim-yyz-airspace/static/media/PpsSymbol.d8c2cf86991b70001c3f.png",
+    "index.html": "/csim-yyz-airspace/index.html",
+    "static/media/IaIndicator_Dashed.png": "/csim-yyz-airspace/static/media/IaIndicator_Dashed.9ec0fd428ac32a640f23.png",
+    "static/media/IaIndicator_Line.png": "/csim-yyz-airspace/static/media/IaIndicator_Line.f764c081c5cfacb1d788.png",
+    "main.76bf1d8f.css.map": "/csim-yyz-airspace/static/css/main.76bf1d8f.css.map",
+    "main.91cb889c.js.map": "/csim-yyz-airspace/static/js/main.91cb889c.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.76bf1d8f.css",
+    "static/js/main.91cb889c.js"
+  ]
+}
