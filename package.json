@@ -1,7 +1,7 @@
 {
-  "name": "csim-yyz-terminal",
-  "version": "0.1.0",
-  "homepage": "https://lirobinxc.github.io/csim-yyz-terminal",
+  "name": "csim-yyz-airspace",
+  "version": "3.1.0",
+  "homepage": "https://lirobinxc.github.io/csim-yyz-airspace",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.1",
