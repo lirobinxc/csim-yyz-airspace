@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { CarrierCode, CarrierSpoken } from '../../phaser/types/CallsignTypes';
+import { CarrierCode, CarrierSpoken } from '../../engine/types/CallsignTypes';
 import { convertNumToText } from './convertNumToText';
 
 export function genCallsign({

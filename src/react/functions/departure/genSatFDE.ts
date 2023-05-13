@@ -2,10 +2,10 @@ import _ from 'lodash';
 import { genCallsign } from '../genCallsign';
 import { genSatRoute } from './genSatRoute';
 import { SatelliteData } from '../../data/satelliteCollection';
-import { RadarSceneKeys } from '../../../phaser/types/SceneKeys';
-import { AcModel, AcType, AcWTC } from '../../../phaser/types/AircraftTypes';
+import { RadarSceneKeys } from '../../../engine/types/SceneKeys';
+import { AcModel, AcType, AcWTC } from '../../../engine/types/AircraftTypes';
 import { DepFDE, genDepFDE } from './genDepFDE';
-import { SatelliteName } from '../../../phaser/types/SidAndSatelliteTypes';
+import { SatelliteName } from '../../../engine/types/SidAndSatelliteTypes';
 import { DeparturePhase, DeparturePosition } from './departureTypes';
 
 export function genSatFDE(radarScene: RadarSceneKeys): DepFDE {

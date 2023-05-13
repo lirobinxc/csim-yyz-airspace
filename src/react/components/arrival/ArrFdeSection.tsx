@@ -11,18 +11,18 @@ import {
 } from '../../state/slices/arrivalListSlice';
 
 import styles from './ArrFdeSection.module.scss';
-import { ArrivalPhase } from '../../../phaser/types/ArrivalTypes';
+import { ArrivalPhase } from '../../../engine/types/ArrivalTypes';
 import { ArrFDE } from '../../functions/arrival/genArrFDE';
 import { ArrBedpost, StarName } from '../../functions/arrival/genArrRoute';
 import _ from 'lodash';
-import PhaserGame from '../../../phaser/PhaserGameConfig';
-import { OtherSceneKeys } from '../../../phaser/types/SceneKeys';
-import RadarScene from '../../../phaser/scenes/RadarScene';
+import PhaserGame from '../../../engine/PhaserGameConfig';
+import { OtherSceneKeys } from '../../../engine/types/SceneKeys';
+import RadarScene from '../../../engine/scenes/RadarScene';
 import {
   PhaserCustomEvents,
   ReactCustomEvents,
-} from '../../../phaser/types/CustomEvents';
-import Plane from '../../../phaser/objects/Plane/Plane';
+} from '../../../engine/types/CustomEvents';
+import Plane from '../../../engine/objects/Plane/Plane';
 
 interface StripsList {
   pendingPanel: ArrFDE[];

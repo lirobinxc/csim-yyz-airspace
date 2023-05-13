@@ -12,16 +12,16 @@ import {
 import { ArrFDE } from '../../../functions/arrival/genArrFDE';
 import { arrivalListActions } from '../../../state/slices/arrivalListSlice';
 import ArrFdeAltitudeModal from '../ArrFdeAltitudeModal';
-import { PlaneCommands } from '../../../../phaser/types/PlaneInterfaces';
-import { AtcInstruction } from '../../../../phaser/types/PlaneCommandTypes';
+import { PlaneCommands } from '../../../../engine/types/PlaneInterfaces';
+import { AtcInstruction } from '../../../../engine/types/PlaneCommandTypes';
 import FdeHeadingModal from '../../FdeHeadingModal';
 import ArrFdeSpeedModal from '../ArrFdeSpeedModal';
-import { PlaneCommandCue } from '../../../../phaser/objects/Plane/PlaneCommandMenu';
-import PhaserGame from '../../../../phaser/PhaserGameConfig';
-import { OtherSceneKeys } from '../../../../phaser/types/SceneKeys';
-import RadarScene from '../../../../phaser/scenes/RadarScene';
-import { ReactCustomEvents } from '../../../../phaser/types/CustomEvents';
-import { RecatGroup } from '../../../../phaser/config/RecatSpacing';
+import { PlaneCommandCue } from '../../../../engine/objects/Plane/PlaneCommandMenu';
+import PhaserGame from '../../../../engine/PhaserGameConfig';
+import { OtherSceneKeys } from '../../../../engine/types/SceneKeys';
+import RadarScene from '../../../../engine/scenes/RadarScene';
+import { ReactCustomEvents } from '../../../../engine/types/CustomEvents';
+import { RecatGroup } from '../../../../engine/config/RecatSpacing';
 
 function ArrivalFDE(props: ArrFDE) {
   const {

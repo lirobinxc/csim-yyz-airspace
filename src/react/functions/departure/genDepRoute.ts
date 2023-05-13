@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { AcType } from '../../../phaser/types/AircraftTypes';
-import { RadarSceneKeys } from '../../../phaser/types/SceneKeys';
+import { AcType } from '../../../engine/types/AircraftTypes';
+import { RadarSceneKeys } from '../../../engine/types/SceneKeys';
 import { sidsCollection } from '../../data/sidsCollection';
 
 export function genDepRoute(runwayId: RadarSceneKeys, acType: AcType) {

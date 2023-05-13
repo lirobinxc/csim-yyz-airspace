@@ -1,7 +1,7 @@
 import _ from 'lodash';
-import { MasterGameOptions } from '../../phaser/MasterGameOptions';
-import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
-import { TerminalPosition } from '../../phaser/types/SimTypes';
+import { MasterGameOptions } from '../../engine/MasterGameOptions';
+import { RadarSceneKeys } from '../../engine/types/SceneKeys';
+import { TerminalPosition } from '../../engine/types/SimTypes';
 import { ArrBedpost } from '../functions/arrival/genArrRoute';
 import { genRandomWindData } from '../functions/genRandomWindData';
 import { SimOptions } from './slices/simOptionsSlice';

@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { AcType } from '../../../phaser/types/AircraftTypes';
-import { RadarSceneKeys } from '../../../phaser/types/SceneKeys';
+import { AcType } from '../../../engine/types/AircraftTypes';
+import { RadarSceneKeys } from '../../../engine/types/SceneKeys';
 import { SATELLITE_COLLECTION } from '../../data/satelliteCollection';
 
 export function genSatRoute(radarScene: RadarSceneKeys, acType: AcType) {

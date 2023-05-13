@@ -8,17 +8,17 @@ import { useAppDispatch, useAppSelector } from '../../../state/hooks';
 
 import styles from './SatelliteFDE.module.scss';
 import { departureListActions } from '../../../state/slices/departureListSlice';
-import { AcType } from '../../../../phaser/types/AircraftTypes';
+import { AcType } from '../../../../engine/types/AircraftTypes';
 import { DepFDE } from '../../../functions/departure/genDepFDE';
 import {
   selectSimOptions,
   simOptionsActions,
 } from '../../../state/slices/simOptionsSlice';
-import { PlaneCommandCue } from '../../../../phaser/objects/Plane/PlaneCommandMenu';
-import PhaserGame from '../../../../phaser/PhaserGameConfig';
-import { OtherSceneKeys } from '../../../../phaser/types/SceneKeys';
-import RadarScene from '../../../../phaser/scenes/RadarScene';
-import { ReactCustomEvents } from '../../../../phaser/types/CustomEvents';
+import { PlaneCommandCue } from '../../../../engine/objects/Plane/PlaneCommandMenu';
+import PhaserGame from '../../../../engine/PhaserGameConfig';
+import { OtherSceneKeys } from '../../../../engine/types/SceneKeys';
+import RadarScene from '../../../../engine/scenes/RadarScene';
+import { ReactCustomEvents } from '../../../../engine/types/CustomEvents';
 
 function SatelliteFDE(props: DepFDE) {
   const {

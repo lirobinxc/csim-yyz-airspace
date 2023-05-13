@@ -1,5 +1,5 @@
-import { DepRunwayYYZ } from '../../../phaser/types/AirportTypes';
-import { RadarSceneKeys } from '../../../phaser/types/SceneKeys';
+import { DepRunwayYYZ } from '../../../engine/types/AirportTypes';
+import { RadarSceneKeys } from '../../../engine/types/SceneKeys';
 import { DeparturePosition } from './departureTypes';
 
 export function determineDepRunwayYYZ(

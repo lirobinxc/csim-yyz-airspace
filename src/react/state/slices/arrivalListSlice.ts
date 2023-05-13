@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import _ from 'lodash';
-import PhaserGame from '../../../phaser/PhaserGameConfig';
-import RadarScene from '../../../phaser/scenes/RadarScene';
-import { ReactCustomEvents } from '../../../phaser/types/CustomEvents';
+import PhaserGame from '../../../engine/PhaserGameConfig';
+import RadarScene from '../../../engine/scenes/RadarScene';
+import { ReactCustomEvents } from '../../../engine/types/CustomEvents';
 import {
   OtherSceneKeys,
   RadarSceneKeys,
-} from '../../../phaser/types/SceneKeys';
-import { SidName } from '../../../phaser/types/SidAndSatelliteTypes';
-import { ArrivalPhase } from '../../../phaser/types/ArrivalTypes';
+} from '../../../engine/types/SceneKeys';
+import { SidName } from '../../../engine/types/SidAndSatelliteTypes';
+import { ArrivalPhase } from '../../../engine/types/ArrivalTypes';
 import { ArrFDE, genArrFDE } from '../../functions/arrival/genArrFDE';
 import { ArrBedpost } from '../../functions/arrival/genArrRoute';
 import { DepFDE } from '../../functions/departure/genDepFDE';

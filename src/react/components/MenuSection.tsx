@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import _ from 'lodash';
 import { useState } from 'react';
-import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
-import { TerminalPosition } from '../../phaser/types/SimTypes';
+import { RadarSceneKeys } from '../../engine/types/SceneKeys';
+import { TerminalPosition } from '../../engine/types/SimTypes';
 import { useAppDispatch, useAppSelector } from '../state/hooks';
 import { departureListActions } from '../state/slices/departureListSlice';
 import {

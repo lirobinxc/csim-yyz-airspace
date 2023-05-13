@@ -9,16 +9,16 @@ import styles from './DepartureFDE.module.scss';
 import { departureListActions } from '../../../state/slices/departureListSlice';
 import { DepFDE } from '../../../functions/departure/genDepFDE';
 import useInterval from 'use-interval';
-import { AcType } from '../../../../phaser/types/AircraftTypes';
+import { AcType } from '../../../../engine/types/AircraftTypes';
 import {
   selectSimOptions,
   simOptionsActions,
 } from '../../../state/slices/simOptionsSlice';
-import { PlaneCommandCue } from '../../../../phaser/objects/Plane/PlaneCommandMenu';
-import { OtherSceneKeys } from '../../../../phaser/types/SceneKeys';
-import RadarScene from '../../../../phaser/scenes/RadarScene';
-import { ReactCustomEvents } from '../../../../phaser/types/CustomEvents';
-import PhaserGame from '../../../../phaser/PhaserGameConfig';
+import { PlaneCommandCue } from '../../../../engine/objects/Plane/PlaneCommandMenu';
+import { OtherSceneKeys } from '../../../../engine/types/SceneKeys';
+import RadarScene from '../../../../engine/scenes/RadarScene';
+import { ReactCustomEvents } from '../../../../engine/types/CustomEvents';
+import PhaserGame from '../../../../engine/PhaserGameConfig';
 
 function DepartureFDE(props: DepFDE) {
   const {

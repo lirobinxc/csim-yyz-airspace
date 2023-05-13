@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { AcModel, AcType, AcWTC } from '../../phaser/types/AircraftTypes';
+import { AcModel, AcType, AcWTC } from '../../engine/types/AircraftTypes';
 
 export interface AircraftCollection {
   [AcWTC.L]: { [AcType.JET]: AcModel[]; [AcType.PROP]: AcModel[] };

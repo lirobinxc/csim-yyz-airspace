@@ -1,4 +1,4 @@
-import { AdjacentSectors } from '../../../phaser/types/SectorTypes';
+import { AdjacentSectors } from '../../../engine/types/SectorTypes';
 import { ArrBedpost } from './genArrRoute';
 
 export function determineBedpostSector(arrBedpost: ArrBedpost) {

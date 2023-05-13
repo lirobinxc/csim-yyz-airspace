@@ -5,33 +5,33 @@ import { genCallsign } from '../genCallsign';
 import { SidData } from '../../data/sidsCollection';
 import { destinationCollection } from '../../data/destinationCollection';
 import { SatelliteData } from '../../data/satelliteCollection';
-import { RadarSceneKeys } from '../../../phaser/types/SceneKeys';
-import { AcModel, AcType, AcWTC } from '../../../phaser/types/AircraftTypes';
-import { SidName } from '../../../phaser/types/SidAndSatelliteTypes';
-import { DepRunwayAll, DepRunwayYYZ } from '../../../phaser/types/AirportTypes';
+import { RadarSceneKeys } from '../../../engine/types/SceneKeys';
+import { AcModel, AcType, AcWTC } from '../../../engine/types/AircraftTypes';
+import { SidName } from '../../../engine/types/SidAndSatelliteTypes';
+import { DepRunwayAll, DepRunwayYYZ } from '../../../engine/types/AirportTypes';
 
-import { AdjacentSectors } from '../../../phaser/types/SectorTypes';
-import { WaypointDataDepCommon } from '../../../phaser/types/WaypointTypesDep';
-import { WaypointDataArrAll } from '../../../phaser/types/WaypointTypesArr';
+import { AdjacentSectors } from '../../../engine/types/SectorTypes';
+import { WaypointDataDepCommon } from '../../../engine/types/WaypointTypesDep';
+import { WaypointDataArrAll } from '../../../engine/types/WaypointTypesArr';
 import { determineDepRunwayYYZ } from '../departure/determineDepRunway';
 import { ArrBedpost, genArrRoute, StarName } from './genArrRoute';
 import { getArrEntryAlt } from './getArrEntryAlt';
 import { getArrEntrySpeed } from './getArrEntrySpeed';
-import { WP_DICT_ARR_COMMON } from '../../../phaser/config/WaypointConfigArr/WaypointConfigArrCommon';
-import { STAR_ROUTES_06s } from '../../../phaser/config/RouteConfigArr/RouteConfigStars06s';
+import { WP_DICT_ARR_COMMON } from '../../../engine/config/WaypointConfigArr/WaypointConfigArrCommon';
+import { STAR_ROUTES_06s } from '../../../engine/config/RouteConfigArr/RouteConfigStars06s';
 import {
   ArrivalPhase,
   ArrivalPosition,
-} from '../../../phaser/types/ArrivalTypes';
-import { RecatGroup } from '../../../phaser/config/RecatSpacing';
-import { PlanePerformanceConfig } from '../../../phaser/config/PlanePerformanceConfig';
-import { STAR_ROUTES_24s } from '../../../phaser/config/RouteConfigArr/RouteConfigStars24s';
-import RadarScene from '../../../phaser/scenes/RadarScene';
+} from '../../../engine/types/ArrivalTypes';
+import { RecatGroup } from '../../../engine/config/RecatSpacing';
+import { PlanePerformanceConfig } from '../../../engine/config/PlanePerformanceConfig';
+import { STAR_ROUTES_24s } from '../../../engine/config/RouteConfigArr/RouteConfigStars24s';
+import RadarScene from '../../../engine/scenes/RadarScene';
 import { determineIfStraightInBedpost } from './determineIfStraightInBedpost';
 import { determineArrBedpost } from './determineArrBedpost';
 import { determineBedpostSector } from './determineBedpostSector';
-import { STAR_ROUTES_33s } from '../../../phaser/config/RouteConfigArr/RouteConfigStars33s';
-import { STAR_ROUTES_15s } from '../../../phaser/config/RouteConfigArr/RouteConfigStars15s';
+import { STAR_ROUTES_33s } from '../../../engine/config/RouteConfigArr/RouteConfigStars33s';
+import { STAR_ROUTES_15s } from '../../../engine/config/RouteConfigArr/RouteConfigStars15s';
 import { getSimOptions } from '../../state/getSimOptions';
 
 let currentHour = _.sample([12, 13, 14, 15, 16, 17, 18]) || 12;

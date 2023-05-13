@@ -53,20 +53,20 @@ export default class OptionsSidebar extends Phaser.GameObjects.Layer {
     });
 
     // Setup: SpeedUp Button
-    this.updateGameSpeedButton();
+    // this.updateGameSpeedButton();
   }
 
   preUpdate() {
-    this.updateGameSpeedButton();
+    // this.updateGameSpeedButton();
   }
 
   private genButtonText() {
     return `Debug Mode: ${this.Scene.IS_DEBUG_MODE ? 'ON' : 'OFF'}`;
   }
 
-  private updateGameSpeedButton() {
-    this.GameSpeedButton.setText(
-      `Game Speed: x${this.Scene.GAME_SPEED_MULTIPLIER}`
-    );
-  }
+  // private updateGameSpeedButton() {
+  //   this.GameSpeedButton.setText(
+  //     `Game Speed: x${this.Scene.GAME_SPEED_MULTIPLIER}`
+  //   );
+  // }
 }

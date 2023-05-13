@@ -1,7 +1,7 @@
-import { AcType } from '../../phaser/types/AircraftTypes';
-import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
-import { AdjacentSectors } from '../../phaser/types/SectorTypes';
-import { SidName } from '../../phaser/types/SidAndSatelliteTypes';
+import { AcType } from '../../engine/types/AircraftTypes';
+import { RadarSceneKeys } from '../../engine/types/SceneKeys';
+import { AdjacentSectors } from '../../engine/types/SectorTypes';
+import { SidName } from '../../engine/types/SidAndSatelliteTypes';
 
 export interface SidData {
   name: SidName;

@@ -1,5 +1,5 @@
-import { WP_DICT_DEP_COMMON } from '../../phaser/config/WaypointConfigDep/WaypointConfigDepCommon';
-import { AcType } from '../../phaser/types/AircraftTypes';
+import { WP_DICT_DEP_COMMON } from '../../engine/config/WaypointConfigDep/WaypointConfigDepCommon';
+import { AcType } from '../../engine/types/AircraftTypes';
 import {
   DepRunwayAll,
   DepRunwaySatArrivals,
@@ -8,11 +8,11 @@ import {
   DepRunwayYKZ,
   DepRunwayYTZ,
   DepRunwayYZD,
-} from '../../phaser/types/AirportTypes';
-import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
-import { AdjacentSectors } from '../../phaser/types/SectorTypes';
-import { SatelliteName } from '../../phaser/types/SidAndSatelliteTypes';
-import { WaypointDataDepCommon } from '../../phaser/types/WaypointTypesDep';
+} from '../../engine/types/AirportTypes';
+import { RadarSceneKeys } from '../../engine/types/SceneKeys';
+import { AdjacentSectors } from '../../engine/types/SectorTypes';
+import { SatelliteName } from '../../engine/types/SidAndSatelliteTypes';
+import { WaypointDataDepCommon } from '../../engine/types/WaypointTypesDep';
 
 export interface SatelliteData {
   name: SatelliteName;

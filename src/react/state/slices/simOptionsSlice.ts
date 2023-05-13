@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { MasterGameOptions } from '../../../phaser/MasterGameOptions';
-import PhaserGame from '../../../phaser/PhaserGameConfig';
-import RadarScene from '../../../phaser/scenes/RadarScene';
-import { DepRunwayYYZ } from '../../../phaser/types/AirportTypes';
-import { ReactCustomEvents } from '../../../phaser/types/CustomEvents';
+import { MasterGameOptions } from '../../../engine/MasterGameOptions';
+import PhaserGame from '../../../engine/PhaserGameConfig';
+import RadarScene from '../../../engine/scenes/RadarScene';
+import { DepRunwayYYZ } from '../../../engine/types/AirportTypes';
+import { ReactCustomEvents } from '../../../engine/types/CustomEvents';
 import {
   OtherSceneKeys,
   RadarSceneKeys,
-} from '../../../phaser/types/SceneKeys';
-import { TerminalPosition } from '../../../phaser/types/SimTypes';
+} from '../../../engine/types/SceneKeys';
+import { TerminalPosition } from '../../../engine/types/SimTypes';
 import { ArrFDE } from '../../functions/arrival/genArrFDE';
 import { ArrBedpost } from '../../functions/arrival/genArrRoute';
 import { DepFDE } from '../../functions/departure/genDepFDE';

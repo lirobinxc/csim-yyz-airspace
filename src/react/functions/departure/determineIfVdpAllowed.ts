@@ -1,5 +1,5 @@
-import { RadarSceneKeys } from '../../../phaser/types/SceneKeys';
-import { SidName } from '../../../phaser/types/SidAndSatelliteTypes';
+import { RadarSceneKeys } from '../../../engine/types/SceneKeys';
+import { SidName } from '../../../engine/types/SidAndSatelliteTypes';
 import { DepFDE } from './genDepFDE';
 
 export function determineIfVdpAllowed(

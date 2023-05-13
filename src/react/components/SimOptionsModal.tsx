@@ -8,10 +8,10 @@ import Modal from 'react-modal';
 
 import styles from './SimOptionsModal.module.scss';
 import React, { useState } from 'react';
-import { RadarSceneKeys } from '../../phaser/types/SceneKeys';
-import { TerminalPosition } from '../../phaser/types/SimTypes';
+import { RadarSceneKeys } from '../../engine/types/SceneKeys';
+import { TerminalPosition } from '../../engine/types/SimTypes';
 import { ArrBedpost, StarName } from '../functions/arrival/genArrRoute';
-import { DepRunwayYYZ } from '../../phaser/types/AirportTypes';
+import { DepRunwayYYZ } from '../../engine/types/AirportTypes';
 import clsx from 'clsx';
 
 interface SimOptionsModalProps {

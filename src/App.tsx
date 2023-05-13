@@ -5,9 +5,9 @@ import MenuSection from './react/components/MenuSection';
 import DepFdeSection from './react/components/departure/DepFdeSection';
 import { useAppSelector } from './react/state/hooks';
 import { selectSimOptions } from './react/state/slices/simOptionsSlice';
-import { TerminalPosition } from './phaser/types/SimTypes';
+import { TerminalPosition } from './engine/types/SimTypes';
 import ArrFdeSection from './react/components/arrival/ArrFdeSection';
-import { MasterGameOptions } from './phaser/MasterGameOptions';
+import { MasterGameOptions } from './engine/MasterGameOptions';
 
 function App() {
   const simOptions = useAppSelector(selectSimOptions);

@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import useInterval from 'use-interval';
-import { AcType } from '../../../phaser/types/AircraftTypes';
+import { AcType } from '../../../engine/types/AircraftTypes';
 import { determineIfVdpAllowed } from '../../functions/departure/determineIfVdpAllowed';
 import { DepFDE } from '../../functions/departure/genDepFDE';
 import { useRandomInterval } from '../../functions/hooks/useRandomInterval';
@@ -18,11 +18,11 @@ import {
   DeparturePhase,
   DeparturePosition,
 } from '../../functions/departure/departureTypes';
-import PhaserGame from '../../../phaser/PhaserGameConfig';
-import { OtherSceneKeys } from '../../../phaser/types/SceneKeys';
-import RadarScene from '../../../phaser/scenes/RadarScene';
-import { PhaserCustomEvents } from '../../../phaser/types/CustomEvents';
-import Plane from '../../../phaser/objects/Plane/Plane';
+import PhaserGame from '../../../engine/PhaserGameConfig';
+import { OtherSceneKeys } from '../../../engine/types/SceneKeys';
+import RadarScene from '../../../engine/scenes/RadarScene';
+import { PhaserCustomEvents } from '../../../engine/types/CustomEvents';
+import Plane from '../../../engine/objects/Plane/Plane';
 
 const DepFdeSection = () => {
   const dispatch = useAppDispatch();

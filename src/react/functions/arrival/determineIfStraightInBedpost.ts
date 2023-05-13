@@ -1,4 +1,4 @@
-import { RadarSceneKeys } from '../../../phaser/types/SceneKeys';
+import { RadarSceneKeys } from '../../../engine/types/SceneKeys';
 import { ArrBedpost } from './genArrRoute';
 
 export function determineIfStraightInBedpost(
