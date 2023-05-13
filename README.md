@@ -2,7 +2,7 @@
 
 ![screenshot](https://github.com/lirobinxc/csim-yyz-airspace/blob/main/public/screenshot.png?raw=true)
 
-Full simulation of YYZ Terminal airspace including wind models, aircraft performance, etc.
+Full Air Traffic Control simulation of YYZ Terminal airspace including wind models, aircraft performance, etc.
 Used for control training purposes.
 
 This is a proof-of-concept written by @lirobinxc and is published for public use under the MIT License with permission from NAV CANADA.
