@@ -38,7 +38,7 @@ import { WP_LIST_DEP_33s } from '../config/WaypointConfigDep/WaypointConfigDep33
 import { WP_LIST_DEP_15s } from '../config/WaypointConfigDep/WaypointConfigDep15s';
 import { TerminalPosition } from '../types/SimTypes';
 import { WP_LIST_ARR_06s } from '../config/WaypointConfigArr/WaypointConfigArr06s';
-import { MasterGameOptions } from '../MasterGameOptions';
+import { MasterEngineOptions } from '../MasterEngineOptions';
 import { ArrFDE } from '../../react/functions/arrival/genArrFDE';
 import { genPlanePropsFromArrFDE } from '../utils/genPlanePropsFromArrFDE';
 import { ColorKeys } from '../types/ColorKeys';
@@ -107,7 +107,7 @@ export default class RadarScene extends Phaser.Scene {
     this.RblCursorIcon = null;
 
     this.SIM_OPTIONS = getSimOptions();
-    this.IS_DEBUG_MODE = MasterGameOptions.isDebug;
+    this.IS_DEBUG_MODE = MasterEngineOptions.isDebug;
     this.GAME_SPEED_MULTIPLIER = 1;
     this.FPS_SPEED_MULTIPLIER = 1;
     this.SHOW_EXTENDED_TAGS = false;
@@ -790,10 +790,10 @@ export default class RadarScene extends Phaser.Scene {
   private updateFPS() {
     if (this.FPS_SPEED_MULTIPLIER > 1) {
       this.physics.world.setFPS(
-        MasterGameOptions.fps * this.FPS_SPEED_MULTIPLIER
+        MasterEngineOptions.fps * this.FPS_SPEED_MULTIPLIER
       );
     } else {
-      this.physics.world.setFPS(MasterGameOptions.fps);
+      this.physics.world.setFPS(MasterEngineOptions.fps);
     }
   }
 

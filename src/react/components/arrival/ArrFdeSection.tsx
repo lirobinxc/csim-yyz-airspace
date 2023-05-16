@@ -15,7 +15,7 @@ import { ArrivalPhase } from '../../../engine/types/ArrivalTypes';
 import { ArrFDE } from '../../functions/arrival/genArrFDE';
 import { ArrBedpost, StarName } from '../../functions/arrival/genArrRoute';
 import _ from 'lodash';
-import PhaserGame from '../../../engine/PhaserGameConfig';
+import Engine from '../../../engine/EngineConfig';
 import { OtherSceneKeys } from '../../../engine/types/SceneKeys';
 import RadarScene from '../../../engine/scenes/RadarScene';
 import {
@@ -52,7 +52,7 @@ const ArrFdeSection = () => {
   }, [simOptions.gameSpeedMultiplier]);
 
   useEffect(() => {
-    const RADAR_SCENE = PhaserGame.scene.keys[
+    const RADAR_SCENE = Engine.scene.keys[
       OtherSceneKeys.RADAR_BASE
     ] as RadarScene;
 

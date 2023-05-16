@@ -15,7 +15,7 @@ import {
   simOptionsActions,
 } from '../../../state/slices/simOptionsSlice';
 import { PlaneCommandCue } from '../../../../engine/objects/Plane/PlaneCommandMenu';
-import PhaserGame from '../../../../engine/PhaserGameConfig';
+import Engine from '../../../../engine/EngineConfig';
 import { OtherSceneKeys } from '../../../../engine/types/SceneKeys';
 import RadarScene from '../../../../engine/scenes/RadarScene';
 import { ReactCustomEvents } from '../../../../engine/types/CustomEvents';
@@ -182,7 +182,7 @@ function SatelliteFDE(props: DepFDE) {
 
     setPrevCommandCue(newCommandCue);
 
-    const RADAR_SCENE = PhaserGame.scene.keys[
+    const RADAR_SCENE = Engine.scene.keys[
       OtherSceneKeys.RADAR_BASE
     ] as RadarScene;
     RADAR_SCENE.events.emit(

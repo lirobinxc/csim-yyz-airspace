@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { MasterGameOptions } from '../../engine/MasterGameOptions';
+import { MasterEngineOptions } from '../../engine/MasterEngineOptions';
 import { RadarSceneKeys } from '../../engine/types/SceneKeys';
 import { TerminalPosition } from '../../engine/types/SimTypes';
 import { ArrBedpost } from '../functions/arrival/genArrRoute';
@@ -11,10 +11,10 @@ export enum LocalStorageKeys {
 }
 
 export const defaultSimOptions: SimOptions = {
-  appVersion: MasterGameOptions.appVersion,
+  appVersion: MasterEngineOptions.appVersion,
   gameSpeedMultiplier: 1,
   radarScene: RadarSceneKeys.RADAR_06s,
-  terminalPosition: TerminalPosition.ARRIVAL,
+  terminalPosition: TerminalPosition.DEPARTURE,
   startingCount: 4,
   isSingleOps: false,
   allowVdp: true,
@@ -60,7 +60,7 @@ export function getSimOptions(): SimOptions {
 
   if (
     storedSimOptions &&
-    storedSimOptions.appVersion === MasterGameOptions.appVersion
+    storedSimOptions.appVersion === MasterEngineOptions.appVersion
   ) {
     console.log('Retrieved localStorage SimOptions.');
 

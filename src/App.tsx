@@ -7,14 +7,14 @@ import { useAppSelector } from './react/state/hooks';
 import { selectSimOptions } from './react/state/slices/simOptionsSlice';
 import { TerminalPosition } from './engine/types/SimTypes';
 import ArrFdeSection from './react/components/arrival/ArrFdeSection';
-import { MasterGameOptions } from './engine/MasterGameOptions';
+import { MasterEngineOptions } from './engine/MasterEngineOptions';
 
 function App() {
   const simOptions = useAppSelector(selectSimOptions);
 
   return (
     <div className={styles.App}>
-      <MenuSection appVersion={MasterGameOptions.appVersion} />
+      <MenuSection appVersion={MasterEngineOptions.appVersion} />
       {simOptions.terminalPosition === TerminalPosition.DEPARTURE ? (
         <DepFdeSection />
       ) : (

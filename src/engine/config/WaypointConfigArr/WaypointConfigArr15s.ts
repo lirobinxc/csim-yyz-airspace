@@ -3,10 +3,10 @@ import {
   WaypointDataArr15s,
   WaypointDict15sArr,
 } from '../../types/WaypointTypesArr';
-import { MasterGameOptions } from '../../MasterGameOptions';
+import { MasterEngineOptions } from '../../MasterEngineOptions';
 import { WP_LIST_ARR_COMMON } from './WaypointConfigArrCommon';
 
-const gameHeight = MasterGameOptions.height;
+const gameHeight = MasterEngineOptions.height;
 
 export const WP_LIST_ARR_15s: WaypointDataArr15s[] = [
   ...WP_LIST_ARR_COMMON,

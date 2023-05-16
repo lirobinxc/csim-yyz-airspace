@@ -18,7 +18,7 @@ import {
   DeparturePhase,
   DeparturePosition,
 } from '../../functions/departure/departureTypes';
-import PhaserGame from '../../../engine/PhaserGameConfig';
+import Engine from '../../../engine/EngineConfig';
 import { OtherSceneKeys } from '../../../engine/types/SceneKeys';
 import RadarScene from '../../../engine/scenes/RadarScene';
 import { PhaserCustomEvents } from '../../../engine/types/CustomEvents';
@@ -50,7 +50,7 @@ const DepFdeSection = () => {
   }, [simOptions.gameSpeedMultiplier]);
 
   useMemo(() => {
-    const RADAR_SCENE = PhaserGame.scene.keys[
+    const RADAR_SCENE = Engine.scene.keys[
       OtherSceneKeys.RADAR_BASE
     ] as RadarScene;
 

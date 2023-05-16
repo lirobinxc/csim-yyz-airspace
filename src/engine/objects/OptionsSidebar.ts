@@ -1,4 +1,4 @@
-import { MasterGameOptions } from '../MasterGameOptions';
+import { MasterEngineOptions } from '../MasterEngineOptions';
 import RadarScene from '../scenes/RadarScene';
 import { AssetKeys } from '../types/AssetKeys';
 import { DomEvents } from '../types/DomEvents';

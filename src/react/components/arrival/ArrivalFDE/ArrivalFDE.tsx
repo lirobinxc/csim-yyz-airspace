@@ -17,7 +17,7 @@ import { AtcInstruction } from '../../../../engine/types/PlaneCommandTypes';
 import FdeHeadingModal from '../../FdeHeadingModal';
 import ArrFdeSpeedModal from '../ArrFdeSpeedModal';
 import { PlaneCommandCue } from '../../../../engine/objects/Plane/PlaneCommandMenu';
-import PhaserGame from '../../../../engine/PhaserGameConfig';
+import Engine from '../../../../engine/EngineConfig';
 import { OtherSceneKeys } from '../../../../engine/types/SceneKeys';
 import RadarScene from '../../../../engine/scenes/RadarScene';
 import { ReactCustomEvents } from '../../../../engine/types/CustomEvents';
@@ -167,7 +167,7 @@ function ArrivalFDE(props: ArrFDE) {
 
     setPrevCommandCue(newCommandCue);
 
-    const RADAR_SCENE = PhaserGame.scene.keys[
+    const RADAR_SCENE = Engine.scene.keys[
       OtherSceneKeys.RADAR_BASE
     ] as RadarScene;
     RADAR_SCENE.events.emit(

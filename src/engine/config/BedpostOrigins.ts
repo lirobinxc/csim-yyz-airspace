@@ -1,5 +1,5 @@
 import { ArrBedpost } from '../../react/functions/arrival/genArrRoute';
-import { MasterGameOptions } from '../MasterGameOptions';
+import { MasterEngineOptions } from '../MasterEngineOptions';
 import RadarScene from '../scenes/RadarScene';
 import { RadarSceneKeys } from '../types/SceneKeys';
 
@@ -33,5 +33,5 @@ export function getBedpostOrigin(
     };
   }
 
-  return relativeBedpostOrigins[arrBedpost].scale(MasterGameOptions.height);
+  return relativeBedpostOrigins[arrBedpost].scale(MasterEngineOptions.height);
 }

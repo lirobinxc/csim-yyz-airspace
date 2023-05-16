@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import _ from 'lodash';
-import PhaserGame from '../../../engine/PhaserGameConfig';
+import Engine from '../../../engine/EngineConfig';
 import RadarScene from '../../../engine/scenes/RadarScene';
 import { ReactCustomEvents } from '../../../engine/types/CustomEvents';
 import {
@@ -52,14 +52,14 @@ function genDepList(
 }
 
 function sendAirborneToPhaser(fde: DepFDE) {
-  const RADAR_SCENE = PhaserGame.scene.keys[
+  const RADAR_SCENE = Engine.scene.keys[
     OtherSceneKeys.RADAR_BASE
   ] as RadarScene;
   RADAR_SCENE.events.emit(ReactCustomEvents.AIRBORNE_DEP, fde);
 }
 
 function restartPhaser() {
-  const RADAR_SCENE = PhaserGame.scene.keys[
+  const RADAR_SCENE = Engine.scene.keys[
     OtherSceneKeys.RADAR_BASE
   ] as RadarScene;
 

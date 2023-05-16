@@ -18,7 +18,7 @@ import { PlaneCommandCue } from '../../../../engine/objects/Plane/PlaneCommandMe
 import { OtherSceneKeys } from '../../../../engine/types/SceneKeys';
 import RadarScene from '../../../../engine/scenes/RadarScene';
 import { ReactCustomEvents } from '../../../../engine/types/CustomEvents';
-import PhaserGame from '../../../../engine/PhaserGameConfig';
+import Engine from '../../../../engine/EngineConfig';
 
 function DepartureFDE(props: DepFDE) {
   const {
@@ -174,7 +174,7 @@ function DepartureFDE(props: DepFDE) {
 
     setPrevCommandCue(newCommandCue);
 
-    const RADAR_SCENE = PhaserGame.scene.keys[
+    const RADAR_SCENE = Engine.scene.keys[
       OtherSceneKeys.RADAR_BASE
     ] as RadarScene;
     RADAR_SCENE.events.emit(

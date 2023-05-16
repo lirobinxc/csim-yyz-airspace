@@ -1,24 +1,24 @@
 import Phaser from 'phaser';
-import { MasterGameOptions, DebugGameOptions } from './MasterGameOptions';
+import { MasterEngineOptions, DebugGameOptions } from './MasterEngineOptions';
 import RadarScene from './scenes/RadarScene';
 import { RadarSceneKeys } from './types/SceneKeys';
 
 const isDebugMode = false;
 
-export const PhaserGameConfig: Phaser.Types.Core.GameConfig = {
+export const EngineConfig: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   parent: 'phaser',
   backgroundColor: '#000',
   scale: {
     mode: Phaser.Scale.ScaleModes.HEIGHT_CONTROLS_WIDTH,
-    width: MasterGameOptions.height,
-    height: MasterGameOptions.height,
+    width: MasterEngineOptions.height,
+    height: MasterEngineOptions.height,
   },
   physics: {
     default: 'arcade',
     arcade: {
       gravity: { x: 0, y: 0 },
-      fps: isDebugMode ? DebugGameOptions.fps : MasterGameOptions.fps,
+      fps: isDebugMode ? DebugGameOptions.fps : MasterEngineOptions.fps,
     },
   },
   scene: [new RadarScene(RadarSceneKeys.RADAR_06s)],
@@ -28,5 +28,5 @@ export const PhaserGameConfig: Phaser.Types.Core.GameConfig = {
   disableContextMenu: true,
 };
 
-const PhaserGame = new Phaser.Game(PhaserGameConfig);
-export default PhaserGame;
+const Engine = new Phaser.Game(EngineConfig);
+export default Engine;

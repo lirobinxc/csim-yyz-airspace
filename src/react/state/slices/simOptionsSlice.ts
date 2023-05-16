@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { MasterGameOptions } from '../../../engine/MasterGameOptions';
-import PhaserGame from '../../../engine/PhaserGameConfig';
+import { MasterEngineOptions } from '../../../engine/MasterEngineOptions';
+import Engine from '../../../engine/EngineConfig';
 import RadarScene from '../../../engine/scenes/RadarScene';
 import { DepRunwayYYZ } from '../../../engine/types/AirportTypes';
 import { ReactCustomEvents } from '../../../engine/types/CustomEvents';
@@ -52,14 +52,14 @@ export interface SimOptions {
 }
 
 function pausePhaser() {
-  const RADAR_SCENE = PhaserGame.scene.keys[
+  const RADAR_SCENE = Engine.scene.keys[
     OtherSceneKeys.RADAR_BASE
   ] as RadarScene;
   RADAR_SCENE.events.emit(ReactCustomEvents.PAUSE);
 }
 
 function unpausePhaser() {
-  const RADAR_SCENE = PhaserGame.scene.keys[
+  const RADAR_SCENE = Engine.scene.keys[
     OtherSceneKeys.RADAR_BASE
   ] as RadarScene;
   RADAR_SCENE.events.emit(ReactCustomEvents.UNPAUSE);
@@ -131,7 +131,7 @@ export const simOptions = createSlice({
       return newOptions;
     },
     cycleGameSpeed: (state) => {
-      const multipliers = MasterGameOptions.speedMultipliers;
+      const multipliers = MasterEngineOptions.speedMultipliers;
 
       const currIdx = multipliers.findIndex(
         (item) => item === state.gameSpeedMultiplier
@@ -145,7 +145,7 @@ export const simOptions = createSlice({
         newMultiplier = multipliers[currIdx + 1];
       }
 
-      const RADAR_SCENE = PhaserGame.scene.keys[
+      const RADAR_SCENE = Engine.scene.keys[
         OtherSceneKeys.RADAR_BASE
       ] as RadarScene;
       RADAR_SCENE.events.emit(

@@ -3,7 +3,7 @@ import './index.scss';
 import App from './App';
 import { Provider } from 'react-redux';
 import { store } from './react/state/store';
-import './engine/PhaserGameConfig';
+import './engine/EngineConfig';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
